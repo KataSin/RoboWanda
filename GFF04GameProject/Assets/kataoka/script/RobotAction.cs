@@ -14,7 +14,8 @@ public class RobotAction : MonoBehaviour
         ROBOT_IDLE,
         ROBOT_MOVE,
         ROBOT_ARM_ATTACK,
-        ROBOT_LEG_ATTACK
+        ROBOT_LEG_ATTACK,
+        ROBOT_SEARCH
     }
 
     [SerializeField, Tooltip("ロボットのスピード"), HeaderAttribute("ロボット移動関係")]
@@ -59,15 +60,15 @@ public class RobotAction : MonoBehaviour
                 m_NavAgent.isStopped = false;
                 m_NavAgent.speed = m_RobotSpeed;
                 m_NavAgent.stoppingDistance = m_Player_Enemy_Distance;
+
+                //Y軸をロボットに合わせる
                 m_NavAgent.destination = m_Player.transform.position;
                 m_RobotState = RobotState.ROBOT_MOVE;
                 m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
                 m_Animator.SetFloat("RobotSpeed", m_NavAgent.velocity.magnitude);
 
-                m_VelocityY = transform.rotation.eulerAngles.y - m_SeveVelocityY;
-                m_SeveVelocityY = transform.rotation.eulerAngles.y;
-                Debug.Log(m_VelocityY);
-                m_Animator.SetFloat("RobotRotateSpeed", 5);
+                //m_VelocityY = transform.rotation.eulerAngles.y - m_SeveVelocityY;
+                //m_Animator.SetFloat("RobotRotateSpeed", 5);
 
                 return true;
             };
@@ -103,6 +104,26 @@ public class RobotAction : MonoBehaviour
             bool endAnim = true;
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
             if (clipInfo.clip.name == "Attack")
+            {
+                endAnim = m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f;
+            }
+            m_RobotState = RobotState.ROBOT_ARM_ATTACK;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+            return endAnim;
+        };
+        return armAttack;
+    }
+    /// <summary>
+    /// ロボットが探すアニメーションだけ
+    /// </summary>
+    /// <returns></returns>
+    public Func<bool> RobotSearch()
+    {
+        Func<bool> armAttack = () => 
+        {
+            bool endAnim = true;
+            AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
+            if (clipInfo.clip.name == "Search")
             {
                 endAnim = m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f;
             }
