@@ -98,7 +98,7 @@ public class Break : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag == "bom")
+        if (other.gameObject.tag == "bom"||other.gameObject.tag=="RobotArmAttack")
         {
             isBreak = true;
 
@@ -171,5 +171,82 @@ public class Break : MonoBehaviour
             }
         }
     }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "RobotArmAttack")
+        {
+            isBreak = true;
+
+            //左下
+            if (other.gameObject.transform.position.x <= transform.position.x
+                &&
+                other.gameObject.transform.position.z <= transform.position.z)
+            {
+                if (other.gameObject.transform.position.x < other.gameObject.transform.position.z)
+                {
+                    m_rotation = Quaternion.Euler(0f, 0f, 90f);
+                }
+                else if (other.gameObject.transform.position.x > other.gameObject.transform.position.z)
+                {
+                    m_rotation = Quaternion.Euler(-90f, 0f, 0f);
+                }
+            }
+
+            //左上
+            if (other.gameObject.transform.position.x <= transform.position.x
+                &&
+                other.gameObject.transform.position.z >= transform.position.z)
+            {
+                if (other.gameObject.transform.position.x < other.gameObject.transform.position.z)
+                {
+                    float l_inv_pos_x = other.gameObject.transform.position.x * (-1f);
+                    if (l_inv_pos_x <= other.gameObject.transform.position.z)
+                    {
+                        m_rotation = Quaternion.Euler(90f, 0f, 0f);
+                    }
+                    else if (l_inv_pos_x >= other.gameObject.transform.position.z)
+                    {
+                        m_rotation = Quaternion.Euler(0f, 0f, 90f);
+                    }
+                }
+            }
+
+            //右上
+            if (other.gameObject.transform.position.x >= transform.position.x
+                &&
+                other.gameObject.transform.position.z >= transform.position.z)
+            {
+                if (other.gameObject.transform.position.x < other.gameObject.transform.position.z)
+                {
+                    m_rotation = Quaternion.Euler(90f, 0f, 0f);
+                }
+                else if (other.gameObject.transform.position.x > other.gameObject.transform.position.z)
+                {
+                    m_rotation = Quaternion.Euler(0f, 0f, -90f);
+                }
+            }
+
+            //右下
+            if (other.gameObject.transform.position.x >= transform.position.x
+                &&
+                other.gameObject.transform.position.z <= transform.position.z)
+            {
+                if (other.gameObject.transform.position.x > other.gameObject.transform.position.z)
+                {
+                    float l_inv_pos_z = other.gameObject.transform.position.z * (-1f);
+                    if (l_inv_pos_z >= other.gameObject.transform.position.x)
+                    {
+                        m_rotation = Quaternion.Euler(-90f, 0f, 0f);
+                    }
+                    else if (l_inv_pos_z <= other.gameObject.transform.position.x)
+                    {
+                        m_rotation = Quaternion.Euler(0f, 0f, -90f);
+                    }
+                }
+            }
+        }
+    }
+
 
 }
