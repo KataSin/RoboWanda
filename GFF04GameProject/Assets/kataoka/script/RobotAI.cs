@@ -39,7 +39,5 @@ public class RobotAI : MonoBehaviour
         {
             manager.SetAction(RobotAction.RobotState.ROBOT_MOVE, false);
         }
-
-        Debug.Log(agent.remainingDistance);
     }
 }

@@ -32,7 +32,9 @@ public class RobotAction : MonoBehaviour
     private RobotState m_RobotState;
     //アニメーター
     private Animator m_Animator;
-
+    //ロボットのY軸速度
+    private float m_VelocityY;
+    private float m_SeveVelocityY;
 
     private bool flag = true;
     void Start()
@@ -43,6 +45,8 @@ public class RobotAction : MonoBehaviour
         m_NavAgent = GetComponent<NavMeshAgent>();
         m_RobotState = RobotState.ROBOT_NULL;
         m_NavAgent.destination = m_Player.transform.position;
+        m_VelocityY = 0.0f;
+        m_SeveVelocityY = 0.0f;
     }
     /// <summary>
     /// ロボットがプレイヤーに向かって動く
@@ -59,6 +63,12 @@ public class RobotAction : MonoBehaviour
                 m_RobotState = RobotState.ROBOT_MOVE;
                 m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
                 m_Animator.SetFloat("RobotSpeed", m_NavAgent.velocity.magnitude);
+
+                m_VelocityY = transform.rotation.eulerAngles.y - m_SeveVelocityY;
+                m_SeveVelocityY = transform.rotation.eulerAngles.y;
+                Debug.Log(m_VelocityY);
+                m_Animator.SetFloat("RobotRotateSpeed", 5);
+
                 return true;
             };
         return move;
