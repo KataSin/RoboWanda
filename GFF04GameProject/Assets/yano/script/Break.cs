@@ -12,7 +12,7 @@ public class Break : MonoBehaviour
     //砂煙
     [SerializeField]
     [Header("砂煙")]
-    private List<ParticleSystem> sand_smokes_;
+    private GameObject sand_smoke_manager_;
 
     //回転スピード
     [SerializeField]
@@ -38,10 +38,6 @@ public class Break : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        //砂煙を停止
-        for (int i = 0; i < sand_smokes_.Count; ++i)
-            sand_smokes_[i].Stop();
-
         //初期化
         m_Bill_rotation = Quaternion.identity;
     }
@@ -62,7 +58,7 @@ public class Break : MonoBehaviour
             m_down_pos_Y += 0.001f * transform.localScale.y * Time.deltaTime;
 
             //砂煙発生
-            Smoke_OutBreak();
+            BreakAfter();
         }
 
         //倒壊挙動制御
@@ -70,15 +66,8 @@ public class Break : MonoBehaviour
     }
 
     //砂煙発生
-    private void Smoke_OutBreak()
+    private void BreakAfter()
     {
-        //8sまでは砂煙発生
-        if (m_break_time < 8f)
-        {
-            for (int i = 0; i < sand_smokes_.Count; ++i)
-                sand_smokes_[i].Play();
-        }
-
         //5s経過後
         if (m_break_time >= 5f)
         {
@@ -93,10 +82,6 @@ public class Break : MonoBehaviour
             //8s経過後
             if (m_break_time >= 8f)
             {
-                //砂煙停止
-                for (int i = 0; i < sand_smokes_.Count; ++i)
-                    sand_smokes_[i].Stop();
-
                 //自分を消去
                 Destroy(gameObject);
             }
@@ -119,6 +104,9 @@ public class Break : MonoBehaviour
         if (other.gameObject.tag == "bom" || other.gameObject.tag == "RobotArmAttack")
         {
             isBreak = true;
+            GameObject smoke = Instantiate(sand_smoke_manager_);
+            smoke.transform.Find("desert_Horizontal").localScale = transform.localScale;
+            smoke.transform.Find("desert_Vertical").localScale = transform.localScale;
 
             /*
             □□
@@ -211,7 +199,16 @@ public class Break : MonoBehaviour
         if (other.gameObject.tag == "RobotArmAttack")
         {
             isBreak = true;
+            GameObject smoke = Instantiate(sand_smoke_manager_, transform);
+            smoke.transform.Find("desert_Horizontal").localScale = Vector3.one;
+            smoke.transform.Find("desert_Vertical").localScale = Vector3.one;
 
+            GameObject a = smoke.transform.Find("desert_Horizontal").gameObject;
+            GameObject b = smoke.transform.Find("desert_Vertical").gameObject;
+
+
+            Debug.Log(a.name);
+            Debug.Log(b.name);
             /*
             □□
             ■□

@@ -23,4 +23,9 @@ public class bomb : MonoBehaviour
         else if (Input.GetKey(KeyCode.LeftArrow))
             transform.position -= transform.right * 2;
     }
+
+    void OnCollisionEnter(Collision other)
+    {
+        Destroy(gameObject);
+    }
 }
