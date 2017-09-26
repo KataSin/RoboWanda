@@ -15,7 +15,8 @@ public class RobotAction : MonoBehaviour
         ROBOT_MOVE,
         ROBOT_ARM_ATTACK,
         ROBOT_LEG_ATTACK,
-        ROBOT_SEARCH
+        ROBOT_SEARCH,
+        ROBOT_SEARCH_MOVE
     }
 
     [SerializeField, Tooltip("ロボットのスピード"), HeaderAttribute("ロボット移動関係")]
@@ -36,8 +37,14 @@ public class RobotAction : MonoBehaviour
     //ロボットのY軸速度
     private float m_VelocityY;
     private float m_SeveVelocityY;
-
-    private bool flag = true;
+    //特定のポイントに当たったかどうか
+    private bool m_SearchFlag;
+    //サーチポイントたち
+    private List<GameObject> m_SearchPoints;
+    //ランダム
+    private System.Random m_Random;
+    //ランダムインデックス
+    private int m_RandomIndex;
     void Start()
     {
         m_Player = GameObject.FindGameObjectWithTag("Player");
@@ -48,6 +55,13 @@ public class RobotAction : MonoBehaviour
         m_NavAgent.destination = m_Player.transform.position;
         m_VelocityY = 0.0f;
         m_SeveVelocityY = 0.0f;
+        //ランダム生成
+        m_Random = new System.Random();
+        //サーチ系
+        m_SearchFlag = true;
+        m_SearchPoints = new List<GameObject>();
+        m_SearchPoints.AddRange(GameObject.FindGameObjectsWithTag("SearchPoint"));
+        m_RandomIndex = m_Random.Next(0, m_SearchPoints.Count + 1);
     }
     /// <summary>
     /// ロボットがプレイヤーに向かって動く
@@ -70,7 +84,7 @@ public class RobotAction : MonoBehaviour
                 //m_VelocityY = transform.rotation.eulerAngles.y - m_SeveVelocityY;
                 //m_Animator.SetFloat("RobotRotateSpeed", 5);
 
-                return true;
+                return false;
             };
         return move;
     }
@@ -88,7 +102,7 @@ public class RobotAction : MonoBehaviour
                 m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
                 m_Animator.SetFloat("RobotSpeed", m_NavAgent.velocity.magnitude);
                 //どうせループなので
-                return true;
+                return false;
             };
         return idle;
     }
@@ -101,11 +115,11 @@ public class RobotAction : MonoBehaviour
     {
         Func<bool> armAttack = () =>
         {
-            bool endAnim = true;
+            bool endAnim = false;
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
             if (clipInfo.clip.name == "Attack")
             {
-                endAnim = m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f;
+                endAnim = (m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f);
             }
             m_RobotState = RobotState.ROBOT_ARM_ATTACK;
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
@@ -119,18 +133,62 @@ public class RobotAction : MonoBehaviour
     /// <returns></returns>
     public Func<bool> RobotSearch()
     {
-        Func<bool> armAttack = () => 
+        Func<bool> armAttack = () =>
         {
-            bool endAnim = true;
+            bool endAnim = false;
+            m_NavAgent.isStopped = true;
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
             if (clipInfo.clip.name == "Search")
             {
-                endAnim = m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f;
+                endAnim = (m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f);
             }
-            m_RobotState = RobotState.ROBOT_ARM_ATTACK;
+            m_RobotState = RobotState.ROBOT_SEARCH;
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
             return endAnim;
         };
         return armAttack;
     }
+    /// <summary>
+    /// ロボットが探す移動
+    /// </summary>
+    /// <returns></returns>
+    public Func<bool> RobotSearchMove()
+    {
+        Func<bool> armAttackMove = () =>
+        {
+            m_NavAgent.isStopped = false;
+            m_NavAgent.speed = m_RobotSpeed;
+            m_NavAgent.stoppingDistance = 0.0f;
+
+            Vector3 pos = m_NavAgent.destination;
+            //当たったらポジションを更新
+            if (m_SearchFlag)
+            {
+                m_RandomIndex = m_Random.Next(0, m_SearchPoints.Count + 1);
+                m_NavAgent.destination = m_SearchPoints[m_RandomIndex].transform.position;
+                m_SearchFlag = false;
+            }
+
+            m_RobotState = RobotState.ROBOT_MOVE;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+            m_Animator.SetFloat("RobotSpeed", m_NavAgent.velocity.magnitude);
+
+            //m_VelocityY = transform.rotation.eulerAngles.y - m_SeveVelocityY;
+            //m_Animator.SetFloat("RobotRotateSpeed", 5);
+
+            return false;
+        };
+        return armAttackMove;
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject == m_SearchPoints[m_RandomIndex])
+        {
+            m_SearchFlag = true;
+        }
+    }
+
+
+
 }

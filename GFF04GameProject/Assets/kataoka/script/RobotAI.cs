@@ -24,6 +24,9 @@ public class RobotAI : MonoBehaviour
 
 
         robotEye = GameObject.FindGameObjectWithTag("RobotEye");
+
+        manager.SetAction(RobotAction.RobotState.ROBOT_ARM_ATTACK, false);
+
         attackTime = 0.0f;
     }
 
@@ -31,7 +34,29 @@ public class RobotAI : MonoBehaviour
     void Update()
     {
         //Debug.Log(agent.remainingDistance);
-        //attackTime += Time.deltaTime;
+        attackTime += Time.deltaTime;
+
+
+
+        if ((manager.GetRobotState()!=RobotAction.RobotState.ROBOT_SEARCH_MOVE)
+            &&attackTime >= 10.0f && Player_Robot_Distance(400.0f))
+        {
+            manager.SetAction(RobotAction.RobotState.ROBOT_ARM_ATTACK, false);
+            attackTime = 0.0f;
+        }
+        else
+        {
+            manager.SetAction(RobotAction.RobotState.ROBOT_MOVE, true);
+             int mask = ~(1 << 8);
+            GameObject collisionObject;
+            if (!PlayerToRobotRay("TestPlayer", mask, out collisionObject))
+            {
+                manager.SetAction(RobotAction.RobotState.ROBOT_SEARCH_MOVE,true);
+            }
+
+        }
+
+
         //if (attackTime >= 10.0f&&agent.velocity.magnitude<=1.0f&&agent.remainingDistance<=1000.0f)
         //{
         //    manager.SetAction(RobotAction.RobotState.ROBOT_ARM_ATTACK,false);
@@ -41,24 +66,74 @@ public class RobotAI : MonoBehaviour
         //{
         //    manager.SetAction(RobotAction.RobotState.ROBOT_MOVE, false);
         //}
+        //if (Player_Robot_Distance(500.0f) && attackTime>10.0f && agent.velocity.magnitude < 10.0f)
+        //{
+        //    manager.SetAction(RobotAction.RobotState.ROBOT_ARM_ATTACK,false);
+        //    attackTime = 0.0f;
+        //}
+        //else
+        //{
+        //    GameObject colObject;
+        //    int mask = ~(1 << 8);
+        //    if (PlayerToRobotRay("Player", mask, out colObject))
+        //    {
+        //        manager.SetAction(RobotAction.RobotState.ROBOT_MOVE, true);
+        //    }
+        //}
+
+        //Vector3 vec = (player.transform.position - robotEye.transform.position).normalized * 2000.0f;
+        //Vector3 start = robotEye.transform.position;
+        //RaycastHit hit;
+        //int mask = ~(1 << 8);
+        //if (Physics.Raycast(start, vec, out hit, 20000.0f,mask))
+        //{
+        //    string name = hit.collider.name;
+        //    if (hit.collider.tag == "Player")
+        //    {
+        //        manager.SetAction(RobotAction.RobotState.ROBOT_MOVE, false);
+        //    }
+        //    else
+        //    {
+        //        manager.SetAction(RobotAction.RobotState.ROBOT_SEARCH, false);
+        //    }
+        //}
 
 
+    }
+
+
+    /// <summary>
+    /// 特定のオブジェクトとロボットが当たっているかどうか
+    /// </summary>
+    /// <param name="objectName">オブジェクトの名前</param>
+    /// <param name="layerMask">レイヤー</param>
+    /// <param name="collision">当たったオブジェクト</param>
+    /// <returns>当たったかどうか</returns>
+    private bool PlayerToRobotRay(string objectName, int layerMask, out GameObject collision)
+    {
         Vector3 vec = (player.transform.position - robotEye.transform.position).normalized * 2000.0f;
         Vector3 start = robotEye.transform.position;
         RaycastHit hit;
-        int mask = ~(1 << 8);
-        if (Physics.Raycast(start, vec, out hit, 20000.0f,mask))
+        //int mask = ~(1 << 8);
+        if (Physics.Raycast(start, vec, out hit, 20000.0f, layerMask))
         {
-            if (hit.collider.tag == "Player")
+            string name = hit.collider.name;
+            collision = hit.collider.gameObject;
+            if (hit.collider.name == objectName)
             {
-                manager.SetAction(RobotAction.RobotState.ROBOT_MOVE, false);
-            }
-            else
-            {
-                manager.SetAction(RobotAction.RobotState.ROBOT_IDLE, false);
+                return true;
             }
         }
-
-
+        collision = null;
+        return false;
+    }
+    /// <summary>
+    /// プレイヤーとロボットが指定した距離以内かどうか
+    /// </summary>
+    /// <param name="dis">距離</param>
+    /// <returns>指定した距離以内か</returns>
+    private bool Player_Robot_Distance(float dis)
+    {
+        return agent.remainingDistance < dis;
     }
 }
