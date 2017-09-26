@@ -142,8 +142,19 @@ public class Break : MonoBehaviour
             //倒壊済みでなければ
             if (!isAfter)
             {
+                Vector3 ba_scale =
+                    new Vector3(
+                    transform.localScale.x,
+                    transform.localScale.y / 3,
+                    transform.localScale.z
+                    );
+                debris_.transform.localScale = ba_scale;
+
+                Vector3 ba_pos = new Vector3(
+                    transform.position.x, debris_.transform.localScale.y / 3, transform.position.z);
+
                 //倒壊後のビルを生成
-                Instantiate(debris_);
+                GameObject ba_obj = Instantiate(debris_, ba_pos, Quaternion.identity);
                 isAfter = true;
             }
 
