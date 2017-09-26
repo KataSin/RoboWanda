@@ -53,6 +53,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4409591913577288}
+  - component: {fileID: 114561123334056624}
   m_Layer: 0
   m_Name: Sand_Smoke
   m_TagString: Untagged
@@ -68,7 +69,7 @@ Transform:
   m_GameObject: {fileID: 1834955015871328}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.33033, z: 0}
-  m_LocalScale: {x: 251.31302, y: 251.31299, z: 251.31299}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4409591913577288}
   m_RootOrder: 0
@@ -96,11 +97,25 @@ Transform:
   m_GameObject: {fileID: 1078704615454764}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: -0.17233, z: 0}
-  m_LocalScale: {x: 251.31302, y: 251.31299, z: 251.31299}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4409591913577288}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114561123334056624
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1915392164093148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09222842e00affa4599de5e8927c84b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sand_smokes_:
+  - {fileID: 198870370312573896}
+  - {fileID: 198298515361715570}
 --- !u!198 &198298515361715570
 ParticleSystem:
   m_ObjectHideFlags: 1
