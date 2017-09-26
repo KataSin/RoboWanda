@@ -34,20 +34,25 @@ public class Break : MonoBehaviour
     //倒壊後かどうか
     private bool isAfter;
 
+    //当たり判定
+    [SerializeField]
+    [Header("ビルの当たり判定")]
+    private GameObject collide_manager_obj_;
+    private tower_collide_manager collide_manager_;
+
 
     // Use this for initialization
     void Start()
     {
         //初期化
         m_Bill_rotation = Quaternion.identity;
+
+        collide_manager_ = collide_manager_obj_.GetComponent<tower_collide_manager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            isBreak = true;
-
         //倒壊していたら
         if (isBreak)
         {
@@ -57,7 +62,7 @@ public class Break : MonoBehaviour
             //落下スピード上昇
             m_down_pos_Y += 0.001f * transform.localScale.y * Time.deltaTime;
 
-            //砂煙発生
+            //倒壊中、後の処理
             BreakAfter();
         }
 
@@ -65,7 +70,70 @@ public class Break : MonoBehaviour
         Collapse();
     }
 
+    //倒壊挙動制御
+    private void Collapse()
+    {
+        //倒壊方向判定
+        Collapse_Direction();
+
+        //落下
+        transform.position += new Vector3(0f, -m_down_pos_Y, 0f);
+
+        //回転
+        transform.rotation =
+            Quaternion.Lerp(Quaternion.Euler(0f, 0f, 0f), m_Bill_rotation, m_break_time / m_rotated_time);
+    }
+
+    //倒壊方向判定
+    private void Collapse_Direction()
+    {
+        switch (collide_manager_.Get_Direction())
+        {
+            //前
+            case 1:
+                OutBreak_Smoke();
+                m_Bill_rotation = Quaternion.Euler(90f, 0f, 0f);
+
+                break;
+
+            //左
+            case 2:
+                OutBreak_Smoke();
+                m_Bill_rotation = Quaternion.Euler(0f, 0f, 90f);
+
+                break;
+
+            //後ろ
+            case 3:
+                OutBreak_Smoke();
+                m_Bill_rotation = Quaternion.Euler(-90f, 0f, 0f);
+
+                break;
+
+            //右
+            case 4:
+                OutBreak_Smoke();
+                m_Bill_rotation = Quaternion.Euler(0f, 0f, -90f);
+
+                break;
+        }
+    }
+
     //砂煙発生
+    private void OutBreak_Smoke()
+    {
+        if (!isBreak)
+        {
+            Vector3 ob_pos = transform.position;
+            ob_pos.y = 0f;
+            GameObject smoke = Instantiate(sand_smoke_manager_, ob_pos, Quaternion.identity);
+            smoke.transform.Find("desert_Horizontal").localScale = transform.localScale;
+            smoke.transform.Find("desert_Vertical").localScale = transform.localScale;
+        }
+        isBreak = true;
+    }
+
+    //倒壊中、後の処理
     private void BreakAfter()
     {
         //5s経過後
@@ -87,213 +155,4 @@ public class Break : MonoBehaviour
             }
         }
     }
-
-    //倒壊挙動制御
-    private void Collapse()
-    {
-        //落下
-        transform.position += new Vector3(0f, -m_down_pos_Y, 0f);
-
-        //回転
-        transform.rotation =
-            Quaternion.Lerp(Quaternion.Euler(0f, 0f, 0f), m_Bill_rotation, m_break_time / m_rotated_time);
-    }
-
-    void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.tag == "bom" || other.gameObject.tag == "RobotArmAttack")
-        {
-            isBreak = true;
-            GameObject smoke = Instantiate(sand_smoke_manager_);
-            smoke.transform.Find("desert_Horizontal").localScale = transform.localScale;
-            smoke.transform.Find("desert_Vertical").localScale = transform.localScale;
-
-            /*
-            □□
-            ■□
-            */
-            //左後ろ
-            if (other.gameObject.transform.position.x <= transform.position.x
-                &&
-                other.gameObject.transform.position.z <= transform.position.z)
-            {
-                if (other.gameObject.transform.position.x < other.gameObject.transform.position.z)
-                {
-                    m_Bill_rotation = Quaternion.Euler(0f, 0f, 90f);
-                }
-                else if (other.gameObject.transform.position.x > other.gameObject.transform.position.z)
-                {
-                    m_Bill_rotation = Quaternion.Euler(-90f, 0f, 0f);
-                }
-            }
-
-            /*
-           ■□
-           □□
-           */
-            //左前
-            if (other.gameObject.transform.position.x <= transform.position.x
-                &&
-                other.gameObject.transform.position.z >= transform.position.z)
-            {
-                if (other.gameObject.transform.position.x < other.gameObject.transform.position.z)
-                {
-                    float l_inv_pos_x = other.gameObject.transform.position.x * (-1f);
-                    if (l_inv_pos_x <= other.gameObject.transform.position.z)
-                    {
-                        m_Bill_rotation = Quaternion.Euler(90f, 0f, 0f);
-                    }
-                    else if (l_inv_pos_x >= other.gameObject.transform.position.z)
-                    {
-                        m_Bill_rotation = Quaternion.Euler(0f, 0f, 90f);
-                    }
-                }
-            }
-
-            /*
-           □■
-           □□
-           */
-            //右前
-            if (other.gameObject.transform.position.x >= transform.position.x
-                &&
-                other.gameObject.transform.position.z >= transform.position.z)
-            {
-                if (other.gameObject.transform.position.x < other.gameObject.transform.position.z)
-                {
-                    m_Bill_rotation = Quaternion.Euler(90f, 0f, 0f);
-                }
-                else if (other.gameObject.transform.position.x > other.gameObject.transform.position.z)
-                {
-                    m_Bill_rotation = Quaternion.Euler(0f, 0f, -90f);
-                }
-            }
-
-            /*
-           □□
-           □■
-           */
-            //右後ろ
-            if (other.gameObject.transform.position.x >= transform.position.x
-                &&
-                other.gameObject.transform.position.z <= transform.position.z)
-            {
-                if (other.gameObject.transform.position.x > other.gameObject.transform.position.z)
-                {
-                    float l_inv_pos_z = other.gameObject.transform.position.z * (-1f);
-                    if (l_inv_pos_z >= other.gameObject.transform.position.x)
-                    {
-                        m_Bill_rotation = Quaternion.Euler(-90f, 0f, 0f);
-                    }
-                    else if (l_inv_pos_z <= other.gameObject.transform.position.x)
-                    {
-                        m_Bill_rotation = Quaternion.Euler(0f, 0f, -90f);
-                    }
-                }
-            }
-        }
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "RobotArmAttack")
-        {
-            isBreak = true;
-            GameObject smoke = Instantiate(sand_smoke_manager_, transform);
-            smoke.transform.Find("desert_Horizontal").localScale = Vector3.one;
-            smoke.transform.Find("desert_Vertical").localScale = Vector3.one;
-
-            GameObject a = smoke.transform.Find("desert_Horizontal").gameObject;
-            GameObject b = smoke.transform.Find("desert_Vertical").gameObject;
-
-
-            Debug.Log(a.name);
-            Debug.Log(b.name);
-            /*
-            □□
-            ■□
-            */
-            //左後ろ
-            if (other.gameObject.transform.position.x <= transform.position.x
-                &&
-                other.gameObject.transform.position.z <= transform.position.z)
-            {
-                if (other.gameObject.transform.position.x < other.gameObject.transform.position.z)
-                {
-                    m_Bill_rotation = Quaternion.Euler(0f, 0f, 90f);
-                }
-                else if (other.gameObject.transform.position.x > other.gameObject.transform.position.z)
-                {
-                    m_Bill_rotation = Quaternion.Euler(-90f, 0f, 0f);
-                }
-            }
-
-            /*
-           ■□
-           □□
-           */
-            //左前
-            if (other.gameObject.transform.position.x <= transform.position.x
-                &&
-                other.gameObject.transform.position.z >= transform.position.z)
-            {
-                if (other.gameObject.transform.position.x < other.gameObject.transform.position.z)
-                {
-                    float l_inv_pos_x = other.gameObject.transform.position.x * (-1f);
-                    if (l_inv_pos_x <= other.gameObject.transform.position.z)
-                    {
-                        m_Bill_rotation = Quaternion.Euler(90f, 0f, 0f);
-                    }
-                    else if (l_inv_pos_x >= other.gameObject.transform.position.z)
-                    {
-                        m_Bill_rotation = Quaternion.Euler(0f, 0f, 90f);
-                    }
-                }
-            }
-
-            /*
-           □■
-           □□
-           */
-            //右前
-            if (other.gameObject.transform.position.x >= transform.position.x
-                &&
-                other.gameObject.transform.position.z >= transform.position.z)
-            {
-                if (other.gameObject.transform.position.x < other.gameObject.transform.position.z)
-                {
-                    m_Bill_rotation = Quaternion.Euler(90f, 0f, 0f);
-                }
-                else if (other.gameObject.transform.position.x > other.gameObject.transform.position.z)
-                {
-                    m_Bill_rotation = Quaternion.Euler(0f, 0f, -90f);
-                }
-            }
-
-            /*
-           □□
-           □■
-           */
-            //右後ろ
-            if (other.gameObject.transform.position.x >= transform.position.x
-                &&
-                other.gameObject.transform.position.z <= transform.position.z)
-            {
-                if (other.gameObject.transform.position.x > other.gameObject.transform.position.z)
-                {
-                    float l_inv_pos_z = other.gameObject.transform.position.z * (-1f);
-                    if (l_inv_pos_z >= other.gameObject.transform.position.x)
-                    {
-                        m_Bill_rotation = Quaternion.Euler(-90f, 0f, 0f);
-                    }
-                    else if (l_inv_pos_z <= other.gameObject.transform.position.x)
-                    {
-                        m_Bill_rotation = Quaternion.Euler(0f, 0f, -90f);
-                    }
-                }
-            }
-        }
-    }
-
-
 }
