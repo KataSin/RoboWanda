@@ -24,7 +24,7 @@ public class bomb : MonoBehaviour
             transform.position -= transform.right * 2;
     }
 
-    void OnCollisionEnter(Collision other)
+    void OnTriggerEnter(Collider other)
     {
         Destroy(gameObject);
     }

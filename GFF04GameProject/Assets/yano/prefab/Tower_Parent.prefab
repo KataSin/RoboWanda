@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114293644155942924}
   m_Layer: 0
   m_Name: Tower_F
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 114111639994803892}
   m_Layer: 0
   m_Name: Tower_B
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60,7 +60,7 @@ GameObject:
   - component: {fileID: 114214817037819754}
   m_Layer: 0
   m_Name: Tower_L
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 114895407135293574}
   m_Layer: 0
   m_Name: Tower_Collide
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 114279887868760460}
   m_Layer: 0
   m_Name: Tower_R
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 114136358849939758}
   m_Layer: 0
   m_Name: Tower_Parent
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -139,7 +139,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1154969289238216}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -1, y: 207.4, z: -113.5}
+  m_LocalPosition: {x: 0, y: 207.4, z: -113.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4161437745657600}
@@ -182,8 +182,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1792023962799358}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -355, y: 104, z: -266}
-  m_LocalScale: {x: 212.367, y: 212.36693, z: 212.36693}
+  m_LocalPosition: {x: -66, y: 87, z: -307}
+  m_LocalScale: {x: 113.76449, y: 172.90454, z: 113.764465}
   m_Children:
   - {fileID: 4292929169511856}
   - {fileID: 4161437745657600}
@@ -223,7 +223,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1105121614357968}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -1, y: 207.4, z: 113.2}
+  m_LocalPosition: {x: 0, y: 207.4, z: 113.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4161437745657600}
@@ -388,6 +388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isCollide: 0
+  isBillCollide: 0
 --- !u!114 &114136358849939758
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -416,6 +417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isCollide: 0
+  isBillCollide: 0
 --- !u!114 &114279887868760460
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -428,6 +430,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isCollide: 0
+  isBillCollide: 0
 --- !u!114 &114293644155942924
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -440,6 +443,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isCollide: 0
+  isBillCollide: 0
 --- !u!114 &114895407135293574
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -456,3 +460,4 @@ MonoBehaviour:
   back_obj_: {fileID: 1154969289238216}
   right_obj_: {fileID: 1775325819666952}
   m_direction: 0
+  isBillCollide: 0
