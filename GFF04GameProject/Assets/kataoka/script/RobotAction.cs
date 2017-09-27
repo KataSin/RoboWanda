@@ -67,8 +67,15 @@ public class RobotAction : MonoBehaviour
     /// ロボットがプレイヤーに向かって動く
     /// </summary>
     /// <returns></returns>
-    public Func<bool> RobotMove()
+    public RobotManager.ActionFunc RobotMove()
     {
+
+        Action moveStart = () =>
+        {
+
+        };
+
+        //アクションアップデート
         Func<bool> move = () =>
             {
                 m_NavAgent.isStopped = false;
@@ -86,14 +93,24 @@ public class RobotAction : MonoBehaviour
 
                 return false;
             };
-        return move;
+
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = moveStart;
+        func.actionUpdate = move;
+
+        return func;
     }
     /// <summary>
     /// ロボットが止まる
     /// </summary>
     /// <returns>終わったかどうか</returns>
-    public Func<bool> RobotIdle()
+    public RobotManager.ActionFunc RobotIdle()
     {
+        Action idleStart = () =>
+        {
+
+        };
+
         Func<bool> idle = () =>
             {
                 m_NavAgent.isStopped = true;
@@ -104,15 +121,25 @@ public class RobotAction : MonoBehaviour
                 //どうせループなので
                 return false;
             };
-        return idle;
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = idleStart;
+        func.actionUpdate = idle;
+
+        return func;
     }
 
     /// <summary>
     /// ロボットの腕の攻撃
     /// </summary>
     /// <returns>終わったかどうか</returns>
-    public Func<bool> RobotArmAttack()
+    public RobotManager.ActionFunc RobotArmAttack()
     {
+        Action robotArmAttackStart = () =>
+        {
+
+        };
+
+
         Func<bool> armAttack = () =>
         {
             bool endAnim = false;
@@ -125,15 +152,23 @@ public class RobotAction : MonoBehaviour
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
             return endAnim;
         };
-        return armAttack;
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = robotArmAttackStart;
+        func.actionUpdate = armAttack;
+
+        return func;
     }
     /// <summary>
     /// ロボットが探すアニメーションだけ
     /// </summary>
     /// <returns></returns>
-    public Func<bool> RobotSearch()
+    public RobotManager.ActionFunc RobotSearch()
     {
-        Func<bool> armAttack = () =>
+        Action robotSearchStart = () =>
+        {
+
+        };
+        Func<bool> robotSearch = () =>
         {
             bool endAnim = false;
             m_NavAgent.isStopped = true;
@@ -146,15 +181,25 @@ public class RobotAction : MonoBehaviour
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
             return endAnim;
         };
-        return armAttack;
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = robotSearchStart;
+        func.actionUpdate = robotSearch;
+
+        return func;
     }
     /// <summary>
     /// ロボットが探す移動
     /// </summary>
     /// <returns></returns>
-    public Func<bool> RobotSearchMove()
+    public RobotManager.ActionFunc RobotSearchMove()
     {
-        Func<bool> armAttackMove = () =>
+        Action robotSearchMoveStart = () =>
+        {
+
+        };
+
+
+        Func<bool> robotSerchMove = () =>
         {
             m_NavAgent.isStopped = false;
             m_NavAgent.speed = m_RobotSpeed;
@@ -178,7 +223,11 @@ public class RobotAction : MonoBehaviour
 
             return false;
         };
-        return armAttackMove;
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = robotSearchMoveStart;
+        func.actionUpdate = robotSerchMove;
+
+        return func;
     }
 
     public void OnTriggerEnter(Collider other)

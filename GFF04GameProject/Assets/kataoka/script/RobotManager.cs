@@ -4,20 +4,16 @@ using UnityEngine;
 using System;
 public class RobotManager : MonoBehaviour
 {
-    ////アクションたち
-    //struct ActionState
-    //{
-    //    //アクション
-    //    public Func<bool> action;
-    //    //割り込みかどうか
-    //    public bool interrupt;
-    //    //継続するか
-    //    public bool continuation;
-    //    //アクションの種類
-    //    public RobotAction.RobotState state;
-    //}
     //アクションたち
-    private Dictionary<RobotAction.RobotState, Func<bool>> m_Actions;
+    public struct ActionFunc
+    {
+        //アクションスターと
+        public Action actionStart;
+        //アクションアップデート
+        public Func<bool> actionUpdate;
+    }
+    //アクションたち
+    private Dictionary<RobotAction.RobotState, ActionFunc> m_Actions;
     //アニメーション
     private Animation m_Animation;
     //ロボットアクション
@@ -26,16 +22,18 @@ public class RobotManager : MonoBehaviour
     private bool m_IsAction;
     //現在のロボットアクション
     private RobotAction.RobotState m_RobotState;
+    //直前のロボットアクション
+    private RobotAction.RobotState m_PreState;
     //現在のアクションがループするかどうか
     private bool m_IsLoop;
     // Use this for initialization
     void Start()
     {
-        m_Actions = new Dictionary<RobotAction.RobotState, Func<bool>>();
+        m_Actions = new Dictionary<RobotAction.RobotState, ActionFunc>();
         m_RobotAction = GetComponent<RobotAction>();
         m_IsAction = true;
         m_RobotState = RobotAction.RobotState.ROBOT_IDLE;
-
+        m_PreState = RobotAction.RobotState.ROBOT_NULL;
         AddAction(RobotAction.RobotState.ROBOT_IDLE, m_RobotAction.RobotIdle());
         AddAction(RobotAction.RobotState.ROBOT_MOVE, m_RobotAction.RobotMove());
         AddAction(RobotAction.RobotState.ROBOT_ARM_ATTACK, m_RobotAction.RobotArmAttack());
@@ -47,7 +45,13 @@ public class RobotManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_IsAction = m_Actions[m_RobotState]();
+        //アクションのスタート
+        if (m_RobotState != m_PreState) {
+            m_Actions[m_RobotState].actionStart();
+            m_PreState = m_RobotState;
+        }
+        //アクションアップデート(trueが帰ったら終了)
+        m_IsAction = m_Actions[m_RobotState].actionUpdate();
         //行動が終わったら待機に戻る
         if (m_IsAction)
         {
@@ -73,7 +77,7 @@ public class RobotManager : MonoBehaviour
     /// </summary>
     /// <param name="state">アクションの種類</param>
     /// <param name="action">アクション</param>
-    private void AddAction(RobotAction.RobotState state, Func<bool> action)
+    private void AddAction(RobotAction.RobotState state, ActionFunc action)
     {
         m_Actions[state] = action;
     }
