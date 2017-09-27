@@ -31,6 +31,9 @@ public class Break : MonoBehaviour
     //倒壊しているかどうか
     private bool isBreak;
 
+    //発生したかどうか
+    private bool isOutBreak;
+
     //倒壊後かどうか
     private bool isAfter;
 
@@ -73,11 +76,17 @@ public class Break : MonoBehaviour
     //倒壊挙動制御
     private void Collapse()
     {
+        if (collide_manager_.Get_Bill_CollideFlag())
+        {
+            isBreak = false;
+        }
+
         //倒壊方向判定
         Collapse_Direction();
 
         //落下
-        transform.position += new Vector3(0f, -m_down_pos_Y, 0f);
+        if (isBreak)
+            transform.position += new Vector3(0f, -m_down_pos_Y, 0f);
 
         //回転
         transform.rotation =
@@ -122,15 +131,17 @@ public class Break : MonoBehaviour
     //砂煙発生
     private void OutBreak_Smoke()
     {
-        if (!isBreak)
+        if (!isOutBreak)
         {
             Vector3 ob_pos = transform.position;
             ob_pos.y = 0f;
             GameObject smoke = Instantiate(sand_smoke_manager_, ob_pos, Quaternion.identity);
             smoke.transform.Find("desert_Horizontal").localScale = transform.localScale;
             smoke.transform.Find("desert_Vertical").localScale = transform.localScale;
+
+            isBreak = true;
         }
-        isBreak = true;
+        isOutBreak = true;
     }
 
     //倒壊中、後の処理

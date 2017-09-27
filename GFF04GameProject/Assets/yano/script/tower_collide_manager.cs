@@ -29,6 +29,9 @@ public class tower_collide_manager : MonoBehaviour
     [Header("方向(1:前、2:左、3:後ろ、4:右)")]
     private int m_direction;
 
+    [SerializeField]
+    private bool isBillCollide;
+
     // Use this for initialization
     void Start()
     {
@@ -38,6 +41,7 @@ public class tower_collide_manager : MonoBehaviour
         right_ = right_obj_.GetComponent<tower_collide>();
 
         m_direction = 0;
+        isBillCollide = false;
     }
 
     // Update is called once per frame
@@ -58,11 +62,22 @@ public class tower_collide_manager : MonoBehaviour
         //右(right)
         else if (right_.Get_CollideFlag())
             m_direction = 4;
+
+        if(forward_.Get_Bill_CollideFlag() || left_.Get_Bill_CollideFlag() 
+            || back_.Get_Bill_CollideFlag() || right_.Get_Bill_CollideFlag())
+        {
+            isBillCollide = true;
+        }
     }
 
     //方向の取得
     public int Get_Direction()
     {
         return m_direction;
+    }
+
+    public bool Get_Bill_CollideFlag()
+    {
+        return isBillCollide;
     }
 }
