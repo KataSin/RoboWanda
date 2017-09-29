@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Break : MonoBehaviour
 {
+    private tower_Type towerType_;
+    private float m_tower_revision;
+
     //破片
     [SerializeField]
     [Header("破片")]
@@ -13,6 +16,10 @@ public class Break : MonoBehaviour
     [SerializeField]
     [Header("砂煙")]
     private GameObject sand_smoke_manager_;
+
+    [SerializeField]
+    [Header("砂煙スケール倍率")]
+    private float m_sand_smoke_scalar;
 
     //回転スピード
     [SerializeField]
@@ -29,6 +36,7 @@ public class Break : MonoBehaviour
     private Quaternion m_Bill_rotation;
 
     //倒壊しているかどうか
+    [SerializeField]
     private bool isBreak;
 
     //発生したかどうか
@@ -47,10 +55,29 @@ public class Break : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        towerType_ = this.gameObject.GetComponent<tower_Type>();
+        TypeAdaptation();
+
         //初期化
         m_Bill_rotation = Quaternion.identity;
 
         collide_manager_ = collide_manager_obj_.GetComponent<tower_collide_manager>();
+    }
+
+    private void TypeAdaptation()
+    {
+        switch (towerType_.Get_TowerType())
+        {
+            //Low
+            case 0:
+                m_tower_revision = 1f;
+                break;
+
+            //High
+            case 1:
+                m_tower_revision = 1.5f;
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -63,7 +90,7 @@ public class Break : MonoBehaviour
             m_break_time += 1f * Time.deltaTime;
 
             //落下スピード上昇
-            m_down_pos_Y += 0.001f * transform.localScale.y * Time.deltaTime;
+            m_down_pos_Y += 0.001f * (transform.localScale.y * m_sand_smoke_scalar) * Time.deltaTime;
 
             //倒壊中、後の処理
             BreakAfter();
@@ -136,19 +163,19 @@ public class Break : MonoBehaviour
             Vector3 ob_pos = transform.position;
             ob_pos.y = 0f;
             GameObject smoke = Instantiate(sand_smoke_manager_, ob_pos, Quaternion.identity);
-            smoke.transform.Find("desert_Horizontal").localScale = transform.localScale;
-            smoke.transform.Find("desert_Vertical").localScale = transform.localScale;
+            smoke.transform.Find("desert_Horizontal").localScale = transform.localScale * m_sand_smoke_scalar;
+            smoke.transform.Find("desert_Vertical").localScale = transform.localScale * m_sand_smoke_scalar;
 
             isBreak = true;
+            isOutBreak = true;
         }
-        isOutBreak = true;
     }
 
     //倒壊中、後の処理
     private void BreakAfter()
     {
         //5s経過後
-        if (m_break_time >= 5f)
+        if (m_break_time >= (6f * m_tower_revision))
         {
             //倒壊済みでなければ
             if (!isAfter)
@@ -159,7 +186,7 @@ public class Break : MonoBehaviour
                     transform.localScale.y / 3,
                     transform.localScale.z
                     );
-                debris_.transform.localScale = ba_scale;
+                debris_.transform.localScale = ba_scale * m_sand_smoke_scalar;
 
                 Vector3 ba_pos = new Vector3(
                     transform.position.x, debris_.transform.localScale.y / 3, transform.position.z);
@@ -170,7 +197,7 @@ public class Break : MonoBehaviour
             }
 
             //8s経過後
-            if (m_break_time >= 8f)
+            if (m_break_time >= (8f * m_tower_revision))
             {
                 //自分を消去
                 Destroy(gameObject);
