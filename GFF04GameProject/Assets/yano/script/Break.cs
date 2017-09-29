@@ -123,35 +123,38 @@ public class Break : MonoBehaviour
     //倒壊方向判定
     private void Collapse_Direction()
     {
-        switch (collide_manager_.Get_Direction())
+        if (!isBreak)
         {
-            //前
-            case 1:
-                OutBreak_Smoke();
-                m_Bill_rotation = Quaternion.Euler(90f, 0f, 0f);
+            switch (collide_manager_.Get_Direction())
+            {
+                //前
+                case 1:
+                    OutBreak_Smoke();
+                    m_Bill_rotation = Quaternion.Euler(90f, 0f, 0f);
 
-                break;
+                    break;
 
-            //左
-            case 2:
-                OutBreak_Smoke();
-                m_Bill_rotation = Quaternion.Euler(0f, 0f, 90f);
+                //左
+                case 2:
+                    OutBreak_Smoke();
+                    m_Bill_rotation = Quaternion.Euler(0f, 0f, 90f);
 
-                break;
+                    break;
 
-            //後ろ
-            case 3:
-                OutBreak_Smoke();
-                m_Bill_rotation = Quaternion.Euler(-90f, 0f, 0f);
+                //後ろ
+                case 3:
+                    OutBreak_Smoke();
+                    m_Bill_rotation = Quaternion.Euler(-90f, 0f, 0f);
 
-                break;
+                    break;
 
-            //右
-            case 4:
-                OutBreak_Smoke();
-                m_Bill_rotation = Quaternion.Euler(0f, 0f, -90f);
+                //右
+                case 4:
+                    OutBreak_Smoke();
+                    m_Bill_rotation = Quaternion.Euler(0f, 0f, -90f);
 
-                break;
+                    break;
+            }
         }
     }
 
