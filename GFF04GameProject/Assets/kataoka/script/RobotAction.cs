@@ -16,8 +16,12 @@ public class RobotAction : MonoBehaviour
         ROBOT_ARM_ATTACK,
         ROBOT_LEG_ATTACK,
         ROBOT_SEARCH,
-        ROBOT_SEARCH_MOVE
+        ROBOT_SEARCH_MOVE,
+        ROBOT_GOOL_MOVE
     }
+
+    [SerializeField, Tooltip("ロボットのゴールポイント")]
+    public GameObject m_GoolPoint;
 
     [SerializeField, Tooltip("ロボットのスピード"), HeaderAttribute("ロボット移動関係")]
     public float m_RobotSpeed;
@@ -195,15 +199,26 @@ public class RobotAction : MonoBehaviour
     {
         Action robotSearchMoveStart = () =>
         {
+            m_NavAgent.isStopped =true;
+            m_NavAgent.speed = m_RobotSpeed;
+            m_NavAgent.stoppingDistance = 0.0f;
+            m_NavAgent.velocity = Vector3.zero;
+            m_RobotState = RobotState.ROBOT_SEARCH;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
 
         };
 
 
         Func<bool> robotSerchMove = () =>
         {
-            m_NavAgent.isStopped = false;
-            m_NavAgent.speed = m_RobotSpeed;
-            m_NavAgent.stoppingDistance = 0.0f;
+            //探すアニメーションが終わったら次に行く
+            bool endAnim = false;
+            AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
+            if (clipInfo.clip.name == "Search")
+            {
+                endAnim = (m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f);
+            }
+            if (!endAnim) return false;
 
             Vector3 pos = m_NavAgent.destination;
             //当たったらポジションを更新
@@ -229,6 +244,40 @@ public class RobotAction : MonoBehaviour
 
         return func;
     }
+    /// <summary>
+    /// ロボットがゴールに向かって歩く
+    /// </summary>
+    /// <returns></returns>
+    public RobotManager.ActionFunc RobotGoolMove()
+    {
+        Action robotGoolMoveStart = () =>
+        {
+            m_NavAgent.isStopped = false;
+            m_NavAgent.speed = m_RobotSpeed;
+            m_NavAgent.stoppingDistance = 0.0f;
+
+            m_NavAgent.destination = m_GoolPoint.transform.position;
+        };
+
+
+        Func<bool> robotGoolMove = () =>
+        {
+            m_RobotState = RobotState.ROBOT_MOVE;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+            m_Animator.SetFloat("RobotSpeed", m_NavAgent.velocity.magnitude);
+
+            //m_VelocityY = transform.rotation.eulerAngles.y - m_SeveVelocityY;
+            //m_Animator.SetFloat("RobotRotateSpeed", 5);
+
+            return false;
+        };
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = robotGoolMoveStart;
+        func.actionUpdate = robotGoolMove;
+
+        return func;
+    }
+
 
     public void OnTriggerEnter(Collider other)
     {

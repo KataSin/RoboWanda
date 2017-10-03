@@ -11,7 +11,7 @@ public class RobotAI : MonoBehaviour
     private NavMeshAgent agent;
     private GameObject robotEye;
 
-
+    public GameObject goolPoint;
     private float attackTime;
     // Use this for initialization
     void Start()
@@ -34,27 +34,29 @@ public class RobotAI : MonoBehaviour
     void Update()
     {
         //Debug.Log(agent.remainingDistance);
-        attackTime += Time.deltaTime;
+        //attackTime += Time.deltaTime;
+
+        manager.SetAction(RobotAction.RobotState.ROBOT_GOOL_MOVE,true);
 
 
 
-        if ((manager.GetRobotState()!=RobotAction.RobotState.ROBOT_SEARCH_MOVE)
-            &&attackTime >= 10.0f && Player_Robot_Distance(400.0f))
-        {
-            manager.SetAction(RobotAction.RobotState.ROBOT_ARM_ATTACK, false);
-            attackTime = 0.0f;
-        }
-        else
-        {
-            manager.SetAction(RobotAction.RobotState.ROBOT_MOVE, true);
-             int mask = ~(1 << 8);
-            GameObject collisionObject;
-            if (!PlayerToRobotRay("TestPlayer", mask, out collisionObject))
-            {
-                manager.SetAction(RobotAction.RobotState.ROBOT_SEARCH_MOVE,true);
-            }
+        //if ((manager.GetRobotState()!=RobotAction.RobotState.ROBOT_SEARCH_MOVE)
+        //    &&attackTime >= 10.0f && Player_Robot_Distance(400.0f))
+        //{
+        //    manager.SetAction(RobotAction.RobotState.ROBOT_ARM_ATTACK, false);
+        //    attackTime = 0.0f;
+        //}
+        //else
+        //{
+        //    manager.SetAction(RobotAction.RobotState.ROBOT_MOVE, true);
+        //     int mask = ~(1 << 8);
+        //    GameObject collisionObject;
+        //    if (!PlayerToRobotRay("TestPlayer", mask, out collisionObject))
+        //    {
+        //        manager.SetAction(RobotAction.RobotState.ROBOT_SEARCH_MOVE,true);
+        //    }
 
-        }
+        //}
 
 
         //if (attackTime >= 10.0f&&agent.velocity.magnitude<=1.0f&&agent.remainingDistance<=1000.0f)

@@ -39,14 +39,18 @@ public class RobotManager : MonoBehaviour
         AddAction(RobotAction.RobotState.ROBOT_ARM_ATTACK, m_RobotAction.RobotArmAttack());
         AddAction(RobotAction.RobotState.ROBOT_SEARCH, m_RobotAction.RobotSearch());
         AddAction(RobotAction.RobotState.ROBOT_SEARCH_MOVE, m_RobotAction.RobotSearchMove());
+        AddAction(RobotAction.RobotState.ROBOT_GOOL_MOVE, m_RobotAction.RobotGoolMove());
         m_IsLoop = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(m_RobotState);
+
         //アクションのスタート
-        if (m_RobotState != m_PreState) {
+        if (m_RobotState != m_PreState)
+        {
             m_Actions[m_RobotState].actionStart();
             m_PreState = m_RobotState;
         }
