@@ -6,12 +6,15 @@ public class tower_collide : MonoBehaviour
 {
     //当たったかどうか
     [SerializeField]
+    [Header("当たったかどうか")]
     private bool isCollide;
 
     [SerializeField]
+    [Header("ビルと当たったか")]
     private bool isBillCollide;
 
     [SerializeField]
+    [Header("当たり判定を纏める親")]
     private GameObject parent_tower_obj_;
     private Transform parent_Tower_;
 
@@ -30,25 +33,11 @@ public class tower_collide : MonoBehaviour
         return isCollide;
     }
 
+    //ビルと当たったかどうかの取得
     public bool Get_Bill_CollideFlag()
     {
         return isBillCollide;
     }
-
-    //void OnCollisionEnter(Collision other)
-    //{
-    //    //ここに対象オブジェクトを指名
-    //    if (other.gameObject.tag == "bom")
-    //    {
-    //        isCollide = true;
-    //    }
-
-    //    if (/*!other.transform.IsChildOf(parent_Tower_) && */other.gameObject.tag == "Tower")
-    //    {
-    //        Debug.Log("当たった");
-    //        isBillCollide = true;
-    //    }
-    //}
 
     void OnTriggerEnter(Collider other)
     {
@@ -60,7 +49,6 @@ public class tower_collide : MonoBehaviour
 
         if (!other.transform.IsChildOf(parent_Tower_) && other.gameObject.tag == "Tower")
         {
-            Debug.Log("当たった");
             isBillCollide = true;
         }
     }

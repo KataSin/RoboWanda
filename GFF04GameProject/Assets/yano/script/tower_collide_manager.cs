@@ -29,7 +29,9 @@ public class tower_collide_manager : MonoBehaviour
     [Header("方向(1:前、2:左、3:後ろ、4:右)")]
     private int m_direction;
 
+    //ビルと当たったか
     [SerializeField]
+    [Header("ビルと当たったか")]
     private bool isBillCollide;
 
     // Use this for initialization
@@ -63,6 +65,7 @@ public class tower_collide_manager : MonoBehaviour
         else if (right_.Get_CollideFlag())
             m_direction = 4;
 
+        //ビル
         if(forward_.Get_Bill_CollideFlag() || left_.Get_Bill_CollideFlag() 
             || back_.Get_Bill_CollideFlag() || right_.Get_Bill_CollideFlag())
         {
@@ -76,6 +79,7 @@ public class tower_collide_manager : MonoBehaviour
         return m_direction;
     }
 
+    //ビルと当たったかどうかの取得
     public bool Get_Bill_CollideFlag()
     {
         return isBillCollide;
