@@ -42,6 +42,7 @@ public class CameraController_Test : MonoBehaviour
     {
         // プレイヤーに追随して移動
         transform.position = Vector3.Lerp(transform.position, m_Target.position, m_Speed * Time.deltaTime);
+        // transform.position = m_Target.position;
 
         switch (m_Mode)
         {

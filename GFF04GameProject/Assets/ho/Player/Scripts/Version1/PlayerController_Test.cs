@@ -34,7 +34,6 @@ public class PlayerController_Test : MonoBehaviour
     float m_SpeedZ = 0.0f;              // Z軸速度（前進はプラス、後退はマイナス）
 
     CharacterController m_Controller;
-    [SerializeField]
     PlayerState m_State;                // プレイヤーの状態
 
     // Use this for initialization
