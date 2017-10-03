@@ -36,6 +36,7 @@ GameObject:
   - component: {fileID: 4756959605785510}
   - component: {fileID: 143556799984166562}
   - component: {fileID: 114360848486680114}
+  - component: {fileID: 114904126448432630}
   m_Layer: 0
   m_Name: TestPlayer2
   m_TagString: Player
@@ -237,6 +238,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Speed: 4
   m_Gravity: 18
+--- !u!114 &114904126448432630
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1337022962520900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10d06766c4a321b42b00bc7569f5ad97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RotateSpeed: 360
 --- !u!136 &136584964600111540
 CapsuleCollider:
   m_ObjectHideFlags: 1
