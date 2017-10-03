@@ -109,7 +109,7 @@ public class Break : MonoBehaviour
             isBreak = false;
 
         //倒壊方向判定
-        Collapse_Direction(isBreak, collide_manager_.Get_Direction());
+        Collapse_Direction();
 
         //落下
         if (isBreak)
@@ -121,11 +121,11 @@ public class Break : MonoBehaviour
     }
 
     //倒壊方向判定
-    private void Collapse_Direction(bool breakFlag, int direction)
+    private void Collapse_Direction()
     {
-        if (breakFlag)
+        if (!isBreak)
         {
-            switch (direction)
+            switch (collide_manager_.Get_Direction())
             {
                 //前
                 case 1:
@@ -211,6 +211,11 @@ public class Break : MonoBehaviour
     public void Set_BreakFlag(bool breakflag)
     {
         isBreak = breakflag;
+    }
+
+    public bool Get_BreakFlag()
+    {
+        return isBreak;
     }
 
     public void Set_Rotation(Quaternion rotation)

@@ -23,7 +23,7 @@ public class TestBillBreak : MonoBehaviour
 
     void Update()
     {
-        if (!isClear)
+        if (!isClear && !break_.Get_BreakFlag())
             TestCollapse();
     }
 

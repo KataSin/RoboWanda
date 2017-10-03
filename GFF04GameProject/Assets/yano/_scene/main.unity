@@ -109,6 +109,11 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &190527641 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1840115229984026, guid: 2e2da1a47769fd4448c1362f09abb855,
+    type: 2}
+  m_PrefabInternal: {fileID: 1306166827}
 --- !u!1 &305112654
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,6 +627,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114093309954733734, guid: 54a0e797f80f19a4d903e3e442acb805,
+        type: 2}
+      propertyPath: bills_.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4620901811838868, guid: 54a0e797f80f19a4d903e3e442acb805, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -654,6 +664,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 114093309954733734, guid: 54a0e797f80f19a4d903e3e442acb805,
+        type: 2}
+      propertyPath: bills_.Array.data[0]
+      value: 
+      objectReference: {fileID: 190527641}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 54a0e797f80f19a4d903e3e442acb805, type: 2}
   m_IsPrefabParent: 0
