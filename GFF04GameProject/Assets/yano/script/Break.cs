@@ -56,14 +56,17 @@ public class Break : MonoBehaviour
     void Start()
     {
         towerType_ = this.gameObject.GetComponent<tower_Type>();
+
+        collide_manager_ = collide_manager_obj_.GetComponent<tower_collide_manager>();
+
+        //ビルの大きさによる補正
         TypeAdaptation();
 
         //初期化
-        m_Bill_rotation = Quaternion.identity;
-
-        collide_manager_ = collide_manager_obj_.GetComponent<tower_collide_manager>();
+        m_Bill_rotation = Quaternion.identity;     
     }
 
+    //ビルの大きさによる補正
     private void TypeAdaptation()
     {
         switch (towerType_.Get_TowerType())
@@ -104,9 +107,7 @@ public class Break : MonoBehaviour
     private void Collapse()
     {
         if (collide_manager_.Get_Bill_CollideFlag())
-        {
             isBreak = false;
-        }
 
         //倒壊方向判定
         Collapse_Direction();
