@@ -51,19 +51,21 @@ public class Break : MonoBehaviour
     private GameObject collide_manager_obj_;
     private tower_collide_manager collide_manager_;
 
-
     // Use this for initialization
     void Start()
     {
         towerType_ = this.gameObject.GetComponent<tower_Type>();
+
+        collide_manager_ = collide_manager_obj_.GetComponent<tower_collide_manager>();
+
+        //ビルの大きさによる補正
         TypeAdaptation();
 
         //初期化
         m_Bill_rotation = Quaternion.identity;
-
-        collide_manager_ = collide_manager_obj_.GetComponent<tower_collide_manager>();
     }
 
+    //ビルの大きさによる補正
     private void TypeAdaptation()
     {
         switch (towerType_.Get_TowerType())
@@ -104,9 +106,7 @@ public class Break : MonoBehaviour
     private void Collapse()
     {
         if (collide_manager_.Get_Bill_CollideFlag())
-        {
             isBreak = false;
-        }
 
         //倒壊方向判定
         Collapse_Direction();
@@ -159,7 +159,7 @@ public class Break : MonoBehaviour
     }
 
     //砂煙発生
-    private void OutBreak_Smoke()
+    public void OutBreak_Smoke()
     {
         if (!isOutBreak)
         {
@@ -206,5 +206,20 @@ public class Break : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+    }
+
+    public void Set_BreakFlag(bool breakflag)
+    {
+        isBreak = breakflag;
+    }
+
+    public bool Get_BreakFlag()
+    {
+        return isBreak;
+    }
+
+    public void Set_Rotation(Quaternion rotation)
+    {
+        m_Bill_rotation = rotation;
     }
 }
