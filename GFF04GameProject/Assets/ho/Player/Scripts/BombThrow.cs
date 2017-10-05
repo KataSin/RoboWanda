@@ -89,7 +89,13 @@ public class BombThrow : MonoBehaviour
             Throw();
         }
 
-        Debug.Log(m_BombKeep);
+        // 爆弾が全て起爆した場合、爆弾の保持数を3に戻す
+
+        if (GameObject.FindGameObjectsWithTag("Bomb").Length == 0)
+        {
+            m_BombKeep = 3;
+        }
+        Debug.Log(m_ThrowAmount);
     }
 
     // 着弾点を表示
@@ -170,20 +176,29 @@ public class BombThrow : MonoBehaviour
     void ThrowOne()
     {
         m_BombKeep -= 1;
-        Debug.Log("1個投擲");
+        GameObject bomb = Instantiate(m_Bomb, transform.position, transform.rotation);
     }
 
     // 爆弾を投擲（2個）
     void ThrowTwo()
     {
         m_BombKeep -= 2;
-        Debug.Log("2個投擲");
+        GameObject bomb1 = Instantiate(m_Bomb, transform.position, transform.rotation);
+        GameObject bomb2 = Instantiate(m_Bomb, transform.position, transform.rotation);
+
+        bomb1.transform.Rotate(new Vector3(0, 1, 0), -15.0f);
+        bomb2.transform.Rotate(new Vector3(0, 1, 0), +15.0f);
     }
 
     // 爆弾を投擲（3個）
     void ThrowThree()
     {
         m_BombKeep -= 3;
-        Debug.Log("3個投擲");
+        GameObject bomb1 = Instantiate(m_Bomb, transform.position, transform.rotation);
+        GameObject bomb2 = Instantiate(m_Bomb, transform.position, transform.rotation);
+        GameObject bomb3 = Instantiate(m_Bomb, transform.position, transform.rotation);
+
+        bomb2.transform.Rotate(new Vector3(0, 1, 0), -15.0f);
+        bomb3.transform.Rotate(new Vector3(0, 1, 0), +15.0f);
     }
 }
