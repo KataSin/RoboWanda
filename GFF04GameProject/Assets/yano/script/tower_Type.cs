@@ -8,10 +8,11 @@ public class tower_Type : MonoBehaviour
     {
         Low,
         High,
+        Other,
     }
 
     [SerializeField]
-    [Header("取得する場合 0:Low 1:High")]
+    [Header("取得する場合 0:Low 1:High 2:Other")]
     private TowerType towerType;
 
 

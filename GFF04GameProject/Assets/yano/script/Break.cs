@@ -152,8 +152,10 @@ public class Break : MonoBehaviour
                 case 4:
                     OutBreak_Smoke();
                     m_Bill_rotation = Quaternion.Euler(0f, 0f, -90f);
-
                     break;
+
+                default:
+                    break;                  
             }
         }
     }

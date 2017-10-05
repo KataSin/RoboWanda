@@ -39,10 +39,10 @@ public class tower_collide : MonoBehaviour
         return isBillCollide;
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         //ここに対象オブジェクトを指名
-        if (other.gameObject.tag == "bom")
+        if (other.gameObject.tag == "bom" || other.gameObject.tag == "RobotArmAttack")
         {
             isCollide = true;
         }
