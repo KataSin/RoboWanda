@@ -6,7 +6,7 @@ using UnityEngine;
 /// スクリプト：カメラ制御
 /// 製作者：Ho Siu Ki（何兆祺）
 /// </summary>
-public class CameraController : MonoBehaviour
+public class CameraController_v2 : MonoBehaviour
 {
     [SerializeField]
     private Transform m_Target;             // 追随目標
@@ -36,6 +36,12 @@ public class CameraController : MonoBehaviour
         // プレイヤー存在時だけ操作可能
         if (m_Target != null)
         {
+            // RBボタンを押すと、プレイヤーの後ろに移動（着弾点表示モード）
+            if (Input.GetButtonDown("Bomb_Hold"))
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, m_Target.rotation, m_RotateSpeed * Time.deltaTime);
+            }
+
             // 回転
             // 方向入力を取得
             float axisVertical = Input.GetAxisRaw("Vertical_R");        // x軸

@@ -17,8 +17,6 @@ public class TPSCamera_Test : MonoBehaviour
     private float m_YPosition_Bomb;     // 着弾点表示時のy軸位置
     [SerializeField]
     private float m_ZPosition_Bomb;     // 着弾点表示時のz軸位置
-    [SerializeField]
-    private float m_Speed;              // カメラ位置の移動速度
 
     GameObject m_Origin;                // 原点
     Vector3 forward;                    // 原点の正面向きベクトル
