@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 public class RobotManager : MonoBehaviour
 {
+   [SerializeField, Tooltip("ロボットのHP")]
+    public int m_RobotHp;
+
+
     //アクションたち
     public struct ActionFunc
     {
@@ -47,7 +52,15 @@ public class RobotManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(m_RobotState);
+        //ロボット仮HPUI
+        Text text = GameObject.FindGameObjectWithTag("RobotHp").GetComponent<Text>();
+        text.text = "RobotHp:" + m_RobotHp.ToString();
+
+        //ロボット死んだ処理
+        if (m_RobotHp <= 0)
+        {
+            Destroy(gameObject);
+        }
 
         //アクションのスタート
         if (m_RobotState != m_PreState)
@@ -94,5 +107,12 @@ public class RobotManager : MonoBehaviour
     {
         return m_RobotState;
     }
-
+    /// <summary>
+    /// ロボットにダメージを与える
+    /// </summary>
+    /// <param name="damage"></param>
+    public void Damage(int damage)
+    {
+        m_RobotHp -= damage;
+    }
 }
