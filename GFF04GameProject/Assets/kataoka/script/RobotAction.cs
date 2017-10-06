@@ -17,7 +17,8 @@ public class RobotAction : MonoBehaviour
         ROBOT_LEG_ATTACK,
         ROBOT_SEARCH,
         ROBOT_SEARCH_MOVE,
-        ROBOT_GOOL_MOVE
+        ROBOT_GOOL_MOVE,
+        ROBOT_BILL_BREAK
     }
     [SerializeField, Tooltip("ビルコリジョン")]
     public GameObject m_BillCollision;
