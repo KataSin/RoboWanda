@@ -11,6 +11,22 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1337022962520900}
   m_IsPrefabParent: 1
+--- !u!1 &1164466509353280
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4728126252718528}
+  - component: {fileID: 114049947550295886}
+  m_Layer: 0
+  m_Name: BombThrow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1273984574984068
 GameObject:
   m_ObjectHideFlags: 0
@@ -36,7 +52,6 @@ GameObject:
   - component: {fileID: 4756959605785510}
   - component: {fileID: 143556799984166562}
   - component: {fileID: 114360848486680114}
-  - component: {fileID: 114904126448432630}
   m_Layer: 0
   m_Name: TestPlayer2
   m_TagString: Player
@@ -121,6 +136,19 @@ Transform:
   m_Father: {fileID: 4756959605785510}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4728126252718528
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1164466509353280}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4756959605785510}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4756959605785510
 Transform:
   m_ObjectHideFlags: 1
@@ -132,6 +160,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4163021180989196}
+  - {fileID: 4728126252718528}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -225,6 +254,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114049947550295886
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1164466509353280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30ba5e7889c9f58458802289c540e9a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Bomb: {fileID: 1671173076217134, guid: 3d9194e6078c3c1479ff9b6ef80262ed, type: 2}
 --- !u!114 &114360848486680114
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -237,18 +278,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Speed: 4
-  m_Gravity: 18
---- !u!114 &114904126448432630
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1337022962520900}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10d06766c4a321b42b00bc7569f5ad97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Gravity: 8
   m_RotateSpeed: 360
 --- !u!136 &136584964600111540
 CapsuleCollider:
