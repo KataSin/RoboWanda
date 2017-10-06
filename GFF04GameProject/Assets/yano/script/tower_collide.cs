@@ -42,7 +42,7 @@ public class tower_collide : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         //ここに対象オブジェクトを指名
-        if (other.gameObject.tag == "bom")
+        if (other.gameObject.tag == "bom"||other.tag=="RobotArmAttack")
         {
             isCollide = true;
         }

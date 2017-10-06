@@ -34,6 +34,7 @@ public class RobotManager : MonoBehaviour
         m_IsAction = true;
         m_RobotState = RobotAction.RobotState.ROBOT_IDLE;
         m_PreState = RobotAction.RobotState.ROBOT_NULL;
+        //アクションの追加
         AddAction(RobotAction.RobotState.ROBOT_IDLE, m_RobotAction.RobotIdle());
         AddAction(RobotAction.RobotState.ROBOT_MOVE, m_RobotAction.RobotMove());
         AddAction(RobotAction.RobotState.ROBOT_ARM_ATTACK, m_RobotAction.RobotArmAttack());

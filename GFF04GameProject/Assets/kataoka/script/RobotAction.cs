@@ -19,6 +19,8 @@ public class RobotAction : MonoBehaviour
         ROBOT_SEARCH_MOVE,
         ROBOT_GOOL_MOVE
     }
+    [SerializeField, Tooltip("ビルコリジョン")]
+    public GameObject m_BillCollision;
 
     [SerializeField, Tooltip("ロボットのスピード"), HeaderAttribute("ロボット移動関係")]
     public float m_RobotSpeed;
@@ -64,7 +66,8 @@ public class RobotAction : MonoBehaviour
         m_SearchFlag = true;
         m_SearchPoints = new List<GameObject>();
         m_SearchPoints.AddRange(GameObject.FindGameObjectsWithTag("SearchPoint"));
-        m_RandomIndex = m_Random.Next(0, m_SearchPoints.Count + 1);
+        if (m_SearchPoints.Count <= 0) m_SearchPoints.Add(new GameObject());
+        m_RandomIndex = m_Random.Next(0, m_SearchPoints.Count-1);
         m_GoalPoint = GameObject.FindGameObjectWithTag("GoalPoint");
     }
     /// <summary>
@@ -108,7 +111,7 @@ public class RobotAction : MonoBehaviour
                 }
                 else
                 {
-                    RobotGoolMove();
+                    RobotGoolMove().actionUpdate();
                 }
 
 
@@ -205,6 +208,7 @@ public class RobotAction : MonoBehaviour
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
             return endAnim;
         };
+
         RobotManager.ActionFunc func = new RobotManager.ActionFunc();
         func.actionStart = robotSearchStart;
         func.actionUpdate = robotSearch;
@@ -244,7 +248,7 @@ public class RobotAction : MonoBehaviour
             //当たったらポジションを更新
             if (m_SearchFlag)
             {
-                m_RandomIndex = m_Random.Next(0, m_SearchPoints.Count + 1);
+                m_RandomIndex = m_Random.Next(0, m_SearchPoints.Count - 1);
                 m_NavAgent.destination = m_SearchPoints[m_RandomIndex].transform.position;
                 m_SearchFlag = false;
             }
@@ -272,23 +276,22 @@ public class RobotAction : MonoBehaviour
     {
         Action robotGoolMoveStart = () =>
         {
-            m_NavAgent.isStopped = false;
-            m_NavAgent.speed = m_RobotSpeed;
-            m_NavAgent.stoppingDistance = 0.0f;
-
-            m_NavAgent.destination = m_GoalPoint.transform.position;
         };
 
 
         Func<bool> robotGoolMove = () =>
         {
+            m_NavAgent.isStopped = false;
+            m_NavAgent.speed = m_RobotSpeed;
+            m_NavAgent.stoppingDistance = 0.0f;
+
+            m_NavAgent.destination = m_GoalPoint.transform.position;
             m_RobotState = RobotState.ROBOT_MOVE;
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
             m_Animator.SetFloat("RobotSpeed", m_NavAgent.velocity.magnitude);
 
             //m_VelocityY = transform.rotation.eulerAngles.y - m_SeveVelocityY;
             //m_Animator.SetFloat("RobotRotateSpeed", 5);
-
             return false;
         };
         RobotManager.ActionFunc func = new RobotManager.ActionFunc();
@@ -297,6 +300,27 @@ public class RobotAction : MonoBehaviour
 
         return func;
     }
+
+    public RobotManager.ActionFunc RobotBillBreak(GameObject bill)
+    {
+        Action robotBillBreakStart = () =>
+        {
+            m_NavAgent.isStopped = true;
+        };
+
+
+        Func<bool> robotBillBreak = () =>
+        {
+
+            return false;
+        };
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = robotBillBreakStart;
+        func.actionUpdate = robotBillBreak;
+
+        return func;
+    }
+
 
 
     public void OnTriggerEnter(Collider other)
