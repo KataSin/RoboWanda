@@ -12,13 +12,13 @@ public class BombExplosion : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        
+        // 出現後0.5秒、消滅
+        Destroy(gameObject, 0.5f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        // 出現後0.5秒、消滅
-        //Destroy(gameObject, 0.5f);
+        
     }
 }
