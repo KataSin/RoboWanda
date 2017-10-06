@@ -20,4 +20,14 @@ public class tower_Type : MonoBehaviour
     {
         return (uint)towerType;
     }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.tag=="RobotArmAttack")
+        {
+            Destroy(gameObject);
+        }
+    }
+
+
 }

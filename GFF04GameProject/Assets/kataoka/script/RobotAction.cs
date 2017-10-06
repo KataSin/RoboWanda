@@ -20,8 +20,6 @@ public class RobotAction : MonoBehaviour
         ROBOT_GOOL_MOVE,
         ROBOT_BILL_BREAK
     }
-    [SerializeField, Tooltip("ビルコリジョン")]
-    public GameObject m_BillCollision;
 
     [SerializeField, Tooltip("ロボットのスピード"), HeaderAttribute("ロボット移動関係")]
     public float m_RobotSpeed;
@@ -302,7 +300,7 @@ public class RobotAction : MonoBehaviour
         return func;
     }
 
-    public RobotManager.ActionFunc RobotBillBreak(GameObject bill)
+    public RobotManager.ActionFunc RobotBillBreak()
     {
         Action robotBillBreakStart = () =>
         {

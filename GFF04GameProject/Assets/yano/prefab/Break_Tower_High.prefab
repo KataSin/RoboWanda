@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4990968555482768}
   - component: {fileID: 114775061787335608}
-  - component: {fileID: 208026129639295578}
   m_Layer: 0
   m_Name: Break_Tower_High
   m_TagString: BreakTower
@@ -38,6 +37,8 @@ GameObject:
   - component: {fileID: 4498319743435900}
   - component: {fileID: 33477938809930190}
   - component: {fileID: 23712265529025636}
+  - component: {fileID: 65068226185387608}
+  - component: {fileID: 208839664744745618}
   m_Layer: 0
   m_Name: 14
   m_TagString: Untagged
@@ -65,7 +66,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1593774923095796}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 198, y: 78.9, z: -378}
+  m_LocalPosition: {x: 7981.338, y: 95, z: 2416.7444}
   m_LocalScale: {x: 3.5116947, y: 3.5116956, z: 3.5116956}
   m_Children:
   - {fileID: 4498319743435900}
@@ -112,6 +113,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1984125316516378}
   m_Mesh: {fileID: 4300000, guid: f01b243fd257015438c2950cdbc4e872, type: 3}
+--- !u!65 &65068226185387608
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1984125316516378}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 43.59982, y: 211.82066, z: 43.43439}
+  m_Center: {x: 0, y: 0.000003814697, z: 0}
 --- !u!114 &114775061787335608
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -124,16 +137,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towerType: 1
---- !u!208 &208026129639295578
+--- !u!208 &208839664744745618
 NavMeshObstacle:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1593774923095796}
+  m_GameObject: {fileID: 1984125316516378}
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 21.800001, y: 105.91, z: 21.717001}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1

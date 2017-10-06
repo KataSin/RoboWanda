@@ -11,6 +11,9 @@ public class RobotAI : MonoBehaviour
     private NavMeshAgent agent;
     private GameObject robotEye;
     private float attackTime;
+
+    [SerializeField, Tooltip("ビルコリジョン")]
+    public GameObject m_BillCollision;
     // Use this for initialization
     void Start()
     {
@@ -31,7 +34,14 @@ public class RobotAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        manager.SetAction(RobotAction.RobotState.ROBOT_GOOL_MOVE, false);
+        manager.SetAction(RobotAction.RobotState.ROBOT_GOOL_MOVE,true);
+
+
+        if (m_BillCollision.GetComponent<RobotBillCollision>().GetCollisionFlag())
+        {
+            manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
+        }
+
         //Debug.Log(agent.remainingDistance);
         //attackTime += Time.deltaTime;
 
