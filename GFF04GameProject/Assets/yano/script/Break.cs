@@ -199,6 +199,9 @@ public class Break : MonoBehaviour
             //倒壊済みでなければ
             if (!isAfter)
             {
+                //Vector3 ba_scale = new Vector3(
+                //    transform.localScale.x, transform.transform.localScale.y, transform.localScale.z);
+
                 Vector3 ba_pos = new Vector3(
                     transform.position.x, debris_low.transform.localScale.x / 2, transform.position.z);
 
@@ -208,11 +211,13 @@ public class Break : MonoBehaviour
                     //Low
                     case 0:
                         GameObject ba_obj = Instantiate(debris_low, ba_pos, m_Break_rotation);
+                        ba_obj.transform.localScale = transform.localScale;
                         break;
 
                     //High
                     case 1:
                         ba_obj = Instantiate(debris_high, ba_pos, m_Break_rotation);
+                        ba_obj.transform.localScale = transform.localScale;
                         break;
                 }
 
@@ -241,5 +246,10 @@ public class Break : MonoBehaviour
     public void Set_Rotation(Quaternion rotation)
     {
         m_Bill_rotation = rotation;
+    }
+
+    public void Set_BreakRotation(Quaternion rotation)
+    {
+        m_Break_rotation = rotation;
     }
 }

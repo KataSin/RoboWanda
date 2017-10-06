@@ -33,6 +33,7 @@ public class TestBillBreak : MonoBehaviour
         {
             break_.Set_BreakFlag(true);
             break_.Set_Rotation(Quaternion.Euler(90f, 0f, 0f));
+            break_.Set_BreakRotation(Quaternion.Euler(90f, 0f, 0f));
             break_.OutBreak_Smoke();
 
             isClear = true;
@@ -41,6 +42,7 @@ public class TestBillBreak : MonoBehaviour
         {
             break_.Set_BreakFlag(true);
             break_.Set_Rotation(Quaternion.Euler(-90f, 0f, 0f));
+            break_.Set_BreakRotation(Quaternion.Euler(-90f, 0f, 0f));
             break_.OutBreak_Smoke();
 
             isClear = true;
@@ -49,6 +51,7 @@ public class TestBillBreak : MonoBehaviour
         {
             break_.Set_BreakFlag(true);
             break_.Set_Rotation(Quaternion.Euler(0f, 0f, -90f));
+            break_.Set_BreakRotation(Quaternion.Euler(0f, 0f, -90f));
             break_.OutBreak_Smoke();
 
             isClear = true;
@@ -57,6 +60,7 @@ public class TestBillBreak : MonoBehaviour
         {
             break_.Set_BreakFlag(true);
             break_.Set_Rotation(Quaternion.Euler(0f, 0f, 90f));
+            break_.Set_BreakRotation(Quaternion.Euler(0f, 0f, 90f));
             break_.OutBreak_Smoke();
 
             isClear = true;
