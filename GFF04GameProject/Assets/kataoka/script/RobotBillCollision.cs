@@ -28,7 +28,8 @@ public class RobotBillCollision : MonoBehaviour
     {
         if (other.tag == "BreakTower")
         {
-            m_IsCollision = true;
+            if (other.GetComponent<tower_Type>().Get_TowerType() == 0)
+                m_IsCollision = true;
         }
     }
 

@@ -46,7 +46,8 @@ public class RobotManager : MonoBehaviour
         AddAction(RobotAction.RobotState.ROBOT_SEARCH, m_RobotAction.RobotSearch());
         AddAction(RobotAction.RobotState.ROBOT_SEARCH_MOVE, m_RobotAction.RobotSearchMove());
         AddAction(RobotAction.RobotState.ROBOT_GOOL_MOVE, m_RobotAction.RobotGoolMove());
-        m_IsLoop = false;
+        AddAction(RobotAction.RobotState.ROBOT_BILL_BREAK, m_RobotAction.RobotBillBreak());
+        m_IsLoop = true;
     }
 
     // Update is called once per frame
