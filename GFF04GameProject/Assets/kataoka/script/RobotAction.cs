@@ -312,8 +312,15 @@ public class RobotAction : MonoBehaviour
 
         Func<bool> robotBillBreak = () =>
         {
-
-            return false;
+            bool endAnim = false;
+            AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
+            if (clipInfo.clip.name == "Attack")
+            {
+                endAnim = (m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f);
+            }
+            m_RobotState = RobotState.ROBOT_ARM_ATTACK;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+            return endAnim;
         };
         RobotManager.ActionFunc func = new RobotManager.ActionFunc();
         func.actionStart = robotBillBreakStart;

@@ -25,7 +25,7 @@ public class RobotAI : MonoBehaviour
 
         robotEye = GameObject.FindGameObjectWithTag("RobotEye");
 
-        manager.SetAction(RobotAction.RobotState.ROBOT_ARM_ATTACK, false);
+        manager.SetAction(RobotAction.RobotState.ROBOT_GOOL_MOVE, false);
 
         attackTime = 0.0f;
     }
@@ -36,7 +36,7 @@ public class RobotAI : MonoBehaviour
         //Debug.Log(agent.remainingDistance);
         //attackTime += Time.deltaTime;
 
-        manager.SetAction(RobotAction.RobotState.ROBOT_MOVE,true);
+        //manager.SetAction(RobotAction.RobotState.ROBOT_MOVE,true);
 
 
 
