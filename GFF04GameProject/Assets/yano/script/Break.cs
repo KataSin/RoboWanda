@@ -9,8 +9,13 @@ public class Break : MonoBehaviour
 
     //破片
     [SerializeField]
-    [Header("破片")]
-    private GameObject debris_;
+    [Header("破片低")]
+    private GameObject debris_low;
+
+    //破片
+    [SerializeField]
+    [Header("破片高")]
+    private GameObject debris_high;
 
     //砂煙
     [SerializeField]
@@ -34,6 +39,9 @@ public class Break : MonoBehaviour
 
     //ビルの回転
     private Quaternion m_Bill_rotation;
+
+    //破壊後の回転
+    private Quaternion m_Break_rotation;
 
     //倒壊しているかどうか
     [SerializeField]
@@ -63,6 +71,7 @@ public class Break : MonoBehaviour
 
         //初期化
         m_Bill_rotation = Quaternion.identity;
+        m_Break_rotation = Quaternion.identity;
     }
 
     //ビルの大きさによる補正
@@ -77,7 +86,7 @@ public class Break : MonoBehaviour
 
             //High
             case 1:
-                m_tower_revision = 1.5f;
+                m_tower_revision = 1.2f;
                 break;
         }
     }
@@ -131,6 +140,7 @@ public class Break : MonoBehaviour
                 case 1:
                     OutBreak_Smoke();
                     m_Bill_rotation = Quaternion.Euler(90f, 0f, 0f);
+                    m_Break_rotation = Quaternion.Euler(90f, 0f, 0f);
 
                     break;
 
@@ -138,6 +148,7 @@ public class Break : MonoBehaviour
                 case 2:
                     OutBreak_Smoke();
                     m_Bill_rotation = Quaternion.Euler(0f, 0f, 90f);
+                    m_Break_rotation = Quaternion.Euler(0f, 0f, 90f);
 
                     break;
 
@@ -145,6 +156,7 @@ public class Break : MonoBehaviour
                 case 3:
                     OutBreak_Smoke();
                     m_Bill_rotation = Quaternion.Euler(-90f, 0f, 0f);
+                    m_Break_rotation = Quaternion.Euler(-90f, 0f, 0f);
 
                     break;
 
@@ -152,10 +164,12 @@ public class Break : MonoBehaviour
                 case 4:
                     OutBreak_Smoke();
                     m_Bill_rotation = Quaternion.Euler(0f, 0f, -90f);
+                    m_Break_rotation = Quaternion.Euler(0f, 0f, -90f);
+
                     break;
 
                 default:
-                    break;                  
+                    break;
             }
         }
     }
@@ -180,29 +194,33 @@ public class Break : MonoBehaviour
     private void BreakAfter()
     {
         //5s経過後
-        if (m_break_time >= (6f * m_tower_revision))
+        if (m_break_time >= (6.9f * m_tower_revision))
         {
             //倒壊済みでなければ
             if (!isAfter)
             {
-                Vector3 ba_scale =
-                    new Vector3(
-                    transform.localScale.x,
-                    transform.localScale.y / 3,
-                    transform.localScale.z
-                    );
-                debris_.transform.localScale = ba_scale * m_sand_smoke_scalar;
-
                 Vector3 ba_pos = new Vector3(
-                    transform.position.x, debris_.transform.localScale.y / 3, transform.position.z);
+                    transform.position.x, debris_low.transform.localScale.x / 2, transform.position.z);
 
                 //倒壊後のビルを生成
-                GameObject ba_obj = Instantiate(debris_, ba_pos, Quaternion.identity);
+                switch (towerType_.Get_TowerType())
+                {
+                    //Low
+                    case 0:
+                        GameObject ba_obj = Instantiate(debris_low, ba_pos, m_Break_rotation);
+                        break;
+
+                    //High
+                    case 1:
+                        ba_obj = Instantiate(debris_high, ba_pos, m_Break_rotation);
+                        break;
+                }
+
                 isAfter = true;
             }
 
             //8s経過後
-            if (m_break_time >= (8f * m_tower_revision))
+            if (m_break_time >= (9f * m_tower_revision))
             {
                 //自分を消去
                 Destroy(gameObject);

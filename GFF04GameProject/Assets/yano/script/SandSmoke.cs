@@ -25,13 +25,13 @@ public class SandSmoke : MonoBehaviour
     {
         m_break_time += 1.0f * Time.deltaTime;
 
-        if (m_break_time < 9f)
+        if (m_break_time < 12f)
         {
             for (int i = 0; i < sand_smokes_.Count; ++i)
                 sand_smokes_[i].Play();
         }
 
-        else if (m_break_time >= 9f)
+        else if (m_break_time >= 12f)
         {
             for (int i = 0; i < sand_smokes_.Count; ++i)
                 sand_smokes_[i].Stop();

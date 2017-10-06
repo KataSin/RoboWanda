@@ -127,7 +127,6 @@ GameObject:
   - component: {fileID: 4848287435079012}
   - component: {fileID: 114767662997810604}
   - component: {fileID: 114430671799315212}
-  - component: {fileID: 114904573738663538}
   m_Layer: 0
   m_Name: Tower_Parent Low
   m_TagString: Untagged
@@ -434,7 +433,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 407b9717867ccb24d9160864564db477, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debris_: {fileID: 1267486523399330, guid: 39825166cc15e47488a175871d339397, type: 2}
+  debris_low: {fileID: 1531780437021400, guid: 79bdb3a9b89849d499dbe222b6289bb0, type: 2}
+  debris_high: {fileID: 1593774923095796, guid: 30dc80281fb4c244a82ec36addf2dc7b,
+    type: 2}
   sand_smoke_manager_: {fileID: 1915392164093148, guid: 5f77a49face4c9840a51841ecbd2278f,
     type: 2}
   m_sand_smoke_scalar: 10
@@ -481,17 +482,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towerType: 0
---- !u!114 &114904573738663538
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1840115229984026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0980eb4da08cc184ebeee33fee4dd3d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114991781797607212
 MonoBehaviour:
   m_ObjectHideFlags: 1
