@@ -51,7 +51,6 @@ public class Break : MonoBehaviour
     private GameObject collide_manager_obj_;
     private tower_collide_manager collide_manager_;
 
-
     // Use this for initialization
     void Start()
     {
@@ -63,7 +62,7 @@ public class Break : MonoBehaviour
         TypeAdaptation();
 
         //初期化
-        m_Bill_rotation = Quaternion.identity;     
+        m_Bill_rotation = Quaternion.identity;
     }
 
     //ビルの大きさによる補正
@@ -153,14 +152,16 @@ public class Break : MonoBehaviour
                 case 4:
                     OutBreak_Smoke();
                     m_Bill_rotation = Quaternion.Euler(0f, 0f, -90f);
-
                     break;
+
+                default:
+                    break;                  
             }
         }
     }
 
     //砂煙発生
-    private void OutBreak_Smoke()
+    public void OutBreak_Smoke()
     {
         if (!isOutBreak)
         {
@@ -207,5 +208,20 @@ public class Break : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+    }
+
+    public void Set_BreakFlag(bool breakflag)
+    {
+        isBreak = breakflag;
+    }
+
+    public bool Get_BreakFlag()
+    {
+        return isBreak;
+    }
+
+    public void Set_Rotation(Quaternion rotation)
+    {
+        m_Bill_rotation = rotation;
     }
 }
