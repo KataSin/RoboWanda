@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4990968555482768}
   - component: {fileID: 114775061787335608}
+  - component: {fileID: 208026129639295578}
   m_Layer: 0
   m_Name: Break_Tower_High
   m_TagString: BreakTower
@@ -123,3 +124,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towerType: 1
+--- !u!208 &208026129639295578
+NavMeshObstacle:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1593774923095796}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

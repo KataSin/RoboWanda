@@ -10,8 +10,6 @@ public class RobotAI : MonoBehaviour
     private GameObject player;
     private NavMeshAgent agent;
     private GameObject robotEye;
-
-    public GameObject goolPoint;
     private float attackTime;
     // Use this for initialization
     void Start()
@@ -25,7 +23,7 @@ public class RobotAI : MonoBehaviour
 
         robotEye = GameObject.FindGameObjectWithTag("RobotEye");
 
-        manager.SetAction(RobotAction.RobotState.ROBOT_GOOL_MOVE, false);
+
 
         attackTime = 0.0f;
     }
@@ -33,6 +31,7 @@ public class RobotAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        manager.SetAction(RobotAction.RobotState.ROBOT_GOOL_MOVE, false);
         //Debug.Log(agent.remainingDistance);
         //attackTime += Time.deltaTime;
 
