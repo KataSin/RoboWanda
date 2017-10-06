@@ -8,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public class Bomb_v2 : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject m_Explosion;     // 爆発の当たり判定
     Rigidbody m_RigidBody;
 
     // Use this for initialization
@@ -27,7 +29,8 @@ public class Bomb_v2 : MonoBehaviour
         if (!Input.GetButton("Bomb_Hold") && Input.GetButtonDown("Bomb_Throw"))
         {
             Destroy(gameObject);
-            // 攻撃判定を発生
+            // 爆発の当たり判定を発生
+            Instantiate(m_Explosion);
         }
     }
 
