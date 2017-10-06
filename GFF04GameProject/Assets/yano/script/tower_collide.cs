@@ -44,6 +44,7 @@ public class tower_collide : MonoBehaviour
         //ここに対象オブジェクトを指名
         if (other.gameObject.tag == "bom" || other.gameObject.tag == "RobotArmAttack")
         {
+            Debug.Log("atata");
             isCollide = true;
         }
 

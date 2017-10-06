@@ -30,7 +30,7 @@ public class Bomb_v2 : MonoBehaviour
         {
             Destroy(gameObject);
             // 爆発の当たり判定を発生
-            Instantiate(m_Explosion);
+            Instantiate(m_Explosion, transform.position, Quaternion.identity);
         }
     }
 
