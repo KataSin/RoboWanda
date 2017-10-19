@@ -14,7 +14,7 @@ public class RobotBillCollision : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_IsCollision = false;
+        //m_IsCollision = false;
     }
     /// <summary>
     /// 当たっているかどうかを取得する
@@ -23,6 +23,14 @@ public class RobotBillCollision : MonoBehaviour
     public bool GetCollisionFlag()
     {
         return m_IsCollision;
+    }
+    /// <summary>
+    /// あたり判定フラグを設定する
+    /// </summary>
+    /// <param name="flag"></param>
+    public void SetCollisionFlag(bool flag)
+    {
+        m_IsCollision = flag;
     }
     public void OnTriggerStay(Collider other)
     {
