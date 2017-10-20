@@ -32,8 +32,8 @@ public class Ground : MonoBehaviour
     {
         if (break_ground_.Get_BreakFlag() && !isClear)
         {
-            Instantiate(break_ground_parts_, transform);
-            Instantiate(hole_collide_obj_, transform);
+            Instantiate(break_ground_parts_, new Vector3(transform.localPosition.x, transform.localPosition.y + 21f, transform.localPosition.z), Quaternion.identity, transform);
+            Instantiate(hole_collide_obj_, new Vector3(transform.localPosition.x, transform.localPosition.y + 24.5f, transform.localPosition.z), Quaternion.identity,transform);
 
             isClear = true;
         }
