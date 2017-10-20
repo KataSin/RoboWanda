@@ -11,6 +11,8 @@ public class RobotAI : MonoBehaviour
     private NavMeshAgent agent;
     private GameObject robotEye;
     private float attackTime;
+    [SerializeField, Tooltip("ビームのクールタイム")]
+    public float m_RobotBeamCoolTime = 50.0f;
 
     [SerializeField, Tooltip("ビルコリジョン")]
     public GameObject m_BillCollision;
@@ -34,13 +36,23 @@ public class RobotAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        manager.SetAction(RobotAction.RobotState.ROBOT_GOOL_MOVE,true);
-
-
-        if (m_BillCollision.GetComponent<RobotBillCollision>().GetCollisionFlag())
-        {
-            manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
+        //見えてたら
+        GameObject player;
+        if(PlayerToRobotRay("Player",0,out player)){
+            manager.SetAction(RobotAction.RobotState.ROBOT_TO_PLAYER_MOVE, true);
         }
+            //見えてなかったら
+        else
+        {
+            manager.SetAction(RobotAction.RobotState.ROBOT_TO_PLAYER_MOVE, true);
+
+        }
+
+
+        //if (m_BillCollision.GetComponent<RobotBillCollision>().GetCollisionFlag())
+        //{
+        //    manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
+        //}
 
         //Debug.Log(agent.remainingDistance);
         //attackTime += Time.deltaTime;
@@ -125,7 +137,7 @@ public class RobotAI : MonoBehaviour
         Vector3 vec = (player.transform.position - robotEye.transform.position).normalized * 2000.0f;
         Vector3 start = robotEye.transform.position;
         RaycastHit hit;
-        //int mask = ~(1 << 8);
+        
         if (Physics.Raycast(start, vec, out hit, 20000.0f, layerMask))
         {
             string name = hit.collider.name;

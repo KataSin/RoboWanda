@@ -7,13 +7,16 @@ using UnityEngine.AI;
 
 public class RobotAction : MonoBehaviour
 {
+    public GameObject testObj;
 
     public enum RobotState
     {
-        ROBOT_NULL,
+        ROBOT_NULL = 0,
         ROBOT_IDLE,
-        ROBOT_MOVE,
+        ROBOT_TO_PLAYER_MOVE,
+        ROBOT_TO_BILL_MOVE,
         ROBOT_ARM_ATTACK,
+        ROBOT_BEAM_ATTACK,
         ROBOT_LEG_ATTACK,
         ROBOT_SEARCH,
         ROBOT_SEARCH_MOVE,
@@ -25,6 +28,10 @@ public class RobotAction : MonoBehaviour
     public float m_RobotSpeed;
     [SerializeField, Tooltip("ロボットがどのくらいプレイヤーの近くによるか")]
     public float m_Player_Enemy_Distance;
+
+    [SerializeField, Tooltip("ロボットビームのクールダウン")]
+    public float m_BeamCoolDownTime = 30.0f;
+
 
     //ナビエージェント
     private NavMeshAgent m_NavAgent;
@@ -49,10 +56,23 @@ public class RobotAction : MonoBehaviour
     private int m_RandomIndex;
     //ゴールポイント
     private GameObject m_GoalPoint;
+    //ロボットが見る補間タイム
+    private float m_LookAtLerpTime;
+    //ロボットが見る場所
+    private Vector3 m_RobotLookAtPosition;
+    //ロボットがプレイヤーを見ているかどうか
+    private bool m_IsRobotLookAtPlayerFlag;
+    //ビルたち
+    private List<GameObject> m_Bills;
     void Start()
     {
+        m_Bills = new List<GameObject>();
         m_Player = GameObject.FindGameObjectWithTag("Player");
         m_Robot = GameObject.FindGameObjectWithTag("Robot");
+
+        m_Bills.AddRange(GameObject.FindGameObjectsWithTag("Tower"));
+
+
         m_Animator = GetComponent<Animator>();
         m_NavAgent = GetComponent<NavMeshAgent>();
         m_RobotState = RobotState.ROBOT_NULL;
@@ -66,14 +86,16 @@ public class RobotAction : MonoBehaviour
         m_SearchPoints = new List<GameObject>();
         m_SearchPoints.AddRange(GameObject.FindGameObjectsWithTag("SearchPoint"));
         if (m_SearchPoints.Count <= 0) m_SearchPoints.Add(new GameObject());
-        m_RandomIndex = m_Random.Next(0, m_SearchPoints.Count-1);
+        m_RandomIndex = m_Random.Next(0, m_SearchPoints.Count - 1);
         m_GoalPoint = GameObject.FindGameObjectWithTag("GoalPoint");
+
+        m_LookAtLerpTime = 0.0f;
     }
     /// <summary>
     /// ロボットがプレイヤーに向かって動く
     /// </summary>
     /// <returns></returns>
-    public RobotManager.ActionFunc RobotMove()
+    public RobotManager.ActionFunc RobotToPlayerMove()
     {
 
         Action moveStart = () =>
@@ -88,30 +110,35 @@ public class RobotAction : MonoBehaviour
                 m_NavAgent.speed = m_RobotSpeed;
                 m_NavAgent.stoppingDistance = m_Player_Enemy_Distance;
 
-                //ロボットからゴールのベクトル計算
-                Vector3 robotToGoalVec3 = (m_GoalPoint.transform.position - m_Robot.transform.position).normalized;
-                //前か後か判定するために横ベクトルに変換
-                Vector3 robotToGoalLeftVec3 = Vector3.Cross(robotToGoalVec3, Vector3.up).normalized;
-                //さっき計算したやつをVector2に変換
-                Vector2 robotToGoalVec2 = new Vector2(robotToGoalLeftVec3.x, robotToGoalLeftVec3.z).normalized;
+                //Y軸をロボットに合わせる
+                m_NavAgent.destination = m_Player.transform.position;
+                m_RobotState = RobotState.ROBOT_TO_PLAYER_MOVE;
+                m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+                m_Animator.SetFloat("RobotSpeed", m_NavAgent.velocity.magnitude);
+                ////ロボットからゴールのベクトル計算
+                //Vector3 robotToGoalVec3 = (m_GoalPoint.transform.position - m_Robot.transform.position).normalized;
+                ////前か後か判定するために横ベクトルに変換
+                //Vector3 robotToGoalLeftVec3 = Vector3.Cross(robotToGoalVec3, Vector3.up).normalized;
+                ////さっき計算したやつをVector2に変換
+                //Vector2 robotToGoalVec2 = new Vector2(robotToGoalLeftVec3.x, robotToGoalLeftVec3.z).normalized;
 
-                //ロボットからプレイヤーのベクトル計算
-                Vector3 robotToPlayerVec3 = (m_Player.transform.position - m_Robot.transform.position).normalized;
-                //それをVector2に変換
-                Vector2 robotToPlayerVec2 = new Vector2(robotToPlayerVec3.x, robotToPlayerVec3.z);
+                ////ロボットからプレイヤーのベクトル計算
+                //Vector3 robotToPlayerVec3 = (m_Player.transform.position - m_Robot.transform.position).normalized;
+                ////それをVector2に変換
+                //Vector2 robotToPlayerVec2 = new Vector2(robotToPlayerVec3.x, robotToPlayerVec3.z);
 
-                if (Vector2Cross(robotToGoalVec2, robotToPlayerVec2) < 0.0f)
-                {
-                    //Y軸をロボットに合わせる
-                    m_NavAgent.destination = m_Player.transform.position;
-                    m_RobotState = RobotState.ROBOT_MOVE;
-                    m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
-                    m_Animator.SetFloat("RobotSpeed", m_NavAgent.velocity.magnitude);
-                }
-                else
-                {
-                    RobotGoolMove().actionUpdate();
-                }
+                //if (Vector2Cross(robotToGoalVec2, robotToPlayerVec2) < 0.0f)
+                //{
+                //    //Y軸をロボットに合わせる
+                //    m_NavAgent.destination = m_Player.transform.position;
+                //    m_RobotState = RobotState.ROBOT_MOVE;
+                //    m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+                //    m_Animator.SetFloat("RobotSpeed", m_NavAgent.velocity.magnitude);
+                //}
+                //else
+                //{
+                //    RobotGoolMove().actionUpdate();
+                //}
 
 
                 //m_VelocityY = transform.rotation.eulerAngles.y - m_SeveVelocityY;
@@ -185,6 +212,38 @@ public class RobotAction : MonoBehaviour
         return func;
     }
     /// <summary>
+    /// ロボットのビームの攻撃
+    /// </summary>
+    /// <returns></returns>
+    public RobotManager.ActionFunc RobotBeamAttack()
+    {
+        Action robotBeamAttackStart = () =>
+        {
+            m_NavAgent.isStopped = true;
+        };
+
+
+        Func<bool> robotBeamAttack = () =>
+        {
+            bool endAnim = false;
+            AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
+            if (clipInfo.clip.name == "AttackHame")
+            {
+                endAnim = (m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f);
+            }
+            m_RobotState = RobotState.ROBOT_BEAM_ATTACK;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+            return endAnim;
+        };
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = robotBeamAttackStart;
+        func.actionUpdate = robotBeamAttack;
+
+        return func;
+    }
+
+
+    /// <summary>
     /// ロボットが探すアニメーションだけ
     /// </summary>
     /// <returns></returns>
@@ -252,7 +311,7 @@ public class RobotAction : MonoBehaviour
                 m_SearchFlag = false;
             }
 
-            m_RobotState = RobotState.ROBOT_MOVE;
+            m_RobotState = RobotState.ROBOT_SEARCH_MOVE;
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
             m_Animator.SetFloat("RobotSpeed", m_NavAgent.velocity.magnitude);
 
@@ -285,7 +344,7 @@ public class RobotAction : MonoBehaviour
             m_NavAgent.stoppingDistance = 0.0f;
 
             m_NavAgent.destination = m_GoalPoint.transform.position;
-            m_RobotState = RobotState.ROBOT_MOVE;
+            m_RobotState = RobotState.ROBOT_TO_PLAYER_MOVE;
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
             m_Animator.SetFloat("RobotSpeed", m_NavAgent.velocity.magnitude);
 
@@ -299,7 +358,54 @@ public class RobotAction : MonoBehaviour
 
         return func;
     }
+    /// <summary>
+    /// ロボットが近くのビルに向かって歩く
+    /// </summary>
+    /// <returns></returns>
+    public RobotManager.ActionFunc RobotBillMove()
+    {
+        Action robotBillMoveStart = () =>
+        {
+        };
 
+
+        Func<bool> robotBillMove = () =>
+        {
+            m_NavAgent.isStopped = false;
+            m_NavAgent.speed = m_RobotSpeed;
+            m_NavAgent.stoppingDistance = 0.0f;
+            //一番近いビル
+            GameObject disObj = m_Bills[0];
+            foreach (var i in m_Bills)
+            {
+                if (Vector3.Distance(disObj.transform.position, m_Robot.transform.position) >=
+                    Vector3.Distance(i.transform.position, m_Robot.transform.position))
+                {
+                    disObj = i;
+                }
+            }
+            m_NavAgent.destination = disObj.transform.position;
+
+            m_RobotState = RobotState.ROBOT_TO_PLAYER_MOVE;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+            m_Animator.SetFloat("RobotSpeed", m_NavAgent.velocity.magnitude);
+
+            //m_VelocityY = transform.rotation.eulerAngles.y - m_SeveVelocityY;
+            //m_Animator.SetFloat("RobotRotateSpeed", 5);
+            return false;
+        };
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = robotBillMoveStart;
+        func.actionUpdate = robotBillMove;
+
+        return func;
+    }
+
+
+    /// <summary>
+    /// ロボットがビルを壊す
+    /// </summary>
+    /// <returns></returns>
     public RobotManager.ActionFunc RobotBillBreak()
     {
         Action robotBillBreakStart = () =>
@@ -336,8 +442,63 @@ public class RobotAction : MonoBehaviour
             m_SearchFlag = true;
         }
     }
+    /// <summary>
+    /// ロボットがプレイヤーを見るかどうか
+    /// </summary>
+    /// <param name="flag">見るかどうかフラグ</param>
+    private void SetRobotLookAt(bool flag)
+    {
+        m_IsRobotLookAtPlayerFlag = flag;
+    }
+
+    public void RobotLookAtIKUpdate()
+    {
+        if (m_IsRobotLookAtPlayerFlag)
+        {
+            m_LookAtLerpTime += Time.deltaTime;
+        }
+        else
+        {
+            m_LookAtLerpTime -= Time.deltaTime;
+        }
+        //基本ここを見てる
+        Vector3 robotFront = m_Robot.transform.position + (m_Robot.transform.forward.normalized * 2000.0f) + new Vector3(0, 3000, 0);
+        //プレイヤー座標
+        Vector3 playerPos = m_Player.transform.position;
+
+        testObj.transform.position = Vector3.Lerp(robotFront, playerPos, m_LookAtLerpTime);
+    }
+    /// <summary>
+    /// IK系
+    /// </summary>
+    /// <param name="layorIndex"></param>
+    void OnAnimatorIK(int layorIndex)
+    {
+        m_Animator.SetLookAtWeight(1.0f, 0.4f, 0.7f, 0.0f, 0.5f);
+        m_Animator.SetLookAtPosition(testObj.transform.position);
 
 
+
+
+
+        //avator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+        //avator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
+        //avator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
+        //avator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
+
+        //avator.SetIKPosition(AvatarIKGoal.LeftHand, lookAtObj.position);
+        //avator.SetIKRotation(AvatarIKGoal.LeftHand, lookAtObj.rotation);
+        //avator.SetIKPosition(AvatarIKGoal.RightHand, lookAtObj.position);
+        //avator.SetIKRotation(AvatarIKGoal.RightHand, lookAtObj.rotation);
+
+    }
+
+    /// <summary>
+    /// Vector2の外積
+    /// </summary>
+    /// <param name="lhs"></param>
+    /// <param name="rhs"></param>
+    /// <returns>外積の結果</returns>
     public float Vector2Cross(Vector2 lhs, Vector2 rhs)
     {
         return lhs.x * rhs.y - rhs.x * lhs.y;
