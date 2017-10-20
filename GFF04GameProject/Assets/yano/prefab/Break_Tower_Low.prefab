@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4209048837553330}
   - component: {fileID: 114168428397509054}
-  - component: {fileID: 65803044711454124}
   m_Layer: 0
   m_Name: Break_Tower_Low
   m_TagString: BreakTower
@@ -38,6 +37,7 @@ GameObject:
   - component: {fileID: 4914450306405054}
   - component: {fileID: 33018719630395004}
   - component: {fileID: 23307252216577816}
+  - component: {fileID: 64632277551388752}
   m_Layer: 0
   m_Name: 6
   m_TagString: Untagged
@@ -52,8 +52,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1531780437021400}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7726.9604, y: 188, z: 3559.999}
-  m_LocalScale: {x: 12.385329, y: 18.141832, z: 12.385348}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4914450306405054}
   m_Father: {fileID: 0}
@@ -66,7 +66,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1742467975621482}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 7.9000006, z: 0}
+  m_LocalPosition: {x: 0, y: 32.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4209048837553330}
@@ -111,19 +111,21 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1742467975621482}
-  m_Mesh: {fileID: 4300000, guid: 4151a6192219ff249b121c536513d8ab, type: 3}
---- !u!65 &65803044711454124
-BoxCollider:
+  m_Mesh: {fileID: 4300002, guid: 4151a6192219ff249b121c536513d8ab, type: 3}
+--- !u!64 &64632277551388752
+MeshCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1531780437021400}
+  m_GameObject: {fileID: 1742467975621482}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 13, y: 23, z: 13}
-  m_Center: {x: 0, y: 8, z: 0}
+  m_Convex: 1
+  m_InflateMesh: 0
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300002, guid: 4151a6192219ff249b121c536513d8ab, type: 3}
 --- !u!114 &114168428397509054
 MonoBehaviour:
   m_ObjectHideFlags: 1
