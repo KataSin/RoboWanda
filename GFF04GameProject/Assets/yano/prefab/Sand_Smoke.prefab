@@ -116,6 +116,7 @@ MonoBehaviour:
   sand_smokes_:
   - {fileID: 198870370312573896}
   - {fileID: 198298515361715570}
+  m_break_time: 0
 --- !u!198 &198298515361715570
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -265,7 +266,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.8308824, g: 0.74366504, b: 0.5559581, a: 1}
+      maxColor: {r: 0.84705883, g: 0.8039216, b: 0.7294118, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -3527,7 +3528,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.83823526, g: 0.75806737, b: 0.585532, a: 1}
+      maxColor: {r: 0.8455882, g: 0.80219394, b: 0.70880187, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}

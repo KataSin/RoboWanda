@@ -47,7 +47,7 @@ public class tower_collide : MonoBehaviour
             isCollide = true;
         }
 
-        if (!other.transform.IsChildOf(parent_Tower_) && other.gameObject.tag == "Tower")
+        if (!other.transform.IsChildOf(parent_Tower_) && other.gameObject.tag == "TowerCollision")
         {
             isBillCollide = true;
         }

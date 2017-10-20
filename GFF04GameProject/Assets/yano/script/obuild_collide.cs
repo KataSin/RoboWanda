@@ -22,7 +22,9 @@ public class obuild_collide : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //ここに対象オブジェクトを指名
-        if (other.gameObject.tag == "bom" || other.gameObject.tag == "RobotArmAttack")
+        if (other.gameObject.tag == "bom" 
+            || other.gameObject.tag == "RobotArmAttack" 
+            || other.gameObject.tag == "TowerCollision")
         {
             isCollide = true;
         }

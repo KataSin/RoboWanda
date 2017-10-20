@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114991781797607212}
   m_Layer: 0
   m_Name: Tower_B
-  m_TagString: Tower
+  m_TagString: TowerCollision
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 114098809221391760}
   m_Layer: 0
   m_Name: Tower_L
-  m_TagString: Tower
+  m_TagString: TowerCollision
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 114618537271565552}
   m_Layer: 0
   m_Name: Tower_F
-  m_TagString: Tower
+  m_TagString: TowerCollision
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 114436533698007310}
   m_Layer: 0
   m_Name: Tower_R
-  m_TagString: Tower
+  m_TagString: TowerCollision
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 114430671799315212}
   m_Layer: 0
   m_Name: Tower_Parent Low
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -440,7 +440,7 @@ MonoBehaviour:
     type: 2}
   sand_smoke_manager_: {fileID: 1915392164093148, guid: 5f77a49face4c9840a51841ecbd2278f,
     type: 2}
-  m_sand_smoke_scalar: 10
+  m_sand_smoke_scalar: 40
   m_rotated_time: 10
   isBreak: 0
   collide_manager_obj_: {fileID: 1465542048929630}
