@@ -41,7 +41,7 @@ public class RobotManager : MonoBehaviour
         m_PreState = RobotAction.RobotState.ROBOT_NULL;
         //アクションの追加
         AddAction(RobotAction.RobotState.ROBOT_IDLE, m_RobotAction.RobotIdle());
-        AddAction(RobotAction.RobotState.ROBOT_MOVE, m_RobotAction.RobotMove());
+        AddAction(RobotAction.RobotState.ROBOT_TO_PLAYER_MOVE, m_RobotAction.RobotToPlayerMove());
         AddAction(RobotAction.RobotState.ROBOT_ARM_ATTACK, m_RobotAction.RobotArmAttack());
         AddAction(RobotAction.RobotState.ROBOT_SEARCH, m_RobotAction.RobotSearch());
         AddAction(RobotAction.RobotState.ROBOT_SEARCH_MOVE, m_RobotAction.RobotSearchMove());
@@ -72,6 +72,8 @@ public class RobotManager : MonoBehaviour
         }
         //アクションアップデート(trueが帰ったら終了)
         m_IsAction = m_Actions[m_RobotState].actionUpdate();
+        //IKのUpdate
+        m_RobotAction.RobotLookAtIKUpdate();
         //行動が終わったら待機に戻る
         if (m_IsAction)
         {
