@@ -20,6 +20,10 @@ enum PlayerStateAlpha
 public class PlayerControllerAlpha : MonoBehaviour
 {
     [SerializeField]
+    private int m_MaxHP = 100;                  // プレイヤーの最大体力値
+    int m_CurrentHP;                            // 現在の体力値
+
+    [SerializeField]
     private float m_MaxSpeed = 6.0f;            // 最高速度（メートル/秒）
     [SerializeField]
     private float m_AccelPower = 2.0f;          // 加速度（メートル/秒/秒）
@@ -53,9 +57,15 @@ public class PlayerControllerAlpha : MonoBehaviour
     private GameObject m_BombThrow;             // 爆弾の出現ポイント
     [SerializeField]
     private GameObject m_Bomb;                  // 爆弾のプレハブ
-    int m_BombKeep = 3;                         // 爆弾の保持数
+    [SerializeField]
+    private GameObject m_ThrowPrediction;       // 投擲予測
+    [SerializeField]
+    private float m_Force = 6.0f;               // 爆弾を投げる力
+
+    int m_BombKeep = 3;                         // 爆弾の所持数
     int m_ThrowAmount = 1;                      // 爆弾の投擲数
     bool m_IsTriggered;                         // 十字キーの操作判定
+    float m_CurrentForce;                       // 現在の投げる力
 
     CharacterController m_Controller;           // キャラクターコントローラー
     PlayerStateAlpha m_State;                   // プレイヤーの状態
@@ -66,8 +76,10 @@ public class PlayerControllerAlpha : MonoBehaviour
     void Start()
     {
         m_Controller = GetComponent<CharacterController>();
+        m_CurrentHP = m_MaxHP;
         m_State = PlayerStateAlpha.Normal;
         m_PrevPosition = transform.position;
+        m_CurrentForce = m_Force;
         m_IsDash = false;
     }
 
@@ -122,10 +134,16 @@ public class PlayerControllerAlpha : MonoBehaviour
         // 爆弾の数を１～３の範囲内に限定
         m_ThrowAmount = Mathf.Clamp(m_ThrowAmount, 1, 3);
 
-        // 爆弾が全て起爆した場合、爆弾の保持数を3に戻す
+        // 爆弾が全て起爆した場合、爆弾の所持数を3に戻す
         if (GameObject.FindGameObjectsWithTag("Bomb").Length == 0)
         {
             m_BombKeep = 3;
+        }
+
+        // 体力が0以下になったら死亡
+        if (m_CurrentHP <= 0)
+        {
+            m_State = PlayerStateAlpha.Dead;
         }
     }
 
@@ -230,6 +248,16 @@ public class PlayerControllerAlpha : MonoBehaviour
     // 爆弾投げ時の挙動
     void Bomb()
     {
+        // カメラの角度に応じて、爆弾の投げる角度を変える（擲弾点の角度を変える）
+        m_BombThrow.transform.rotation = Camera.main.transform.rotation;
+
+        // 投擲角度によって、投げる力を変える（水平以上になると、力が増える）
+        var throw_angle = m_BombThrow.transform.localEulerAngles.x;
+        float elevation_angle = 0.0f;
+        if (throw_angle >= 270.0f) elevation_angle = 360.0f - throw_angle;
+        float new_force = m_Force * (1 + elevation_angle / 90.0f);
+        m_CurrentForce = new_force;
+
         // 爆弾投げ時の移動処理
         BombMove();
 
@@ -319,7 +347,60 @@ public class PlayerControllerAlpha : MonoBehaviour
     // 着弾点を表示
     void BombShowThrowPoint()
     {
+        switch (m_ThrowAmount)
+        {
+            case 1:
+                ShowThrowDirectionOne();
+                break;
+            case 2:
+                ShowThrowDirectionTwo();
+                break;
+            case 3:
+                ShowThrowDirectionThree();
+                break;
+            default:
+                ShowThrowDirectionOne();
+                break;
+        }
+    }
 
+    // 着弾点を表示（1個投擲時）
+    void ShowThrowDirectionOne()
+    {
+        // 予測用オブジェクトを生成
+        GameObject prediction = Instantiate(m_ThrowPrediction, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
+        // Rigidbodyに力を加えて投げる
+        prediction.GetComponent<Rigidbody>().AddForce(prediction.transform.forward * m_CurrentForce, ForceMode.Impulse);
+    }
+
+    // 着弾点を表示（2個投擲時）
+    void ShowThrowDirectionTwo()
+    {
+        // 予測用オブジェクトを生成
+        GameObject prediction1 = Instantiate(m_ThrowPrediction, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
+        GameObject prediction2 = Instantiate(m_ThrowPrediction, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
+        // 予測用オブジェクトの角度を調整
+        prediction1.transform.Rotate(new Vector3(0, 1, 0), -15.0f);
+        prediction2.transform.Rotate(new Vector3(0, 1, 0), +15.0f);
+        // Rigidbodyに力を加えて投げる
+        prediction1.GetComponent<Rigidbody>().AddForce(prediction1.transform.forward * m_CurrentForce, ForceMode.Impulse);
+        prediction2.GetComponent<Rigidbody>().AddForce(prediction2.transform.forward * m_CurrentForce, ForceMode.Impulse);
+    }
+
+    // 着弾点を表示（3個投擲時）
+    void ShowThrowDirectionThree()
+    {
+        // 予測用オブジェクトを生成
+        GameObject prediction1 = Instantiate(m_ThrowPrediction, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
+        GameObject prediction2 = Instantiate(m_ThrowPrediction, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
+        GameObject prediction3 = Instantiate(m_ThrowPrediction, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
+        // 予測用オブジェクトの角度を調整
+        prediction2.transform.Rotate(new Vector3(0, 1, 0), -15.0f);
+        prediction3.transform.Rotate(new Vector3(0, 1, 0), +15.0f);
+        // Rigidbodyに力を加えて投げる
+        prediction1.GetComponent<Rigidbody>().AddForce(prediction1.transform.forward * m_CurrentForce, ForceMode.Impulse);
+        prediction2.GetComponent<Rigidbody>().AddForce(prediction2.transform.forward * m_CurrentForce, ForceMode.Impulse);
+        prediction3.GetComponent<Rigidbody>().AddForce(prediction3.transform.forward * m_CurrentForce, ForceMode.Impulse);
     }
 
     // 爆弾を投擲
@@ -357,6 +438,7 @@ public class PlayerControllerAlpha : MonoBehaviour
                     ThrowOne();
                     break;
                 default:
+                    ThrowOne();
                     break;
             }
         }
@@ -365,31 +447,46 @@ public class PlayerControllerAlpha : MonoBehaviour
     // 爆弾を投擲（1個）
     void ThrowOne()
     {
+        // 爆弾の所持数が減る
         m_BombKeep -= 1;
+        // 爆弾を生成
         GameObject bomb = Instantiate(m_Bomb, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
+        // Rigidbodyに力を加えて投げる
+        bomb.GetComponent<Rigidbody>().AddForce(bomb.transform.forward * m_CurrentForce, ForceMode.Impulse);
     }
 
     // 爆弾を投擲（2個）
     void ThrowTwo()
     {
+        // 爆弾の所持数が減る
         m_BombKeep -= 2;
+        // 爆弾を生成
         GameObject bomb1 = Instantiate(m_Bomb, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
         GameObject bomb2 = Instantiate(m_Bomb, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
-
+        // 爆弾の角度を調整
         bomb1.transform.Rotate(new Vector3(0, 1, 0), -15.0f);
         bomb2.transform.Rotate(new Vector3(0, 1, 0), +15.0f);
+        // Rigidbodyに力を加えて投げる
+        bomb1.GetComponent<Rigidbody>().AddForce(bomb1.transform.forward * m_CurrentForce, ForceMode.Impulse);
+        bomb2.GetComponent<Rigidbody>().AddForce(bomb2.transform.forward * m_CurrentForce, ForceMode.Impulse);
     }
 
     // 爆弾を投擲（3個）
     void ThrowThree()
     {
+        // 爆弾の所持数が減る
         m_BombKeep -= 3;
+        // 爆弾を生成
         GameObject bomb1 = Instantiate(m_Bomb, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
         GameObject bomb2 = Instantiate(m_Bomb, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
         GameObject bomb3 = Instantiate(m_Bomb, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
-
+        // 爆弾の角度を調整
         bomb2.transform.Rotate(new Vector3(0, 1, 0), -15.0f);
         bomb3.transform.Rotate(new Vector3(0, 1, 0), +15.0f);
+        // Rigidbodyに力を加えて投げる
+        bomb1.GetComponent<Rigidbody>().AddForce(bomb1.transform.forward * m_CurrentForce, ForceMode.Impulse);
+        bomb2.GetComponent<Rigidbody>().AddForce(bomb2.transform.forward * m_CurrentForce, ForceMode.Impulse);
+        bomb3.GetComponent<Rigidbody>().AddForce(bomb3.transform.forward * m_CurrentForce, ForceMode.Impulse);
     }
 
     // 回避行動
