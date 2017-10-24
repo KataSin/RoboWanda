@@ -199,11 +199,8 @@ public class Break : MonoBehaviour
             //倒壊済みでなければ
             if (!isAfter)
             {
-                //Vector3 ba_scale = new Vector3(
-                //    transform.localScale.x, transform.transform.localScale.y, transform.localScale.z);
-
                 Vector3 ba_pos = new Vector3(
-                    transform.position.x, debris_low.transform.localScale.x / 2, transform.position.z);
+                    transform.position.x, 0f, transform.position.z);
 
                 //倒壊後のビルを生成
                 switch (towerType_.Get_TowerType())

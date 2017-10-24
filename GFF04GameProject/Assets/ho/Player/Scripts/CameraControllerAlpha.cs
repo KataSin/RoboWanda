@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// スクリプト：カメラ制御
-/// 製作者：Ho Siu Ki（何兆祺）
+/// スクリプト：カメラ支点制御（α版）
+/// 製作者：Ho Siu Ki（何　兆祺）
 /// </summary>
-public class CameraController_v2 : MonoBehaviour
+
+public class CameraControllerAlpha : MonoBehaviour
 {
     [SerializeField]
-    private Transform m_Target;             // 追随目標
+    private Transform m_Target;             // 追跡対象
     [SerializeField]
     private float m_RotateSpeed = 180.0f;   // 回転速度
 
-    Vector3 offset;                         //プレイヤーとカメラ間のオフセット距離
     float pitch = 0.0f;                     // 仰角
-
     [SerializeField]
     private float m_PitchMax = 30.0f;       // 仰角最大値
     [SerializeField]
-    private float m_PitchMin = -20.0f;      // 仰角最大値
+    private float m_PitchMin = -40.0f;      // 仰角最小値
+
+    Vector3 offset;                         // プレイヤーとカメラ間のオフセット距離
 
     // Use this for initialization
     void Start()
@@ -33,15 +34,8 @@ public class CameraController_v2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // プレイヤー存在時だけ操作可能
         if (m_Target != null)
         {
-            // RBボタンを押すと、プレイヤーの後ろに移動（着弾点表示モード）
-            if (Input.GetButtonDown("Bomb_Hold"))
-            {
-                transform.rotation = Quaternion.Slerp(transform.rotation, m_Target.rotation, m_RotateSpeed * Time.deltaTime);
-            }
-
             // 回転
             // 方向入力を取得
             float axisVertical = Input.GetAxisRaw("Vertical_R");        // x軸
