@@ -32,8 +32,10 @@ public class IKTest : MonoBehaviour
     {
         if (avator)
         {
-            avator.SetLookAtWeight(lookAtWeight, bodyWeight, headWeight, eyesWeight, clampWeight);
-            avator.SetLookAtPosition(lookAtObj.position);
+            //avator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1.0f);
+            //avator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1.0f);
+            //avator.SetIKPosition(AvatarIKGoal.LeftFoot, lookAtObj.transform.position);
+            //avator.SetIKPosition(AvatarIKGoal.RightFoot, lookAtObj.transform.position);
             //avator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
             //avator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
             //avator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);

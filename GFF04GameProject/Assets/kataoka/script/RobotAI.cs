@@ -12,10 +12,15 @@ public class RobotAI : MonoBehaviour
     private GameObject robotEye;
     private float attackTime;
     [SerializeField, Tooltip("ビームのクールタイム")]
-    public float m_RobotBeamCoolTime = 50.0f;
+    public float m_RobotBeamCoolTime = 30.0f;
+    //ビームのカウント
+    private float m_RobotBeamCount;
 
     [SerializeField, Tooltip("ビルコリジョン")]
     public GameObject m_BillCollision;
+
+
+    bool m_FirstCol;
     // Use this for initialization
     void Start()
     {
@@ -28,100 +33,41 @@ public class RobotAI : MonoBehaviour
 
         robotEye = GameObject.FindGameObjectWithTag("RobotEye");
 
-
+        m_FirstCol = true;
 
         attackTime = 0.0f;
+        m_RobotBeamCount = 20.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //カウント
+        m_RobotBeamCount += Time.deltaTime;
+
+
+        GameObject[] a = GameObject.FindGameObjectsWithTag("RobotEye");
         //見えてたら
         GameObject player;
-        if(PlayerToRobotRay("Player",0,out player)){
+        if (PlayerToRobotRay("Player", 0, out player))
+        {
+            //見えててかつ遠かったらビームアタック
+            if (m_RobotBeamCount >= m_RobotBeamCoolTime)
+            {
+                manager.SetAction(RobotAction.RobotState.ROBOT_BEAM_ATTACK, false);
+                m_RobotBeamCount = 0.0f;
+            }
             manager.SetAction(RobotAction.RobotState.ROBOT_TO_PLAYER_MOVE, true);
         }
-            //見えてなかったら
+        //見えてなかったらビル壊す
         else
         {
-            manager.SetAction(RobotAction.RobotState.ROBOT_TO_PLAYER_MOVE, true);
-
+            if (m_BillCollision.GetComponent<RobotBillCollision>().GetCollisionFlag())
+            {
+                manager.SetAction(RobotAction.RobotState.ROBOT_ARM_ATTACK, false);
+            }
+            manager.SetAction(RobotAction.RobotState.ROBOT_TO_BILL_MOVE, true);
         }
-
-
-        //if (m_BillCollision.GetComponent<RobotBillCollision>().GetCollisionFlag())
-        //{
-        //    manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
-        //}
-
-        //Debug.Log(agent.remainingDistance);
-        //attackTime += Time.deltaTime;
-
-        //manager.SetAction(RobotAction.RobotState.ROBOT_MOVE,true);
-
-
-
-        //if ((manager.GetRobotState()!=RobotAction.RobotState.ROBOT_SEARCH_MOVE)
-        //    &&attackTime >= 10.0f && Player_Robot_Distance(400.0f))
-        //{
-        //    manager.SetAction(RobotAction.RobotState.ROBOT_ARM_ATTACK, false);
-        //    attackTime = 0.0f;
-        //}
-        //else
-        //{
-        //    manager.SetAction(RobotAction.RobotState.ROBOT_MOVE, true);
-        //     int mask = ~(1 << 8);
-        //    GameObject collisionObject;
-        //    if (!PlayerToRobotRay("TestPlayer", mask, out collisionObject))
-        //    {
-        //        manager.SetAction(RobotAction.RobotState.ROBOT_SEARCH_MOVE,true);
-        //    }
-
-        //}
-
-
-        //if (attackTime >= 10.0f&&agent.velocity.magnitude<=1.0f&&agent.remainingDistance<=1000.0f)
-        //{
-        //    manager.SetAction(RobotAction.RobotState.ROBOT_ARM_ATTACK,false);
-        //    attackTime = 0.0f;
-        //}
-        //else if (agent.remainingDistance >= 1000.0f)
-        //{
-        //    manager.SetAction(RobotAction.RobotState.ROBOT_MOVE, false);
-        //}
-        //if (Player_Robot_Distance(500.0f) && attackTime>10.0f && agent.velocity.magnitude < 10.0f)
-        //{
-        //    manager.SetAction(RobotAction.RobotState.ROBOT_ARM_ATTACK,false);
-        //    attackTime = 0.0f;
-        //}
-        //else
-        //{
-        //    GameObject colObject;
-        //    int mask = ~(1 << 8);
-        //    if (PlayerToRobotRay("Player", mask, out colObject))
-        //    {
-        //        manager.SetAction(RobotAction.RobotState.ROBOT_MOVE, true);
-        //    }
-        //}
-
-        //Vector3 vec = (player.transform.position - robotEye.transform.position).normalized * 2000.0f;
-        //Vector3 start = robotEye.transform.position;
-        //RaycastHit hit;
-        //int mask = ~(1 << 8);
-        //if (Physics.Raycast(start, vec, out hit, 20000.0f,mask))
-        //{
-        //    string name = hit.collider.name;
-        //    if (hit.collider.tag == "Player")
-        //    {
-        //        manager.SetAction(RobotAction.RobotState.ROBOT_MOVE, false);
-        //    }
-        //    else
-        //    {
-        //        manager.SetAction(RobotAction.RobotState.ROBOT_SEARCH, false);
-        //    }
-        //}
-
-
     }
 
 
@@ -137,12 +83,12 @@ public class RobotAI : MonoBehaviour
         Vector3 vec = (player.transform.position - robotEye.transform.position).normalized * 2000.0f;
         Vector3 start = robotEye.transform.position;
         RaycastHit hit;
-        
-        if (Physics.Raycast(start, vec, out hit, 20000.0f, layerMask))
+
+        if (Physics.Raycast(start, vec, out hit, 20000.0f))
         {
-            string name = hit.collider.name;
+            string name = hit.collider.tag;
             collision = hit.collider.gameObject;
-            if (hit.collider.name == objectName)
+            if (name == objectName)
             {
                 return true;
             }
@@ -157,6 +103,19 @@ public class RobotAI : MonoBehaviour
     /// <returns>指定した距離以内か</returns>
     private bool Player_Robot_Distance(float dis)
     {
-        return agent.remainingDistance < dis;
+        return Vector3.Distance(agent.transform.position, player.transform.position) < dis;
     }
+
+
+
+
+    public void OnDrawGizmos()
+    {
+        if (player == null) return;
+        Vector3 vec = (player.transform.position - robotEye.transform.position).normalized * 2000.0f;
+        Vector3 start = robotEye.transform.position;
+        Gizmos.DrawLine(robotEye.transform.position, player.transform.position);
+    }
+
+
 }

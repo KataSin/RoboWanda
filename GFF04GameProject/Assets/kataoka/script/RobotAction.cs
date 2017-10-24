@@ -109,7 +109,7 @@ public class RobotAction : MonoBehaviour
                 m_NavAgent.isStopped = false;
                 m_NavAgent.speed = m_RobotSpeed;
                 m_NavAgent.stoppingDistance = m_Player_Enemy_Distance;
-
+                SetRobotLookAt(true);
                 //Y軸をロボットに合わせる
                 m_NavAgent.destination = m_Player.transform.position;
                 m_RobotState = RobotState.ROBOT_TO_PLAYER_MOVE;
@@ -166,6 +166,7 @@ public class RobotAction : MonoBehaviour
 
         Func<bool> idle = () =>
             {
+                SetRobotLookAt(false);
                 m_NavAgent.isStopped = true;
                 m_RobotState = RobotState.ROBOT_IDLE;
                 m_NavAgent.destination = m_Player.transform.position;
@@ -196,6 +197,7 @@ public class RobotAction : MonoBehaviour
         Func<bool> armAttack = () =>
         {
             bool endAnim = false;
+            SetRobotLookAt(false);
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
             if (clipInfo.clip.name == "Attack")
             {
@@ -225,6 +227,7 @@ public class RobotAction : MonoBehaviour
 
         Func<bool> robotBeamAttack = () =>
         {
+            SetRobotLookAt(true);
             bool endAnim = false;
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
             if (clipInfo.clip.name == "AttackHame")
@@ -241,7 +244,36 @@ public class RobotAction : MonoBehaviour
 
         return func;
     }
+    /// <summary>
+    /// ふみつけ
+    /// </summary>
+    /// <returns></returns>
+    public RobotManager.ActionFunc RobotLegAttack()
+    {
+        Action robotLefAttackStart = () =>
+        {
+            m_NavAgent.isStopped = true;
+        };
 
+        Func<bool> robotLegAttack = () =>
+        {
+            SetRobotLookAt(true);
+            bool endAnim = false;
+            AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
+            if (clipInfo.clip.name == "AttackLeg")
+            {
+                endAnim = (m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f);
+            }
+            m_RobotState = RobotState.ROBOT_LEG_ATTACK;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+            return endAnim;
+        };
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = robotLefAttackStart;
+        func.actionUpdate = robotLegAttack;
+
+        return func;
+    }
 
     /// <summary>
     /// ロボットが探すアニメーションだけ
@@ -255,6 +287,7 @@ public class RobotAction : MonoBehaviour
         };
         Func<bool> robotSearch = () =>
         {
+            SetRobotLookAt(false);
             bool endAnim = false;
             m_NavAgent.isStopped = true;
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
@@ -293,6 +326,7 @@ public class RobotAction : MonoBehaviour
 
         Func<bool> robotSerchMove = () =>
         {
+            SetRobotLookAt(false);
             //探すアニメーションが終わったら次に行く
             bool endAnim = false;
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
@@ -339,6 +373,7 @@ public class RobotAction : MonoBehaviour
 
         Func<bool> robotGoolMove = () =>
         {
+            SetRobotLookAt(false);
             m_NavAgent.isStopped = false;
             m_NavAgent.speed = m_RobotSpeed;
             m_NavAgent.stoppingDistance = 0.0f;
@@ -371,10 +406,20 @@ public class RobotAction : MonoBehaviour
 
         Func<bool> robotBillMove = () =>
         {
+            SetRobotLookAt(false);
             m_NavAgent.isStopped = false;
             m_NavAgent.speed = m_RobotSpeed;
             m_NavAgent.stoppingDistance = 0.0f;
+
             //一番近いビル
+            GameObject[] bill = GameObject.FindGameObjectsWithTag("Tower");
+            m_Bills.AddRange(bill);
+            //もしビルが無かったらプレイヤーに向かって歩く
+            if (m_Bills.Count <= 0)
+            {
+                RobotToPlayerMove().actionUpdate();
+                return false;
+            }
             GameObject disObj = m_Bills[0];
             foreach (var i in m_Bills)
             {
@@ -384,9 +429,10 @@ public class RobotAction : MonoBehaviour
                     disObj = i;
                 }
             }
+            m_Bills.Clear();
             m_NavAgent.destination = disObj.transform.position;
 
-            m_RobotState = RobotState.ROBOT_TO_PLAYER_MOVE;
+            m_RobotState = RobotState.ROBOT_TO_BILL_MOVE;
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
             m_Animator.SetFloat("RobotSpeed", m_NavAgent.velocity.magnitude);
 
@@ -400,8 +446,6 @@ public class RobotAction : MonoBehaviour
 
         return func;
     }
-
-
     /// <summary>
     /// ロボットがビルを壊す
     /// </summary>
@@ -416,6 +460,7 @@ public class RobotAction : MonoBehaviour
 
         Func<bool> robotBillBreak = () =>
         {
+            SetRobotLookAt(false);
             bool endAnim = false;
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
             if (clipInfo.clip.name == "Attack")
@@ -450,7 +495,9 @@ public class RobotAction : MonoBehaviour
     {
         m_IsRobotLookAtPlayerFlag = flag;
     }
-
+    /// <summary>
+    /// プレイヤーを見るアップデート
+    /// </summary>
     public void RobotLookAtIKUpdate()
     {
         if (m_IsRobotLookAtPlayerFlag)
@@ -461,6 +508,7 @@ public class RobotAction : MonoBehaviour
         {
             m_LookAtLerpTime -= Time.deltaTime;
         }
+        m_LookAtLerpTime = Mathf.Clamp(m_LookAtLerpTime, 0.0f, 1.0f);
         //基本ここを見てる
         Vector3 robotFront = m_Robot.transform.position + (m_Robot.transform.forward.normalized * 2000.0f) + new Vector3(0, 3000, 0);
         //プレイヤー座標
@@ -478,7 +526,10 @@ public class RobotAction : MonoBehaviour
         m_Animator.SetLookAtPosition(testObj.transform.position);
 
 
-
+        if (m_RobotState == RobotState.ROBOT_LEG_ATTACK)
+        {
+            m_Animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot,1.0f);
+        }
 
 
         //avator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);

@@ -42,6 +42,8 @@ public class RobotManager : MonoBehaviour
         //アクションの追加
         AddAction(RobotAction.RobotState.ROBOT_IDLE, m_RobotAction.RobotIdle());
         AddAction(RobotAction.RobotState.ROBOT_TO_PLAYER_MOVE, m_RobotAction.RobotToPlayerMove());
+        AddAction(RobotAction.RobotState.ROBOT_TO_BILL_MOVE, m_RobotAction.RobotBillMove());
+        AddAction(RobotAction.RobotState.ROBOT_BEAM_ATTACK,m_RobotAction.RobotBeamAttack());
         AddAction(RobotAction.RobotState.ROBOT_ARM_ATTACK, m_RobotAction.RobotArmAttack());
         AddAction(RobotAction.RobotState.ROBOT_SEARCH, m_RobotAction.RobotSearch());
         AddAction(RobotAction.RobotState.ROBOT_SEARCH_MOVE, m_RobotAction.RobotSearchMove());
@@ -54,9 +56,9 @@ public class RobotManager : MonoBehaviour
     void Update()
     {
         Debug.Log(m_RobotState);
-        //ロボット仮HPUI
-        Text text = GameObject.FindGameObjectWithTag("RobotHp").GetComponent<Text>();
-        text.text = "RobotHp:" + m_RobotHp.ToString();
+        ////ロボット仮HPUI
+        //Text text = GameObject.FindGameObjectWithTag("RobotHp").GetComponent<Text>();
+        //text.text = "RobotHp:" + m_RobotHp.ToString();
 
         //ロボット死んだ処理
         if (m_RobotHp <= 0)
