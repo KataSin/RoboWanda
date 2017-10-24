@@ -32,7 +32,7 @@ public class RobotBillCollision : MonoBehaviour
     {
         m_IsCollision = flag;
     }
-    public void OnTriggerStay(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
         if (other.tag == "TowerCollision")
         {
@@ -40,5 +40,12 @@ public class RobotBillCollision : MonoBehaviour
         }
     }
 
+    //public void OnTriggerExit(Collider other)
+    //{
+    //    if (other.tag == "TowerCollision")
+    //    {
+    //        m_IsCollision = false;
+    //    }
+    //}
 
 }

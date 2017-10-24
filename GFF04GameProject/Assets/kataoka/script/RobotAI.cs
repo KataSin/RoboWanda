@@ -62,9 +62,10 @@ public class RobotAI : MonoBehaviour
         //見えてなかったらビル壊す
         else
         {
-            if (m_BillCollision.GetComponent<RobotBillCollision>().GetCollisionFlag())
+            if (Vector3.Distance(agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject().transform.position, agent.transform.position) <= 70.0f)
             {
-                manager.SetAction(RobotAction.RobotState.ROBOT_ARM_ATTACK, false);
+                manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
+                return;
             }
             manager.SetAction(RobotAction.RobotState.ROBOT_TO_BILL_MOVE, true);
         }
