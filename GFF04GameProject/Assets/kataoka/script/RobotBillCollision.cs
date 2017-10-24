@@ -34,10 +34,9 @@ public class RobotBillCollision : MonoBehaviour
     }
     public void OnTriggerStay(Collider other)
     {
-        if (other.tag == "BreakTower")
+        if (other.tag == "TowerCollision")
         {
-            if (other.GetComponent<tower_Type>().Get_TowerType() == 0)
-                m_IsCollision = true;
+            m_IsCollision = true;
         }
     }
 
