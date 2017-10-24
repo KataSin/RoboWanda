@@ -8,7 +8,7 @@ using UnityEngine.AI;
 public class RobotAction : MonoBehaviour
 {
     public GameObject testObj;
-
+    public GameObject goPoint;
     public enum RobotState
     {
         ROBOT_NULL = 0,
@@ -32,6 +32,7 @@ public class RobotAction : MonoBehaviour
     [SerializeField, Tooltip("ロボットビームのクールダウン")]
     public float m_BeamCoolDownTime = 30.0f;
 
+    public GameObject m_BillCollision;
 
     //ナビエージェント
     private NavMeshAgent m_NavAgent;
@@ -64,6 +65,14 @@ public class RobotAction : MonoBehaviour
     private bool m_IsRobotLookAtPlayerFlag;
     //ビルたち
     private List<GameObject> m_Bills;
+    //ロボットが壊すビル
+    private GameObject m_BreakBill;
+    //IKを有効にするかどうか
+    private bool m_IsIK;
+    //ビル壊すときの球面補間用
+    private float lerpTime = 0.0f;
+    private Quaternion m_BillQuaternion;
+    private Quaternion m_RobotQuaternion;
     void Start()
     {
         m_Bills = new List<GameObject>();
@@ -79,6 +88,9 @@ public class RobotAction : MonoBehaviour
         m_NavAgent.destination = m_Player.transform.position;
         m_VelocityY = 0.0f;
         m_SeveVelocityY = 0.0f;
+
+
+        m_IsIK = true;
         //ランダム生成
         m_Random = new System.Random();
         //サーチ系
@@ -90,6 +102,9 @@ public class RobotAction : MonoBehaviour
         m_GoalPoint = GameObject.FindGameObjectWithTag("GoalPoint");
 
         m_LookAtLerpTime = 0.0f;
+
+        m_BreakBill = m_Bills[0];
+        NearBill();
     }
     /// <summary>
     /// ロボットがプレイヤーに向かって動く
@@ -410,27 +425,12 @@ public class RobotAction : MonoBehaviour
             m_NavAgent.isStopped = false;
             m_NavAgent.speed = m_RobotSpeed;
             m_NavAgent.stoppingDistance = 0.0f;
-
-            //一番近いビル
-            GameObject[] bill = GameObject.FindGameObjectsWithTag("Tower");
-            m_Bills.AddRange(bill);
-            //もしビルが無かったらプレイヤーに向かって歩く
-            if (m_Bills.Count <= 0)
+            //ビル設定
+            if (!NearBill())
             {
-                RobotToPlayerMove().actionUpdate();
                 return false;
             }
-            GameObject disObj = m_Bills[0];
-            foreach (var i in m_Bills)
-            {
-                if (Vector3.Distance(disObj.transform.position, m_Robot.transform.position) >=
-                    Vector3.Distance(i.transform.position, m_Robot.transform.position))
-                {
-                    disObj = i;
-                }
-            }
-            m_Bills.Clear();
-            m_NavAgent.destination = disObj.transform.position;
+            m_NavAgent.destination = m_BreakBill.transform.position;
 
             m_RobotState = RobotState.ROBOT_TO_BILL_MOVE;
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
@@ -454,18 +454,28 @@ public class RobotAction : MonoBehaviour
     {
         Action robotBillBreakStart = () =>
         {
-            m_NavAgent.isStopped = true;
+            lerpTime = 0.0f;
+            Vector3 vec = (m_BreakBill.transform.position - m_Robot.transform.position);
+            vec.y = 0.0f;
+            m_BillQuaternion = Quaternion.LookRotation(vec);
+            m_RobotQuaternion = transform.rotation;
+            m_IsIK = false;
         };
 
 
         Func<bool> robotBillBreak = () =>
         {
             SetRobotLookAt(false);
+            m_NavAgent.isStopped = true;
             bool endAnim = false;
+
+            lerpTime += Time.deltaTime;
+            transform.rotation = Quaternion.Lerp(m_RobotQuaternion, m_BillQuaternion, lerpTime);
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
             if (clipInfo.clip.name == "Attack")
             {
                 endAnim = (m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f);
+                m_BillCollision.GetComponent<RobotBillCollision>().SetCollisionFlag(false);
             }
             m_RobotState = RobotState.ROBOT_ARM_ATTACK;
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
@@ -509,8 +519,8 @@ public class RobotAction : MonoBehaviour
             m_LookAtLerpTime -= Time.deltaTime;
         }
         m_LookAtLerpTime = Mathf.Clamp(m_LookAtLerpTime, 0.0f, 1.0f);
-        //基本ここを見てる
-        Vector3 robotFront = m_Robot.transform.position + (m_Robot.transform.forward.normalized * 2000.0f) + new Vector3(0, 3000, 0);
+        //基本ここを見てる(ローカル座標)
+        Vector3 robotFront = m_Robot.transform.position + m_Robot.transform.forward * 150.0f + new Vector3(0, 180, 0);
         //プレイヤー座標
         Vector3 playerPos = m_Player.transform.position;
 
@@ -522,14 +532,16 @@ public class RobotAction : MonoBehaviour
     /// <param name="layorIndex"></param>
     void OnAnimatorIK(int layorIndex)
     {
-        m_Animator.SetLookAtWeight(1.0f, 0.4f, 0.7f, 0.0f, 0.5f);
-        m_Animator.SetLookAtPosition(testObj.transform.position);
+        //if (!m_IsIK) return;
+
+        //m_Animator.SetLookAtWeight(1.0f, 0.4f, 0.7f, 0.0f, 0.5f);
+        //m_Animator.SetLookAtPosition(testObj.transform.position);
 
 
-        if (m_RobotState == RobotState.ROBOT_LEG_ATTACK)
-        {
-            m_Animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot,1.0f);
-        }
+        //if (m_RobotState == RobotState.ROBOT_LEG_ATTACK)
+        //{
+        //    m_Animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1.0f);
+        //}
 
 
         //avator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
@@ -542,6 +554,52 @@ public class RobotAction : MonoBehaviour
         //avator.SetIKPosition(AvatarIKGoal.RightHand, lookAtObj.position);
         //avator.SetIKRotation(AvatarIKGoal.RightHand, lookAtObj.rotation);
 
+    }
+    /// <summary>
+    /// ロボットが壊すビルの取得
+    /// </summary>
+    /// <returns></returns>
+    public GameObject GetBillBreakObject()
+    {
+        return m_BreakBill;
+    }
+    /// <summary>
+    /// ロボットから一番近いビルを取得する
+    /// </summary>
+    /// <returns>ビルがあるかどうか</returns>
+    private bool NearBill()
+    {
+        m_Bills.Clear();
+        //一番近いビル
+        GameObject[] bill = GameObject.FindGameObjectsWithTag("Tower");
+
+
+        for (int i = 0; i < bill.Length; i++)
+        {
+            if (!(bill[i].GetComponent<Break>().Get_BreakFlag()))
+            {
+                m_Bills.Add(bill[i]);
+            }
+        }
+        m_BreakBill = m_Bills[0];
+        //もしビルが無かったらプレイヤーに向かって歩く
+        if (m_Bills.Count <= 0)
+        {
+            RobotToPlayerMove().actionUpdate();
+            return false;
+        }
+        int count = 0;
+        foreach (var i in m_Bills)
+        {
+            count++;
+            if (Vector3.Distance(m_BreakBill.transform.position, m_Robot.transform.position) >=
+                Vector3.Distance(i.transform.position, m_Robot.transform.position))
+            {
+                m_BreakBill = i;
+                goPoint.transform.position = m_BreakBill.transform.position;
+            }
+        }
+        return true;
     }
 
     /// <summary>
