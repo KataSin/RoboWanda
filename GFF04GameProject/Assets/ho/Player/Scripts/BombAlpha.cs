@@ -3,25 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// スクリプト：爆弾制御
+/// スクリプト：爆弾制御（α版）
 /// 製作者：Ho Siu Ki（何兆祺）
 /// </summary>
-public class Bomb_v2 : MonoBehaviour
+
+public class BombAlpha : MonoBehaviour
 {
     [SerializeField]
-    private float m_Force = 6.0f;       // 与える力
-    [SerializeField]
     private GameObject m_Explosion;     // 爆発の当たり判定
-    Rigidbody m_RigidBody;
+
+    Rigidbody m_Rigidbody;
 
     // Use this for initialization
     void Start()
     {
-        m_RigidBody = GetComponent<Rigidbody>();
-
-        var forward = transform.forward;
-        var up = transform.up;
-        m_RigidBody.AddForce(forward * m_Force + up * m_Force, ForceMode.Impulse);
+        m_Rigidbody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -42,7 +38,7 @@ public class Bomb_v2 : MonoBehaviour
         // 他の爆弾とプレイヤーとの接触判定は発生しない
         if (other.tag == "Bomb" || other.tag == "Player") return;
 
-        m_RigidBody.velocity = Vector3.zero;
-        m_RigidBody.isKinematic = true;
+        m_Rigidbody.velocity = Vector3.zero;
+        m_Rigidbody.isKinematic = true;
     }
 }
