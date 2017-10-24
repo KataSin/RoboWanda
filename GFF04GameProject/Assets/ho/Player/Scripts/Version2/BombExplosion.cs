@@ -8,10 +8,16 @@ using UnityEngine;
 /// </summary>
 public class BombExplosion : MonoBehaviour
 {
+    [SerializeField]
+    [Header("爆発エフェクト")]
+    private GameObject exlosion_obj_;
+
 
     // Use this for initialization
     void Start()
     {
+        Instantiate(exlosion_obj_, transform.position, Quaternion.identity);
+
         // 出現後0.5秒、消滅
         Destroy(gameObject, 0.5f);
     }
@@ -19,6 +25,6 @@ public class BombExplosion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

@@ -42,12 +42,16 @@ public class tower_collide : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //ここに対象オブジェクトを指名
-        if (other.gameObject.tag == "bom" || other.gameObject.tag == "RobotArmAttack")
+        if (other.gameObject.tag == "bom" 
+            ||
+            other.gameObject.tag == "RobotArmAttack")
         {
             isCollide = true;
         }
 
-        if (!other.transform.IsChildOf(parent_Tower_) && other.gameObject.tag == "TowerCollision")
+        if (!other.transform.IsChildOf(parent_Tower_) 
+            &&
+            other.gameObject.tag == "TowerCollision")
         {
             isBillCollide = true;
         }
