@@ -236,17 +236,19 @@ public class RobotAction : MonoBehaviour
     {
         Action robotBeamAttackStart = () =>
         {
-            m_NavAgent.isStopped = true;
+
         };
 
 
         Func<bool> robotBeamAttack = () =>
         {
-            SetRobotLookAt(true);
+            //SetRobotLookAt(true);
+            m_NavAgent.isStopped = true;
             bool endAnim = false;
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
             if (clipInfo.clip.name == "AttackHame")
             {
+                
                 endAnim = (m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f);
             }
             m_RobotState = RobotState.ROBOT_BEAM_ATTACK;
@@ -510,21 +512,21 @@ public class RobotAction : MonoBehaviour
     /// </summary>
     public void RobotLookAtIKUpdate()
     {
-        if (m_IsRobotLookAtPlayerFlag)
-        {
-            m_LookAtLerpTime += Time.deltaTime;
-        }
-        else
-        {
-            m_LookAtLerpTime -= Time.deltaTime;
-        }
-        m_LookAtLerpTime = Mathf.Clamp(m_LookAtLerpTime, 0.0f, 1.0f);
-        //基本ここを見てる(ローカル座標)
-        Vector3 robotFront = m_Robot.transform.position + m_Robot.transform.forward * 150.0f + new Vector3(0, 180, 0);
-        //プレイヤー座標
-        Vector3 playerPos = m_Player.transform.position;
+        //if (m_IsRobotLookAtPlayerFlag)
+        //{
+        //    m_LookAtLerpTime += Time.deltaTime;
+        //}
+        //else
+        //{
+        //    m_LookAtLerpTime -= Time.deltaTime;
+        //}
+        //m_LookAtLerpTime = Mathf.Clamp(m_LookAtLerpTime, 0.0f, 1.0f);
+        ////基本ここを見てる(ローカル座標)
+        //Vector3 robotFront = m_Robot.transform.position + m_Robot.transform.forward * 150.0f + new Vector3(0, 180, 0);
+        ////プレイヤー座標
+        //Vector3 playerPos = m_Player.transform.position;
 
-        testObj.transform.position = Vector3.Lerp(robotFront, playerPos, m_LookAtLerpTime);
+        //testObj.transform.position = Vector3.Lerp(robotFront, playerPos, m_LookAtLerpTime);
     }
     /// <summary>
     /// IK系

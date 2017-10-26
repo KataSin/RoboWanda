@@ -18761,6 +18761,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RobotBeamCoolTime: 30
   m_BillCollision: {fileID: 1129908024}
+  m_Beamtest: {fileID: 1256477276269348, guid: 5e226c55e58e2e2458dbd1cf41d06575, type: 2}
 --- !u!4 &1229984539
 Transform:
   m_ObjectHideFlags: 0
@@ -24658,7 +24659,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4938749998372272, guid: 96b5a92b9b81cff48a6d44e0e6fa0073, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 42.92
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 114532699205423034, guid: 96b5a92b9b81cff48a6d44e0e6fa0073,
         type: 2}
@@ -24667,7 +24668,7 @@ Prefab:
       objectReference: {fileID: 1626172082}
     - target: {fileID: 4938749998372272, guid: 96b5a92b9b81cff48a6d44e0e6fa0073, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 395
+      value: 229
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 96b5a92b9b81cff48a6d44e0e6fa0073, type: 2}
@@ -25291,7 +25292,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4756959605785510, guid: 5c675c820aed725429981910efa3d332, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 42.92
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 4756959605785510, guid: 5c675c820aed725429981910efa3d332, type: 2}
       propertyPath: m_LocalPosition.y
@@ -25299,7 +25300,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4756959605785510, guid: 5c675c820aed725429981910efa3d332, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 395
+      value: 229
       objectReference: {fileID: 0}
     - target: {fileID: 4756959605785510, guid: 5c675c820aed725429981910efa3d332, type: 2}
       propertyPath: m_LocalRotation.x
@@ -25325,6 +25326,10 @@ Prefab:
         type: 2}
       propertyPath: m_Speed
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1980577461966806, guid: 5c675c820aed725429981910efa3d332, type: 2}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5c675c820aed725429981910efa3d332, type: 2}
