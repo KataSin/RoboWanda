@@ -70,9 +70,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4469219541591926}
+  - component: {fileID: 114928906206027754}
   m_Layer: 0
   m_Name: TowerPoint
-  m_TagString: Untagged
+  m_TagString: TowerPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -531,3 +532,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towerType: 1
+--- !u!114 &114928906206027754
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1626840568277976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e3b2616a3c42b245aaf8f09d3019bfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tower_parent_obj_: {fileID: 1439890785648220}
