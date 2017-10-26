@@ -573,12 +573,12 @@ public class RobotAction : MonoBehaviour
     {
         m_Bills.Clear();
         //一番近いビル
-        GameObject[] bill = GameObject.FindGameObjectsWithTag("Tower");
+        GameObject[] bill = GameObject.FindGameObjectsWithTag("TowerPoint");
 
 
         for (int i = 0; i < bill.Length; i++)
         {
-            if (!(bill[i].GetComponent<Break>().Get_BreakFlag()))
+            if (!(bill[i].GetComponent<tower_point>().Get_BreakFlag()))
             {
                 m_Bills.Add(bill[i]);
             }
