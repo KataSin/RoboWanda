@@ -8,17 +8,14 @@ public class tower_point : MonoBehaviour
     private GameObject tower_parent_obj_;
     private Break tower_break_;
 
-    private bool isBreak;
-
     // Use this for initialization
     void Start()
     {
         tower_break_ = tower_parent_obj_.GetComponent<Break>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public bool Get_BreakFlag()
     {
-        isBreak = tower_break_.Get_BreakFlag();
+        return tower_break_.Get_BreakFlag();
     }
 }
