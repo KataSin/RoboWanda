@@ -428,10 +428,10 @@ public class RobotAction : MonoBehaviour
             m_NavAgent.speed = m_RobotSpeed;
             m_NavAgent.stoppingDistance = 0.0f;
             //ビル設定
-            if (!NearBill())
-            {
-                return false;
-            }
+            //if (!NearBill())
+            //{
+            //    return false;
+            //}
             m_NavAgent.destination = m_BreakBill.transform.position;
 
             m_RobotState = RobotState.ROBOT_TO_BILL_MOVE;
@@ -512,6 +512,7 @@ public class RobotAction : MonoBehaviour
     /// </summary>
     public void RobotLookAtIKUpdate()
     {
+        NearBill();
         //if (m_IsRobotLookAtPlayerFlag)
         //{
         //    m_LookAtLerpTime += Time.deltaTime;
@@ -588,6 +589,7 @@ public class RobotAction : MonoBehaviour
         if (m_Bills.Count <= 0)
         {
             RobotToPlayerMove().actionUpdate();
+            m_BreakBill = null;
             return false;
         }
         int count = 0;

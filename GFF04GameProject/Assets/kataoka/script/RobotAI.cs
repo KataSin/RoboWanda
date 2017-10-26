@@ -46,10 +46,9 @@ public class RobotAI : MonoBehaviour
     {
         //カウント
         m_RobotBeamCount += Time.deltaTime;
-        if (m_RobotBeamCount >= 1.0f)
+        if (Input.GetKeyDown(KeyCode.B))
         {
             Instantiate(m_Beamtest, robotEye.transform.position, Quaternion.Euler(0, 0, 0));
-            m_RobotBeamCount = 0.0f;
         }
         //見えてたら
         GameObject player;
@@ -64,14 +63,18 @@ public class RobotAI : MonoBehaviour
             manager.SetAction(RobotAction.RobotState.ROBOT_TO_PLAYER_MOVE, true);
         }
         //見えてなかったらビル壊す
-        else
+        else if (agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject() != null)
         {
-            if (Vector3.Distance(agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject().transform.position, agent.transform.position) <= 70.0f)
+            if (Vector3.Distance(agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject().transform.position, agent.transform.position) <= 100.0f)
             {
                 manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
                 return;
             }
             manager.SetAction(RobotAction.RobotState.ROBOT_TO_BILL_MOVE, true);
+        }
+        else
+        {
+            manager.SetAction(RobotAction.RobotState.ROBOT_IDLE, true);
         }
     }
 
