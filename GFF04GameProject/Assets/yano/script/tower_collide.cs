@@ -18,11 +18,16 @@ public class tower_collide : MonoBehaviour
     private GameObject parent_tower_obj_;
     private Transform parent_Tower_;
 
+    [SerializeField]
+    private bool isBreakAfter;
+
     // Use this for initialization
     void Start()
     {
         isCollide = false;
         isBillCollide = false;
+
+        isBreakAfter = false;
 
         parent_Tower_ = parent_tower_obj_.GetComponent<Transform>();
     }
@@ -33,27 +38,44 @@ public class tower_collide : MonoBehaviour
         return isCollide;
     }
 
+    public void Set_CollideFlag(bool flag)
+    {
+        isCollide = flag;
+    }
+
     //ビルと当たったかどうかの取得
     public bool Get_Bill_CollideFlag()
     {
         return isBillCollide;
     }
 
+    public void Set_Bill_CollideFlag(bool flag)
+    {
+        isBillCollide = flag;
+    }
+
+    public bool Get_BreakAfterFlag()
+    {
+        return isBreakAfter;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         //ここに対象オブジェクトを指名
-        if (other.gameObject.tag == "bom" 
+        if ((other.gameObject.tag == "bom"
             ||
-            other.gameObject.tag == "RobotArmAttack")
+            other.gameObject.tag == "RobotArmAttack"))
         {
             isCollide = true;
         }
 
-        if (!other.transform.IsChildOf(parent_Tower_) 
+        if (!isBreakAfter
+            &&!other.transform.IsChildOf(parent_Tower_)
             &&
             other.gameObject.tag == "TowerCollision")
         {
             isBillCollide = true;
+            isBreakAfter = true;
         }
     }
 }

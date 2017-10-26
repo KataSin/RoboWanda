@@ -115,7 +115,12 @@ public class Break : MonoBehaviour
     private void Collapse()
     {
         if (collide_manager_.Get_Bill_CollideFlag())
+        {
             isBreak = false;
+            isOutBreak = false;
+            collide_manager_.Set_Direction(0);
+            collide_manager_.Set_Bill_CollideFlag(false);
+        }
 
         //倒壊方向判定
         Collapse_Direction();
@@ -125,8 +130,9 @@ public class Break : MonoBehaviour
             transform.position += new Vector3(0f, -m_down_pos_Y, 0f);
 
         //回転
-        transform.rotation =
-            Quaternion.Lerp(Quaternion.Euler(0f, 0f, 0f), m_Bill_rotation, m_break_time / m_rotated_time);
+        if (!collide_manager_.Get_BreakAfterFlag())
+            transform.rotation =
+                Quaternion.Lerp(Quaternion.Euler(0f, 0f, 0f), m_Bill_rotation, m_break_time / m_rotated_time);
     }
 
     //倒壊方向判定
@@ -197,7 +203,7 @@ public class Break : MonoBehaviour
         if (m_break_time >= (6.9f * m_tower_revision))
         {
             //倒壊済みでなければ
-            if (!isAfter)
+            if (!isAfter && !collide_manager_.Get_BreakAfterFlag())
             {
                 Vector3 ba_pos = new Vector3(
                     transform.position.x, 0f, transform.position.z);

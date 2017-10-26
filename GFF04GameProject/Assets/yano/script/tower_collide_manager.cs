@@ -34,6 +34,8 @@ public class tower_collide_manager : MonoBehaviour
     [Header("ビルと当たったか")]
     private bool isBillCollide;
 
+    private bool isBreakAfter;
+
     // Use this for initialization
     void Start()
     {
@@ -44,6 +46,9 @@ public class tower_collide_manager : MonoBehaviour
 
         m_direction = 0;
         isBillCollide = false;
+
+        isBreakAfter = false;
+
     }
 
     // Update is called once per frame
@@ -66,11 +71,32 @@ public class tower_collide_manager : MonoBehaviour
             m_direction = 4;
 
         //ビル
-        if(forward_.Get_Bill_CollideFlag() || left_.Get_Bill_CollideFlag() 
-            || back_.Get_Bill_CollideFlag() || right_.Get_Bill_CollideFlag())
+        if ((forward_.Get_Bill_CollideFlag() || left_.Get_Bill_CollideFlag()
+            || back_.Get_Bill_CollideFlag() || right_.Get_Bill_CollideFlag()))
         {
             isBillCollide = true;
+
+            Flag_Reset();
         }
+
+        if ((forward_.Get_BreakAfterFlag() || left_.Get_BreakAfterFlag()
+            || back_.Get_BreakAfterFlag() || right_.Get_BreakAfterFlag()))
+        {
+            isBreakAfter = true;
+        }
+    }
+
+    public void Flag_Reset()
+    {
+        forward_.Set_CollideFlag(false);
+        left_.Set_CollideFlag(false);
+        back_.Set_CollideFlag(false);
+        right_.Set_CollideFlag(false);
+
+        forward_.Set_Bill_CollideFlag(false);
+        left_.Set_Bill_CollideFlag(false);
+        back_.Set_Bill_CollideFlag(false);
+        right_.Set_Bill_CollideFlag(false);
     }
 
     //方向の取得
@@ -79,9 +105,24 @@ public class tower_collide_manager : MonoBehaviour
         return m_direction;
     }
 
+    public void Set_Direction(int direction)
+    {
+        m_direction = direction;
+    }
+
     //ビルと当たったかどうかの取得
     public bool Get_Bill_CollideFlag()
     {
         return isBillCollide;
+    }
+
+    public void Set_Bill_CollideFlag(bool flag)
+    {
+        isBillCollide = flag;
+    }
+
+    public bool Get_BreakAfterFlag()
+    {
+        return isBreakAfter;
     }
 }
