@@ -54,12 +54,17 @@ public class RobotAI : MonoBehaviour
         GameObject player;
         if (PlayerToRobotRay("Player", 0, out player))
         {
+            if (Player_Robot_Distance(100.0f))
+            {
+                manager.SetAction(RobotAction.RobotState.ROBOT_LEG_ATTACK, false);
+            }
             //見えててかつ遠かったらビームアタック
-            if (m_RobotBeamCount >= m_RobotBeamCoolTime)
+            else if (m_RobotBeamCount >= m_RobotBeamCoolTime)
             {
                 manager.SetAction(RobotAction.RobotState.ROBOT_BEAM_ATTACK, false);
                 m_RobotBeamCount = 0.0f;
             }
+
             manager.SetAction(RobotAction.RobotState.ROBOT_TO_PLAYER_MOVE, true);
         }
         //見えてなかったらビル壊す

@@ -45,6 +45,7 @@ public class RobotManager : MonoBehaviour
         AddAction(RobotAction.RobotState.ROBOT_TO_BILL_MOVE, m_RobotAction.RobotBillMove());
         AddAction(RobotAction.RobotState.ROBOT_BEAM_ATTACK,m_RobotAction.RobotBeamAttack());
         AddAction(RobotAction.RobotState.ROBOT_ARM_ATTACK, m_RobotAction.RobotArmAttack());
+        AddAction(RobotAction.RobotState.ROBOT_LEG_ATTACK, m_RobotAction.RobotLegAttack());
         AddAction(RobotAction.RobotState.ROBOT_SEARCH, m_RobotAction.RobotSearch());
         AddAction(RobotAction.RobotState.ROBOT_SEARCH_MOVE, m_RobotAction.RobotSearchMove());
         AddAction(RobotAction.RobotState.ROBOT_GOOL_MOVE, m_RobotAction.RobotGoolMove());
