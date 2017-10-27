@@ -121,6 +121,8 @@ public class RobotAction : MonoBehaviour
         //アクションアップデート
         Func<bool> move = () =>
             {
+                SetRobotLookAt(true);
+                m_IsIK = true;
                 m_NavAgent.isStopped = false;
                 m_NavAgent.speed = m_RobotSpeed;
                 m_NavAgent.stoppingDistance = m_Player_Enemy_Distance;
@@ -182,6 +184,7 @@ public class RobotAction : MonoBehaviour
         Func<bool> idle = () =>
             {
                 SetRobotLookAt(false);
+                m_IsIK = false;
                 m_NavAgent.isStopped = true;
                 m_RobotState = RobotState.ROBOT_IDLE;
                 m_NavAgent.destination = m_Player.transform.position;
@@ -213,6 +216,7 @@ public class RobotAction : MonoBehaviour
         {
             bool endAnim = false;
             SetRobotLookAt(false);
+            m_IsIK = false;
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
             if (clipInfo.clip.name == "Attack")
             {
@@ -242,7 +246,8 @@ public class RobotAction : MonoBehaviour
 
         Func<bool> robotBeamAttack = () =>
         {
-            //SetRobotLookAt(true);
+            SetRobotLookAt(true);
+            m_IsIK = true;
             m_NavAgent.isStopped = true;
             bool endAnim = false;
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
@@ -275,6 +280,7 @@ public class RobotAction : MonoBehaviour
         Func<bool> robotLegAttack = () =>
         {
             SetRobotLookAt(true);
+            m_IsIK = true;
             bool endAnim = false;
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
             if (clipInfo.clip.name == "AttackLeg")
@@ -305,6 +311,7 @@ public class RobotAction : MonoBehaviour
         Func<bool> robotSearch = () =>
         {
             SetRobotLookAt(false);
+            m_IsIK = false;
             bool endAnim = false;
             m_NavAgent.isStopped = true;
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
@@ -344,6 +351,7 @@ public class RobotAction : MonoBehaviour
         Func<bool> robotSerchMove = () =>
         {
             SetRobotLookAt(false);
+            m_IsIK = false;
             //探すアニメーションが終わったら次に行く
             bool endAnim = false;
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
@@ -391,6 +399,7 @@ public class RobotAction : MonoBehaviour
         Func<bool> robotGoolMove = () =>
         {
             SetRobotLookAt(false);
+            m_IsIK = false;
             m_NavAgent.isStopped = false;
             m_NavAgent.speed = m_RobotSpeed;
             m_NavAgent.stoppingDistance = 0.0f;
@@ -424,6 +433,7 @@ public class RobotAction : MonoBehaviour
         Func<bool> robotBillMove = () =>
         {
             SetRobotLookAt(false);
+            m_IsIK = false;
             m_NavAgent.isStopped = false;
             m_NavAgent.speed = m_RobotSpeed;
             m_NavAgent.stoppingDistance = 0.0f;
@@ -461,13 +471,13 @@ public class RobotAction : MonoBehaviour
             vec.y = 0.0f;
             m_BillQuaternion = Quaternion.LookRotation(vec);
             m_RobotQuaternion = transform.rotation;
-            m_IsIK = false;
         };
 
 
         Func<bool> robotBillBreak = () =>
         {
             SetRobotLookAt(false);
+            m_IsIK = false;
             m_NavAgent.isStopped = true;
             bool endAnim = false;
 
@@ -513,21 +523,21 @@ public class RobotAction : MonoBehaviour
     public void RobotLookAtIKUpdate()
     {
         NearBill();
-        //if (m_IsRobotLookAtPlayerFlag)
-        //{
-        //    m_LookAtLerpTime += Time.deltaTime;
-        //}
-        //else
-        //{
-        //    m_LookAtLerpTime -= Time.deltaTime;
-        //}
-        //m_LookAtLerpTime = Mathf.Clamp(m_LookAtLerpTime, 0.0f, 1.0f);
-        ////基本ここを見てる(ローカル座標)
-        //Vector3 robotFront = m_Robot.transform.position + m_Robot.transform.forward * 150.0f + new Vector3(0, 180, 0);
-        ////プレイヤー座標
-        //Vector3 playerPos = m_Player.transform.position;
+        if (m_IsRobotLookAtPlayerFlag)
+        {
+            m_LookAtLerpTime += Time.deltaTime;
+        }
+        else
+        {
+            m_LookAtLerpTime -= Time.deltaTime;
+        }
+        m_LookAtLerpTime = Mathf.Clamp(m_LookAtLerpTime, 0.0f, 1.0f);
+        //基本ここを見てる(ローカル座標)
+        Vector3 robotFront = m_Robot.transform.position + m_Robot.transform.forward * 150.0f + new Vector3(0, 180, 0);
+        //プレイヤー座標
+        Vector3 playerPos = m_Player.transform.position;
 
-        //testObj.transform.position = Vector3.Lerp(robotFront, playerPos, m_LookAtLerpTime);
+        testObj.transform.position = Vector3.Lerp(robotFront, playerPos, m_LookAtLerpTime);
     }
     /// <summary>
     /// IK系
@@ -535,10 +545,10 @@ public class RobotAction : MonoBehaviour
     /// <param name="layorIndex"></param>
     void OnAnimatorIK(int layorIndex)
     {
-        //if (!m_IsIK) return;
+        if (!m_IsIK) return;
 
-        //m_Animator.SetLookAtWeight(1.0f, 0.4f, 0.7f, 0.0f, 0.5f);
-        //m_Animator.SetLookAtPosition(testObj.transform.position);
+        m_Animator.SetLookAtWeight(1.0f, 0.4f, 0.7f, 0.0f, 0.5f);
+        m_Animator.SetLookAtPosition(testObj.transform.position);
 
 
         //if (m_RobotState == RobotState.ROBOT_LEG_ATTACK)
