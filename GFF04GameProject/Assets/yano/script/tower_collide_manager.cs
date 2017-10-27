@@ -34,6 +34,8 @@ public class tower_collide_manager : MonoBehaviour
     [Header("ビルと当たったか")]
     private bool isBillCollide;
 
+    [SerializeField]
+    [Header("半壊途中か")]
     private bool isBreakAfter;
 
     // Use this for initialization

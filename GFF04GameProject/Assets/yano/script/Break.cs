@@ -109,6 +109,9 @@ public class Break : MonoBehaviour
 
         //倒壊挙動制御
         Collapse();
+
+        //崩壊状態の反映
+        BreakType_Reflect();
     }
 
     //倒壊挙動制御
@@ -236,23 +239,43 @@ public class Break : MonoBehaviour
         }
     }
 
+    //崩壊状態の反映
+    private void BreakType_Reflect()
+    {
+        if (!collide_manager_.Get_BreakAfterFlag() || transform.rotation == Quaternion.identity)
+            towerType_.Set_BreakType(0);
+
+        else if (collide_manager_.Get_BreakAfterFlag() && transform.rotation != Quaternion.identity)
+            towerType_.Set_BreakType(1);
+    }
+
+    //倒壊フラグの設定
     public void Set_BreakFlag(bool breakflag)
     {
         isBreak = breakflag;
     }
 
+    //倒壊フラグの取得
     public bool Get_BreakFlag()
     {
         return isBreak;
     }
 
+    //回転の設定
     public void Set_Rotation(Quaternion rotation)
     {
         m_Bill_rotation = rotation;
     }
 
+    //崩壊後のタワーの回転の設定
     public void Set_BreakRotation(Quaternion rotation)
     {
         m_Break_rotation = rotation;
+    }
+
+    //タワーの崩壊状態の取得
+    public uint Get_BreakType()
+    {
+        return towerType_.Get_BreakType();
     }
 }
