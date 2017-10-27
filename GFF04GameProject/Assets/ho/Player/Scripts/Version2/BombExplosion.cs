@@ -25,6 +25,16 @@ public class BombExplosion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        GameObject robot = GameObject.FindGameObjectWithTag("Robot");
+
+        if (other.transform.IsChildOf(robot.transform))
+        {
+            RobotManager robot_mana_ = robot.GetComponent<RobotManager>();
+            robot_mana_.Damage(10);
+        }
     }
 }

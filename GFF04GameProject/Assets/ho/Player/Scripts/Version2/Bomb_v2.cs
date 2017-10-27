@@ -42,6 +42,9 @@ public class Bomb_v2 : MonoBehaviour
         // 他の爆弾とプレイヤーとの接触判定は発生しない
         if (other.tag == "Bomb" || other.tag == "Player") return;
 
+
+        //矢野追加10270231
+        transform.parent = other.transform;
         m_RigidBody.velocity = Vector3.zero;
         m_RigidBody.isKinematic = true;
     }

@@ -81,9 +81,11 @@ public class tower_collide_manager : MonoBehaviour
 
         if ((forward_.Get_BreakAfterFlag() || left_.Get_BreakAfterFlag()
             || back_.Get_BreakAfterFlag() || right_.Get_BreakAfterFlag()))
-        {
             isBreakAfter = true;
-        }
+
+        else if (!(forward_.Get_BreakAfterFlag() || left_.Get_BreakAfterFlag()
+            || back_.Get_BreakAfterFlag() || right_.Get_BreakAfterFlag()))
+            isBreakAfter = false;
     }
 
     public void Flag_Reset()

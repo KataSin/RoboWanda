@@ -70,12 +70,25 @@ public class tower_collide : MonoBehaviour
         }
 
         if (!isBreakAfter
-            &&!other.transform.IsChildOf(parent_Tower_)
+            &&
+            !other.transform.IsChildOf(parent_Tower_)
             &&
             other.gameObject.tag == "TowerCollision")
         {
             isBillCollide = true;
             isBreakAfter = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (parent_Tower_.transform.rotation == Quaternion.identity
+            &&
+            !other.transform.IsChildOf(parent_Tower_)
+            &&
+            other.gameObject.tag == "TowerCollision")
+        {
+            isBreakAfter = false;
         }
     }
 }

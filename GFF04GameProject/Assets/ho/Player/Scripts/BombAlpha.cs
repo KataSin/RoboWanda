@@ -38,7 +38,6 @@ public class BombAlpha : MonoBehaviour
         // 他の爆弾とプレイヤーとの接触判定は発生しない
         if (other.tag == "Bomb" || other.tag == "Player") return;
 
-        m_Rigidbody.velocity = Vector3.zero;
-        m_Rigidbody.isKinematic = true;
+                
     }
 }
