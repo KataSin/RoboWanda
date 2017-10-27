@@ -86,7 +86,7 @@ public class Break : MonoBehaviour
 
             //High
             case 1:
-                m_tower_revision = 1.2f;
+                m_tower_revision = 1.4f;
                 break;
         }
     }
