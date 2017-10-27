@@ -82,7 +82,9 @@ public class tower_collide : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (parent_Tower_.transform.rotation == Quaternion.identity
+        if (!isCollide
+            &&
+            parent_Tower_.transform.rotation == Quaternion.identity
             &&
             !other.transform.IsChildOf(parent_Tower_)
             &&

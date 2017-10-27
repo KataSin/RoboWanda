@@ -83,7 +83,10 @@ public class tower_collide_manager : MonoBehaviour
             || back_.Get_BreakAfterFlag() || right_.Get_BreakAfterFlag()))
             isBreakAfter = true;
 
-        else if (!(forward_.Get_BreakAfterFlag() || left_.Get_BreakAfterFlag()
+        else if (!(forward_.Get_CollideFlag()|| left_.Get_CollideFlag()
+            || back_.Get_CollideFlag()|| right_.Get_CollideFlag())
+            &&
+            !(forward_.Get_BreakAfterFlag() || left_.Get_BreakAfterFlag()
             || back_.Get_BreakAfterFlag() || right_.Get_BreakAfterFlag()))
             isBreakAfter = false;
     }
