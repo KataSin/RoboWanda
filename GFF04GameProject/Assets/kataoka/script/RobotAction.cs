@@ -248,7 +248,7 @@ public class RobotAction : MonoBehaviour
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
             if (clipInfo.clip.name == "AttackHame")
             {
-                
+
                 endAnim = (m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f);
             }
             m_RobotState = RobotState.ROBOT_BEAM_ATTACK;
