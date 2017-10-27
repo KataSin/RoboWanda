@@ -13,6 +13,9 @@ public class Ground : MonoBehaviour
     private GameObject break_ground_parts_;
 
     [SerializeField]
+    private GameObject ground_smoke_;
+
+    [SerializeField]
     [Header("穴の判定")]
     private GameObject hole_collide_obj_;
 
