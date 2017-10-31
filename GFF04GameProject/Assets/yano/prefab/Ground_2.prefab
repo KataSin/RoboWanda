@@ -21,12 +21,12 @@ GameObject:
   - component: {fileID: 4651342777418500}
   - component: {fileID: 33043395819911378}
   - component: {fileID: 23071773575363550}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ManHoll
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1223980145250164
 GameObject:
@@ -39,12 +39,12 @@ GameObject:
   - component: {fileID: 33888890408296442}
   - component: {fileID: 65993981722875848}
   - component: {fileID: 23162975615320734}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ground_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1296681147735648
 GameObject:
@@ -59,12 +59,12 @@ GameObject:
   - component: {fileID: 23450411228795324}
   - component: {fileID: 54876280517277250}
   - component: {fileID: 114313039928963644}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ground_Break
   m_TagString: BreakGround
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1672437464194986
 GameObject:
@@ -75,12 +75,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4259966804039806}
   - component: {fileID: 65367370745192144}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ground_collide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1755307794464758
 GameObject:
@@ -93,12 +93,12 @@ GameObject:
   - component: {fileID: 33929804878257218}
   - component: {fileID: 65668425081549732}
   - component: {fileID: 23894527065482838}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ground_B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1799139069163816
 GameObject:
@@ -111,12 +111,12 @@ GameObject:
   - component: {fileID: 33002144680547834}
   - component: {fileID: 65129166127760772}
   - component: {fileID: 23124527209459866}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ground_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1904173702134796
 GameObject:
@@ -129,12 +129,12 @@ GameObject:
   - component: {fileID: 33807628895796886}
   - component: {fileID: 65991376935251792}
   - component: {fileID: 23024232089877044}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ground_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1951660025894084
 GameObject:
@@ -147,12 +147,12 @@ GameObject:
   - component: {fileID: 33001929340083162}
   - component: {fileID: 65788518248088706}
   - component: {fileID: 23052162071887344}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ground_Bottom
   m_TagString: BreakGround
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1967789338403830
 GameObject:
@@ -163,12 +163,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4245914612596712}
   - component: {fileID: 114727543400621362}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ground_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4190971745688044
 Transform:
@@ -203,7 +203,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1967789338403830}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -25, z: 100}
+  m_LocalPosition: {x: 100, y: -25, z: 500}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4233677097269780}
@@ -692,6 +692,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   break_ground_obj_: {fileID: 1296681147735648}
   break_ground_parts_: {fileID: 1487440457101710, guid: 731ca9da43fc64543a77bcca4e821788,
+    type: 2}
+  ground_smoke_: {fileID: 1183971809056322, guid: c6ca9de2ab51cf141994f580692d8e8e,
     type: 2}
   hole_collide_obj_: {fileID: 1479919141174444, guid: 3e50969c262d2084ba0697de8758709e,
     type: 2}
