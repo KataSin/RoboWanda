@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4265616609349528}
   - component: {fileID: 198730220714575980}
+  - component: {fileID: 114917687791794796}
   - component: {fileID: 199743074683311318}
   m_Layer: 0
   m_Name: ground_Smoke
@@ -34,13 +35,24 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1183971809056322}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 100, y: 0, z: 500}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114917687791794796
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1183971809056322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 762d877411f4efa4db3f53153046d79e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!198 &198730220714575980
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -100,7 +112,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -496515004
+  randomSeed: -758366104
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -758,12 +770,12 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 2
           time: 0
-          value: 0.6031737
-          inSlope: 1.1858188
-          outSlope: 1.1858188
+          value: 0.7024626
+          inSlope: 0.7731158
+          outSlope: 0.7731158
           tangentMode: 0
         - serializedVersion: 2
-          time: 0.82180786
+          time: 0.7345276
           value: 1
           inSlope: 0
           outSlope: 0
@@ -771,8 +783,8 @@ ParticleSystem:
         - serializedVersion: 2
           time: 1
           value: 0.81601477
-          inSlope: -2.078058
-          outSlope: -2.078058
+          inSlope: -1.2939429
+          outSlope: -1.2939429
           tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2

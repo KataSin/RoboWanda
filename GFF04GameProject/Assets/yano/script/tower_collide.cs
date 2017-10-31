@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class tower_collide : MonoBehaviour
 {
+    private enum HitOther
+    {
+        Neutral,
+        Bomb,
+        Robot,
+    }
+    private HitOther hitOther_;
+
     //当たったかどうか
     [SerializeField]
     [Header("当たったかどうか")]
@@ -24,6 +32,8 @@ public class tower_collide : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        hitOther_ = HitOther.Neutral;
+
         isCollide = false;
         isBillCollide = false;
 
@@ -59,6 +69,12 @@ public class tower_collide : MonoBehaviour
         return isBreakAfter;
     }
 
+    //当たった相手取得
+    public uint Get_HitOther()
+    {
+        return (uint)hitOther_;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         //ここに対象オブジェクトを指名
@@ -67,6 +83,8 @@ public class tower_collide : MonoBehaviour
             other.gameObject.tag == "RobotArmAttack"))
         {
             isCollide = true;
+
+            CheckOther(other);
         }
 
         if (!isBreakAfter
@@ -92,5 +110,15 @@ public class tower_collide : MonoBehaviour
         {
             isBreakAfter = false;
         }
+    }
+
+    //当たった相手チェック
+    private void CheckOther(Collider other)
+    {
+        if (other.gameObject.tag == "bom")
+            hitOther_ = HitOther.Bomb;
+
+        else if (other.gameObject.tag == "RobotArmAttack")
+            hitOther_ = HitOther.Robot;
     }
 }
