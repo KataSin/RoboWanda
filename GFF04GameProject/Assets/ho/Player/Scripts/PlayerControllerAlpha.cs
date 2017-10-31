@@ -12,6 +12,7 @@ enum PlayerStateAlpha
 {
     Normal,     // 通常
     Bomb,       // 爆弾投げ
+    Crouch,     // しゃがむ
     Evasion,    // 回避
     Damage,     // 被弾
     Dead        // 死亡
@@ -35,9 +36,9 @@ public class PlayerControllerAlpha : MonoBehaviour
     private float m_Gravity = 18.0f;            // 重力加速度（メートル/秒/秒）
 
     [SerializeField]
-    private float m_MaxSpeedDash = 8.0f;        // ダッシュ時の最高速度（メートル/秒）
+    private float m_MaxSpeedDash = 12.0f;       // ダッシュ時の最高速度（メートル/秒）
     [SerializeField]
-    private float m_AccelPowerDash = 3.5f;      // ダッシュ時の加速度（メートル/秒/秒）
+    private float m_AccelPowerDash = 6.0f;      // ダッシュ時の加速度（メートル/秒/秒）
 
     [SerializeField]
     private float m_MaxSpeedBomb = 4.0f;        // 爆弾投げ時の最高速度（メートル/秒）
@@ -67,10 +68,16 @@ public class PlayerControllerAlpha : MonoBehaviour
     bool m_IsTriggered;                         // 十字キーの操作判定
     float m_CurrentForce;                       // 現在の投げる力
 
+    [SerializeField]
+    private float m_MaxCrouchSpeed = 1.0f;      // しゃがむ時の最高速度（メートル/秒）
+    [SerializeField]
+    private float m_AccelPowerCrouch = 0.5f;    // しゃがむ時の加速度（メートル/秒/秒）
+    [SerializeField]
+    private float m_RotateSpeedCrouch = 180.0f; // しゃがむ時の回転速度（度/秒）
+
     CharacterController m_Controller;           // キャラクターコントローラー
     PlayerStateAlpha m_State;                   // プレイヤーの状態
     bool m_IsDash;                              // ダッシュしているか
-
 
     // Use this for initialization
     void Start()
@@ -93,6 +100,9 @@ public class PlayerControllerAlpha : MonoBehaviour
                 break;
             case PlayerStateAlpha.Bomb:
                 Bomb();
+                break;
+            case PlayerStateAlpha.Crouch:
+                Crouch();
                 break;
             case PlayerStateAlpha.Evasion:
                 Evasion();
@@ -147,19 +157,27 @@ public class PlayerControllerAlpha : MonoBehaviour
         }
     }
 
+    // 接触判定
+
     // 通常時の挙動
     void Normal()
     {
         // 通常時の移動処理
         NormalMove();
 
-        // Aボタンを押すとダッシュ
-        m_IsDash = (Input.GetButton("Dash")) ? true : false;
+        // RTボタンを押すとダッシュ
+        m_IsDash = (Input.GetAxis("Dash") > 0.5f) ? true : false;
 
         // RBボタンを押すと爆弾投げ状態に
         if (Input.GetButton("Bomb_Hold"))
         {
             m_State = PlayerStateAlpha.Bomb;
+        }
+
+        // Bボタンを押すとしゃがむ
+        if (Input.GetButtonDown("Crouch"))
+        {
+            m_State = PlayerStateAlpha.Crouch;
         }
     }
 
@@ -350,16 +368,16 @@ public class PlayerControllerAlpha : MonoBehaviour
         switch (m_ThrowAmount)
         {
             case 1:
-                ShowThrowDirectionOne();
+                //ShowThrowDirectionOne();
                 break;
             case 2:
-                ShowThrowDirectionTwo();
+                //ShowThrowDirectionTwo();
                 break;
             case 3:
-                ShowThrowDirectionThree();
+                //ShowThrowDirectionThree();
                 break;
             default:
-                ShowThrowDirectionOne();
+                //ShowThrowDirectionOne();
                 break;
         }
     }
@@ -487,6 +505,96 @@ public class PlayerControllerAlpha : MonoBehaviour
         bomb1.GetComponent<Rigidbody>().AddForce(bomb1.transform.forward * m_CurrentForce, ForceMode.Impulse);
         bomb2.GetComponent<Rigidbody>().AddForce(bomb2.transform.forward * m_CurrentForce, ForceMode.Impulse);
         bomb3.GetComponent<Rigidbody>().AddForce(bomb3.transform.forward * m_CurrentForce, ForceMode.Impulse);
+    }
+
+    // しゃがむ時の挙動
+    void Crouch()
+    {
+        // しゃがむ時の移動処理
+        CrouchMove();
+
+        // Bボタンを押すと、通常状態に戻る
+        if (Input.GetButtonDown("Crouch"))
+        {
+            m_State = PlayerStateAlpha.Normal;
+        }
+    }
+
+    // しゃがむ時の移動処理
+    void CrouchMove()
+    {
+        // カメラの正面向きのベクトルを取得
+        Vector3 forward = Camera.main.transform.forward;
+        // y成分を無視する
+        forward.y = 0;
+        // 正規化する
+        forward.Normalize();
+
+        // 方向入力を取得
+        float axisHorizontal = Input.GetAxisRaw("Horizontal_L");    // x軸
+        float axisVertical = Input.GetAxisRaw("Vertical_L");        // z軸
+
+        // 減速する（入力が無い場合 or 進行方向と逆に入力がある場合）
+        // X軸（左右キー）
+        if ((axisHorizontal == 0) || (m_SpeedX * axisHorizontal < 0))
+        {
+            if (m_SpeedX > 0)
+            {
+                m_SpeedX = Mathf.Max(m_SpeedX - m_BrakePower * Time.deltaTime, 0);
+            }
+            else {
+                m_SpeedX = Mathf.Min(m_SpeedX + m_BrakePower * Time.deltaTime, 0);
+            }
+        }
+        // Z軸（上下キー）
+        if ((axisVertical == 0) || (m_SpeedZ * axisVertical < 0))
+        {
+            if (m_SpeedZ > 0)
+            {
+                m_SpeedZ = Mathf.Max(m_SpeedZ - m_BrakePower * Time.deltaTime, 0);
+            }
+            else {
+                m_SpeedZ = Mathf.Min(m_SpeedZ + m_BrakePower * Time.deltaTime, 0);
+            }
+        }
+
+        // 左右キーで加速
+        m_SpeedX +=
+            m_AccelPowerCrouch
+            * axisHorizontal
+            * Time.deltaTime;
+        // 上下キーで加速
+        m_SpeedZ +=
+            m_AccelPowerCrouch
+            * axisVertical
+            * Time.deltaTime;
+
+        // 速度制限
+        m_SpeedX = Mathf.Clamp(m_SpeedX, -m_MaxCrouchSpeed, m_MaxCrouchSpeed);
+        m_SpeedZ = Mathf.Clamp(m_SpeedZ, -m_MaxCrouchSpeed, m_MaxCrouchSpeed);
+
+        // 移動処理
+        Vector3 velocity = forward * m_SpeedZ + Camera.main.transform.right * m_SpeedX;
+
+        // 重力加速度を加算
+        m_VelocityY -= m_Gravity * Time.deltaTime;
+        // y軸方向の移動量を加味する
+        velocity.y = m_VelocityY;
+        // CharacterControllerに命令して移動する
+        m_Controller.Move(velocity * Time.deltaTime);
+
+        // 移動方向に向ける
+        Vector3 direction = transform.position - m_PrevPosition;
+
+        if (direction.sqrMagnitude > 0)
+        {
+            Vector3 orientiation = Vector3.Slerp(transform.forward,
+                new Vector3(direction.x, 0.0f, direction.z),
+                m_RotateSpeedCrouch * Time.deltaTime / Vector3.Angle(transform.forward, direction));
+
+            transform.LookAt(transform.position + orientiation);
+            m_PrevPosition = transform.position;
+        }
     }
 
     // 回避行動

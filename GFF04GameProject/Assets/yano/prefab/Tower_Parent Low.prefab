@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 33250431171618248}
   - component: {fileID: 23248467971119918}
   - component: {fileID: 64151189627089030}
+  - component: {fileID: 208272917127704978}
   m_Layer: 0
   m_Name: 6
   m_TagString: Untagged
@@ -544,3 +545,18 @@ MonoBehaviour:
   isBillCollide: 0
   parent_tower_obj_: {fileID: 1465542048929630}
   isBreakAfter: 0
+--- !u!208 &208272917127704978
+NavMeshObstacle:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1707648769930712}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 25.000002, y: 50.000004, z: 25.000002}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
