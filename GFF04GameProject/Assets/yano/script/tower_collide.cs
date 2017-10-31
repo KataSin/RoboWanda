@@ -29,6 +29,8 @@ public class tower_collide : MonoBehaviour
     [SerializeField]
     private bool isBreakAfter;
 
+    private bool isRobotHit;
+
     // Use this for initialization
     void Start()
     {
@@ -38,6 +40,7 @@ public class tower_collide : MonoBehaviour
         isBillCollide = false;
 
         isBreakAfter = false;
+        isRobotHit = false;
 
         parent_Tower_ = parent_tower_obj_.GetComponent<Transform>();
     }
@@ -73,6 +76,12 @@ public class tower_collide : MonoBehaviour
     public uint Get_HitOther()
     {
         return (uint)hitOther_;
+    }
+
+    //ロボットと当たったかどうかの取得
+    public bool Get_RobotHit()
+    {
+        return isRobotHit;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -119,6 +128,9 @@ public class tower_collide : MonoBehaviour
             hitOther_ = HitOther.Bomb;
 
         else if (other.gameObject.tag == "RobotArmAttack")
+        {
             hitOther_ = HitOther.Robot;
+            isRobotHit = true;
+        }
     }
 }

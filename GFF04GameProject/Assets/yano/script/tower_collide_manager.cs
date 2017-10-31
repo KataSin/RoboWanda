@@ -48,6 +48,10 @@ public class tower_collide_manager : MonoBehaviour
     [Header("半壊途中か")]
     private bool isBreakAfter;
 
+    [SerializeField]
+    [Header("ロボットに当たったかどうか")]
+    private bool isRobotHit;
+
     // Use this for initialization
     void Start()
     {
@@ -61,7 +65,8 @@ public class tower_collide_manager : MonoBehaviour
         m_direction = 0;
         isBillCollide = false;
 
-        isBreakAfter = false;       
+        isBreakAfter = false;
+        isRobotHit = false;
     }
 
     // Update is called once per frame
@@ -96,12 +101,16 @@ public class tower_collide_manager : MonoBehaviour
             || back_.Get_BreakAfterFlag() || right_.Get_BreakAfterFlag()))
             isBreakAfter = true;
 
-        else if (!(forward_.Get_CollideFlag()|| left_.Get_CollideFlag()
-            || back_.Get_CollideFlag()|| right_.Get_CollideFlag())
+        else if (!(forward_.Get_CollideFlag() || left_.Get_CollideFlag()
+            || back_.Get_CollideFlag() || right_.Get_CollideFlag())
             &&
             !(forward_.Get_BreakAfterFlag() || left_.Get_BreakAfterFlag()
             || back_.Get_BreakAfterFlag() || right_.Get_BreakAfterFlag()))
             isBreakAfter = false;
+
+        if (forward_.Get_RobotHit() || left_.Get_RobotHit()
+            || back_.Get_RobotHit() || right_.Get_RobotHit())
+            isRobotHit = true;
 
         //当たった相手チェック
         CheckOther();
@@ -165,5 +174,11 @@ public class tower_collide_manager : MonoBehaviour
     public uint Get_HitOther()
     {
         return (uint)hitOther_;
+    }
+
+    //ロボットと当たったかどうかの取得
+    public bool Get_RobotHit()
+    {
+        return isRobotHit;
     }
 }
