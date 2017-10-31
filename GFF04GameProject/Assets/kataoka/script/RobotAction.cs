@@ -32,7 +32,6 @@ public class RobotAction : MonoBehaviour
     [SerializeField, Tooltip("ロボットビームのクールダウン")]
     public float m_BeamCoolDownTime = 30.0f;
 
-    public GameObject m_BillCollision;
 
     //ナビエージェント
     private NavMeshAgent m_NavAgent;
@@ -486,7 +485,6 @@ public class RobotAction : MonoBehaviour
             if (clipInfo.clip.name == "Attack")
             {
                 endAnim = (m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f);
-                m_BillCollision.GetComponent<RobotBillCollision>().SetCollisionFlag(false);
             }
             m_RobotState = RobotState.ROBOT_ARM_ATTACK;
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
