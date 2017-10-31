@@ -24,6 +24,13 @@ public class RobotDamage : MonoBehaviour
         {
             m_Manager.Damage(10);
         }
+        if (other.tag == "TowerCollision")
+        {
+            if (other.transform.parent.GetComponent<tower_collide_manager>().Get_HitOther() == 1)
+            {
+                m_Manager.Damage(40);
+            }
+        }
     }
 
 }
