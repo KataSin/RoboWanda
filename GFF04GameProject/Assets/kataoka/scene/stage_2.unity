@@ -96,15 +96,15 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 2
     agentTypeID: 0
-    agentRadius: 15
+    agentRadius: 4
     agentHeight: 2
     agentSlope: 3.7
-    agentClimb: 0.4
+    agentClimb: 2
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2
     manualCellSize: 0
-    cellSize: 5
+    cellSize: 1.3333334
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
@@ -17315,6 +17315,11 @@ Prefab:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 997475637}
+    - target: {fileID: 195360418192333670, guid: 9d62383a5e21fc4438b569b5be6a7c3d,
+        type: 2}
+      propertyPath: m_Radius
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9d62383a5e21fc4438b569b5be6a7c3d, type: 2}
   m_IsPrefabParent: 0

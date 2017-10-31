@@ -104,7 +104,6 @@ public class RobotAction : MonoBehaviour
         m_LookAtLerpTime = 0.0f;
 
         m_BreakBill = m_Bills[0];
-        NearBill();
     }
     /// <summary>
     /// ロボットがプレイヤーに向かって動く
@@ -433,7 +432,7 @@ public class RobotAction : MonoBehaviour
         Func<bool> robotBillMove = () =>
         {
             SetRobotLookAt(false);
-            m_IsIK = false;
+            m_IsIK = true;
             m_NavAgent.isStopped = false;
             m_NavAgent.speed = m_RobotSpeed;
             m_NavAgent.stoppingDistance = 0.0f;
@@ -481,7 +480,7 @@ public class RobotAction : MonoBehaviour
             m_NavAgent.isStopped = true;
             bool endAnim = false;
 
-            lerpTime += Time.deltaTime;
+            lerpTime += 0.5f * Time.deltaTime;
             transform.rotation = Quaternion.Lerp(m_RobotQuaternion, m_BillQuaternion, lerpTime);
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
             if (clipInfo.clip.name == "Attack")
