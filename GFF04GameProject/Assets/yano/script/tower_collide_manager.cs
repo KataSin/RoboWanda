@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class tower_collide_manager : MonoBehaviour
 {
+    private enum HitOther
+    {
+        Neutral,
+        Bomb,
+        Robot,
+    }
+    [SerializeField]
+    [Header("倒壊させた相手(0:なし 1:ボム 2:ロボット)")]
+    private HitOther hitOther_;
+
     //前の当たり判定
     [SerializeField]
     private GameObject forward_obj_;
@@ -41,6 +51,8 @@ public class tower_collide_manager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        hitOther_ = HitOther.Neutral;
+
         forward_ = forward_obj_.GetComponent<tower_collide>();
         left_ = left_obj_.GetComponent<tower_collide>();
         back_ = back_obj_.GetComponent<tower_collide>();
@@ -49,8 +61,7 @@ public class tower_collide_manager : MonoBehaviour
         m_direction = 0;
         isBillCollide = false;
 
-        isBreakAfter = false;
-
+        isBreakAfter = false;       
     }
 
     // Update is called once per frame
@@ -91,8 +102,12 @@ public class tower_collide_manager : MonoBehaviour
             !(forward_.Get_BreakAfterFlag() || left_.Get_BreakAfterFlag()
             || back_.Get_BreakAfterFlag() || right_.Get_BreakAfterFlag()))
             isBreakAfter = false;
+
+        //当たった相手チェック
+        CheckOther();
     }
 
+    //フラグのリセット
     public void Flag_Reset()
     {
         forward_.Set_CollideFlag(false);
@@ -104,6 +119,18 @@ public class tower_collide_manager : MonoBehaviour
         left_.Set_Bill_CollideFlag(false);
         back_.Set_Bill_CollideFlag(false);
         right_.Set_Bill_CollideFlag(false);
+    }
+
+    //当たった相手チェック
+    private void CheckOther()
+    {
+        if (forward_.Get_HitOther() == 1 || left_.Get_HitOther() == 1
+            || back_.Get_HitOther() == 1 || right_.Get_HitOther() == 1)
+            hitOther_ = HitOther.Bomb;
+
+        else if (forward_.Get_HitOther() == 2 || left_.Get_HitOther() == 2
+            || back_.Get_HitOther() == 2 || right_.Get_HitOther() == 2)
+            hitOther_ = HitOther.Robot;
     }
 
     //方向の取得
@@ -128,8 +155,15 @@ public class tower_collide_manager : MonoBehaviour
         isBillCollide = flag;
     }
 
+    //半壊途中かどうかの取得
     public bool Get_BreakAfterFlag()
     {
         return isBreakAfter;
+    }
+
+    //当たった相手の取得
+    public uint Get_HitOther()
+    {
+        return (uint)hitOther_;
     }
 }
