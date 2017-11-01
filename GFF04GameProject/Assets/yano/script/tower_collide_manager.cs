@@ -181,4 +181,9 @@ public class tower_collide_manager : MonoBehaviour
     {
         return isRobotHit;
     }
+    //ロボットと当たったか設定
+    public void Set_RobotHit(bool flag)
+    {
+        isRobotHit = flag;
+    }
 }

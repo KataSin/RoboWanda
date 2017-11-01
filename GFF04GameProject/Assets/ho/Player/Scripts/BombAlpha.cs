@@ -11,6 +11,7 @@ public class BombAlpha : MonoBehaviour
 {
     [SerializeField]
     private GameObject m_Explosion;     // 爆発の当たり判定
+    bool m_IsHit;                       // 接触判定
 
     Rigidbody m_Rigidbody;
 
@@ -18,6 +19,7 @@ public class BombAlpha : MonoBehaviour
     void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
+        m_IsHit = false;
     }
 
     // Update is called once per frame
@@ -30,6 +32,11 @@ public class BombAlpha : MonoBehaviour
             // 爆発の当たり判定を発生
             Instantiate(m_Explosion, transform.position, Quaternion.identity);
         }
+
+        if (m_IsHit)
+        {
+            transform.localRotation = Quaternion.identity;
+        }
     }
 
     // 接触判定
@@ -38,6 +45,10 @@ public class BombAlpha : MonoBehaviour
         // 他の爆弾とプレイヤーとの接触判定は発生しない
         if (other.tag == "Bomb" || other.tag == "Player") return;
 
-                
+        m_IsHit = true;
+        // 矢野追加10270231
+        transform.parent = other.transform;
+        m_Rigidbody.velocity = Vector3.zero;
+        m_Rigidbody.isKinematic = true;
     }
 }
