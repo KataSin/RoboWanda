@@ -4,32 +4,90 @@ using UnityEngine;
 using UnityEngine.AI;
 public class testScript : MonoBehaviour
 {
+    public GameObject bom;
+    public GameObject tyakuti;
+    public GameObject goal;
+    private Vector3 vec;
 
-    public GameObject m_Robot;
-    public GameObject m_GoalPoint;
-    private GameObject m_Player;
+    public GameObject point;
+
+    private List<GameObject> points;
     // Use this for initialization
     void Start()
     {
-        m_Player = gameObject;
+        points = new List<GameObject>();
+        for (int time = 0; time <= 200; time++)
+        {
+            points.Add(Instantiate(point));
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        //ロボットからゴールのベクトル計算
-        Vector3 robotToGoalVec3 = (m_GoalPoint.transform.position - m_Robot.transform.position).normalized;
-        //前か後か判定するために横ベクトルに変換
-        Vector3 robotToGoalLeftVec3 = Vector3.Cross(robotToGoalVec3, Vector3.up).normalized;
-        //さっき計算したやつをVector2に変換
-        Vector2 robotToGoalVec2 = new Vector2(robotToGoalLeftVec3.x, robotToGoalLeftVec3.z).normalized;
 
-        //ロボットからプレイヤーのベクトル計算
-        Vector3 robotToPlayerVec3 = (m_Player.transform.position - m_Robot.transform.position).normalized;
-        //それをVector2に変換
-        Vector2 robotToPlayerVec2 = new Vector2(robotToPlayerVec3.x, robotToPlayerVec3.z);
-        Debug.Log(Vector2Cross(robotToGoalVec2, robotToPlayerVec2));
+        vec = transform.forward.normalized * 100.0f;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GameObject b = Instantiate(bom, transform.position, Quaternion.identity);
+            b.GetComponent<Rigidbody>().AddForce(vec);
+        }
+        //ポジション設定
+        for (int time = 0; time <= 200; time++)
+        {
+            Vector3 pos = Force(transform.position, vec, 0.1f, Physics.gravity, 1, time * 0.1f);
+            points[time].transform.position = pos;
+        }
+        //線設定
+        for (int time = 0; time <= 200; time++)
+        {
+            Vector3 start = points[time].transform.position;
+            if (points.Count - 1 < time + 1) break;
+            Vector3 end = points[time + 1].transform.position;
 
+            Ray ray = new Ray(start, end - start);
+            RaycastHit hit;
+            int layer = ~(1 << 11 | 1 << 12);
+            if (Physics.Raycast(ray, out hit, Vector3.Distance(start, end), layer))
+            {
+                tyakuti.transform.position = hit.point;
+                for (int i = time + 1; i <= 200; i++)
+                {
+                    points[i].SetActive(false);
+                }
+                break;
+            }
+            else
+            {
+                points[time].SetActive(true);
+            }
+
+        }
+
+    }
+
+    public Vector3 Force(
+    Vector3 start,
+    Vector3 force,
+    float mass,
+    Vector3 gravity,
+    float gravityScale,
+    float time
+)
+    {
+        var speedX = force.x / mass * Time.fixedDeltaTime;
+        var speedY = force.y / mass * Time.fixedDeltaTime;
+        var speedZ = force.z / mass * Time.fixedDeltaTime;
+
+        var halfGravityX = gravity.x * 0.5f * gravityScale;
+        var halfGravityY = gravity.y * 0.5f * gravityScale;
+        var halfGravityZ = gravity.z * 0.5f * gravityScale;
+
+        var positionX = speedX * time + halfGravityX * Mathf.Pow(time, 2);
+        var positionY = speedY * time + halfGravityY * Mathf.Pow(time, 2);
+        var positionZ = speedZ * time + halfGravityZ * Mathf.Pow(time, 2);
+
+        return start + new Vector3(positionX, positionY, positionZ);
     }
     public float Vector2Cross(Vector2 lhs, Vector2 rhs)
     {
