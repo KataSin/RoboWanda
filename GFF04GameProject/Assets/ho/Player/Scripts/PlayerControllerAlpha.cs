@@ -12,7 +12,7 @@ enum PlayerStateAlpha
 {
     Normal,     // 通常
     Bomb,       // 爆弾投げ
-    Crouch,     // しゃがむ
+    Prone,      // 
     Evasion,    // 回避
     Damage,     // 被弾
     Dead        // 死亡
@@ -52,6 +52,7 @@ public class PlayerControllerAlpha : MonoBehaviour
     float m_VelocityY = 0.0f;                   // y軸方向の移動量
     float m_SpeedX = 0.0f;                      // X軸速度（右はプラス、左はマイナス）
     float m_SpeedZ = 0.0f;                      // Z軸速度（前進はプラス、後退はマイナス）
+    float m_CurrentSpeedLimit;                  // 現在の速度制限
     Vector3 m_PrevPosition;                     // 前回の位置（回転処理用）
 
     [SerializeField]
@@ -69,25 +70,32 @@ public class PlayerControllerAlpha : MonoBehaviour
     float m_CurrentForce;                       // 現在の投げる力
 
     [SerializeField]
-    private float m_MaxCrouchSpeed = 1.0f;      // しゃがむ時の最高速度（メートル/秒）
+    private float m_MaxProneSpeed = 1.0f;       // 
     [SerializeField]
-    private float m_AccelPowerCrouch = 0.5f;    // しゃがむ時の加速度（メートル/秒/秒）
+    private float m_AccelPowerProne = 0.5f;     // 
     [SerializeField]
-    private float m_RotateSpeedCrouch = 180.0f; // しゃがむ時の回転速度（度/秒）
+    private float m_RotateSpeedProne = 45.0f;  // 
 
     CharacterController m_Controller;           // キャラクターコントローラー
+    Animator m_Animator;                        // アニメーター
     PlayerStateAlpha m_State;                   // プレイヤーの状態
     bool m_IsDash;                              // ダッシュしているか
+    bool m_IsBomb;                              // 爆弾投げ状態であるか
+    bool m_IsCrouch;                            // 
 
     // Use this for initialization
     void Start()
     {
         m_Controller = GetComponent<CharacterController>();
+        m_Animator = GetComponent<Animator>();
         m_CurrentHP = m_MaxHP;
         m_State = PlayerStateAlpha.Normal;
+        m_CurrentSpeedLimit = m_MaxSpeed;
         m_PrevPosition = transform.position;
         m_CurrentForce = m_Force;
         m_IsDash = false;
+        m_IsBomb = false;
+        m_IsCrouch = false;
     }
 
     // Update is called once per frame
@@ -97,23 +105,37 @@ public class PlayerControllerAlpha : MonoBehaviour
         {
             case PlayerStateAlpha.Normal:
                 Normal();
+                m_IsBomb = false;
+                m_IsCrouch = false;
                 break;
             case PlayerStateAlpha.Bomb:
                 Bomb();
+                m_IsBomb = true;
+                m_IsCrouch = false;
                 break;
-            case PlayerStateAlpha.Crouch:
-                Crouch();
+            case PlayerStateAlpha.Prone:
+                Prone();
+                m_IsBomb = false;
+                m_IsCrouch = true;
                 break;
             case PlayerStateAlpha.Evasion:
                 Evasion();
+                m_IsBomb = false;
+                m_IsCrouch = false;
                 break;
             case PlayerStateAlpha.Damage:
                 Damage();
+                m_IsBomb = false;
+                m_IsCrouch = false;
                 break;
             case PlayerStateAlpha.Dead:
                 Dead();
+                m_IsBomb = false;
+                m_IsCrouch = false;
                 break;
             default:
+                m_IsBomb = false;
+                m_IsCrouch = false;
                 break;
         }
 
@@ -155,6 +177,10 @@ public class PlayerControllerAlpha : MonoBehaviour
         {
             m_State = PlayerStateAlpha.Dead;
         }
+
+        // Animatorにプレイヤーの状態を知らせる
+        m_Animator.SetBool("IsBomb", m_IsBomb);
+        m_Animator.SetBool("IsCrouch", m_IsCrouch);
     }
 
     // 接触判定
@@ -177,7 +203,7 @@ public class PlayerControllerAlpha : MonoBehaviour
         // Bボタンを押すとしゃがむ
         if (Input.GetButtonDown("Crouch"))
         {
-            m_State = PlayerStateAlpha.Crouch;
+            m_State = PlayerStateAlpha.Prone;
         }
     }
 
@@ -234,10 +260,20 @@ public class PlayerControllerAlpha : MonoBehaviour
             * Time.deltaTime;
 
         // 速度制限
-        float speed_limit;
-        speed_limit = (m_IsDash) ? speed_limit = m_MaxSpeedDash : speed_limit = m_MaxSpeed;
-        m_SpeedX = Mathf.Clamp(m_SpeedX, -speed_limit, speed_limit);
-        m_SpeedZ = Mathf.Clamp(m_SpeedZ, -speed_limit, speed_limit);
+        if (m_IsDash)
+        {
+            m_CurrentSpeedLimit = m_MaxSpeedDash;
+        }
+        else
+        {
+            if (m_CurrentSpeedLimit > m_MaxSpeed)
+            {
+                m_CurrentSpeedLimit -= 0.1f;
+            }
+        }
+
+        m_SpeedX = Mathf.Clamp(m_SpeedX, -m_CurrentSpeedLimit, m_CurrentSpeedLimit);
+        m_SpeedZ = Mathf.Clamp(m_SpeedZ, -m_CurrentSpeedLimit, m_CurrentSpeedLimit);
 
         // 移動処理
         Vector3 velocity = forward * m_SpeedZ + Camera.main.transform.right * m_SpeedX;
@@ -248,6 +284,11 @@ public class PlayerControllerAlpha : MonoBehaviour
         velocity.y = m_VelocityY;
         // CharacterControllerに命令して移動する
         m_Controller.Move(velocity * Time.deltaTime);
+        // Animatorに命令して、アニメーションを再生する
+        // プレイヤー現在の移動量を取得
+        float current_speed;
+        current_speed = m_Controller.velocity.magnitude;
+        m_Animator.SetFloat("NormalSpeed", current_speed);
 
         // 移動方向に向ける
         Vector3 direction = transform.position - m_PrevPosition;
@@ -355,6 +396,12 @@ public class PlayerControllerAlpha : MonoBehaviour
         velocity.y = m_VelocityY;
         // CharacterControllerに命令して移動する
         m_Controller.Move(velocity * Time.deltaTime);
+        // Animatorに命令して、アニメーションを再生する
+        float current_speed_X = m_SpeedX;
+        float current_speed_Z = m_SpeedZ;
+
+        m_Animator.SetFloat("BombSpeedX", current_speed_X);
+        m_Animator.SetFloat("BombSpeedZ", current_speed_Z);
 
         // カメラと同じ方向に向く
         Vector3 camera_direction = Camera.main.transform.eulerAngles;
@@ -468,9 +515,9 @@ public class PlayerControllerAlpha : MonoBehaviour
         // 爆弾の所持数が減る
         m_BombKeep -= 1;
         // 爆弾を生成
-        GameObject bomb = Instantiate(m_Bomb, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
+        GameObject bomb = Instantiate(m_Bomb, m_BombThrow.transform.position, Quaternion.identity);
         // Rigidbodyに力を加えて投げる
-        bomb.GetComponent<Rigidbody>().AddForce(bomb.transform.forward * m_CurrentForce, ForceMode.Impulse);
+        bomb.GetComponent<Rigidbody>().AddForce(transform.forward * m_CurrentForce, ForceMode.Impulse);
     }
 
     // 爆弾を投擲（2個）
@@ -507,11 +554,11 @@ public class PlayerControllerAlpha : MonoBehaviour
         bomb3.GetComponent<Rigidbody>().AddForce(bomb3.transform.forward * m_CurrentForce, ForceMode.Impulse);
     }
 
-    // しゃがむ時の挙動
-    void Crouch()
+    // 
+    void Prone()
     {
-        // しゃがむ時の移動処理
-        CrouchMove();
+        // 
+        ProneMove();
 
         // Bボタンを押すと、通常状態に戻る
         if (Input.GetButtonDown("Crouch"))
@@ -520,8 +567,8 @@ public class PlayerControllerAlpha : MonoBehaviour
         }
     }
 
-    // しゃがむ時の移動処理
-    void CrouchMove()
+    // 
+    void ProneMove()
     {
         // カメラの正面向きのベクトルを取得
         Vector3 forward = Camera.main.transform.forward;
@@ -560,18 +607,18 @@ public class PlayerControllerAlpha : MonoBehaviour
 
         // 左右キーで加速
         m_SpeedX +=
-            m_AccelPowerCrouch
+            m_AccelPowerProne
             * axisHorizontal
             * Time.deltaTime;
         // 上下キーで加速
         m_SpeedZ +=
-            m_AccelPowerCrouch
+            m_AccelPowerProne
             * axisVertical
             * Time.deltaTime;
 
         // 速度制限
-        m_SpeedX = Mathf.Clamp(m_SpeedX, -m_MaxCrouchSpeed, m_MaxCrouchSpeed);
-        m_SpeedZ = Mathf.Clamp(m_SpeedZ, -m_MaxCrouchSpeed, m_MaxCrouchSpeed);
+        m_SpeedX = Mathf.Clamp(m_SpeedX, -m_MaxProneSpeed, m_MaxProneSpeed);
+        m_SpeedZ = Mathf.Clamp(m_SpeedZ, -m_MaxProneSpeed, m_MaxProneSpeed);
 
         // 移動処理
         Vector3 velocity = forward * m_SpeedZ + Camera.main.transform.right * m_SpeedX;
@@ -582,6 +629,11 @@ public class PlayerControllerAlpha : MonoBehaviour
         velocity.y = m_VelocityY;
         // CharacterControllerに命令して移動する
         m_Controller.Move(velocity * Time.deltaTime);
+        // Animatorに命令して、アニメーションを再生する
+        // プレイヤー現在の移動量を取得
+        float current_speed;
+        current_speed = m_Controller.velocity.magnitude;
+        m_Animator.SetFloat("ProneSpeed", current_speed);
 
         // 移動方向に向ける
         Vector3 direction = transform.position - m_PrevPosition;
@@ -590,7 +642,7 @@ public class PlayerControllerAlpha : MonoBehaviour
         {
             Vector3 orientiation = Vector3.Slerp(transform.forward,
                 new Vector3(direction.x, 0.0f, direction.z),
-                m_RotateSpeedCrouch * Time.deltaTime / Vector3.Angle(transform.forward, direction));
+                m_RotateSpeedProne * Time.deltaTime / Vector3.Angle(transform.forward, direction));
 
             transform.LookAt(transform.position + orientiation);
             m_PrevPosition = transform.position;
