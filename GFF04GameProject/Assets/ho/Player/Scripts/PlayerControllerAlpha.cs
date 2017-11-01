@@ -83,6 +83,9 @@ public class PlayerControllerAlpha : MonoBehaviour
     bool m_IsBomb;                              // 爆弾投げ状態であるか
     bool m_IsCrouch;                            // 
 
+    //片岡実装
+    BomSpawn m_BomSpawn; //ボムスポーンクラス
+
     // Use this for initialization
     void Start()
     {
@@ -96,6 +99,9 @@ public class PlayerControllerAlpha : MonoBehaviour
         m_IsDash = false;
         m_IsBomb = false;
         m_IsCrouch = false;
+
+        //片岡実装
+        m_BomSpawn = transform.Find("BomSpawn").GetComponent<BomSpawn>();
     }
 
     // Update is called once per frame
@@ -317,11 +323,15 @@ public class PlayerControllerAlpha : MonoBehaviour
         float new_force = m_Force * (1 + elevation_angle / 90.0f);
         m_CurrentForce = new_force;
 
+
+        //軌道を表示する
+        m_BomSpawn.SetDrawLine(true);
+        
         // 爆弾投げ時の移動処理
         BombMove();
 
-        // 着弾点を表示
-        BombShowThrowPoint();
+        //// 着弾点を表示
+        //BombShowThrowPoint();
 
         // 爆弾を投擲
         BombThrow();
@@ -330,6 +340,8 @@ public class PlayerControllerAlpha : MonoBehaviour
         if (!Input.GetButton("Bomb_Hold"))
         {
             m_State = PlayerStateAlpha.Normal;
+            //軌道を消す
+            m_BomSpawn.SetDrawLine(false);
         }
     }
 
@@ -471,40 +483,15 @@ public class PlayerControllerAlpha : MonoBehaviour
     // 爆弾を投擲
     void BombThrow()
     {
+        //片岡実装
+        //ベクトルとパワーを設定
+        m_BomSpawn.Set(Camera.main.transform.forward.normalized, 100.0f);
         // LBボタンを押すと、爆弾を投擲
         if (Input.GetButtonDown("Bomb_Throw"))
         {
-            if (m_BombKeep <= 0) return;
-
-            switch (m_ThrowAmount)
+            if (GameObject.FindGameObjectsWithTag("Bomb").Length < 3)
             {
-                case 3:
-                    if (m_BombKeep == 1)
-                    {
-                        ThrowOne();
-                        break;
-                    }
-                    if (m_BombKeep == 2)
-                    {
-                        ThrowTwo();
-                        break;
-                    }
-                    ThrowThree();
-                    break;
-                case 2:
-                    if (m_BombKeep == 1)
-                    {
-                        ThrowOne();
-                        break;
-                    }
-                    ThrowTwo();
-                    break;
-                case 1:
-                    ThrowOne();
-                    break;
-                default:
-                    ThrowOne();
-                    break;
+                m_BomSpawn.SpawnBom();
             }
         }
     }

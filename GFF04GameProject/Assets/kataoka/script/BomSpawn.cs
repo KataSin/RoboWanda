@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
-public class testScript : MonoBehaviour
+
+public class BomSpawn : MonoBehaviour
 {
     [SerializeField, Tooltip("爆弾プレハブ")]
     public GameObject m_BomPrefab;
-    [SerializeField, Tooltip("着地地点プレハブ")]
-    public GameObject m_LandingPointPrefab;
+    [SerializeField, Tooltip("着地地点オブジェクト")]
+    public GameObject m_LandingPoint;
     [SerializeField, Tooltip("挙動のテストプレハブ")]
     public GameObject m_Point;
     [SerializeField, Tooltip("投げる力")]
@@ -45,6 +45,7 @@ public class testScript : MonoBehaviour
             {
                 i.SetActive(false);
             }
+            m_LandingPoint.SetActive(false);
             return;
         }
 
@@ -68,7 +69,13 @@ public class testScript : MonoBehaviour
             int layer = ~(1 << 11 | 1 << 12);
             if (Physics.Raycast(ray, out hit, Vector3.Distance(start, end), layer))
             {
-                m_LandingPointPrefab.transform.position = hit.point;
+                //着地地点の座標と回転を設定
+                m_LandingPoint.transform.position = hit.point;
+                m_LandingPoint.transform.LookAt(m_LandingPoint.transform.position + hit.normal * 5.0f);
+                m_LandingPoint.transform.rotation =
+                    Quaternion.Euler(m_LandingPoint.transform.eulerAngles.x + 90,
+                    m_LandingPoint.transform.eulerAngles.y,
+                    m_LandingPoint.transform.eulerAngles.z);
                 for (int j = i + 1; j <= 200; j++)
                 {
                     points[i].SetActive(false);
@@ -79,6 +86,12 @@ public class testScript : MonoBehaviour
             {
                 points[i].SetActive(true);
             }
+            //着地地点表示するか
+            m_LandingPoint.SetActive(true);
+            if (i == 200)
+            {
+                m_LandingPoint.SetActive(false);
+            }
         }
 
     }
@@ -88,7 +101,7 @@ public class testScript : MonoBehaviour
     public void SpawnBom()
     {
         GameObject bom = Instantiate(m_BomPrefab, transform.position, Quaternion.identity);
-        bom.GetComponent<Rigidbody>().AddForce(m_Vec);
+        bom.GetComponent<Rigidbody>().AddForce(m_Vec * m_Power);
     }
     /// <summary>
     /// ボムの投げるベクトルとパワーを設定する
