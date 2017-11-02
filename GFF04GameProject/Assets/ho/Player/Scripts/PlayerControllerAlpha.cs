@@ -12,7 +12,7 @@ enum PlayerStateAlpha
 {
     Normal,     // 通常
     Bomb,       // 爆弾投げ
-    Prone,      // 
+    Creeping,   // 匍匐
     Evasion,    // 回避
     Damage,     // 被弾
     Dead        // 死亡
@@ -31,7 +31,7 @@ public class PlayerControllerAlpha : MonoBehaviour
     [SerializeField]
     private float m_BrakePower = 6.0f;          // ブレーキ速度（メートル/秒/秒）
     [SerializeField]
-    private float m_RotateSpeed = 180.0f;       // 回転速度（度/秒）
+    private float m_RotateSpeed = 360.0f;       // 回転速度（度/秒）
     [SerializeField]
     private float m_Gravity = 18.0f;            // 重力加速度（メートル/秒/秒）
 
@@ -55,12 +55,12 @@ public class PlayerControllerAlpha : MonoBehaviour
     float m_CurrentSpeedLimit;                  // 現在の速度制限
     Vector3 m_PrevPosition;                     // 前回の位置（回転処理用）
 
-    [SerializeField]
+    /*[SerializeField]
     private GameObject m_BombThrow;             // 爆弾の出現ポイント
     [SerializeField]
     private GameObject m_Bomb;                  // 爆弾のプレハブ
     [SerializeField]
-    private GameObject m_ThrowPrediction;       // 投擲予測
+    private GameObject m_ThrowPrediction;       // 投擲予測*/
     [SerializeField]
     private float m_Force = 6.0f;               // 爆弾を投げる力
 
@@ -70,21 +70,21 @@ public class PlayerControllerAlpha : MonoBehaviour
     float m_CurrentForce;                       // 現在の投げる力
 
     [SerializeField]
-    private float m_MaxProneSpeed = 1.0f;       // 
+    private float m_MaxCreepingSpeed = 1.0f;        // 匍匐時の最高速度（メートル/秒）
     [SerializeField]
-    private float m_AccelPowerProne = 0.5f;     // 
+    private float m_AccelPowerCreeping = 0.5f;      // 匍匐時の加速度（メートル/秒/秒）
     [SerializeField]
-    private float m_RotateSpeedProne = 45.0f;  // 
+    private float m_RotateSpeedCreeping = 45.0f;    // 匍匐時の回転速度（度/秒）
 
     CharacterController m_Controller;           // キャラクターコントローラー
     Animator m_Animator;                        // アニメーター
     PlayerStateAlpha m_State;                   // プレイヤーの状態
     bool m_IsDash;                              // ダッシュしているか
     bool m_IsBomb;                              // 爆弾投げ状態であるか
-    bool m_IsCrouch;                            // 
+    bool m_IsCreeping;                          // 匍匐しているか
 
     //片岡実装
-    BomSpawn m_BomSpawn; //ボムスポーンクラス
+    BomSpawn m_BomSpawn;                        // ボムスポーンクラス
 
     // Use this for initialization
     void Start()
@@ -98,7 +98,7 @@ public class PlayerControllerAlpha : MonoBehaviour
         m_CurrentForce = m_Force;
         m_IsDash = false;
         m_IsBomb = false;
-        m_IsCrouch = false;
+        m_IsCreeping = false;
 
         //片岡実装
         m_BomSpawn = transform.Find("BomSpawn").GetComponent<BomSpawn>();
@@ -112,36 +112,36 @@ public class PlayerControllerAlpha : MonoBehaviour
             case PlayerStateAlpha.Normal:
                 Normal();
                 m_IsBomb = false;
-                m_IsCrouch = false;
+                m_IsCreeping = false;
                 break;
             case PlayerStateAlpha.Bomb:
                 Bomb();
                 m_IsBomb = true;
-                m_IsCrouch = false;
+                m_IsCreeping = false;
                 break;
-            case PlayerStateAlpha.Prone:
-                Prone();
+            case PlayerStateAlpha.Creeping:
+                Creeping();
                 m_IsBomb = false;
-                m_IsCrouch = true;
+                m_IsCreeping = true;
                 break;
             case PlayerStateAlpha.Evasion:
                 Evasion();
                 m_IsBomb = false;
-                m_IsCrouch = false;
+                m_IsCreeping = false;
                 break;
             case PlayerStateAlpha.Damage:
                 Damage();
                 m_IsBomb = false;
-                m_IsCrouch = false;
+                m_IsCreeping = false;
                 break;
             case PlayerStateAlpha.Dead:
                 Dead();
                 m_IsBomb = false;
-                m_IsCrouch = false;
+                m_IsCreeping = false;
                 break;
             default:
                 m_IsBomb = false;
-                m_IsCrouch = false;
+                m_IsCreeping = false;
                 break;
         }
 
@@ -186,7 +186,7 @@ public class PlayerControllerAlpha : MonoBehaviour
 
         // Animatorにプレイヤーの状態を知らせる
         m_Animator.SetBool("IsBomb", m_IsBomb);
-        m_Animator.SetBool("IsCrouch", m_IsCrouch);
+        m_Animator.SetBool("IsCreeping", m_IsCreeping);
     }
 
     // 接触判定
@@ -207,9 +207,9 @@ public class PlayerControllerAlpha : MonoBehaviour
         }
 
         // Bボタンを押すとしゃがむ
-        if (Input.GetButtonDown("Crouch"))
+        if (Input.GetButtonDown("Creeping"))
         {
-            m_State = PlayerStateAlpha.Prone;
+            m_State = PlayerStateAlpha.Creeping;
         }
     }
 
@@ -313,7 +313,7 @@ public class PlayerControllerAlpha : MonoBehaviour
     // 爆弾投げ時の挙動
     void Bomb()
     {
-        // カメラの角度に応じて、爆弾の投げる角度を変える（擲弾点の角度を変える）
+        /*// カメラの角度に応じて、爆弾の投げる角度を変える（擲弾点の角度を変える）
         m_BombThrow.transform.rotation = Camera.main.transform.rotation;
 
         // 投擲角度によって、投げる力を変える（水平以上になると、力が増える）
@@ -321,17 +321,13 @@ public class PlayerControllerAlpha : MonoBehaviour
         float elevation_angle = 0.0f;
         if (throw_angle >= 270.0f) elevation_angle = 360.0f - throw_angle;
         float new_force = m_Force * (1 + elevation_angle / 90.0f);
-        m_CurrentForce = new_force;
+        m_CurrentForce = new_force;*/
 
-
-        //軌道を表示する
-        m_BomSpawn.SetDrawLine(true);
-        
         // 爆弾投げ時の移動処理
         BombMove();
 
-        //// 着弾点を表示
-        //BombShowThrowPoint();
+        // 投擲軌道を表示する
+        m_BomSpawn.SetDrawLine(true);
 
         // 爆弾を投擲
         BombThrow();
@@ -421,70 +417,11 @@ public class PlayerControllerAlpha : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, next_direction, Time.deltaTime * m_RotateSpeedBomb);
     }
 
-    // 着弾点を表示
-    void BombShowThrowPoint()
-    {
-        switch (m_ThrowAmount)
-        {
-            case 1:
-                //ShowThrowDirectionOne();
-                break;
-            case 2:
-                //ShowThrowDirectionTwo();
-                break;
-            case 3:
-                //ShowThrowDirectionThree();
-                break;
-            default:
-                //ShowThrowDirectionOne();
-                break;
-        }
-    }
-
-    // 着弾点を表示（1個投擲時）
-    void ShowThrowDirectionOne()
-    {
-        // 予測用オブジェクトを生成
-        GameObject prediction = Instantiate(m_ThrowPrediction, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
-        // Rigidbodyに力を加えて投げる
-        prediction.GetComponent<Rigidbody>().AddForce(prediction.transform.forward * m_CurrentForce, ForceMode.Impulse);
-    }
-
-    // 着弾点を表示（2個投擲時）
-    void ShowThrowDirectionTwo()
-    {
-        // 予測用オブジェクトを生成
-        GameObject prediction1 = Instantiate(m_ThrowPrediction, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
-        GameObject prediction2 = Instantiate(m_ThrowPrediction, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
-        // 予測用オブジェクトの角度を調整
-        prediction1.transform.Rotate(new Vector3(0, 1, 0), -15.0f);
-        prediction2.transform.Rotate(new Vector3(0, 1, 0), +15.0f);
-        // Rigidbodyに力を加えて投げる
-        prediction1.GetComponent<Rigidbody>().AddForce(prediction1.transform.forward * m_CurrentForce, ForceMode.Impulse);
-        prediction2.GetComponent<Rigidbody>().AddForce(prediction2.transform.forward * m_CurrentForce, ForceMode.Impulse);
-    }
-
-    // 着弾点を表示（3個投擲時）
-    void ShowThrowDirectionThree()
-    {
-        // 予測用オブジェクトを生成
-        GameObject prediction1 = Instantiate(m_ThrowPrediction, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
-        GameObject prediction2 = Instantiate(m_ThrowPrediction, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
-        GameObject prediction3 = Instantiate(m_ThrowPrediction, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
-        // 予測用オブジェクトの角度を調整
-        prediction2.transform.Rotate(new Vector3(0, 1, 0), -15.0f);
-        prediction3.transform.Rotate(new Vector3(0, 1, 0), +15.0f);
-        // Rigidbodyに力を加えて投げる
-        prediction1.GetComponent<Rigidbody>().AddForce(prediction1.transform.forward * m_CurrentForce, ForceMode.Impulse);
-        prediction2.GetComponent<Rigidbody>().AddForce(prediction2.transform.forward * m_CurrentForce, ForceMode.Impulse);
-        prediction3.GetComponent<Rigidbody>().AddForce(prediction3.transform.forward * m_CurrentForce, ForceMode.Impulse);
-    }
-
     // 爆弾を投擲
     void BombThrow()
     {
-        //片岡実装
-        //ベクトルとパワーを設定
+        // 片岡実装
+        // ベクトルとパワーを設定
         m_BomSpawn.Set(Camera.main.transform.forward.normalized, 100.0f);
         // LBボタンを押すと、爆弾を投擲
         if (Input.GetButtonDown("Bomb_Throw"))
@@ -499,18 +436,18 @@ public class PlayerControllerAlpha : MonoBehaviour
     // 爆弾を投擲（1個）
     void ThrowOne()
     {
-        // 爆弾の所持数が減る
+        /*// 爆弾の所持数が減る
         m_BombKeep -= 1;
         // 爆弾を生成
         GameObject bomb = Instantiate(m_Bomb, m_BombThrow.transform.position, Quaternion.identity);
         // Rigidbodyに力を加えて投げる
-        bomb.GetComponent<Rigidbody>().AddForce(transform.forward * m_CurrentForce, ForceMode.Impulse);
+        bomb.GetComponent<Rigidbody>().AddForce(transform.forward * m_CurrentForce, ForceMode.Impulse);*/
     }
 
     // 爆弾を投擲（2個）
     void ThrowTwo()
     {
-        // 爆弾の所持数が減る
+        /*// 爆弾の所持数が減る
         m_BombKeep -= 2;
         // 爆弾を生成
         GameObject bomb1 = Instantiate(m_Bomb, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
@@ -520,13 +457,13 @@ public class PlayerControllerAlpha : MonoBehaviour
         bomb2.transform.Rotate(new Vector3(0, 1, 0), +15.0f);
         // Rigidbodyに力を加えて投げる
         bomb1.GetComponent<Rigidbody>().AddForce(bomb1.transform.forward * m_CurrentForce, ForceMode.Impulse);
-        bomb2.GetComponent<Rigidbody>().AddForce(bomb2.transform.forward * m_CurrentForce, ForceMode.Impulse);
+        bomb2.GetComponent<Rigidbody>().AddForce(bomb2.transform.forward * m_CurrentForce, ForceMode.Impulse);*/
     }
 
     // 爆弾を投擲（3個）
     void ThrowThree()
     {
-        // 爆弾の所持数が減る
+        /*// 爆弾の所持数が減る
         m_BombKeep -= 3;
         // 爆弾を生成
         GameObject bomb1 = Instantiate(m_Bomb, m_BombThrow.transform.position, m_BombThrow.transform.rotation);
@@ -538,24 +475,24 @@ public class PlayerControllerAlpha : MonoBehaviour
         // Rigidbodyに力を加えて投げる
         bomb1.GetComponent<Rigidbody>().AddForce(bomb1.transform.forward * m_CurrentForce, ForceMode.Impulse);
         bomb2.GetComponent<Rigidbody>().AddForce(bomb2.transform.forward * m_CurrentForce, ForceMode.Impulse);
-        bomb3.GetComponent<Rigidbody>().AddForce(bomb3.transform.forward * m_CurrentForce, ForceMode.Impulse);
+        bomb3.GetComponent<Rigidbody>().AddForce(bomb3.transform.forward * m_CurrentForce, ForceMode.Impulse);*/
     }
 
     // 
-    void Prone()
+    void Creeping()
     {
         // 
-        ProneMove();
+        CreepingMove();
 
         // Bボタンを押すと、通常状態に戻る
-        if (Input.GetButtonDown("Crouch"))
+        if (Input.GetButtonDown("Creeping"))
         {
             m_State = PlayerStateAlpha.Normal;
         }
     }
 
     // 
-    void ProneMove()
+    void CreepingMove()
     {
         // カメラの正面向きのベクトルを取得
         Vector3 forward = Camera.main.transform.forward;
@@ -594,18 +531,18 @@ public class PlayerControllerAlpha : MonoBehaviour
 
         // 左右キーで加速
         m_SpeedX +=
-            m_AccelPowerProne
+            m_AccelPowerCreeping
             * axisHorizontal
             * Time.deltaTime;
         // 上下キーで加速
         m_SpeedZ +=
-            m_AccelPowerProne
+            m_AccelPowerCreeping
             * axisVertical
             * Time.deltaTime;
 
         // 速度制限
-        m_SpeedX = Mathf.Clamp(m_SpeedX, -m_MaxProneSpeed, m_MaxProneSpeed);
-        m_SpeedZ = Mathf.Clamp(m_SpeedZ, -m_MaxProneSpeed, m_MaxProneSpeed);
+        m_SpeedX = Mathf.Clamp(m_SpeedX, -m_MaxCreepingSpeed, m_MaxCreepingSpeed);
+        m_SpeedZ = Mathf.Clamp(m_SpeedZ, -m_MaxCreepingSpeed, m_MaxCreepingSpeed);
 
         // 移動処理
         Vector3 velocity = forward * m_SpeedZ + Camera.main.transform.right * m_SpeedX;
@@ -620,7 +557,7 @@ public class PlayerControllerAlpha : MonoBehaviour
         // プレイヤー現在の移動量を取得
         float current_speed;
         current_speed = m_Controller.velocity.magnitude;
-        m_Animator.SetFloat("ProneSpeed", current_speed);
+        m_Animator.SetFloat("CreepingSpeed", current_speed);
 
         // 移動方向に向ける
         Vector3 direction = transform.position - m_PrevPosition;
@@ -629,7 +566,7 @@ public class PlayerControllerAlpha : MonoBehaviour
         {
             Vector3 orientiation = Vector3.Slerp(transform.forward,
                 new Vector3(direction.x, 0.0f, direction.z),
-                m_RotateSpeedProne * Time.deltaTime / Vector3.Angle(transform.forward, direction));
+                m_RotateSpeedCreeping * Time.deltaTime / Vector3.Angle(transform.forward, direction));
 
             transform.LookAt(transform.position + orientiation);
             m_PrevPosition = transform.position;
