@@ -50,6 +50,7 @@ public class RobotManager : MonoBehaviour
         AddAction(RobotAction.RobotState.ROBOT_SEARCH_MOVE, m_RobotAction.RobotSearchMove());
         AddAction(RobotAction.RobotState.ROBOT_GOOL_MOVE, m_RobotAction.RobotGoolMove());
         AddAction(RobotAction.RobotState.ROBOT_BILL_BREAK, m_RobotAction.RobotBillBreak());
+        AddAction(RobotAction.RobotState.ROBOT_FALL_DOWN, m_RobotAction.RobotFallDown());
         m_IsLoop = true;
     }
 
@@ -121,5 +122,13 @@ public class RobotManager : MonoBehaviour
     public void Damage(int damage)
     {
         m_RobotHp -= damage;
+    }
+    /// <summary>
+    /// ロボットのHPを取得する
+    /// </summary>
+    /// <returns></returns>
+    public int GetRobotHP()
+    {
+        return m_RobotHp;
     }
 }

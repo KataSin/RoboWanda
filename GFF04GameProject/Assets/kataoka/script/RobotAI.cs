@@ -44,8 +44,8 @@ public class RobotAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        manager.SetAction(RobotAction.RobotState.ROBOT_TO_PLAYER_MOVE, true);
-        //カウント
+        manager.SetAction(RobotAction.RobotState.ROBOT_TO_PLAYER_MOVE,true);
+        ////カウント
         //m_RobotBeamCount += Time.deltaTime;
         //if (Input.GetKeyDown(KeyCode.B))
         //{
@@ -71,7 +71,7 @@ public class RobotAI : MonoBehaviour
         ////見えてなかったらビル壊す
         //else if (agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject() != null)
         //{
-        //    if (Vector3.Distance(agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject().transform.position, agent.transform.position) <= 100.0f)
+        //    if (Vector3.Distance(agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject().transform.position, agent.transform.position) <= 130.0f)
         //    {
         //        manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
         //        return;
