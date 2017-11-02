@@ -37,22 +37,22 @@ public class Ground : MonoBehaviour
         {
             Instantiate(
                 break_ground_parts_,
-                new Vector3(transform.localPosition.x, transform.localPosition.y + 21f, transform.localPosition.z),
-                Quaternion.identity, 
+                new Vector3(transform.position.x, transform.position.y + 21f, transform.position.z),
+                Quaternion.identity,
                 transform
                 );
 
             Instantiate(
                 hole_collide_obj_,
-                new Vector3(transform.localPosition.x, transform.localPosition.y + 24.5f, transform.localPosition.z),
+                new Vector3(transform.position.x, transform.position.y + 24.5f, transform.position.z),
                 Quaternion.identity,
                 transform
                 );
 
             Instantiate(
                 ground_smoke_,
-                new Vector3(transform.localPosition.x, transform.localPosition.y + 24.5f, transform.localPosition.z),
-                Quaternion.identity, 
+                new Vector3(transform.position.x, transform.position.y + 24.5f, transform.position.z),
+                Quaternion.identity,
                 transform
                 );
 
