@@ -1416,8 +1416,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1815350530951300}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.199997, y: 5.3, z: 770}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4852015558967194}
@@ -2159,7 +2159,7 @@ MonoBehaviour:
   m_MaxSpeed: 6
   m_AccelPower: 2
   m_BrakePower: 6
-  m_RotateSpeed: 180
+  m_RotateSpeed: 360
   m_Gravity: 18
   m_MaxSpeedDash: 12
   m_AccelPowerDash: 6
@@ -2167,14 +2167,10 @@ MonoBehaviour:
   m_MaxBackSpeed: 2
   m_AccelPowerBomb: 1.5
   m_RotateSpeedBomb: 20
-  m_BombThrow: {fileID: 1069925139962814}
-  m_Bomb: {fileID: 1250502653043180, guid: aae8e3a16d7a723469d0abfdc9680c56, type: 2}
-  m_ThrowPrediction: {fileID: 1683008141455164, guid: ee51b3b3ea226234296b84fd1dd0f1af,
-    type: 2}
   m_Force: 6
-  m_MaxProneSpeed: 1
-  m_AccelPowerProne: 0.5
-  m_RotateSpeedProne: 45
+  m_MaxCreepingSpeed: 1
+  m_AccelPowerCreeping: 0.5
+  m_RotateSpeedCreeping: 45
 --- !u!114 &114726454986788438
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2310,10 +2306,10 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 1.75
-  m_Radius: 0.5
+  m_Height: 1.65
+  m_Radius: 0.2
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.9, z: 0}
+  m_Center: {x: 0, y: 0.87, z: 0}

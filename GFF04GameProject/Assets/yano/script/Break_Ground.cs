@@ -19,7 +19,12 @@ public class Break_Ground : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            isBreak = true;
+            Destroy(ground_collide_);
+            Destroy(this.gameObject);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

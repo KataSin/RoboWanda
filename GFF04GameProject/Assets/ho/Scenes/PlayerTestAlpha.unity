@@ -483,11 +483,6 @@ Transform:
   m_Father: {fileID: 514309313}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!1 &717864496 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1069925139962814, guid: 1468337bce593c444a8c2c12297814bb,
-    type: 2}
-  m_PrefabInternal: {fileID: 791220304}
 --- !u!1001 &791220304
 Prefab:
   m_ObjectHideFlags: 0
@@ -527,23 +522,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 114383587797782904, guid: 1468337bce593c444a8c2c12297814bb,
-        type: 2}
-      propertyPath: m_Bomb
-      value: 
-      objectReference: {fileID: 1250502653043180, guid: aae8e3a16d7a723469d0abfdc9680c56,
-        type: 2}
-    - target: {fileID: 114383587797782904, guid: 1468337bce593c444a8c2c12297814bb,
-        type: 2}
-      propertyPath: m_BombThrow
-      value: 
-      objectReference: {fileID: 717864496}
-    - target: {fileID: 114383587797782904, guid: 1468337bce593c444a8c2c12297814bb,
-        type: 2}
-      propertyPath: m_ThrowPrediction
-      value: 
-      objectReference: {fileID: 1683008141455164, guid: ee51b3b3ea226234296b84fd1dd0f1af,
-        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1468337bce593c444a8c2c12297814bb, type: 2}
   m_IsPrefabParent: 0

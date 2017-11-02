@@ -21,7 +21,8 @@ public class RobotAction : MonoBehaviour
         ROBOT_SEARCH,
         ROBOT_SEARCH_MOVE,
         ROBOT_GOOL_MOVE,
-        ROBOT_BILL_BREAK
+        ROBOT_BILL_BREAK,
+        ROBOT_FALL_DOWN
     }
 
     [SerializeField, Tooltip("ロボットのスピード"), HeaderAttribute("ロボット移動関係")]
@@ -72,12 +73,16 @@ public class RobotAction : MonoBehaviour
     private float lerpTime = 0.0f;
     private Quaternion m_BillQuaternion;
     private Quaternion m_RobotQuaternion;
+    //ロボット足マネージャー
+    private RobotLegManager m_LegManager;
+    //転ぶとき前に進む時間
+    private float m_RobotFallDownTime;
     void Start()
     {
         m_Bills = new List<GameObject>();
         m_Player = GameObject.FindGameObjectWithTag("Player");
         m_Robot = GameObject.FindGameObjectWithTag("Robot");
-
+        m_LegManager = GetComponent<RobotLegManager>();
         m_Bills.AddRange(GameObject.FindGameObjectsWithTag("Tower"));
 
 
@@ -101,6 +106,8 @@ public class RobotAction : MonoBehaviour
         m_GoalPoint = GameObject.FindGameObjectWithTag("GoalPoint");
 
         m_LookAtLerpTime = 0.0f;
+
+        m_RobotFallDownTime = 0.0f;
 
         m_BreakBill = m_Bills[0];
     }
@@ -496,7 +503,53 @@ public class RobotAction : MonoBehaviour
 
         return func;
     }
+    /// <summary>
+    /// ロボットが転ぶ
+    /// </summary>
+    /// <returns></returns>
+    public RobotManager.ActionFunc RobotFallDown()
+    {
+        Action robotFallDownStart = () =>
+        {
+            m_RobotFallDownTime = 0.0f;
+        };
 
+
+        Func<bool> robotFallDown = () =>
+        {
+            SetRobotLookAt(false);
+            m_IsIK = false;
+            m_NavAgent.isStopped = true;
+
+            m_RobotFallDownTime += Time.deltaTime;
+
+            if (m_RobotFallDownTime<=10.0f)
+            {
+                m_Robot.transform.position += m_Robot.transform.forward*4.0f * Time.deltaTime;
+            }
+            bool endAnim = false;
+            AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
+            if (clipInfo.clip.name == "Standing Up")
+            {
+                if ((m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f))
+                {
+                    endAnim = true;
+                    m_LegManager.LegSet(RobotLegManager.Leg.NO);
+                    GameObject.FindGameObjectWithTag("RobotRightLeg").GetComponent<RobotLeg>().SetLegFlag(false);
+                    GameObject.FindGameObjectWithTag("RobotLeftLeg").GetComponent<RobotLeg>().SetLegFlag(false);
+
+                }
+            }
+            m_RobotState = RobotState.ROBOT_FALL_DOWN;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+            return endAnim;
+        };
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = robotFallDownStart;
+        func.actionUpdate = robotFallDown;
+
+        return func;
+    }
 
 
     public void OnTriggerEnter(Collider other)
