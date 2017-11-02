@@ -5,7 +5,7 @@ using System;
 using UnityEngine.UI;
 public class RobotManager : MonoBehaviour
 {
-   [SerializeField, Tooltip("ロボットのHP")]
+    [SerializeField, Tooltip("ロボットのHP")]
     public int m_RobotHp;
 
 
@@ -43,7 +43,7 @@ public class RobotManager : MonoBehaviour
         AddAction(RobotAction.RobotState.ROBOT_IDLE, m_RobotAction.RobotIdle());
         AddAction(RobotAction.RobotState.ROBOT_TO_PLAYER_MOVE, m_RobotAction.RobotToPlayerMove());
         AddAction(RobotAction.RobotState.ROBOT_TO_BILL_MOVE, m_RobotAction.RobotBillMove());
-        AddAction(RobotAction.RobotState.ROBOT_BEAM_ATTACK,m_RobotAction.RobotBeamAttack());
+        AddAction(RobotAction.RobotState.ROBOT_BEAM_ATTACK, m_RobotAction.RobotBeamAttack());
         AddAction(RobotAction.RobotState.ROBOT_ARM_ATTACK, m_RobotAction.RobotArmAttack());
         AddAction(RobotAction.RobotState.ROBOT_LEG_ATTACK, m_RobotAction.RobotLegAttack());
         AddAction(RobotAction.RobotState.ROBOT_SEARCH, m_RobotAction.RobotSearch());
@@ -91,8 +91,16 @@ public class RobotManager : MonoBehaviour
     /// </summary>
     /// <param name="state">アクションステート</param>
     /// <param name="loop">ループするかどうか</param>
-    public void SetAction(RobotAction.RobotState state, bool loop)
+    /// <param name="first">最優先で実行させるか</param>
+    public void SetAction(RobotAction.RobotState state, bool loop, bool first = false)
     {
+        if (first)
+        {
+            m_RobotState = state;
+            m_IsLoop = loop;
+            return;
+        }
+
         if (!m_IsLoop && !m_IsAction) return;
         m_RobotState = state;
         m_IsLoop = loop;

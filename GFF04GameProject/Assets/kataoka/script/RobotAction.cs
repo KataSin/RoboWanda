@@ -69,10 +69,11 @@ public class RobotAction : MonoBehaviour
     private GameObject m_BreakBill;
     //IKを有効にするかどうか
     private bool m_IsIK;
-    //ビル壊すときの球面補間用
+    //ビル壊すときと足踏み付けの球面補間用
     private float lerpTime = 0.0f;
     private Quaternion m_BillQuaternion;
     private Quaternion m_RobotQuaternion;
+    private Quaternion m_PlayerQuaternion;
     //ロボット足マネージャー
     private RobotLegManager m_LegManager;
     //転ぶとき前に進む時間
@@ -84,8 +85,7 @@ public class RobotAction : MonoBehaviour
         m_Robot = GameObject.FindGameObjectWithTag("Robot");
         m_LegManager = GetComponent<RobotLegManager>();
         m_Bills.AddRange(GameObject.FindGameObjectsWithTag("Tower"));
-
-
+        
         m_Animator = GetComponent<Animator>();
         m_NavAgent = GetComponent<NavMeshAgent>();
         m_RobotState = RobotState.ROBOT_NULL;
@@ -280,6 +280,11 @@ public class RobotAction : MonoBehaviour
         Action robotLefAttackStart = () =>
         {
             m_NavAgent.isStopped = true;
+            lerpTime = 0.0f;
+            Vector3 vec = (m_Player.transform.position - m_Robot.transform.position);
+            vec.y = 0.0f;
+            m_PlayerQuaternion = Quaternion.LookRotation(vec);
+            m_RobotQuaternion = transform.rotation;
         };
 
         Func<bool> robotLegAttack = () =>
@@ -287,6 +292,9 @@ public class RobotAction : MonoBehaviour
             SetRobotLookAt(true);
             m_IsIK = true;
             bool endAnim = false;
+            lerpTime += 0.5f * Time.deltaTime;
+            transform.rotation = Quaternion.Lerp(m_RobotQuaternion, m_PlayerQuaternion, lerpTime);
+
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
             if (clipInfo.clip.name == "AttackLeg")
             {
@@ -525,7 +533,7 @@ public class RobotAction : MonoBehaviour
 
             if (m_RobotFallDownTime<=10.0f)
             {
-                m_Robot.transform.position += m_Robot.transform.forward*4.0f * Time.deltaTime;
+                m_Robot.transform.position += m_Robot.transform.forward*5.0f * Time.deltaTime;
             }
             bool endAnim = false;
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];

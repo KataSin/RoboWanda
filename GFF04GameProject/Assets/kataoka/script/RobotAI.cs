@@ -44,44 +44,43 @@ public class RobotAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        manager.SetAction(RobotAction.RobotState.ROBOT_TO_PLAYER_MOVE,true);
-        ////カウント
-        //m_RobotBeamCount += Time.deltaTime;
-        //if (Input.GetKeyDown(KeyCode.B))
-        //{
-        //    Instantiate(m_Beamtest, robotEye.transform.position, Quaternion.Euler(0, 0, 0));
-        //}
-        ////見えてたら
-        //GameObject player;
-        //if (PlayerToRobotRay("Player", 0, out player))
-        //{
-        //    if (Player_Robot_Distance(100.0f))
-        //    {
-        //        manager.SetAction(RobotAction.RobotState.ROBOT_LEG_ATTACK, false);
-        //    }
-        //    //見えててかつ遠かったらビームアタック
-        //    else if (m_RobotBeamCount >= m_RobotBeamCoolTime)
-        //    {
-        //        manager.SetAction(RobotAction.RobotState.ROBOT_BEAM_ATTACK, false);
-        //        m_RobotBeamCount = 0.0f;
-        //    }
+        //カウント
+        m_RobotBeamCount += Time.deltaTime;
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            Instantiate(m_Beamtest, robotEye.transform.position, Quaternion.Euler(0, 0, 0));
+        }
+        //見えてたら
+        GameObject player;
+        if (PlayerToRobotRay("Player", 0, out player))
+        {
+            if (Player_Robot_Distance(100.0f))
+            {
+                manager.SetAction(RobotAction.RobotState.ROBOT_LEG_ATTACK, false);
+            }
+            //見えててかつ遠かったらビームアタック
+            else if (m_RobotBeamCount >= m_RobotBeamCoolTime)
+            {
+                manager.SetAction(RobotAction.RobotState.ROBOT_BEAM_ATTACK, false);
+                m_RobotBeamCount = 0.0f;
+            }
 
-        //    manager.SetAction(RobotAction.RobotState.ROBOT_TO_PLAYER_MOVE, true);
-        //}
-        ////見えてなかったらビル壊す
-        //else if (agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject() != null)
-        //{
-        //    if (Vector3.Distance(agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject().transform.position, agent.transform.position) <= 130.0f)
-        //    {
-        //        manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
-        //        return;
-        //    }
-        //    manager.SetAction(RobotAction.RobotState.ROBOT_TO_BILL_MOVE, true);
-        //}
-        //else
-        //{
-        //    manager.SetAction(RobotAction.RobotState.ROBOT_IDLE, true);
-        //}
+            manager.SetAction(RobotAction.RobotState.ROBOT_TO_PLAYER_MOVE, true);
+        }
+        //見えてなかったらビル壊す
+        else if (agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject() != null)
+        {
+            if (Vector3.Distance(agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject().transform.position, agent.transform.position) <= 130.0f)
+            {
+                manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
+                return;
+            }
+            manager.SetAction(RobotAction.RobotState.ROBOT_TO_BILL_MOVE, true);
+        }
+        else
+        {
+            manager.SetAction(RobotAction.RobotState.ROBOT_IDLE, true);
+        }
     }
 
 

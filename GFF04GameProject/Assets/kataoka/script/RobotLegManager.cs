@@ -46,13 +46,13 @@ public class RobotLegManager : MonoBehaviour
             {
                 m_Leg = Leg.LEFT;
                 m_LeftLegRayPoint = m_RobotLeftLeg.GetComponent<RobotLeg>().GetIKPoint();
-                m_Manager.SetAction(RobotAction.RobotState.ROBOT_FALL_DOWN,false);
+                m_Manager.SetAction(RobotAction.RobotState.ROBOT_FALL_DOWN,false,true);
             }
             else if (m_RobotRightLeg.GetComponent<RobotLeg>().GetLegFlag())
             {
                 m_Leg = Leg.RIGHT;
                 m_RightLegRayPoint = m_RobotRightLeg.GetComponent<RobotLeg>().GetIKPoint();
-                m_Manager.SetAction(RobotAction.RobotState.ROBOT_FALL_DOWN, false);
+                m_Manager.SetAction(RobotAction.RobotState.ROBOT_FALL_DOWN, false,true);
             }
         }
 
