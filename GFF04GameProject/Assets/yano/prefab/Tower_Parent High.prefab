@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4700466597655706}
   - component: {fileID: 114154379299365564}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tower_Collide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 4087212371755188}
   - component: {fileID: 114871686863186822}
   - component: {fileID: 114148252594888852}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tower_Parent High
   m_TagString: Tower
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 65865791159446878}
   - component: {fileID: 54793766811590758}
   - component: {fileID: 114289955158653142}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tower_F
   m_TagString: TowerCollision
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4469219541591926}
   - component: {fileID: 114928906206027754}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TowerPoint
   m_TagString: TowerPoint
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 65785506397800596}
   - component: {fileID: 54916781655172024}
   - component: {fileID: 114374007697635600}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tower_R
   m_TagString: TowerCollision
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 23973850124353766}
   - component: {fileID: 64137082333358964}
   - component: {fileID: 208829543551046794}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: 14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 65580607709713980}
   - component: {fileID: 54543343820644548}
   - component: {fileID: 114851082915173354}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tower_L
   m_TagString: TowerCollision
   m_Icon: {fileID: 0}
@@ -144,7 +144,7 @@ GameObject:
   - component: {fileID: 65893837113288916}
   - component: {fileID: 54900813533524546}
   - component: {fileID: 114432946443025530}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tower_B
   m_TagString: TowerCollision
   m_Icon: {fileID: 0}
@@ -197,7 +197,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1439890785648220}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 200, y: 22.9, z: 25}
+  m_LocalPosition: {x: 0, y: 22.9, z: 500}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4061980032482240}
@@ -442,6 +442,7 @@ MonoBehaviour:
     type: 2}
   m_sand_smoke_scalar: 50
   m_rotated_time: 15
+  navMOb_obj_: {fileID: 1848384161607258}
   isBreak: 0
   collide_manager_obj_: {fileID: 1136425372892510}
 --- !u!114 &114154379299365564
@@ -455,12 +456,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29b507a7f82a8c846a15da258171fbea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitOther_: 0
   forward_obj_: {fileID: 1501353917817464}
   left_obj_: {fileID: 1851429598127658}
   back_obj_: {fileID: 1948819663821814}
   right_obj_: {fileID: 1708432817606656}
   m_direction: 0
   isBillCollide: 0
+  isBreakAfter: 0
+  isRobotHit: 0
 --- !u!114 &114289955158653142
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -533,6 +537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towerType: 1
+  breakType: 0
 --- !u!114 &114928906206027754
 MonoBehaviour:
   m_ObjectHideFlags: 1

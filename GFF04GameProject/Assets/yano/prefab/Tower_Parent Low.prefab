@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 65427496870308228}
   - component: {fileID: 54656086569549108}
   - component: {fileID: 114991781797607212}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tower_B
   m_TagString: TowerCollision
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4041439209186418}
   - component: {fileID: 114173207698233554}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TowerPoint
   m_TagString: TowerPoint
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 65412423825721456}
   - component: {fileID: 54299825142721142}
   - component: {fileID: 114098809221391760}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tower_L
   m_TagString: TowerCollision
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4586276504178316}
   - component: {fileID: 114331265133107426}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tower_Collide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 65282755267658090}
   - component: {fileID: 54894474923313562}
   - component: {fileID: 114618537271565552}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tower_F
   m_TagString: TowerCollision
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 65213498432388508}
   - component: {fileID: 54931747855810998}
   - component: {fileID: 114436533698007310}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tower_R
   m_TagString: TowerCollision
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 23248467971119918}
   - component: {fileID: 64151189627089030}
   - component: {fileID: 208272917127704978}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,7 +144,7 @@ GameObject:
   - component: {fileID: 4848287435079012}
   - component: {fileID: 114767662997810604}
   - component: {fileID: 114430671799315212}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tower_Parent Low
   m_TagString: Tower
   m_Icon: {fileID: 0}
@@ -462,12 +462,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29b507a7f82a8c846a15da258171fbea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitOther_: 0
   forward_obj_: {fileID: 1557144750731984}
   left_obj_: {fileID: 1292963175411382}
   back_obj_: {fileID: 1107354243011536}
   right_obj_: {fileID: 1673688314308274}
   m_direction: 0
   isBillCollide: 0
+  isBreakAfter: 0
+  isRobotHit: 0
 --- !u!114 &114430671799315212
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -486,6 +489,7 @@ MonoBehaviour:
     type: 2}
   m_sand_smoke_scalar: 40
   m_rotated_time: 10
+  navMOb_obj_: {fileID: 1707648769930712}
   isBreak: 0
   collide_manager_obj_: {fileID: 1465542048929630}
 --- !u!114 &114436533698007310
@@ -530,6 +534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towerType: 0
+  breakType: 0
 --- !u!114 &114991781797607212
 MonoBehaviour:
   m_ObjectHideFlags: 1

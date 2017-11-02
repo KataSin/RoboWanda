@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Break : MonoBehaviour
 {
@@ -30,6 +31,10 @@ public class Break : MonoBehaviour
     [SerializeField]
     [Header("回転にかかる時間(s)")]
     private float m_rotated_time;
+
+    [SerializeField]
+    private GameObject navMOb_obj_;
+    private NavMeshObstacle navMOb_;
 
     //落下移動量
     private float m_down_pos_Y;
@@ -72,6 +77,8 @@ public class Break : MonoBehaviour
         //初期化
         m_Bill_rotation = Quaternion.identity;
         m_Break_rotation = Quaternion.identity;
+
+        navMOb_ = navMOb_obj_.GetComponent<NavMeshObstacle>();
     }
 
     //ビルの大きさによる補正
@@ -112,6 +119,9 @@ public class Break : MonoBehaviour
 
         //崩壊状態の反映
         BreakType_Reflect();
+
+        //NavMeshObstracleのアクティブ
+        Active_NavMesh();
     }
 
     //倒壊挙動制御
@@ -247,6 +257,16 @@ public class Break : MonoBehaviour
 
         else if (collide_manager_.Get_BreakAfterFlag() && transform.rotation != Quaternion.identity)
             towerType_.Set_BreakType(1);
+    }
+
+    //NavMeshObstracleのアクティブ
+    private void Active_NavMesh()
+    {
+        if (isBreak)
+            navMOb_.enabled = false;
+
+        else if (!isBreak && collide_manager_.Get_BreakAfterFlag())
+            navMOb_.enabled = true;
     }
 
     //倒壊フラグの設定
