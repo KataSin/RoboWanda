@@ -22,6 +22,8 @@ public class CameraControllerAlpha : MonoBehaviour
 
     Vector3 offset;                         // プレイヤーとカメラ間のオフセット距離
 
+    GameObject m_Player;                    // プレイヤー
+
     // Use this for initialization
     void Start()
     {
@@ -29,12 +31,16 @@ public class CameraControllerAlpha : MonoBehaviour
         {
             offset = transform.position - m_Target.transform.position;
         }
+
+        m_Player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (m_Target != null)
+        // プレイヤーが死亡していない場合、操作可能
+        // if (m_Target != null)
+        if (m_Player != null && !m_Player.GetComponent<PlayerControllerAlpha>().IsDead())
         {
             // 回転
             // 方向入力を取得

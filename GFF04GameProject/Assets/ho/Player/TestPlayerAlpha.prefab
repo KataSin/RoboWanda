@@ -861,6 +861,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4266884167702560}
   - component: {fileID: 143531259932099160}
+  - component: {fileID: 136819608320622186}
   - component: {fileID: 95919725966098684}
   - component: {fileID: 114383587797782904}
   m_Layer: 0
@@ -2155,7 +2156,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c2ee04e75a082e489e65a2e842d400d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MaxHP: 100
   m_MaxSpeed: 6
   m_AccelPower: 2
   m_BrakePower: 6
@@ -2187,6 +2187,19 @@ MonoBehaviour:
   m_LandingPoint: {fileID: 1884040052303102}
   m_Point: {fileID: 1878176742274818, guid: 48804f3a4e577224da4a0e50e2d072fc, type: 2}
   m_Power: 100
+--- !u!136 &136819608320622186
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1815350530951300}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.2
+  m_Height: 1.65
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.87, z: 0}
 --- !u!137 &137957413602185610
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

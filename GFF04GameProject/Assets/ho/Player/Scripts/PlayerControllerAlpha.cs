@@ -21,10 +21,6 @@ enum PlayerStateAlpha
 public class PlayerControllerAlpha : MonoBehaviour
 {
     [SerializeField]
-    private int m_MaxHP = 100;                  // プレイヤーの最大体力値
-    int m_CurrentHP;                            // 現在の体力値
-
-    [SerializeField]
     private float m_MaxSpeed = 6.0f;            // 最高速度（メートル/秒）
     [SerializeField]
     private float m_AccelPower = 2.0f;          // 加速度（メートル/秒/秒）
@@ -64,9 +60,9 @@ public class PlayerControllerAlpha : MonoBehaviour
     [SerializeField]
     private float m_Force = 6.0f;               // 爆弾を投げる力
 
-    int m_BombKeep = 3;                         // 爆弾の所持数
-    int m_ThrowAmount = 1;                      // 爆弾の投擲数
-    bool m_IsTriggered;                         // 十字キーの操作判定
+    // int m_BombKeep = 3;                         // 爆弾の所持数
+    // int m_ThrowAmount = 1;                      // 爆弾の投擲数
+    // bool m_IsTriggered;                         // 十字キーの操作判定
     float m_CurrentForce;                       // 現在の投げる力
 
     [SerializeField]
@@ -82,6 +78,7 @@ public class PlayerControllerAlpha : MonoBehaviour
     bool m_IsDash;                              // ダッシュしているか
     bool m_IsBomb;                              // 爆弾投げ状態であるか
     bool m_IsCreeping;                          // 匍匐しているか
+    bool m_IsDead;                              // 死亡しているか
 
     //片岡実装
     BomSpawn m_BomSpawn;                        // ボムスポーンクラス
@@ -91,7 +88,6 @@ public class PlayerControllerAlpha : MonoBehaviour
     {
         m_Controller = GetComponent<CharacterController>();
         m_Animator = GetComponent<Animator>();
-        m_CurrentHP = m_MaxHP;
         m_State = PlayerStateAlpha.Normal;
         m_CurrentSpeedLimit = m_MaxSpeed;
         m_PrevPosition = transform.position;
@@ -99,6 +95,7 @@ public class PlayerControllerAlpha : MonoBehaviour
         m_IsDash = false;
         m_IsBomb = false;
         m_IsCreeping = false;
+        m_IsDead = false;
 
         //片岡実装
         m_BomSpawn = transform.Find("BomSpawn").GetComponent<BomSpawn>();
@@ -113,47 +110,54 @@ public class PlayerControllerAlpha : MonoBehaviour
                 Normal();
                 m_IsBomb = false;
                 m_IsCreeping = false;
+                m_IsDead = false;
                 break;
             case PlayerStateAlpha.Bomb:
                 Bomb();
                 m_IsBomb = true;
                 m_IsCreeping = false;
+                m_IsDead = false;
                 break;
             case PlayerStateAlpha.Creeping:
                 Creeping();
                 m_IsBomb = false;
                 m_IsCreeping = true;
+                m_IsDead = false;
                 break;
             case PlayerStateAlpha.Evasion:
                 Evasion();
                 m_IsBomb = false;
                 m_IsCreeping = false;
+                m_IsDead = false;
                 break;
             case PlayerStateAlpha.Damage:
                 Damage();
                 m_IsBomb = false;
                 m_IsCreeping = false;
+                m_IsDead = false;
                 break;
             case PlayerStateAlpha.Dead:
                 Dead();
                 m_IsBomb = false;
                 m_IsCreeping = false;
+                m_IsDead = true;
                 break;
             default:
                 m_IsBomb = false;
                 m_IsCreeping = false;
+                m_IsDead = true;
                 break;
         }
 
         // 十字キーで爆弾の投擲数を調節
         // 十字キーの入力が無い場合、操作判定を解除
-        if (Input.GetAxisRaw("Throw_Amount") == 0)
+        /*if (Input.GetAxisRaw("Throw_Amount") == 0)
         {
             m_IsTriggered = false;
-        }
+        }*/
 
         // 十字ボタンの上下で投擲数を選択
-        if (m_IsTriggered == false)
+        /*if (m_IsTriggered == false)
         {
             // 上ボタン
             if (Input.GetAxisRaw("Throw_Amount") < -0.9)
@@ -167,22 +171,16 @@ public class PlayerControllerAlpha : MonoBehaviour
                 m_IsTriggered = true;
                 m_ThrowAmount = m_ThrowAmount - 1;
             }
-        }
+        }*/
 
         // 爆弾の数を１～３の範囲内に限定
-        m_ThrowAmount = Mathf.Clamp(m_ThrowAmount, 1, 3);
+        //m_ThrowAmount = Mathf.Clamp(m_ThrowAmount, 1, 3);
 
         // 爆弾が全て起爆した場合、爆弾の所持数を3に戻す
-        if (GameObject.FindGameObjectsWithTag("Bomb").Length == 0)
+        /*if (GameObject.FindGameObjectsWithTag("Bomb").Length == 0)
         {
             m_BombKeep = 3;
-        }
-
-        // 体力が0以下になったら死亡
-        if (m_CurrentHP <= 0)
-        {
-            m_State = PlayerStateAlpha.Dead;
-        }
+        }*/
 
         // Animatorにプレイヤーの状態を知らせる
         m_Animator.SetBool("IsBomb", m_IsBomb);
@@ -190,6 +188,20 @@ public class PlayerControllerAlpha : MonoBehaviour
     }
 
     // 接触判定
+    public void OnTriggerEnter(Collider other)
+    {
+        // 敵ロボットと接触したら死亡
+        if (other.GetComponent<RobotDamage>() != null)
+        {
+            m_State = PlayerStateAlpha.Dead;
+        }
+
+        // 倒壊中のビルと接触したら死亡
+        if (other.tag == "TowerCollision" && other.GetComponent<tower_collide>().Get_CollideFlag())
+        {
+            m_State = PlayerStateAlpha.Dead;
+        }
+    }
 
     // 通常時の挙動
     void Normal()
@@ -226,6 +238,8 @@ public class PlayerControllerAlpha : MonoBehaviour
         // 方向入力を取得
         float axisHorizontal = Input.GetAxisRaw("Horizontal_L");    // x軸
         float axisVertical = Input.GetAxisRaw("Vertical_L");        // z軸
+
+
 
         // 減速する（入力が無い場合 or 進行方向と逆に入力がある場合）
         // X軸（左右キー）
@@ -589,5 +603,11 @@ public class PlayerControllerAlpha : MonoBehaviour
     void Dead()
     {
 
+    }
+
+    // 死亡しているか
+    public bool IsDead()
+    {
+        return m_IsDead;
     }
 }
