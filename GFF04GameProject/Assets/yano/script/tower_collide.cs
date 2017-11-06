@@ -31,6 +31,8 @@ public class tower_collide : MonoBehaviour
 
     private bool isRobotHit;
 
+    private bool isOriginChange;
+
     // Use this for initialization
     void Start()
     {
@@ -41,6 +43,8 @@ public class tower_collide : MonoBehaviour
 
         isBreakAfter = false;
         isRobotHit = false;
+
+        isOriginChange = false;
 
         parent_Tower_ = parent_tower_obj_.GetComponent<Transform>();
     }
@@ -84,8 +88,20 @@ public class tower_collide : MonoBehaviour
         return isRobotHit;
     }
 
+    public bool Get_OriginChange()
+    {
+        return isOriginChange;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
+        if (other.GetComponent<RobotDamage>() != null
+            &&
+            parent_Tower_.transform.rotation != Quaternion.identity)
+        {
+            isOriginChange = true;
+        }
+
         //ここに対象オブジェクトを指名
         if ((other.gameObject.tag == "bom"
             ||

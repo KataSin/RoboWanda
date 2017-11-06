@@ -52,6 +52,12 @@ public class tower_collide_manager : MonoBehaviour
     [Header("ロボットに当たったかどうか")]
     private bool isRobotHit;
 
+    [SerializeField]
+    private GameObject originBill_obj_;
+
+    [SerializeField]
+    private GameObject afterBill_obj_;
+
     // Use this for initialization
     void Start()
     {
@@ -114,6 +120,17 @@ public class tower_collide_manager : MonoBehaviour
 
         //当たった相手チェック
         CheckOther();
+
+        if (forward_.Get_OriginChange() || left_.Get_OriginChange()
+            || back_.Get_OriginChange() || right_.Get_OriginChange())
+        {
+            if (originBill_obj_ != null)
+            {
+                Transform origin_transform = originBill_obj_.GetComponent<Transform>();
+                Destroy(originBill_obj_);
+                Instantiate(afterBill_obj_, origin_transform.position, origin_transform.rotation);
+            }
+        }
     }
 
     //フラグのリセット
