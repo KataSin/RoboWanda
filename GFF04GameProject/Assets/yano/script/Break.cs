@@ -64,6 +64,9 @@ public class Break : MonoBehaviour
     private GameObject collide_manager_obj_;
     private tower_collide_manager collide_manager_;
 
+    [SerializeField]
+    private GameObject originBill_obj_;
+
     // Use this for initialization
     void Start()
     {
@@ -221,20 +224,23 @@ public class Break : MonoBehaviour
                 Vector3 ba_pos = new Vector3(
                     transform.position.x, 0f, transform.position.z);
 
-                //倒壊後のビルを生成
-                switch (towerType_.Get_TowerType())
+                if (originBill_obj_ != null)
                 {
-                    //Low
-                    case 0:
-                        GameObject ba_obj = Instantiate(debris_low, ba_pos, m_Break_rotation);
-                        ba_obj.transform.localScale = transform.localScale;
-                        break;
+                    //倒壊後のビルを生成
+                    switch (towerType_.Get_TowerType())
+                    {
+                        //Low
+                        case 0:
+                            GameObject ba_obj = Instantiate(debris_low, ba_pos, m_Break_rotation);
+                            ba_obj.transform.localScale = transform.localScale;
+                            break;
 
-                    //High
-                    case 1:
-                        ba_obj = Instantiate(debris_high, ba_pos, m_Break_rotation);
-                        ba_obj.transform.localScale = transform.localScale;
-                        break;
+                        //High
+                        case 1:
+                            ba_obj = Instantiate(debris_high, ba_pos, m_Break_rotation);
+                            ba_obj.transform.localScale = transform.localScale;
+                            break;
+                    }
                 }
 
                 isAfter = true;
@@ -262,11 +268,14 @@ public class Break : MonoBehaviour
     //NavMeshObstracleのアクティブ
     private void Active_NavMesh()
     {
-        if (isBreak)
-            navMOb_.enabled = false;
+        if (originBill_obj_ != null)
+        {
+            if (isBreak)
+                navMOb_.enabled = false;
 
-        else if (!isBreak && collide_manager_.Get_BreakAfterFlag())
-            navMOb_.enabled = true;
+            else if (!isBreak && collide_manager_.Get_BreakAfterFlag())
+                navMOb_.enabled = true;
+        }
     }
 
     //倒壊フラグの設定
