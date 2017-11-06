@@ -20,9 +20,7 @@ public class RobotAI : MonoBehaviour
     //public GameObject m_BillCollision;
 
 
-    public GameObject m_Beamtest;
 
-    bool m_FirstCol;
     // Use this for initialization
     void Start()
     {
@@ -35,8 +33,6 @@ public class RobotAI : MonoBehaviour
 
         robotEye = GameObject.FindGameObjectWithTag("RobotEye");
 
-        m_FirstCol = true;
-
         attackTime = 0.0f;
         m_RobotBeamCount = 20.0f;
     }
@@ -46,10 +42,6 @@ public class RobotAI : MonoBehaviour
     {
         //カウント
         m_RobotBeamCount += Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            Instantiate(m_Beamtest, robotEye.transform.position, Quaternion.Euler(0, 0, 0));
-        }
         //見えてたら
         GameObject player;
         if (PlayerToRobotRay("Player", 0, out player))
