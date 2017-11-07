@@ -16,7 +16,7 @@ public class RobotAI : MonoBehaviour
     //ビームのカウント
     private float m_RobotBeamCount;
 
-    [SerializeField, Tooltip("ビルコリジョン")]
+    //[SerializeField, Tooltip("ビルコリジョン")]
     //public GameObject m_BillCollision;
 
 

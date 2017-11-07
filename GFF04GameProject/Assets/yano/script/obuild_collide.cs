@@ -24,7 +24,8 @@ public class obuild_collide : MonoBehaviour
         //ここに対象オブジェクトを指名
         if (other.gameObject.tag == "bom" 
             || other.gameObject.tag == "RobotArmAttack" 
-            || other.gameObject.tag == "TowerCollision")
+            || other.gameObject.tag == "TowerCollision"
+            || other.GetComponent<RobotDamage>() != null)
         {
             isCollide = true;
         }

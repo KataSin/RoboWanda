@@ -9,14 +9,13 @@ public class StageSelectManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        if (scene_ != null)
-            scene_ = GameObject.Find("SceneController").GetComponent<SceneController>();
+        scene_ = GameObject.Find("SceneController").GetComponent<SceneController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.anyKeyDown && scene_ != null)
-            scene_.SceneChange("stage_5");
+        if (Input.anyKeyDown)
+            scene_.SceneChange("stage_a");
     }
 }

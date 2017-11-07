@@ -185,6 +185,8 @@ public class PlayerControllerAlpha : MonoBehaviour
         // Animatorにプレイヤーの状態を知らせる
         m_Animator.SetBool("IsBomb", m_IsBomb);
         m_Animator.SetBool("IsCreeping", m_IsCreeping);
+
+        Debug.Log(m_VelocityY);
     }
 
     // 接触判定
@@ -197,7 +199,9 @@ public class PlayerControllerAlpha : MonoBehaviour
         }
 
         // 倒壊中のビルと接触したら死亡
-        if (other.tag == "TowerCollision" && other.GetComponent<tower_collide>().Get_CollideFlag())
+        if ((other.tag == "TowerCollision" && other.GetComponent<tower_collide>().Get_CollideFlag())
+            || (other.tag == "DebrisCollision" && !other.GetComponent<DebrisGround>().Hit_Ground())
+            || other.gameObject.name == "DeathCollide")
         {
             m_State = PlayerStateAlpha.Dead;
         }

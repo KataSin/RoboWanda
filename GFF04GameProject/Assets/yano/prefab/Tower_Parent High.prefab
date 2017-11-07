@@ -445,6 +445,7 @@ MonoBehaviour:
   navMOb_obj_: {fileID: 1848384161607258}
   isBreak: 0
   collide_manager_obj_: {fileID: 1136425372892510}
+  originBill_obj_: {fileID: 1848384161607258}
 --- !u!114 &114154379299365564
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -465,6 +466,9 @@ MonoBehaviour:
   isBillCollide: 0
   isBreakAfter: 0
   isRobotHit: 0
+  originBill_obj_: {fileID: 1848384161607258}
+  afterBill_obj_: {fileID: 1185806101665936, guid: be25923ea3a18dd40a9ca72e567f7d07,
+    type: 2}
 --- !u!114 &114289955158653142
 MonoBehaviour:
   m_ObjectHideFlags: 1

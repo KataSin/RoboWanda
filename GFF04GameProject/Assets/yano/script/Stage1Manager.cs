@@ -6,15 +6,23 @@ public class Stage1Manager : MonoBehaviour
 {
     private SceneController scene_;
 
+    [SerializeField]
+    private GameObject robot_obj_;
     private RobotManager robotMana_;
+
+    [SerializeField]
+    private GameObject player_obj_;
+    private PlayerControllerAlpha player_;
 
     // Use this for initialization
     void Start()
     {
-        if (scene_ != null)
-            scene_ = GameObject.Find("SceneController").GetComponent<SceneController>();
+        scene_ = GameObject.Find("SceneController").GetComponent<SceneController>();
 
-        robotMana_ = GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>();
+        robotMana_ = robot_obj_.GetComponent<RobotManager>();
+
+        player_ = player_obj_.GetComponent<PlayerControllerAlpha>();
+
     }
 
     // Update is called once per frame
@@ -27,8 +35,11 @@ public class Stage1Manager : MonoBehaviour
     //ステージ上の全キャラクターのHPチェック
     private void Check_CharaHp()
     {
-        if (robotMana_.GetRobotHP() <= 0&& scene_ != null)
+        if (robotMana_.GetRobotHP() <= 0)
             scene_.SceneChange("Result");
+
+        else if (player_.IsDead())
+            scene_.SceneChange("GameOver");
     }
 
 }
