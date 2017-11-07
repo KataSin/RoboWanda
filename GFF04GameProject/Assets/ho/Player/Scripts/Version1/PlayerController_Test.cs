@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 
 // プレイヤーの状態
-enum PlayerState
+enum PlayerStateTest
 {
     Normal,     // 通常
     Bomb,       // ボム保持
@@ -34,13 +34,13 @@ public class PlayerController_Test : MonoBehaviour
     float m_SpeedZ = 0.0f;              // Z軸速度（前進はプラス、後退はマイナス）
 
     CharacterController m_Controller;
-    PlayerState m_State;                // プレイヤーの状態
+    PlayerStateTest m_State;                // プレイヤーの状態
 
     // Use this for initialization
     void Start()
     {
         m_Controller = GetComponent<CharacterController>();
-        m_State = PlayerState.Normal;
+        m_State = PlayerStateTest.Normal;
     }
 
     // Update is called once per frame
@@ -48,15 +48,15 @@ public class PlayerController_Test : MonoBehaviour
     {
         switch (m_State)
         {
-            case PlayerState.Normal:
+            case PlayerStateTest.Normal:
                 Normal();
                 break;
-            case PlayerState.Bomb:
+            case PlayerStateTest.Bomb:
                 Bomb();
                 break;
-            case PlayerState.Evasion:
+            case PlayerStateTest.Evasion:
                 break;
-            case PlayerState.Damage:
+            case PlayerStateTest.Damage:
                 break;
             default:
                 break;
@@ -76,7 +76,7 @@ public class PlayerController_Test : MonoBehaviour
         // RBキーを押しで着弾点を表示
         if (Input.GetButton("Bomb_Hold"))
         {
-            m_State = PlayerState.Bomb;
+            m_State = PlayerStateTest.Bomb;
         }
 
         // 方向入力を取得
@@ -153,7 +153,7 @@ public class PlayerController_Test : MonoBehaviour
         // RBキーを放すと通常状態に戻る
         if (!Input.GetButton("Bomb_Hold"))
         {
-            m_State = PlayerState.Normal;
+            m_State = PlayerStateTest.Normal;
         }
 
         // 方向入力を取得

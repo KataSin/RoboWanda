@@ -14,10 +14,6 @@ public class CameraShake : MonoBehaviour
     float m_LifeTime = 0.0f;        // 振動時間の残り
 
     [SerializeField]
-    private int m_ShakeInterval = 60;   // 振動間隔設定（60フレーム＝1秒）
-    int m_ShakeCount;                   // 振動間隔
-
-    [SerializeField]
     private float m_Force = 0.5f;   // 振動力
     float m_CurrentForce;           // 現在の振動力
 
@@ -34,9 +30,8 @@ public class CameraShake : MonoBehaviour
     void Start()
     {
         if (m_ShakeTime <= 0.0f) m_ShakeTime = 0.7f;
-        m_ShakeCount = m_ShakeInterval;
         m_CurrentForce = m_Force;
-        
+
         m_EnemyRobot = GameObject.FindGameObjectWithTag("Robot");
     }
 
@@ -74,21 +69,12 @@ public class CameraShake : MonoBehaviour
             float y_val = Random.Range(m_LowRangeY, m_MaxRangeY);
             transform.localPosition = new Vector3(x_val, y_val, transform.localPosition.z);
         }
-        
-        // 振動間隔が0になったら振動
-        m_ShakeCount--;
-        // 距離が100メートル以内なら振動
-        if (m_ShakeCount <= 0 && m_Distance <= 100.0f)
-        {
-            // 距離が近いほど振動力が大きくなる
-            m_CurrentForce = m_Force * (1 - (m_Distance / 100.0f));
-            Shake();
-            m_ShakeCount = m_ShakeInterval;
-        }
+
+        // ここに振動条件を入力
+
 
         // Spaceキーで振動（テスト用）
         // if (Input.GetKeyDown("space")) Shake();
-        // Debug.Log("ロボットとの距離：" + m_Distance);
     }
 
     // 振動処理
@@ -99,6 +85,17 @@ public class CameraShake : MonoBehaviour
         m_MaxRangeX = m_OriginalPosition.x + m_CurrentForce;
         m_LowRangeY = m_OriginalPosition.y - m_CurrentForce;
         m_MaxRangeY = m_OriginalPosition.y + m_CurrentForce;
+        m_LifeTime = m_ShakeTime;
+    }
+
+    // 振動処理（外部から力を設定）
+    public void Shake(float force)
+    {
+        m_OriginalPosition = Vector3.zero;
+        m_LowRangeX = m_OriginalPosition.x - force;
+        m_MaxRangeX = m_OriginalPosition.x + force;
+        m_LowRangeY = m_OriginalPosition.y - force;
+        m_MaxRangeY = m_OriginalPosition.y + force;
         m_LifeTime = m_ShakeTime;
     }
 }
