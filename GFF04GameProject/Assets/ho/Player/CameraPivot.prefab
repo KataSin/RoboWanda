@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4526169278337938}
-  - component: {fileID: 114627058736730592}
+  - component: {fileID: 114540851185170396}
   m_Layer: 0
   m_Name: CameraPivot
   m_TagString: Untagged
@@ -55,6 +55,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4573419039619944}
+  - component: {fileID: 114039206884055584}
   m_Layer: 0
   m_Name: CameraPosition
   m_TagString: Untagged
@@ -153,6 +154,26 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1239567480333462}
   m_Enabled: 1
+--- !u!114 &114039206884055584
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1917802577353176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 594e129a1674cd545a3f27f7dd151077, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NormalPositionX: 0
+  m_NormalPositionY: 2.5
+  m_NormalPositionZ: -5
+  m_AimingPositionX: 0
+  m_AimingPositionY: 2.5
+  m_AimingPositionZ: -5
+  m_SpeedX: 0
+  m_SpeedY: 0
+  m_SpeedZ: 0
 --- !u!114 &114536233480326674
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -165,9 +186,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShakeTime: 0
-  m_ShakeInterval: 180
   m_Force: 3
---- !u!114 &114627058736730592
+--- !u!114 &114540851185170396
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -175,13 +195,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1660377369132156}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b76c4474f070d9646ad63fe4d9e614f9, type: 3}
+  m_Script: {fileID: 11500000, guid: 583151313839a454ea284a22b01b49f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Target: {fileID: 0}
   m_RotateSpeed: 180
   m_PitchMax: 30
-  m_PitchMin: -65
+  m_PitchMin: -40
 --- !u!124 &124449146215364946
 Behaviour:
   m_ObjectHideFlags: 1
