@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4486924610719560}
   - component: {fileID: 198298515361715570}
   - component: {fileID: 199183666659282972}
+  - component: {fileID: 135064384652677262}
   m_Layer: 0
   m_Name: desert_Vertical
   m_TagString: Untagged
@@ -81,7 +82,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1915392164093148}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 101.1, y: 4.95, z: 435.7}
+  m_LocalPosition: {x: 0, y: 26.31, z: -169.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4409516752706428}
@@ -117,6 +118,18 @@ MonoBehaviour:
   - {fileID: 198870370312573896}
   - {fileID: 198298515361715570}
   m_break_time: 0
+--- !u!135 &135064384652677262
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1078704615454764}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.7
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!198 &198298515361715570
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -176,7 +189,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1927576800
+  randomSeed: -350642642
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -3438,7 +3451,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 1424993432
+  randomSeed: -1803943210
   InitialModule:
     serializedVersion: 3
     enabled: 1

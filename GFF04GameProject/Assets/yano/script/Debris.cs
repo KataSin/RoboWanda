@@ -4,22 +4,29 @@ using UnityEngine;
 
 public class Debris : MonoBehaviour
 {
-    Rigidbody rigids_;
+    [SerializeField]
+    private List<GameObject> debris_;
+
+    private Rigidbody rigids_;
+    private Vector3 clampVelocities;
 
     // Use this for initialization
     void Start()
     {
-        rigids_ = GetComponentInChildren<Rigidbody>();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        Vector3 l_clampVelocity = rigids_.velocity;
-        l_clampVelocity.x = Mathf.Clamp(l_clampVelocity.x, -0.1f, 0.1f);
-        l_clampVelocity.z = Mathf.Clamp(l_clampVelocity.z, -0.1f, 0.1f);
-        l_clampVelocity.y = Mathf.Clamp(l_clampVelocity.y, -9.8f, 5f);
-        rigids_.velocity = l_clampVelocity;
+        for (int i = 0; i < debris_.Count; i++)
+        {
+            rigids_ = debris_[i].GetComponent<Rigidbody>();
+            clampVelocities = rigids_.velocity;
+            clampVelocities.x = Mathf.Clamp(rigids_.velocity.x, -10f, 10f);
+            clampVelocities.z = Mathf.Clamp(rigids_.velocity.z, -10f, 10f);
+            clampVelocities.y = Mathf.Clamp(rigids_.velocity.y, rigids_.velocity.y, 50f);
+            rigids_.velocity = clampVelocities;
+        }
     }
 
 }

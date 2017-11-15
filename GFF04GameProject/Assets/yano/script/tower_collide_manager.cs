@@ -56,6 +56,9 @@ public class tower_collide_manager : MonoBehaviour
     private GameObject originBill_obj_;
 
     [SerializeField]
+    private GameObject parentBill_obj_;
+
+    [SerializeField]
     private GameObject afterBill_obj_;
 
     // Use this for initialization
@@ -127,7 +130,7 @@ public class tower_collide_manager : MonoBehaviour
             if (originBill_obj_ != null)
             {
                 Transform origin_transform = originBill_obj_.GetComponent<Transform>();
-                Destroy(originBill_obj_);
+                Destroy(parentBill_obj_);
                 Instantiate(afterBill_obj_, origin_transform.position, origin_transform.rotation);
             }
         }

@@ -185,8 +185,6 @@ public class PlayerControllerAlpha : MonoBehaviour
         // Animatorにプレイヤーの状態を知らせる
         m_Animator.SetBool("IsBomb", m_IsBomb);
         m_Animator.SetBool("IsCreeping", m_IsCreeping);
-
-        Debug.Log(m_VelocityY);
     }
 
     // 接触判定
