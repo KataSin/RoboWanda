@@ -21,6 +21,10 @@ public class BeamExplosion : MonoBehaviour
         m_Timer += Time.deltaTime;
         if (m_Timer >= 0.5f)
         {
+            Destroy(gameObject.GetComponent<SphereCollider>());
+        }
+        if (m_Timer >= 4.0f)
+        {
             Destroy(gameObject);
         }
     }

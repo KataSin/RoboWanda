@@ -20,14 +20,14 @@ public class PlayerController_v2 : MonoBehaviour
     Vector3 m_PrevPosition;                 // 前回の位置（回転処理用）
 
     CharacterController m_Controller;
-    PlayerState m_State;                    // プレイヤーの状態
+    PlayerStateTest m_State;                    // プレイヤーの状態
 
     // Use this for initialization
     void Start()
     {
         m_Controller = GetComponent<CharacterController>();
         m_PrevPosition = transform.position;
-        m_State = PlayerState.Normal;
+        m_State = PlayerStateTest.Normal;
     }
 
     // Update is called once per frame
@@ -35,15 +35,15 @@ public class PlayerController_v2 : MonoBehaviour
     {
         switch (m_State)
         {
-            case PlayerState.Normal:
+            case PlayerStateTest.Normal:
                 Normal();
                 break;
-            case PlayerState.Bomb:
+            case PlayerStateTest.Bomb:
                 Bomb();
                 break;
-            case PlayerState.Evasion:
+            case PlayerStateTest.Evasion:
                 break;
-            case PlayerState.Damage:
+            case PlayerStateTest.Damage:
                 break;
             default:
                 break;
@@ -59,7 +59,7 @@ public class PlayerController_v2 : MonoBehaviour
         // RBキーを押しで着弾点を表示
         if (Input.GetButtonDown("Bomb_Hold"))
         {
-            m_State = PlayerState.Bomb;
+            m_State = PlayerStateTest.Bomb;
         }
     }
 
@@ -110,7 +110,7 @@ public class PlayerController_v2 : MonoBehaviour
         // RBキーを放すと通常状態に戻る
         if (!Input.GetButton("Bomb_Hold"))
         {
-            m_State = PlayerState.Normal;
+            m_State = PlayerStateTest.Normal;
         }
 
         // 着弾点表示時の移動処理
