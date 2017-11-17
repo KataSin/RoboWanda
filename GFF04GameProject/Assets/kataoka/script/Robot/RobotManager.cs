@@ -51,6 +51,7 @@ public class RobotManager : MonoBehaviour
         AddAction(RobotAction.RobotState.ROBOT_GOOL_MOVE, m_RobotAction.RobotGoolMove());
         AddAction(RobotAction.RobotState.ROBOT_BILL_BREAK, m_RobotAction.RobotBillBreak());
         AddAction(RobotAction.RobotState.ROBOT_FALL_DOWN, m_RobotAction.RobotFallDown());
+        AddAction(RobotAction.RobotState.ROBOT_MISSILE_ATTACK, m_RobotAction.RobotMissileAttack());
         m_IsLoop = true;
     }
 
