@@ -66,7 +66,7 @@ public class BomSpawn : MonoBehaviour
 
             Ray ray = new Ray(start, end - start);
             RaycastHit hit;
-            int layer = ~(1 << 11 | 1 << 12);
+            int layer = ~(1 << 11 | 1 << 12 | 1 << 13);
             if (Physics.Raycast(ray, out hit, Vector3.Distance(start, end), layer))
             {
                 //着地地点の座標と回転を設定

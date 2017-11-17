@@ -17,18 +17,13 @@ public class Bomb_v2 : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        m_RigidBody = GetComponent<Rigidbody>();
-
-        var forward = transform.forward;
-        var up = transform.up;
-        m_RigidBody.AddForce(forward * m_Force + up * m_Force, ForceMode.Impulse);
+        m_RigidBody = GetComponent<Rigidbody>();    
     }
-
     // Update is called once per frame
     void Update()
     {
         // RBボタンが押されてない間に、LBボタンを押すと起爆
-        if (!Input.GetButton("Bomb_Hold") && Input.GetButtonDown("Bomb_Throw"))
+        if (!Input.GetButton("Aim") && Input.GetButtonDown("Bomb_Throw"))
         {
             Destroy(gameObject);
             // 爆発の当たり判定を発生
