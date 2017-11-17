@@ -11,7 +11,7 @@ using UnityEngine;
 enum PlayerState
 {
     Normal,     // 通常
-    Bomb,       // 爆弾投げ
+    Aiming,     // 照準中
     Creeping,   // 匍匐
     Dead        // 死亡
 }
@@ -40,13 +40,13 @@ public class PlayerController : MonoBehaviour
     private float m_RotateSpeedDash = 450.0f;       // ダッシュ時の回転速度（度/秒）
     // 爆弾投げ時の移動関連
     [SerializeField]
-    private float m_MaxSpeedBomb = 5.0f;            // 爆弾投げ時の最高速度（メートル/秒）
+    private float m_MaxSpeedAiming = 5.0f;          // 照準中の最高速度（メートル/秒）
     [SerializeField]
-    private float m_MaxBackSpeed = 3.0f;            // 爆弾投げ時の最高後退速度（メートル/秒）
+    private float m_MaxBackSpeed = 3.0f;            // 照準中の最高後退速度（メートル/秒）
     [SerializeField]
-    private float m_AccelPowerBomb = 4.0f;          // 爆弾投げ時の加速度（メートル/秒/秒）
+    private float m_AccelPowerAiming = 4.0f;        // 照準中の加速度（メートル/秒/秒）
     [SerializeField]
-    private float m_RotateSpeedBomb = 20.0f;        // 爆弾投げ時の回転速度（度/秒）
+    private float m_RotateSpeedAiming = 20.0f;      // 照準中の回転速度（度/秒）
     // 匍匐時の移動関連
     [SerializeField]
     private float m_MaxCreepingSpeed = 1.0f;        // 匍匐時の最高速度（メートル/秒）
@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
     Animator m_Animator;                            // アニメーター
     PlayerState m_State;                            // プレイヤーの状態
     bool m_IsDash;                                  // ダッシュしているか
-    bool m_IsBomb;                                  // 爆弾投げ状態であるか
+    bool m_IsAiming;                                  // 爆弾投げ状態であるか
     bool m_IsCreeping;                              // 匍匐しているか
     bool m_IsDead;                                  // 死亡しているか
 
@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour
         m_PrevPosition = transform.position;
 
         m_IsDash = false;
-        m_IsBomb = false;
+        m_IsAiming = false;
         m_IsCreeping = false;
         m_IsDead = false;
     }
@@ -98,34 +98,34 @@ public class PlayerController : MonoBehaviour
             // 通常
             case PlayerState.Normal:
                 Normal();
-                m_IsBomb = false;
+                m_IsAiming = false;
                 m_IsCreeping = false;
                 m_IsDead = false;
                 break;
-            // 爆弾投げ
-            case PlayerState.Bomb:
-                Bomb();
-                m_IsBomb = true;
+            // 照準中
+            case PlayerState.Aiming:
+                Aiming();
+                m_IsAiming = true;
                 m_IsCreeping = false;
                 m_IsDead = false;
                 break;
             // 匍匐
             case PlayerState.Creeping:
                 Creeping();
-                m_IsBomb = false;
+                m_IsAiming = false;
                 m_IsCreeping = true;
                 m_IsDead = false;
                 break;
             // 死亡
             case PlayerState.Dead:
                 Dead();
-                m_IsBomb = false;
+                m_IsAiming = false;
                 m_IsCreeping = false;
                 m_IsDead = true;
                 break;
             // デフォルト（バグ防止用）
             default:
-                m_IsBomb = false;
+                m_IsAiming = false;
                 m_IsCreeping = false;
                 m_IsDead = true;
                 break;
@@ -134,8 +134,12 @@ public class PlayerController : MonoBehaviour
         // プレイヤーが地面にいる場合、y軸加速度を0にする
         if (m_Controller.isGrounded) m_VelocityY = 0.0f;
 
+        // プレイヤーと地面との距離を取得（着地アニメーション用）
+
+
         // アニメーターにプレイヤーの状態を知らせる
-        m_Animator.SetBool("IsBomb", m_IsBomb);
+        m_Animator.SetBool("IsGrounded", m_Controller.isGrounded);
+        m_Animator.SetBool("IsAiming", m_IsAiming);
         m_Animator.SetBool("IsCreeping", m_IsCreeping);
         m_Animator.SetBool("IsDead", m_IsDead);
 
@@ -146,6 +150,15 @@ public class PlayerController : MonoBehaviour
             Camera.GetComponent<CameraShake>().Shake(5.0f);
             Debug.Log("外部からカメラに振動命令");
         }*/
+
+        // 死亡テスト
+        if (Input.GetKeyDown("space"))
+        {
+            if (m_State != PlayerState.Dead)
+            {
+                m_State = PlayerState.Dead;
+            }
+        }
     }
 
     // 接触判定
@@ -176,9 +189,9 @@ public class PlayerController : MonoBehaviour
         m_IsDash = (Input.GetAxis("Dash") > 0.5f) ? true : false;
 
         // RBボタンを押すと爆弾投げ状態に
-        if (Input.GetButton("Bomb_Hold"))
+        if (Input.GetButton("Aim"))
         {
-            m_State = PlayerState.Bomb;
+            m_State = PlayerState.Aiming;
         }
 
         // Bボタンを押すとしゃがむ
@@ -278,7 +291,6 @@ public class PlayerController : MonoBehaviour
 
         // 移動方向に向ける
         Vector3 direction = transform.position - m_PrevPosition;
-
         if (direction.sqrMagnitude > 0)
         {
             Vector3 orientiation = Vector3.Slerp(transform.forward,
@@ -296,21 +308,21 @@ public class PlayerController : MonoBehaviour
         m_Animator.SetFloat("NormalSpeed", current_speed);
     }
 
-    // 爆弾投げ時の処理
-    void Bomb()
+    // 照準中の処理
+    void Aiming()
     {
         // 爆弾投げ時の移動処理
-        BombMove();
+        AimingMove();
 
         // RBボタンを放すと通常状態に戻る
-        if (!Input.GetButton("Bomb_Hold"))
+        if (!Input.GetButton("Aim"))
         {
             m_State = PlayerState.Normal;
         }
     }
 
-    // 爆弾投げ時の移動
-    void BombMove()
+    // 照準中の移動
+    void AimingMove()
     {
         // カメラの正面向きのベクトルを取得
         Vector3 forward = Camera.main.transform.forward;
@@ -353,18 +365,18 @@ public class PlayerController : MonoBehaviour
             // 加速する
             // 左右キーで加速
             m_SpeedX +=
-                m_AccelPowerBomb
+                m_AccelPowerAiming
                 * axisHorizontal
                 * Time.deltaTime;
             // 上下キーで加速
             m_SpeedZ +=
-                m_AccelPowerBomb
+                m_AccelPowerAiming
                 * axisVertical
                 * Time.deltaTime;
 
             // 速度を制限する
-            m_SpeedX = Mathf.Clamp(m_SpeedX, -m_MaxSpeedBomb, m_MaxSpeedBomb);
-            m_SpeedZ = Mathf.Clamp(m_SpeedZ, -m_MaxBackSpeed, m_MaxSpeedBomb);
+            m_SpeedX = Mathf.Clamp(m_SpeedX, -m_MaxSpeedAiming, m_MaxSpeedAiming);
+            m_SpeedZ = Mathf.Clamp(m_SpeedZ, -m_MaxBackSpeed, m_MaxSpeedAiming);
         }
 
         // 移動処理
@@ -379,14 +391,14 @@ public class PlayerController : MonoBehaviour
         // カメラと同じ方向に向く
         Vector3 camera_direction = Camera.main.transform.eulerAngles;
         Quaternion next_direction = Quaternion.Euler(0.0f, camera_direction.y, 0.0f);
-        transform.rotation = Quaternion.Slerp(transform.rotation, next_direction, Time.deltaTime * m_RotateSpeedBomb);
+        transform.rotation = Quaternion.Slerp(transform.rotation, next_direction, Time.deltaTime * m_RotateSpeedAiming);
 
         // アニメーターに命令して、アニメーションを再生する
         float current_speed_X = m_SpeedX;
         float current_speed_Z = m_SpeedZ;
 
-        m_Animator.SetFloat("BombSpeedX", current_speed_X);
-        m_Animator.SetFloat("BombSpeedZ", current_speed_Z);
+        m_Animator.SetFloat("AimingSpeedX", current_speed_X);
+        m_Animator.SetFloat("AimingSpeedZ", current_speed_Z);
     }
 
     // 匍匐時の処理
@@ -467,7 +479,6 @@ public class PlayerController : MonoBehaviour
 
         // 移動方向に向ける
         Vector3 direction = transform.position - m_PrevPosition;
-
         if (direction.sqrMagnitude > 0)
         {
             Vector3 orientiation = Vector3.Slerp(transform.forward,
@@ -488,12 +499,19 @@ public class PlayerController : MonoBehaviour
     // 死亡時の処理
     void Dead()
     {
-
+        // 死亡モーションを再生
+        m_Animator.Play("Dead");
     }
 
     // 死亡しているか
     public bool IsDead()
     {
         return m_IsDead;
+    }
+
+    // 照準状態であるか
+    public bool IsAiming()
+    {
+        return m_IsAiming;
     }
 }
