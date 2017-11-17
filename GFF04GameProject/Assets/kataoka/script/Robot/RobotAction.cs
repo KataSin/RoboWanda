@@ -22,7 +22,8 @@ public class RobotAction : MonoBehaviour
         ROBOT_SEARCH_MOVE,
         ROBOT_GOOL_MOVE,
         ROBOT_BILL_BREAK,
-        ROBOT_FALL_DOWN
+        ROBOT_FALL_DOWN,
+        ROBOT_MISSILE_ATTACK
     }
 
     [SerializeField, Tooltip("ロボットのスピード"), HeaderAttribute("ロボット移動関係")]
@@ -33,7 +34,8 @@ public class RobotAction : MonoBehaviour
     [SerializeField, Tooltip("ロボットビームのクールダウン")]
     public float m_BeamCoolDownTime = 30.0f;
 
-
+    //ミサイルスポーン
+    private GameObject m_MissileSpawn;
     //ナビエージェント
     private NavMeshAgent m_NavAgent;
     //ロボット
@@ -78,9 +80,14 @@ public class RobotAction : MonoBehaviour
     private RobotLegManager m_LegManager;
     //転ぶとき前に進む時間
     private float m_RobotFallDownTime;
-
+    //ミサイルが発射するフラグ
+    private bool m_SpawnMissileFlag;
     private GameObject m_RobotEye;
 
+    //ビーム補間用
+    private Vector3 m_BeamStartPos;
+    private Vector3 m_BeamEndPos;
+    private float m_BeamLerpTime;
 
     //バネ補間のパラメーター
     float m_Stiffness;
@@ -117,6 +124,8 @@ public class RobotAction : MonoBehaviour
 
         m_RobotEye = GameObject.FindGameObjectWithTag("RobotEye");
 
+        m_MissileSpawn = GameObject.FindGameObjectWithTag("MissileSpawn");
+
         m_RobotFallDownTime = 0.0f;
 
         m_BreakBill = m_Bills[0];
@@ -124,6 +133,12 @@ public class RobotAction : MonoBehaviour
         m_RobotLookAtPosition = Vector3.zero;
         m_SpringVelo = Vector3.zero;
         SetSpringParameter(0.05f, 0.5f, 2.0f);
+
+        m_SpawnMissileFlag = true;
+
+        m_BeamStartPos = Vector3.zero;
+        m_BeamEndPos = Vector3.zero;
+        m_BeamLerpTime = 0.0f;
     }
     /// <summary>
     /// ロボットがプレイヤーに向かって動く
@@ -177,7 +192,8 @@ public class RobotAction : MonoBehaviour
         Func<bool> idle = () =>
             {
 
-                m_IsIK = false;
+                m_IsIK = true;
+                m_RobotLookAtPosition = m_Player.transform.position;
                 m_NavAgent.isStopped = true;
                 m_RobotState = RobotState.ROBOT_IDLE;
                 //見てる場所設定
@@ -235,9 +251,14 @@ public class RobotAction : MonoBehaviour
         Action robotBeamAttackStart = () =>
         {
             m_RobotQuaternion = m_Robot.transform.rotation;
-            m_PlayerQuaternion = Quaternion.LookRotation(m_Player.transform.position-m_Robot.transform.position);
+            m_PlayerQuaternion = Quaternion.LookRotation(m_Player.transform.position - m_Robot.transform.position);
+
+            m_BeamLerpTime = 0.0f;
 
             m_LerpTime = 0.0f;
+            m_BeamStartPos = transform.position + (transform.forward.normalized * 20.0f) + new Vector3(0.0f, -10.0f, 0.0f);
+            m_BeamEndPos = transform.position + (transform.forward.normalized * 100.0f) + new Vector3(0.0f, 200.0f, 0.0f);
+
         };
 
 
@@ -251,29 +272,27 @@ public class RobotAction : MonoBehaviour
             SetSpringParameter(0.1f, 0.2f, 2.0f);
 
             m_LerpTime += 0.5f * Time.deltaTime;
+            m_BeamLerpTime += 0.1f * Time.deltaTime;
 
             transform.rotation = Quaternion.Lerp(m_RobotQuaternion, m_PlayerQuaternion, m_LerpTime);
 
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
             if (clipInfo.clip.name == "Idle")
             {
+                m_RobotLookAtPosition = Vector3.Lerp(m_BeamStartPos, m_BeamEndPos, m_BeamLerpTime);
+
                 if (m_LerpTime >= 1.0f)
-                {
-                    Vector3 startLookPosition = transform.position + (transform.forward.normalized * 50.0f) + new Vector3(0.0f, -100.0f, 0.0f);
-                    Vector3 endLookPosition = transform.position + (transform.forward.normalized * 100.0f) + new Vector3(0.0f, 240.0f, 0.0f);
-                    m_RobotLookAtPosition = Vector3.Lerp(startLookPosition, endLookPosition, m_LerpTime - 1.0f);
-                }
-                if (m_LerpTime >= 1.5f)
                 {
                     m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(true);
                     //バネ補間
                 }
-                if (m_LerpTime >= 4.0f)
+                if (m_LerpTime >= 6.0f)
                 {
                     SetSpringParameter(0.1f, 0.2f, 2.0f);
+                    m_RobotLookAtPosition = m_Player.transform.position;
                     m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(false);
                 }
-                if (m_LerpTime >= 5.0f)
+                if (m_LerpTime >= 7.0f)
                 {
                     endAnim = true;
                 }
@@ -315,7 +334,7 @@ public class RobotAction : MonoBehaviour
             transform.rotation = Quaternion.Lerp(m_RobotQuaternion, m_PlayerQuaternion, m_LerpTime);
 
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
-            if (clipInfo.clip.name == "AttackLeg")
+            if (clipInfo.clip.name == "LegAttack")
             {
                 endAnim = (m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f);
             }
@@ -513,7 +532,7 @@ public class RobotAction : MonoBehaviour
             m_IsIK = false;
             m_NavAgent.isStopped = true;
             bool endAnim = false;
-
+            m_NavAgent.velocity = Vector3.zero;
             m_LerpTime += 0.5f * Time.deltaTime;
             transform.rotation = Quaternion.Lerp(m_RobotQuaternion, m_BillQuaternion, m_LerpTime);
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
@@ -578,7 +597,40 @@ public class RobotAction : MonoBehaviour
 
         return func;
     }
+    public RobotManager.ActionFunc RobotMissileAttack()
+    {
+        Action missileAttackStart = () =>
+        {
+            m_SpawnMissileFlag = true;
+        };
 
+
+        Func<bool> missileAttack = () =>
+        {
+            m_IsIK = true;
+            m_NavAgent.isStopped = true;
+            m_RobotLookAtPosition = m_Player.transform.position;
+            bool endAnim = false;
+            AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
+            if (clipInfo.clip.name == "Idle")
+            {
+                if (m_SpawnMissileFlag)
+                {
+                    m_MissileSpawn.GetComponent<MissileSpawn>().SpawnFlag(true);
+                    m_SpawnMissileFlag = false;
+                }
+                endAnim = !(m_MissileSpawn.GetComponent<MissileSpawn>().GetSpawnFlag());
+            }
+            m_RobotState = RobotState.ROBOT_MISSILE_ATTACK;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+            return endAnim;
+        };
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = missileAttackStart;
+        func.actionUpdate = missileAttack;
+
+        return func;
+    }
 
     public void OnTriggerEnter(Collider other)
     {
@@ -644,6 +696,7 @@ public class RobotAction : MonoBehaviour
         //avator.SetIKRotation(AvatarIKGoal.RightHand, lookAtObj.rotation);
 
     }
+
     /// <summary>
     /// ロボットが壊すビルの取得
     /// </summary>

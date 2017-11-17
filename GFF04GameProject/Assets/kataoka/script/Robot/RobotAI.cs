@@ -13,6 +13,8 @@ public class RobotAI : MonoBehaviour
     private float attackTime;
     //見つかったかどうか
     private bool m_IsLookFlag;
+
+
     //[SerializeField, Tooltip("ビルコリジョン")]
     //public GameObject m_BillCollision;
 
@@ -30,7 +32,7 @@ public class RobotAI : MonoBehaviour
 
         robotEye = GameObject.FindGameObjectWithTag("RobotEye");
 
-        attackTime = 0.0f;
+        attackTime = 10.0f;
         m_IsLookFlag = false;
     }
 
@@ -39,13 +41,26 @@ public class RobotAI : MonoBehaviour
     {
         //見えてたら
         GameObject player;
+        attackTime += Time.deltaTime;
         if (PlayerToRobotRay("Player", 0, out player))
         {
             if (Player_Robot_Distance(100.0f))
             {
-                manager.SetAction(RobotAction.RobotState.ROBOT_LEG_ATTACK, false);
+                if (attackTime >= 5.0f)
+                {
+                    manager.SetAction(RobotAction.RobotState.ROBOT_LEG_ATTACK, false);
+                    attackTime = 0.0f;
+                }
             }
             //見えててかつ遠かったらビームアタック
+            else if (!Player_Robot_Distance(200.0f))
+            {
+                if (attackTime >= 20.0f)
+                {
+                    manager.SetAction(RobotAction.RobotState.ROBOT_MISSILE_ATTACK, false);
+                    attackTime = 0.0f;
+                }
+            }
             else
             {
                 manager.SetAction(RobotAction.RobotState.ROBOT_BEAM_ATTACK, false);
@@ -61,7 +76,7 @@ public class RobotAI : MonoBehaviour
                 m_IsLookFlag = false;
             }
 
-            if (Vector3.Distance(agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject().transform.position, agent.transform.position) <= 200.0f)
+            if (Vector3.Distance(agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject().transform.position, agent.transform.position) <= 100.0f)
             {
                 manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
                 return;
@@ -107,6 +122,8 @@ public class RobotAI : MonoBehaviour
     /// <returns>指定した距離以内か</returns>
     private bool Player_Robot_Distance(float dis)
     {
+        float a=Vector3.Distance(agent.transform.position, player.transform.position);
+        Debug.Log(a);
         return Vector3.Distance(agent.transform.position, player.transform.position) < dis;
     }
 
