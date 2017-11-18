@@ -299,6 +299,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4604856987715120}
+  - component: {fileID: 114945534618019870}
   m_Layer: 0
   m_Name: DP_1
   m_TagString: Untagged
@@ -5292,6 +5293,65 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGround: 0
+--- !u!114 &114945534618019870
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1231462260759374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 090962b30ba8d3042a8c4dd1ab52d1d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debris_:
+  - {fileID: 1931308252463704}
+  - {fileID: 1301883111103534}
+  - {fileID: 1613460784989780}
+  - {fileID: 1854436586636864}
+  - {fileID: 1356217062733556}
+  - {fileID: 1078294444040588}
+  - {fileID: 1919653723091436}
+  - {fileID: 1669922409492738}
+  - {fileID: 1135161973253040}
+  - {fileID: 1869420939860888}
+  - {fileID: 1109739189581336}
+  - {fileID: 1516177411111880}
+  - {fileID: 1815361714252948}
+  - {fileID: 1396259948906582}
+  - {fileID: 1277771456652680}
+  - {fileID: 1595930767687144}
+  - {fileID: 1101601832495008}
+  - {fileID: 1021203320275104}
+  - {fileID: 1163615196152018}
+  - {fileID: 1043782535766036}
+  - {fileID: 1287278376964984}
+  - {fileID: 1970252386354308}
+  - {fileID: 1275984092573224}
+  - {fileID: 1252270569383278}
+  - {fileID: 1025005889287238}
+  - {fileID: 1606658755454148}
+  - {fileID: 1294146614879868}
+  - {fileID: 1583701255665394}
+  - {fileID: 1227790888549298}
+  - {fileID: 1926667310458608}
+  - {fileID: 1802188777032084}
+  - {fileID: 1127584774134174}
+  - {fileID: 1811256438087716}
+  - {fileID: 1579263415737070}
+  - {fileID: 1839017035479084}
+  - {fileID: 1995698402576022}
+  - {fileID: 1629460860830304}
+  - {fileID: 1656654778603726}
+  - {fileID: 1322650591765976}
+  - {fileID: 1031204729524964}
+  - {fileID: 1516637053992790}
+  - {fileID: 1198363317074734}
+  - {fileID: 1027377397005844}
+  - {fileID: 1164857129036340}
+  - {fileID: 1899986845580794}
+  - {fileID: 1262919314058340}
+  destroyTime: 0
 --- !u!114 &114959374566360550
 MonoBehaviour:
   m_ObjectHideFlags: 1

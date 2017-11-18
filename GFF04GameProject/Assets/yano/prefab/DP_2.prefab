@@ -619,6 +619,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4811777612505034}
+  - component: {fileID: 114738630310477988}
   m_Layer: 0
   m_Name: DP_2
   m_TagString: Untagged
@@ -3484,6 +3485,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGround: 0
+--- !u!114 &114738630310477988
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1992930467678468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 090962b30ba8d3042a8c4dd1ab52d1d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debris_:
+  - {fileID: 1337514275508234}
+  - {fileID: 1037164483878692}
+  - {fileID: 1608089147718204}
+  - {fileID: 1369649817129954}
+  - {fileID: 1884100172409658}
+  - {fileID: 1058964027050308}
+  - {fileID: 1840268654140122}
+  - {fileID: 1302136689489970}
+  - {fileID: 1822328726941440}
+  - {fileID: 1200838274006858}
+  - {fileID: 1940957041966192}
+  - {fileID: 1419580294579878}
+  - {fileID: 1857661492022892}
+  - {fileID: 1181643315755488}
+  - {fileID: 1216874235491288}
+  - {fileID: 1949385459034224}
+  - {fileID: 1785123400443468}
+  - {fileID: 1997411180087084}
+  - {fileID: 1567404156450220}
+  - {fileID: 1273038032384534}
+  - {fileID: 1632607282910504}
+  - {fileID: 1793523757551082}
+  - {fileID: 1590913157779642}
+  - {fileID: 1339198019999564}
+  - {fileID: 1645531641147600}
+  - {fileID: 1544860895185248}
+  - {fileID: 1685379244463232}
+  - {fileID: 1308117226696348}
+  - {fileID: 1142147539727698}
+  - {fileID: 1394070224872928}
+  - {fileID: 1468912386137244}
+  destroyTime: 0
 --- !u!114 &114772549124521804
 MonoBehaviour:
   m_ObjectHideFlags: 1

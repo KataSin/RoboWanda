@@ -23,6 +23,9 @@ public class DebrisPart_collide : MonoBehaviour
     [SerializeField]
     private bool isClear;
 
+    [SerializeField]
+    private GameObject dp_1_obj_;
+
     // Use this for initialization
     void Start()
     {
@@ -33,9 +36,13 @@ public class DebrisPart_collide : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isBreak&&!isClear)
+        if (isBreak && !isClear)
         {
             Instantiate(debrisParts_obj_, transform.position, transform.rotation);
+            if (debrisParts_obj_.ToString() == "DP_2")
+            {
+
+            }
             Destroy(this.gameObject);
             Destroy(originBill_obj_);
             Instantiate(
@@ -51,7 +58,7 @@ public class DebrisPart_collide : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.GetComponent<RobotDamage>() != null)
+        if (other.GetComponent<RobotDamage>() != null)
         {
             isBreak = true;
         }
