@@ -72,6 +72,8 @@ public class PlayerController : MonoBehaviour
     bool m_IsCreeping;                              // 匍匐しているか
     bool m_IsDead;                                  // 死亡しているか
 
+    //ボムスポーン(片岡実装)
+    private GameObject m_BomSpawn;
     // Use this for initialization
     void Start()
     {
@@ -88,6 +90,10 @@ public class PlayerController : MonoBehaviour
         m_IsAiming = false;
         m_IsCreeping = false;
         m_IsDead = false;
+
+        //片岡実装
+        m_BomSpawn = GameObject.FindGameObjectWithTag("BomSpawn");
+
     }
 
     // Update is called once per frame
@@ -446,9 +452,19 @@ public class PlayerController : MonoBehaviour
         // 爆弾投げ時の移動処理
         AimingMove();
 
+        //片岡の実装
+        m_BomSpawn.GetComponent<BomSpawn>().Set(Camera.main.transform.forward, 150.0f);
+        m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(true);
+
+        if (Input.GetButtonDown("Bomb_Throw"))
+        {
+            m_BomSpawn.GetComponent<BomSpawn>().SpawnBom();
+        }
+
         // RBボタンを放すと通常状態に戻る
         if (!Input.GetButton("Aim"))
         {
+            m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(false);
             m_State = PlayerState.Normal;
         }
     }
