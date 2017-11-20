@@ -101,7 +101,7 @@ public class GeroBeam : MonoBehaviour {
                 int layerMask = ~(1 << LayerMask.NameToLayer("NoBeamHit") | 1 << 2);
                 if (Physics.Raycast(NowPos,F_Vec[i],out hit,BlockLen*workNLG,layerMask)){
     				GameObject hitobj = hit.collider.gameObject;
-					NowLength = ((BlockLen*i)+hit.distance)/MaxLength;
+					NowLength = ((BlockLen*i)+hit.distance)/MaxLength+0.05f;
                     HitObj.transform.position = NowPos + F_Vec[i] * hit.distance;
 					HitObj.transform.rotation = Quaternion.AngleAxis(180.0f,transform.up)* this.transform.rotation;
                     //HitObj.transform.localScale = HitObjSize * Width * BP.Scale * 10.0f;

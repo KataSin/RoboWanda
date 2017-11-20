@@ -9,7 +9,7 @@ public class RobotAI : MonoBehaviour
     private RobotManager manager;
     private GameObject player;
     private NavMeshAgent agent;
-    private GameObject robotEye;
+    public GameObject robotEye;
     private float attackTime;
     //見つかったかどうか
     private bool m_IsLookFlag;
@@ -29,8 +29,6 @@ public class RobotAI : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         agent = GameObject.FindGameObjectWithTag("Robot").GetComponent<NavMeshAgent>();
 
-
-        robotEye = GameObject.FindGameObjectWithTag("RobotEye");
 
         attackTime = 10.0f;
         m_IsLookFlag = false;
