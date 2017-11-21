@@ -121,7 +121,6 @@ public class RobotAI : MonoBehaviour
     private bool Player_Robot_Distance(float dis)
     {
         float a=Vector3.Distance(agent.transform.position, player.transform.position);
-        Debug.Log(a);
         return Vector3.Distance(agent.transform.position, player.transform.position) < dis;
     }
 
