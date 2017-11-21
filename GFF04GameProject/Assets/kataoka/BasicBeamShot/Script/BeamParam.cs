@@ -6,7 +6,7 @@ public class BeamParam : MonoBehaviour {
 	public Color BeamColor = Color.white;
 	public float AnimationSpd = 0.1f;
 	public float Scale = 1.0f;
-	public float MaxLength = 32.0f;
+	public float MaxLength;
 	public bool bEnd = false;
 	public bool bGero = false;
 

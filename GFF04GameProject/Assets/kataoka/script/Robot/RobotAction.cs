@@ -82,7 +82,7 @@ public class RobotAction : MonoBehaviour
     private float m_RobotFallDownTime;
     //ミサイルが発射するフラグ
     private bool m_SpawnMissileFlag;
-    private GameObject m_RobotEye;
+    public GameObject m_RobotEye;
 
     //ビーム補間用
     private Vector3 m_BeamStartPos;
@@ -121,8 +121,6 @@ public class RobotAction : MonoBehaviour
         if (m_SearchPoints.Count <= 0) m_SearchPoints.Add(new GameObject());
         m_RandomIndex = m_Random.Next(0, m_SearchPoints.Count - 1);
         m_GoalPoint = GameObject.FindGameObjectWithTag("GoalPoint");
-
-        m_RobotEye = GameObject.FindGameObjectWithTag("RobotEye");
 
         m_MissileSpawn = GameObject.FindGameObjectWithTag("MissileSpawn");
 
@@ -258,7 +256,7 @@ public class RobotAction : MonoBehaviour
             m_LerpTime = 0.0f;
             m_BeamStartPos = transform.position + (transform.forward.normalized * 20.0f) + new Vector3(0.0f, -10.0f, 0.0f);
             m_BeamEndPos = transform.position + (transform.forward.normalized * 100.0f) + new Vector3(0.0f, 200.0f, 0.0f);
-
+            m_RobotEye.SetActive(true);
         };
 
 
@@ -281,7 +279,7 @@ public class RobotAction : MonoBehaviour
             {
                 m_RobotLookAtPosition = Vector3.Lerp(m_BeamStartPos, m_BeamEndPos, m_BeamLerpTime);
 
-                if (m_LerpTime >= 1.0f)
+                if (m_LerpTime >= 2.0f)
                 {
                     m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(true);
                     //バネ補間
@@ -292,7 +290,7 @@ public class RobotAction : MonoBehaviour
                     m_RobotLookAtPosition = m_Player.transform.position;
                     m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(false);
                 }
-                if (m_LerpTime >= 7.0f)
+                if (m_LerpTime >= 10.0f)
                 {
                     endAnim = true;
                 }
