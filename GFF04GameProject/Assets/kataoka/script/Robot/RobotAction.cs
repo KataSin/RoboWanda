@@ -279,11 +279,7 @@ public class RobotAction : MonoBehaviour
             {
                 m_RobotLookAtPosition = Vector3.Lerp(m_BeamStartPos, m_BeamEndPos, m_BeamLerpTime);
 
-                if (m_LerpTime >= 2.0f)
-                {
-                    m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(true);
-                    //バネ補間
-                }
+                m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(true);
                 if (m_LerpTime >= 6.0f)
                 {
                     SetSpringParameter(0.1f, 0.2f, 2.0f);

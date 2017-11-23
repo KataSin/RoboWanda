@@ -53,7 +53,7 @@ public class RobotAI : MonoBehaviour
             //見えててかつ遠かったらビームアタック
             else if (!Player_Robot_Distance(200.0f))
             {
-                if (attackTime >= 20.0f)
+                if (attackTime >= 10.0f)
                 {
                     manager.SetAction(RobotAction.RobotState.ROBOT_MISSILE_ATTACK, false);
                     attackTime = 0.0f;
