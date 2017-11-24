@@ -42,6 +42,7 @@ public class RobotLegManager : MonoBehaviour
     {
         if (m_Leg == Leg.NO)
         {
+            RobotLeg a = m_RobotLeftLeg.GetComponent<RobotLeg>();
             if (m_RobotLeftLeg.GetComponent<RobotLeg>().GetLegFlag())
             {
                 m_Leg = Leg.LEFT;
