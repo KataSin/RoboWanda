@@ -75,8 +75,8 @@ public class RobotBeam : MonoBehaviour
         if (Physics.Raycast(ray, out hit, m_BeamLen, layer))
         {
             m_Frame++;
-            if (m_Frame % 3 == 0)
-                Instantiate(m_BonEffect, hit.point, Quaternion.identity);
+            //if (m_Frame % 3 == 0)
+            //    //Instantiate(m_BonEffect, hit.point, Quaternion.identity);
         }
         m_BeamLength = Mathf.Clamp(m_BeamLength, 0.0f, 1000.0f);
         m_BeamScale = Mathf.Clamp(m_BeamScale, 0.0f, 3.0f);
