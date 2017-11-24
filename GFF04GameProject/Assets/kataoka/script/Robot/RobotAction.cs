@@ -23,7 +23,8 @@ public class RobotAction : MonoBehaviour
         ROBOT_GOOL_MOVE,
         ROBOT_BILL_BREAK,
         ROBOT_FALL_DOWN,
-        ROBOT_MISSILE_ATTACK
+        ROBOT_MISSILE_ATTACK,
+        ROBOT_HELI_ATTACK
     }
 
     [SerializeField, Tooltip("ロボットのスピード"), HeaderAttribute("ロボット移動関係")]
@@ -626,6 +627,74 @@ public class RobotAction : MonoBehaviour
         return func;
     }
 
+    public RobotManager.ActionFunc RobotHeliAttack()
+    {
+        Action robotHeliAttackStart = () =>
+        {
+            m_BeamLerpTime = 0.0f;
+            m_BeamStartPos = transform.position;
+
+
+            Vector3 robotLeft = transform.right.normalized;
+            List<GameObject> heli = new List<GameObject>();
+            GameObject[] objs = GameObject.FindGameObjectsWithTag("Helocopter");
+            foreach (var i in objs)
+            {
+
+                Vector3 vec = (m_Robot.transform.position - i.transform.position).normalized;
+                float dot =
+                    Vector2Cross(
+                    new Vector2(m_Robot.transform.right.x, m_Robot.transform.right.z)
+                    , new Vector2(vec.x, vec.z));
+
+                if (dot > 0.0f)
+                {
+                    //前のいる
+                    heli.Add(i);
+                }
+            }
+            m_BeamEndPos = heli[UnityEngine.Random.Range(0, heli.Count - 1)].transform.position;
+            m_RobotEye.SetActive(true);
+        };
+
+
+        Func<bool> robotHeliAttack = () =>
+        {
+            m_IsIK = true;
+            m_NavAgent.isStopped = true;
+            m_NavAgent.velocity = Vector3.zero;
+            bool endAnim = false;
+            //バネ補間
+            SetSpringParameter(0.1f, 0.2f, 2.0f);
+
+            m_BeamLerpTime += 0.1f * Time.deltaTime;
+
+            AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
+            if (clipInfo.clip.name == "Idle")
+            {
+                m_RobotLookAtPosition = Vector3.Lerp(m_BeamStartPos, m_BeamEndPos, m_BeamLerpTime);
+
+                m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(true);
+                SetSpringParameter(0.1f, 0.2f, 2.0f);
+                m_RobotLookAtPosition = m_Player.transform.position;
+
+                if (m_BeamLerpTime >= 2.5f)
+                {
+                    m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(false);
+                    endAnim = true;
+                }
+            }
+            m_RobotState = RobotState.ROBOT_HELI_ATTACK;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+            return endAnim;
+        };
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = robotHeliAttackStart;
+        func.actionUpdate = robotHeliAttack;
+
+        return func;
+    }
+
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject == m_SearchPoints[m_RandomIndex])
@@ -691,6 +760,10 @@ public class RobotAction : MonoBehaviour
 
     }
 
+
+
+
+
     /// <summary>
     /// ロボットが壊すビルの取得
     /// </summary>
@@ -738,6 +811,9 @@ public class RobotAction : MonoBehaviour
         }
         return true;
     }
+
+
+
 
     /// <summary>
     /// Vector2の外積
