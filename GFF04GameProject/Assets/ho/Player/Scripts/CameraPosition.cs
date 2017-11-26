@@ -88,7 +88,6 @@ public class CameraPosition : MonoBehaviour
 
     private GameObject m_Player;                // プレイヤー
     private bool m_IsAiming = false;            // プレイヤーは照準状態であるか
-    private Camera m_Camera;
 
     private CameraDistance m_Distance;          // カメラとプレイヤーの距離
     private int m_DistanceSelect;
@@ -113,7 +112,6 @@ public class CameraPosition : MonoBehaviour
             m_IsAiming = m_Player.GetComponent<PlayerController>().IsAiming();
         }
 
-        m_Camera = Camera.main;
         m_DistanceSelect = 2;
         m_IsTriggered = false;
     }
@@ -244,10 +242,17 @@ public class CameraPosition : MonoBehaviour
         }
         // カメラの位置を更新（相対座標を使用）
         transform.localPosition = Vector3.Lerp(transform.localPosition, new_position, m_Speed * Time.deltaTime);
-        // transform.localPosition = Vector3.Slerp(transform.position, new_position, m_Speed * Time.deltaTime);
-        // transform.localPosition = new Vector3(new_position.x, new_position.y, new_position.z);
 
-        // カメラがフィールドや他のオブジェクトに透過しないようにする
+        // カメラがフィールドや障害物に透過しないようにする
+        Ray ray = new Ray(m_Player.transform.position + Vector3.up, transform.position - m_Player.transform.position - Vector3.up);
+        float distance = Vector3.Distance(m_Player.transform.position, transform.position);
+        // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
+        RaycastHit hitInfo;
 
+        if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
+        {
+            // Debug.Log("壁に遮られた");
+            transform.position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.1f, hitInfo.point.z);
+        }
     }
 }

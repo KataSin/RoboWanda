@@ -165,15 +165,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 594e129a1674cd545a3f27f7dd151077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_VeryClosePositionX: 1
+  m_VeryClosePositionY: 1.9
+  m_VeryClosePositionZ: -2
+  m_ClosePositionX: 0
+  m_ClosePositionY: 2.5
+  m_ClosePositionZ: -3
   m_NormalPositionX: 0
   m_NormalPositionY: 2.5
   m_NormalPositionZ: -5
-  m_AimingPositionX: 0
-  m_AimingPositionY: 2.5
-  m_AimingPositionZ: -5
-  m_SpeedX: 0
-  m_SpeedY: 0
-  m_SpeedZ: 0
+  m_FarPositionX: 0
+  m_FarPositionY: 2.5
+  m_FarPositionZ: -20
+  m_Speed: 10
 --- !u!114 &114536233480326674
 MonoBehaviour:
   m_ObjectHideFlags: 1
