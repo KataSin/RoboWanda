@@ -68,9 +68,11 @@ public class PlayerController : MonoBehaviour
     Animator m_Animator;                            // アニメーター
     PlayerState m_State;                            // プレイヤーの状態
     bool m_IsDash;                                  // ダッシュしているか
-    bool m_IsAiming;                                  // 爆弾投げ状態であるか
+    bool m_IsAiming;                                // 照準中であるか
     bool m_IsCreeping;                              // 匍匐しているか
     bool m_IsDead;                                  // 死亡しているか
+
+    float m_current_speed;
 
     //ボムスポーン(片岡実装)
     private GameObject m_BomSpawn;
@@ -91,9 +93,10 @@ public class PlayerController : MonoBehaviour
         m_IsCreeping = false;
         m_IsDead = false;
 
+        m_current_speed = 0.0f;
+
         //片岡実装
         m_BomSpawn = GameObject.FindGameObjectWithTag("BomSpawn");
-
     }
 
     // Update is called once per frame
@@ -150,22 +153,24 @@ public class PlayerController : MonoBehaviour
         m_Animator.SetBool("IsCreeping", m_IsCreeping);
         m_Animator.SetBool("IsDead", m_IsDead);
 
+        m_current_speed = m_Controller.velocity.magnitude;
+
         // 振動テスト
         /*if (Input.GetKeyDown("space"))
         {
             GameObject Camera = GameObject.FindGameObjectWithTag("MainCamera");
-            Camera.GetComponent<CameraShake>().Shake(5.0f);
-            Debug.Log("外部からカメラに振動命令");
+            Camera.GetComponent<CameraShake>().Shake(3.0f);
+            // Debug.Log("外部からカメラに振動命令");
         }*/
 
         // 死亡テスト
-        if (Input.GetKeyDown("space"))
+        /*if (Input.GetKeyDown("space"))
         {
             if (m_State != PlayerState.Dead)
             {
                 m_State = PlayerState.Dead;
             }
-        }
+        }*/
     }
 
     // 接触判定
@@ -406,7 +411,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (m_CurrentSpeedLimit > m_MaxSpeed)
                 {
-                    m_CurrentSpeedLimit -= 0.1f;
+                    m_CurrentSpeedLimit -= 0.2f;
                 }
                 m_CurrentBrakePower = m_BrakePower;
                 if (m_CurrentRotateSpeed > m_RotateSpeed)
@@ -431,7 +436,8 @@ public class PlayerController : MonoBehaviour
         Vector3 direction = transform.position - m_PrevPosition;
         if (direction.sqrMagnitude > 0)
         {
-            Vector3 orientiation = Vector3.Slerp(transform.forward,
+            Vector3 orientiation = Vector3.Slerp(
+                transform.forward,
                 new Vector3(direction.x, 0.0f, direction.z),
                 m_CurrentRotateSpeed * Time.deltaTime / Vector3.Angle(transform.forward, direction));
             transform.LookAt(transform.position + orientiation);
@@ -440,10 +446,15 @@ public class PlayerController : MonoBehaviour
 
         // アニメーターに命令して、アニメーションを再生する
         // プレイヤー現在の移動量を取得
-        float current_speed;
+        /*float current_speed;
         current_speed = m_Controller.velocity.magnitude;
         if (current_speed > m_CurrentSpeedLimit) current_speed = m_CurrentSpeedLimit;
-        m_Animator.SetFloat("NormalSpeed", current_speed);
+        m_Animator.SetFloat("NormalSpeed", current_speed);*/
+        float animation_speed;
+        animation_speed = m_current_speed;
+
+        if (animation_speed > m_CurrentSpeedLimit) animation_speed = m_CurrentSpeedLimit;
+        m_Animator.SetFloat("NormalSpeed", animation_speed);
     }
 
     // 照準中の処理
