@@ -33,9 +33,5 @@ public class LightSerch : MonoBehaviour
                 m_LightRotateZ.transform.eulerAngles.y,
                 m_LightRotateZ.transform.eulerAngles.z
                 );
-
-
-
-        m_Agent.destination = Vector3.zero;
     }
 }
