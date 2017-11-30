@@ -9,6 +9,8 @@ public class TitleManager : MonoBehaviour
         Opening,
         Ready,
         Start,
+        Select,
+        Sally,
     }
 
     private enum ModeState
@@ -41,11 +43,20 @@ public class TitleManager : MonoBehaviour
     [SerializeField]
     private List<GameObject> quetion_y_n_back_;
 
+    [SerializeField]
+    private GameObject Heri;
+
+    [SerializeField]
+    private GameObject blackoutCurtain_;
+
+    private float m_feadSTimer;
+
     // Use this for initialization
     void Start()
     {
         //scene_ = GameObject.Find("SceneController").GetComponent<SceneController>();
         nextViewTimer = 0f;
+        m_feadSTimer = 0f;
     }
 
     // Update is called once per frame
@@ -68,44 +79,68 @@ public class TitleManager : MonoBehaviour
         if (Input.anyKeyDown && titleState_ == TitleState.Ready)
         {
             titleState_ = TitleState.Start;
-            //scene_.SceneChange("StageSelect");
         }
 
         if (titleState_ == TitleState.Start)
+        {
             nextViewTimer += 1.0f * Time.deltaTime;
 
-        if (nextViewTimer >= 2f)
+            if (nextViewTimer >= 2f)
+            {
+                title_player_.GetComponent<TitlePlayer>().Set_StandFlag(true);
+                title_uis_.SetActive(false);
+                titleCamera_.GetComponent<TitleCamera>().Set_Timer(1.0f * Time.deltaTime);
+                titleCamera_.GetComponent<TitleCamera>().titleReadyToStart();
+
+                if ((titleCamera_.GetComponent<TitleCamera>().Get_Timer()
+                    >= titleCamera_.GetComponent<TitleCamera>().Get_FeadTime()) && mode_uis_.activeSelf == false)
+                {
+                    mode_uis_.SetActive(true);
+                }
+            }
+
+            if (mode_uis_.activeSelf == true)
+            {
+                if (modeState_ == ModeState.Yes)
+                {
+                    quetion_y_n_back_[0].SetActive(true);
+                    quetion_y_n_back_[1].SetActive(false);
+
+                    if (Input.GetKeyDown(KeyCode.S))
+                        modeState_ = ModeState.No;
+
+
+                }
+                else if (modeState_ == ModeState.No)
+                {
+                    quetion_y_n_back_[0].SetActive(false);
+                    quetion_y_n_back_[1].SetActive(true);
+
+                    if (Input.GetKeyDown(KeyCode.W))
+                        modeState_ = ModeState.Yes;
+                }
+
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    mode_uis_.SetActive(false);
+                    titleCamera_.GetComponent<TitleCamera>().Reset_Timer();
+                    titleState_ = TitleState.Sally;
+                }
+            }
+        }
+
+        if (titleState_ == TitleState.Sally)
         {
-            title_player_.GetComponent<TitlePlayer>().Set_StandFlag(true);
-            title_uis_.SetActive(false);
             titleCamera_.GetComponent<TitleCamera>().Set_Timer(1.0f * Time.deltaTime);
-            titleCamera_.GetComponent<TitleCamera>().titleReadyToStart();
+            Heri.GetComponent<TitleHeri>().TitleHeriMove();
+            titleCamera_.GetComponent<TitleCamera>().titleHeriSally();
 
-            if (titleCamera_.GetComponent<TitleCamera>().Get_Timer()
-                >= titleCamera_.GetComponent<TitleCamera>().Get_FeadTime())
-            {
-                mode_uis_.SetActive(true);
-            }
+            m_feadSTimer += 1.0f * Time.deltaTime;
+
+            if (m_feadSTimer >= 4f)
+                blackoutCurtain_.GetComponent<BlackOut_UI>().BlackOut();
         }
 
-        if (mode_uis_ == true)
-        {
-            if (modeState_ == ModeState.Yes)
-            {
-                quetion_y_n_back_[0].SetActive(true);
-                quetion_y_n_back_[1].SetActive(false);
 
-                if (Input.GetKeyDown(KeyCode.S))
-                    modeState_ = ModeState.No;
-            }
-            else if (modeState_ == ModeState.No)
-            {
-                quetion_y_n_back_[0].SetActive(false);
-                quetion_y_n_back_[1].SetActive(true);
-
-                if (Input.GetKeyDown(KeyCode.W))
-                    modeState_ = ModeState.Yes;
-            }
-        }
     }
 }
