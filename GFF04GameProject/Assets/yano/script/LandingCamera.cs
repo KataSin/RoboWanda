@@ -46,7 +46,7 @@ public class LandingCamera : MonoBehaviour
 
         transform.LookAt(heri_.transform);
 
-        if (player_.GetComponent<PlayerController1>().GetPlayerState() != 0)
+        if (player_.GetComponent<PlayerController>().GetPlayerState() != 0)
         {
             transform.position = Vector3.Lerp(m_originPos, mainCamera_.transform.position, t / 1f);
             transform.rotation = Quaternion.Lerp(m_originRotate, mainCamera_.transform.rotation, t / 1f);

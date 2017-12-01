@@ -42,14 +42,14 @@ public class DeadCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player_.GetComponent<PlayerController1>().GetPlayerState() != 4)
+        if (player_.GetComponent<PlayerController>().GetPlayerState() != 4)
         {
             m_originPos = transform.position;
             m_lerp_rotation = transform.rotation;
             m_origin_rotation = transform.rotation;
         }
 
-        else if (player_.GetComponent<PlayerController1>().GetPlayerState() == 4)
+        else if (player_.GetComponent<PlayerController>().GetPlayerState() == 4)
         {
             m_intervalTimer += 1.0f * Time.deltaTime;
             if (t < 3f)

@@ -10,6 +10,7 @@ using UnityEngine;
 // プレイヤーの状態
 enum PlayerState
 {
+    StartFall,
     Normal,     // 通常
     Aiming,     // 照準中
     Creeping,   // 匍匐
@@ -76,13 +77,24 @@ public class PlayerController : MonoBehaviour
 
     //ボムスポーン(片岡実装)
     private GameObject m_BomSpawn;
+    bool m_isClear;
+    bool m_IsStartFall;
+
+    [SerializeField]
+    private GameObject s_Heri;
+
+    [SerializeField]
+    private List<GameObject> rope_destibation_;
+
+    float t;
+
     // Use this for initialization
     void Start()
     {
         m_Controller = GetComponent<CharacterController>();
         m_Animator = GetComponent<Animator>();
 
-        m_State = PlayerState.Normal;
+        m_State = PlayerState.StartFall;
         m_CurrentSpeedLimit = m_MaxSpeed;
         m_CurrentBrakePower = m_BrakePower;
         m_CurrentRotateSpeed = m_RotateSpeed;
@@ -92,11 +104,17 @@ public class PlayerController : MonoBehaviour
         m_IsAiming = false;
         m_IsCreeping = false;
         m_IsDead = false;
+        m_IsStartFall = true;
+        m_isClear = false;
 
         m_current_speed = 0.0f;
 
         //片岡実装
         m_BomSpawn = GameObject.FindGameObjectWithTag("BomSpawn");
+
+        m_Animator.speed = 0;
+
+        t = 0f;
     }
 
     // Update is called once per frame
@@ -105,6 +123,13 @@ public class PlayerController : MonoBehaviour
         // プレイヤーの状態に応じて処理を行う
         switch (m_State)
         {
+            //ヘリから降下
+            case PlayerState.StartFall:
+                Fall();
+                m_IsAiming = false;
+                m_IsCreeping = false;
+                m_IsDead = false;
+                break;
             // 通常
             case PlayerState.Normal:
                 Normal();
@@ -164,13 +189,13 @@ public class PlayerController : MonoBehaviour
         }*/
 
         // 死亡テスト
-        /*if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown("space"))
         {
             if (m_State != PlayerState.Dead)
             {
                 m_State = PlayerState.Dead;
             }
-        }*/
+        }
     }
 
     // 接触判定
@@ -188,6 +213,52 @@ public class PlayerController : MonoBehaviour
             || other.gameObject.name == "DeathCollide")
         {
             m_State = PlayerState.Dead;
+        }
+    }
+
+    void Fall()
+    {
+        if (transform.position.y <= 13.5f)
+        {
+            m_Animator.speed = 1;
+            m_IsStartFall = false;
+
+            if (!m_isClear)
+            {
+                Destroy(rope_destibation_[1]);
+                rope_destibation_.RemoveAt(1);
+                Destroy(rope_destibation_[0]);
+                rope_destibation_.RemoveAt(0);
+
+                m_isClear = true;
+            }
+            t += 1.0f * Time.deltaTime;
+            if (t >= 0.8f)
+                m_State = PlayerState.Normal;
+            transform.parent = null;
+        }
+
+        if (s_Heri.GetComponent<PlayStartHeri>().Get_StopFlag() == true
+            && m_IsStartFall)
+        {
+            for (int i = 0; i < rope_destibation_.Count; i++)
+                rope_destibation_[i].transform.position -= transform.up / 4f;
+            transform.position -= transform.up / 4f;
+        }
+
+
+
+    }
+
+    void OnAnimatorIK()
+    {
+        if (m_State == PlayerState.StartFall)
+        {
+            m_Animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+            m_Animator.SetIKPosition(AvatarIKGoal.LeftHand, rope_destibation_[0].transform.position);
+
+            m_Animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+            m_Animator.SetIKPosition(AvatarIKGoal.RightHand, rope_destibation_[1].transform.position);
         }
     }
 
@@ -661,6 +732,11 @@ public class PlayerController : MonoBehaviour
     {
         // 死亡モーションを再生
         m_Animator.Play("Dead");
+    }
+
+    public int GetPlayerState()
+    {
+        return (int)m_State;
     }
 
     // 死亡しているか

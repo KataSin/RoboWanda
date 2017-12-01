@@ -60,7 +60,7 @@ public class PlayStartHeri : MonoBehaviour
     {
         // m_speed -= (0.8f / (m_LOverTime)) * Time.deltaTime;
 
-        if (player_.GetComponent<PlayerController1>().GetPlayerState() == 0)
+        if (player_.GetComponent<PlayerController>().GetPlayerState() == 0)
         {
             m_speed -= 0.12f * Time.deltaTime;
             if (m_speed <= 0.1f)
@@ -116,7 +116,7 @@ public class PlayStartHeri : MonoBehaviour
 
     private void MoveLeave()
     {
-        if (player_.GetComponent<PlayerController1>().GetPlayerState() != 0)
+        if (player_.GetComponent<PlayerController>().GetPlayerState() != 0)
         {
             m_intervalTimer2 += 1.0f * Time.deltaTime;
 
