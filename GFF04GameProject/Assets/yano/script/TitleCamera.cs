@@ -10,6 +10,8 @@ public class TitleCamera : MonoBehaviour
 
     private float m_feadTime;
 
+    private float m_sallyTime;
+
     private float t;
 
     [SerializeField]
@@ -21,6 +23,7 @@ public class TitleCamera : MonoBehaviour
         m_originPos = transform.position;
         m_readyTime = 6f;
         m_feadTime = 5f;
+        m_sallyTime = 5f;
     }
 
     // Update is called once per frame
@@ -38,6 +41,11 @@ public class TitleCamera : MonoBehaviour
     {
         transform.position = Vector3.Slerp(new Vector3(0f, 0.8f, -10.5f), new Vector3(2.5f, 0.9f, -10.0f), t / m_feadTime);
         transform.LookAt(player_.transform.position + new Vector3(-0.61f, 0.9f, -1.0f));
+    }
+
+    public void titleHeriSally()
+    {
+        //transform.position = Vector3.Slerp(new Vector3(2.5f, 0.9f, -10.0f), new Vector3(13f, 0.9f, -10.0f), t / m_sallyTime);
     }
 
     public float Get_ReadyTime()

@@ -8,11 +8,17 @@ public class RobotLeg : MonoBehaviour
     private bool m_IsLeg;
     //穴のIKポイント
     private Vector3 m_IkPoint;
+    //プレイヤー
+    private GameObject m_Player;
+
+
     // Use this for initialization
     void Start()
     {
         m_IsLeg = false;
         m_IkPoint = Vector3.zero;
+
+        m_Player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
@@ -26,8 +32,10 @@ public class RobotLeg : MonoBehaviour
         {
             m_IsLeg = true;
             m_IkPoint = other.transform.parent.Find("IKPoint").transform.position;
+
             Destroy(other.gameObject);
         }
+
     }
     /// <summary>
     /// 足はまっているかどうか
