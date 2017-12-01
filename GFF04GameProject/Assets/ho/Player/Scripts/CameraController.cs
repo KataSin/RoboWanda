@@ -10,7 +10,9 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [SerializeField]
-    private float m_RotateSpeed = 180.0f;   // 回転速度
+    private float m_RotateSpeedY = 180.0f;  // y軸回転速度
+    [SerializeField]
+    private float m_RotateSpeedX = 90.0f;  // x軸回転速度
 
     float pitch = 0.0f;                     // 仰角
     [SerializeField]
@@ -44,10 +46,10 @@ public class CameraController : MonoBehaviour
                 float axisVertical = Input.GetAxisRaw("Vertical_R");        // x軸
                 float axisHorizontal = Input.GetAxisRaw("Horizontal_R");    // y軸
 
-                transform.Rotate(Vector3.up, axisHorizontal * Time.deltaTime * m_RotateSpeed, Space.World);  // y軸回転
+                transform.Rotate(Vector3.up, axisHorizontal * Time.deltaTime * m_RotateSpeedY, Space.World);  // y軸回転
 
                 // x軸回転
-                pitch += axisVertical * Time.deltaTime * m_RotateSpeed;
+                pitch += axisVertical * Time.deltaTime * m_RotateSpeedX;
                 pitch = Mathf.Clamp(pitch, m_PitchMin, m_PitchMax);        // 角度を制限する
 
                 Vector3 rotation = transform.rotation.eulerAngles;

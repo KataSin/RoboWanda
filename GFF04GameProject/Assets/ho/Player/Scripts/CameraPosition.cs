@@ -249,6 +249,12 @@ public class CameraPosition : MonoBehaviour
         // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
         RaycastHit hitInfo;
 
+        if (transform.position.y <= 0.1f)
+        {
+            transform.position = new Vector3(transform.position.x, 0.1f, transform.position.z);
+            return;
+        }
+
         if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
         {
             // Debug.Log("壁に遮られた");

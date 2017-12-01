@@ -463,6 +463,7 @@ public class PlayerController : MonoBehaviour
         // 爆弾投げ時の移動処理
         AimingMove();
 
+        var a = m_BomSpawn.GetComponent<BomSpawn>();
         //片岡の実装
         m_BomSpawn.GetComponent<BomSpawn>().Set(Camera.main.transform.forward, 150.0f);
         m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(true);
