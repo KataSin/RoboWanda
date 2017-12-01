@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.AI;
 using UnityEngine.UI;
 public class RobotManager : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class RobotManager : MonoBehaviour
     private RobotAction.RobotState m_PreState;
     //現在のアクションがループするかどうか
     private bool m_IsLoop;
+    //ロボットが死んだかどうか
+    private bool m_IsDead;
     // Use this for initialization
     void Start()
     {
@@ -53,6 +56,8 @@ public class RobotManager : MonoBehaviour
         AddAction(RobotAction.RobotState.ROBOT_FALL_DOWN, m_RobotAction.RobotFallDown());
         AddAction(RobotAction.RobotState.ROBOT_MISSILE_ATTACK, m_RobotAction.RobotMissileAttack());
         m_IsLoop = true;
+
+        m_IsDead = false;
     }
 
     // Update is called once per frame
@@ -66,7 +71,7 @@ public class RobotManager : MonoBehaviour
         //ロボット死んだ処理
         if (m_RobotHp <= 0)
         {
-            Destroy(gameObject);
+            m_IsDead = true;
         }
 
         //アクションのスタート
@@ -145,5 +150,20 @@ public class RobotManager : MonoBehaviour
     public int GetRobotHP()
     {
         return m_RobotHp;
+    }
+    /// <summary>
+    /// ロボットが死んだ時の処理
+    /// </summary>
+    public void Dead()
+    {
+        Destroy(transform.Find("LookAtObject").gameObject);
+        Destroy(transform.Find("GoPoint").gameObject);
+        Destroy(transform.Find("RobotAI").gameObject);
+
+
+        Destroy(gameObject.GetComponent<NavMeshAgent>());
+        Destroy(gameObject.GetComponent<RobotAction>());
+        Destroy(gameObject.GetComponent<RobotLegManager>());
+
     }
 }
