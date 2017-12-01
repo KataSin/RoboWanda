@@ -51,6 +51,9 @@ public class TitleManager : MonoBehaviour
 
     private float m_feadSTimer;
 
+    [SerializeField]
+    private GameObject sceneCnt_;
+
     // Use this for initialization
     void Start()
     {
@@ -138,7 +141,12 @@ public class TitleManager : MonoBehaviour
             m_feadSTimer += 1.0f * Time.deltaTime;
 
             if (m_feadSTimer >= 4f)
+            {
                 blackoutCurtain_.GetComponent<BlackOut_UI>().BlackOut();
+
+                if (blackoutCurtain_.GetComponent<BlackOut_UI>().Get_Clear() == true)
+                    sceneCnt_.GetComponent<SceneController>().SceneChange("NightTest 1");
+            }
         }
 
 

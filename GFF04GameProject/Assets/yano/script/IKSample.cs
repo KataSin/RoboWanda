@@ -26,8 +26,5 @@ public class IKSample : MonoBehaviour
     {
         animator_.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
         animator_.SetIKPosition(AvatarIKGoal.LeftHand, destination_.transform.position);
-
-        //animator_.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
-        //animator_.SetIKRotation(AvatarIKGoal.LeftHand, destination_.transform.rotation);
     }
 }

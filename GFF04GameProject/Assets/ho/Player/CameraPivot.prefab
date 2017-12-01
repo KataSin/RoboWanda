@@ -56,7 +56,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4573419039619944}
   - component: {fileID: 114039206884055584}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: CameraPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,7 +202,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 583151313839a454ea284a22b01b49f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RotateSpeed: 180
+  m_RotateSpeedY: 180
+  m_RotateSpeedX: 90
   m_PitchMax: 30
   m_PitchMin: -40
 --- !u!124 &124449146215364946

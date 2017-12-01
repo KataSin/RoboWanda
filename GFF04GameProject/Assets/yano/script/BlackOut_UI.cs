@@ -12,10 +12,16 @@ public class BlackOut_UI : MonoBehaviour
 
     private Color m_lerp_color;
 
-    private float t;
+    private float t, t1;
 
     [SerializeField]
     private float m_blackFeadTime;
+
+    [SerializeField]
+    private float m_blackFeadTime2;
+
+    [SerializeField]
+    private bool isClear,isClearGO;
 
     // Use this for initialization
     void Start()
@@ -23,14 +29,19 @@ public class BlackOut_UI : MonoBehaviour
         balck_curtain_ = balck_curtain_onj_.GetComponent<Image>();
 
         t = 0f;
+        t1 = 0f;
 
         m_lerp_color = balck_curtain_.color;
+
+
+        isClear = false;
+        isClearGO = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void BlackOut()
@@ -40,5 +51,49 @@ public class BlackOut_UI : MonoBehaviour
         m_lerp_color.a = Mathf.Lerp(0.0f, 1.0f, t / m_blackFeadTime);
 
         balck_curtain_.color = m_lerp_color;
+
+        CheackClear();
+
+    }
+
+    public void FeadIn()
+    {
+        t += 1.0f * Time.deltaTime;
+
+        m_lerp_color.a = Mathf.Lerp(1.0f, 0.0f, t / m_blackFeadTime);
+
+        balck_curtain_.color = m_lerp_color;
+
+        CheackClear();
+    }
+
+    public void GameOverFead()
+    {
+        t1 += 1.0f * Time.deltaTime;
+        
+        m_lerp_color.a = Mathf.Lerp(0.0f, 0.5f, t1 / m_blackFeadTime2);
+
+        balck_curtain_.color = m_lerp_color;
+
+        CheackClear();
+    }
+
+    private void CheackClear()
+    {
+        if (t >= m_blackFeadTime)
+            isClear = true;
+
+        if (t1 >= m_blackFeadTime2)
+            isClearGO = true;
+    }
+
+    public bool Get_Clear()
+    {
+        return isClear;
+    }
+
+    public bool Get_ClearGO()
+    {
+        return isClearGO;
     }
 }
