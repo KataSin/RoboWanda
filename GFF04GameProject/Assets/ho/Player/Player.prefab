@@ -640,7 +640,7 @@ GameObject:
   - component: {fileID: 143475670589342060}
   - component: {fileID: 136173170211221020}
   - component: {fileID: 95461882400070894}
-  - component: {fileID: 114351913251267358}
+  - component: {fileID: 114881641353461562}
   m_Layer: 13
   m_Name: Player
   m_TagString: Player
@@ -2050,14 +2050,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1509400212802182}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 1.324, y: 0, z: 0.009946016}
+  m_LocalScale: {x: 0.7085026, y: 0.7085023, z: 0.7085026}
   m_Children:
   - {fileID: 4463513521050008}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!4 &4890654144347344
 Transform:
   m_ObjectHideFlags: 1
@@ -2232,7 +2232,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114351913251267358
+--- !u!114 &114881641353461562
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -2243,22 +2243,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f34d8e9e5681f143a260cd06cea7e22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MaxSpeed: 4
-  m_AccelPower: 2
+  m_MaxSpeed: 6
+  m_AccelPower: 6
   m_BrakePower: 12
   m_RotateSpeed: 360
-  m_Gravity: 9.8
+  m_Gravity: 18
   m_MaxSpeedDash: 12
   m_AccelPowerDash: 12
-  m_BrakePowerDash: 6
+  m_BrakePowerDash: 18
   m_RotateSpeedDash: 450
-  m_MaxSpeedAiming: 4
+  m_MaxSpeedAiming: 5
   m_MaxBackSpeed: 3
   m_AccelPowerAiming: 4
   m_RotateSpeedAiming: 20
   m_MaxCreepingSpeed: 1
   m_AccelPowerCreeping: 0.5
   m_RotateSpeedCreeping: 45
+  s_Heri: {fileID: 0}
+  rope_destibation_:
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &114981012563883342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2272,7 +2276,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BomPrefab: {fileID: 1671173076217134, guid: 3d9194e6078c3c1479ff9b6ef80262ed,
     type: 2}
-  m_LandingPoint: {fileID: 1075665675467108, guid: 8ad34b54b0269be4a8cc20736301f959,
+  m_LandingPoint: {fileID: 1963355961607182, guid: f66b1b853e0f1e5419fee92a99baabfc,
     type: 2}
   m_Point: {fileID: 1878176742274818, guid: 48804f3a4e577224da4a0e50e2d072fc, type: 2}
   m_Power: 100
