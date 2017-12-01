@@ -9,12 +9,10 @@ public partial class LightShafts : MonoBehaviour
 	{
 		CheckMinRequirements();
 
-        //if (m_Cameras == null || m_Cameras.Length == 0)
-        //    m_Cameras = new Camera[]{Camera.main};
+        if (m_Cameras == null || m_Cameras.Length == 0)
+            m_Cameras = new Camera[] { Camera.main };
 
-        m_Cameras[0] = Camera.main;
-
-		UpdateCameraDepthMode();
+        UpdateCameraDepthMode();
 	}
 
 	void UpdateShadowmap()
