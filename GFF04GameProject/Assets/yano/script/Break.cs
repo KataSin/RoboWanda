@@ -222,7 +222,7 @@ public class Break : MonoBehaviour
             if (!isAfter && !collide_manager_.Get_BreakAfterFlag())
             {
                 Vector3 ba_pos = new Vector3(
-                    transform.position.x, 0f, transform.position.z);
+                    transform.position.x, 10f, transform.position.z);
 
                 if (originBill_obj_ != null)
                 {
