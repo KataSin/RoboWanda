@@ -7,6 +7,13 @@ using UnityEngine;
 /// 製作者：Ho Siu Ki（何兆祺）
 /// </summary>
 
+// カメラモード
+enum PlayerCameraMode
+{
+    Normal,     // 通常
+    Event       // イベント
+}
+
 // カメラ距離
 enum CameraDistance
 {
@@ -83,12 +90,25 @@ public class CameraPosition : MonoBehaviour
     [SerializeField]
     private float m_FarPositionZ = -15.0f;
 
+    // イベントカメラの位置座標
+    private float m_EventPositionX;
+    private float m_EventPositionY;
+    private float m_EventPositionZ;
+
+    // 元のカメラ座標（イベントモードから通常モードに戻るとき、カメラの位置を戻す用）
+    float m_PrevPositionX;
+    float m_PrevPositionY;
+    float m_PrevPositionZ;
+
     [SerializeField]
-    private float m_Speed = 10.0f;
+    private float m_Speed = 10.0f;              // カメラの移動速度（通常モード、距離変更時）
+    [SerializeField]
+    private float m_EventSpeed = 10.0f;         // イベントカメラの移動速度
 
     private GameObject m_Player;                // プレイヤー
     private bool m_IsAiming = false;            // プレイヤーは照準状態であるか
 
+    private PlayerCameraMode m_Mode;            // カメラモード
     private CameraDistance m_Distance;          // カメラとプレイヤーの距離
     private int m_DistanceSelect;
     bool m_IsTriggered;                         // 十字キーの操作判定
@@ -112,6 +132,11 @@ public class CameraPosition : MonoBehaviour
             m_IsAiming = m_Player.GetComponent<PlayerController>().IsAiming();
         }
 
+        m_EventPositionX = 0.0f;
+        m_EventPositionY = 0.0f;
+        m_EventPositionZ = 0.0f;
+
+        m_Mode = PlayerCameraMode.Normal;
         m_DistanceSelect = 2;
         m_IsTriggered = false;
     }
@@ -167,6 +192,118 @@ public class CameraPosition : MonoBehaviour
         // カメラの位置を更新（相対位置を使用）
         transform.localPosition = new Vector3(current_pos_X, current_pos_Y, current_pos_Z);*/
 
+        // カメラの距離を変更
+        /*switch (m_DistanceSelect)
+        {
+            case 0:
+                m_Distance = CameraDistance.VeryClose;
+                break;
+            case 1:
+                m_Distance = CameraDistance.Close;
+                break;
+            case 2:
+                m_Distance = CameraDistance.Normal;
+                break;
+            case 3:
+                m_Distance = CameraDistance.Far;
+                break;
+            default:
+                m_Distance = CameraDistance.Normal;
+                break;
+        }
+
+        // 十字キーの入力が無い場合、操作判定を解除
+        if (Input.GetAxisRaw("Camera_Distance") == 0)
+        {
+            m_IsTriggered = false;
+        }
+        // 十字キーでカメラの距離を選択
+        if (m_IsTriggered == false)
+        {
+            // 上ボタン
+            if (Input.GetAxisRaw("Camera_Distance") < -0.9)
+            {
+                m_IsTriggered = true;
+                m_DistanceSelect = m_DistanceSelect + 1;
+            }
+            // 下ボタン
+            if (Input.GetAxisRaw("Camera_Distance") > 0.9)
+            {
+                m_IsTriggered = true;
+                m_DistanceSelect = m_DistanceSelect - 1;
+            }
+        }
+        m_DistanceSelect = Mathf.Clamp(m_DistanceSelect, 0, 3);
+
+        // カメラの座標を変更
+        Vector3 new_position;
+        switch (m_Distance)
+        {
+            case CameraDistance.VeryClose:
+                new_position.x = m_VeryClosePositionX;
+                new_position.y = m_VeryClosePositionY;
+                new_position.z = m_VeryClosePositionZ;
+                break;
+            case CameraDistance.Close:
+                new_position.x = m_ClosePositionX;
+                new_position.y = m_ClosePositionY;
+                new_position.z = m_ClosePositionZ;
+                break;
+            case CameraDistance.Normal:
+                new_position.x = m_NormalPositionX;
+                new_position.y = m_NormalPositionY;
+                new_position.z = m_NormalPositionZ;
+                break;
+            case CameraDistance.Far:
+                new_position.x = m_FarPositionX;
+                new_position.y = m_FarPositionY;
+                new_position.z = m_FarPositionZ;
+                break;
+            default:
+                new_position.x = m_NormalPositionX;
+                new_position.y = m_NormalPositionY;
+                new_position.z = m_NormalPositionZ;
+                break;
+        }
+        // カメラの位置を更新（相対座標を使用）
+        transform.localPosition = Vector3.Lerp(transform.localPosition, new_position, m_Speed * Time.deltaTime);
+
+        // カメラがフィールドや障害物に透過しないようにする
+        Ray ray = new Ray(m_Player.transform.position + Vector3.up, transform.position - m_Player.transform.position - Vector3.up);
+        float distance = Vector3.Distance(m_Player.transform.position, transform.position);
+        // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
+        RaycastHit hitInfo;
+
+        if (transform.position.y <= 0.1f)
+        {
+            transform.position = new Vector3(transform.position.x, 0.1f, transform.position.z);
+            return;
+        }
+
+        if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
+        {
+            // Debug.Log("壁に遮られた");
+            transform.position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.1f, hitInfo.point.z);
+        }*/
+
+        // カメラの状態に応じて処理を行う
+        switch (m_Mode)
+        {
+            case PlayerCameraMode.Normal:
+                NormalMode();
+                break;
+            case PlayerCameraMode.Event:
+                EventMode();
+                break;
+            default:
+                NormalMode();
+                break;
+        }
+    }
+
+    // 通常時の挙動
+    void NormalMode()
+    {
         // カメラの距離を変更
         switch (m_DistanceSelect)
         {
@@ -260,5 +397,65 @@ public class CameraPosition : MonoBehaviour
             // Debug.Log("壁に遮られた");
             transform.position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.1f, hitInfo.point.z);
         }
+    }
+
+    // イベントカメラの挙動
+    void EventMode()
+    {
+        Vector3 new_position = new Vector3(m_EventPositionX, m_EventPositionY, m_EventPositionZ);
+
+        // カメラの位置を更新
+        transform.position = Vector3.Lerp(transform.position, new_position, m_EventSpeed * Time.deltaTime);
+    }
+
+    // イベントカメラに移行
+    public void ChangeEventMode(float position_x, float position_y, float position_z)
+    {
+        // 現在のカメラ座標を記録（相対座標を使用）
+        m_PrevPositionX = transform.localPosition.x;
+        m_PrevPositionY = transform.localPosition.y;
+        m_PrevPositionZ = transform.localPosition.z;
+
+        // 新しい座標を記録（実際の座標を使用）
+        m_EventPositionX = position_x;
+        m_EventPositionY = position_y;
+        m_EventPositionZ = position_z;
+
+        // イベントモードに移行
+        m_Mode = PlayerCameraMode.Event;
+    }
+
+    // イベントカメラに移行（速度設定アリ）
+    public void ChangeEventMode(float position_x, float position_y, float position_z, float camera_speed)
+    {
+        // 現在のカメラ座標を記録（相対座標を使用）
+        m_PrevPositionX = transform.localPosition.x;
+        m_PrevPositionY = transform.localPosition.y;
+        m_PrevPositionZ = transform.localPosition.z;
+
+        // 新しい座標を記録（実際の座標を使用）
+        m_EventPositionX = position_x;
+        m_EventPositionY = position_y;
+        m_EventPositionZ = position_z;
+
+        // 新しい速度を適用
+        m_EventSpeed = camera_speed;
+
+        // イベントモードに移行
+        m_Mode = PlayerCameraMode.Event;
+    }
+
+    // イベントモードを解除し、通常モードに移行
+    public void ChangeNormalMode()
+    {
+        if (m_Mode == PlayerCameraMode.Normal) return;
+
+        Vector3 origin_position = new Vector3(m_PrevPositionX, m_PrevPositionY, m_PrevPositionZ);
+
+        // カメラの位置を元に戻す（一瞬で戻る）
+        transform.localPosition = origin_position;
+
+        // 通常モードに移行
+        m_Mode = PlayerCameraMode.Normal;
     }
 }
