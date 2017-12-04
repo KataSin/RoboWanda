@@ -67,26 +67,31 @@ public class PlayerController : MonoBehaviour
     // コンポーネントと他の変数
     CharacterController m_Controller;               // キャラクターコントローラー
     Animator m_Animator;                            // アニメーター
+    [SerializeField]
     PlayerState m_State;                            // プレイヤーの状態
     bool m_IsDash;                                  // ダッシュしているか
     bool m_IsAiming;                                // 照準中であるか
     bool m_IsCreeping;                              // 匍匐しているか
     bool m_IsDead;                                  // 死亡しているか
 
-    float m_current_speed;
+    //矢野実装
+    bool m_IsStartFall;                             //ヘリから降下中か
+    bool m_isClear;                                 //Listの中身を消したかどうか
 
-    //ボムスポーン(片岡実装)
-    private GameObject m_BomSpawn;
-    bool m_isClear;
-    bool m_IsStartFall;
-
-    [SerializeField]
     private GameObject s_Heri;
 
     [SerializeField]
     private List<GameObject> rope_destibation_;
 
     float t;
+    //
+
+    float m_current_speed;
+
+    //ボムスポーン(片岡実装)
+    private GameObject m_BomSpawn;
+
+
 
     // Use this for initialization
     void Start()
@@ -112,9 +117,13 @@ public class PlayerController : MonoBehaviour
         //片岡実装
         m_BomSpawn = GameObject.FindGameObjectWithTag("BomSpawn");
 
-        m_Animator.speed = 0;
+        //矢野実装
+        s_Heri = GameObject.FindGameObjectWithTag("StartHeri");
+
+        m_Animator.speed = 0f;
 
         t = 0f;
+        //
     }
 
     // Update is called once per frame
@@ -173,7 +182,8 @@ public class PlayerController : MonoBehaviour
 
 
         // アニメーターにプレイヤーの状態を知らせる
-        m_Animator.SetBool("IsGrounded", m_Controller.isGrounded);
+        if (m_State != PlayerState.StartFall)
+            m_Animator.SetBool("IsGrounded", m_Controller.isGrounded);
         m_Animator.SetBool("IsAiming", m_IsAiming);
         m_Animator.SetBool("IsCreeping", m_IsCreeping);
         m_Animator.SetBool("IsDead", m_IsDead);
@@ -218,7 +228,8 @@ public class PlayerController : MonoBehaviour
 
     void Fall()
     {
-        if (transform.position.y <= 13.5f)
+        if (transform.position.y <= 13.5f
+            || s_Heri == null)
         {
             m_Animator.speed = 1;
             m_IsStartFall = false;
@@ -238,7 +249,8 @@ public class PlayerController : MonoBehaviour
             transform.parent = null;
         }
 
-        if (s_Heri.GetComponent<PlayStartHeri>().Get_StopFlag() == true
+        if (s_Heri != null
+            && s_Heri.GetComponent<PlayStartHeri>().Get_StopFlag() == true
             && m_IsStartFall)
         {
             for (int i = 0; i < rope_destibation_.Count; i++)
