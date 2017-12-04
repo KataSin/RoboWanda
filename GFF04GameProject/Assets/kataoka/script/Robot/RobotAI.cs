@@ -37,6 +37,13 @@ public class RobotAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (manager.GetRobotHP() <= 0)
+        {
+            manager.SetAction(RobotAction.RobotState.ROBOT_DEAD, false, true);
+            return;
+        }
+
         //見えてたら
         GameObject player;
         attackTime += Time.deltaTime;
@@ -86,10 +93,7 @@ public class RobotAI : MonoBehaviour
             manager.SetAction(RobotAction.RobotState.ROBOT_IDLE, true);
         }
 
-        if (manager.GetRobotHP() <= 0)
-        {
-            manager.SetAction(RobotAction.RobotState.ROBOT_DEAD,false,true);
-        }
+
 
     }
 
