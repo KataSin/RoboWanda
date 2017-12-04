@@ -55,6 +55,8 @@ public class RobotManager : MonoBehaviour
         AddAction(RobotAction.RobotState.ROBOT_BILL_BREAK, m_RobotAction.RobotBillBreak());
         AddAction(RobotAction.RobotState.ROBOT_FALL_DOWN, m_RobotAction.RobotFallDown());
         AddAction(RobotAction.RobotState.ROBOT_MISSILE_ATTACK, m_RobotAction.RobotMissileAttack());
+        AddAction(RobotAction.RobotState.ROBOT_DEAD, m_RobotAction.RobotDead());
+
         m_IsLoop = true;
 
         m_IsDead = false;
@@ -68,10 +70,9 @@ public class RobotManager : MonoBehaviour
         //Text text = GameObject.FindGameObjectWithTag("RobotHp").GetComponent<Text>();
         //text.text = "RobotHp:" + m_RobotHp.ToString();
 
-        //ロボット死んだ処理
-        if (m_RobotHp <= 0)
+        if (Input.GetKey(KeyCode.N))
         {
-            m_IsDead = true;
+            m_RobotHp = 0;
         }
 
         //アクションのスタート
@@ -156,14 +157,6 @@ public class RobotManager : MonoBehaviour
     /// </summary>
     public void Dead()
     {
-        Destroy(transform.Find("LookAtObject").gameObject);
-        Destroy(transform.Find("GoPoint").gameObject);
-        Destroy(transform.Find("RobotAI").gameObject);
-
-
-        Destroy(gameObject.GetComponent<NavMeshAgent>());
-        Destroy(gameObject.GetComponent<RobotAction>());
-        Destroy(gameObject.GetComponent<RobotLegManager>());
 
     }
 }

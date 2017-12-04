@@ -24,7 +24,8 @@ public class RobotAction : MonoBehaviour
         ROBOT_BILL_BREAK,
         ROBOT_FALL_DOWN,
         ROBOT_MISSILE_ATTACK,
-        ROBOT_HELI_ATTACK
+        ROBOT_HELI_ATTACK,
+        ROBOT_DEAD
     }
 
     [SerializeField, Tooltip("ロボットのスピード"), HeaderAttribute("ロボット移動関係")]
@@ -702,6 +703,36 @@ public class RobotAction : MonoBehaviour
             m_SearchFlag = true;
         }
     }
+
+
+    public RobotManager.ActionFunc RobotDead()
+    {
+        Action robotDeadStart = () =>
+        {
+        };
+
+
+        Func<bool> robotDead = () =>
+        {
+            m_IsIK = false;
+            m_NavAgent.isStopped = true;
+            m_NavAgent.velocity = Vector3.zero;
+            bool endAnim = false;
+
+            //死んだらもう何も移行しない
+            m_RobotState = RobotState.ROBOT_DEAD;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+            return endAnim;
+        };
+
+
+
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = robotDeadStart;
+        func.actionUpdate = robotDead;
+        return func;
+    }
+
     /// <summary>
     /// プレイヤーを見るアップデート
     /// </summary>

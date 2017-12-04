@@ -85,6 +85,12 @@ public class RobotAI : MonoBehaviour
         {
             manager.SetAction(RobotAction.RobotState.ROBOT_IDLE, true);
         }
+
+        if (manager.GetRobotHP() <= 0)
+        {
+            manager.SetAction(RobotAction.RobotState.ROBOT_DEAD,false,true);
+        }
+
     }
 
 
