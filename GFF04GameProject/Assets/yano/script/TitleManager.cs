@@ -54,12 +54,15 @@ public class TitleManager : MonoBehaviour
     [SerializeField]
     private GameObject sceneCnt_;
 
+    private bool isLScene;
+
     // Use this for initialization
     void Start()
     {
         //scene_ = GameObject.Find("SceneController").GetComponent<SceneController>();
         nextViewTimer = 0f;
         m_feadSTimer = 0f;
+        isLScene = false;
     }
 
     // Update is called once per frame
@@ -144,8 +147,12 @@ public class TitleManager : MonoBehaviour
             {
                 blackoutCurtain_.GetComponent<BlackOut_UI>().BlackOut();
 
-                if (blackoutCurtain_.GetComponent<BlackOut_UI>().Get_Clear() == true)
-                    sceneCnt_.GetComponent<SceneController>().SceneChange("NightTest 1");
+                if (blackoutCurtain_.GetComponent<BlackOut_UI>().Get_Clear() == true
+                    && !isLScene)
+                {
+                    StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("Loading"));
+                    isLScene = true;
+                }
             }
         }
 
