@@ -113,7 +113,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1313202791067960}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.37, y: 4.85, z: 0.66}
+  m_LocalPosition: {x: 0.157, y: 1.461, z: -0.125}
   m_LocalScale: {x: 1, y: 1.0000001, z: 1.0000001}
   m_Children: []
   m_Father: {fileID: 4156131484190994}
@@ -126,8 +126,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1742880916990780}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -421.2, y: -71.50004, z: -0.2999878}
-  m_LocalScale: {x: 30.6052, y: 30.605196, z: 30.605196}
+  m_LocalPosition: {x: 137.84583, y: -47.039997, z: 69.600006}
+  m_LocalScale: {x: 30.6052, y: 30.605198, z: 30.605198}
   m_Children:
   - {fileID: 4722938256516344}
   - {fileID: 4302083280062602}
@@ -143,7 +143,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1291654693738338}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.46, y: 4.36, z: -1.82}
+  m_LocalPosition: {x: 0.803, y: 1.577, z: -0.765}
   m_LocalScale: {x: 1, y: 1.0000001, z: 1.0000001}
   m_Children: []
   m_Father: {fileID: 4156131484190994}
@@ -155,8 +155,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1270307576221476}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 176, y: 84, z: 274}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -224.24582, y: 46.1, z: 28.09999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4156131484190994}
@@ -170,7 +170,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1060371732628692}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.94, y: 6.31, z: 0}
+  m_LocalPosition: {x: 1.582, y: 1.791, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4156131484190994}
@@ -183,7 +183,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1880675352519124}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.73, y: 3.709, z: 0.41}
+  m_LocalPosition: {x: 0.194, y: 1.97, z: 0.566}
   m_LocalScale: {x: 1, y: 1.0000001, z: 1.0000001}
   m_Children: []
   m_Father: {fileID: 4156131484190994}
@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb0e72198183beb4980712c17b03d0be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PointSpeed: 10
+  m_PointSpeed: 2
 --- !u!114 &114341638380598154
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb0e72198183beb4980712c17b03d0be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PointSpeed: -6
+  m_PointSpeed: -0.5
 --- !u!114 &114683782427400724
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb0e72198183beb4980712c17b03d0be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PointSpeed: 6
+  m_PointSpeed: -0.1
 --- !u!114 &114972231629821746
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -237,7 +237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_MaxHelicopter: 4
-  m_HelicopterPrefab: {fileID: 1100528365688664, guid: a966b2c38d28d5d4e983242ff30646ab,
+  m_HelicopterPrefab: {fileID: 1902529391699550, guid: a966b2c38d28d5d4e983242ff30646ab,
     type: 2}
 --- !u!114 &114980779628778890
 MonoBehaviour:
@@ -250,4 +250,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb0e72198183beb4980712c17b03d0be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PointSpeed: 9
+  m_PointSpeed: 1.5

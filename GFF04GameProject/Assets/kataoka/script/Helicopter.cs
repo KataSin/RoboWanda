@@ -64,7 +64,7 @@ public class Helicopter : MonoBehaviour
 
         m_Propeller.transform.localEulerAngles += new Vector3(0,0,1000)*Time.deltaTime;
 
-        Spring(m_ResPos, ref m_Pos, ref m_Velo, 0.06f, 0.1f, 7.0f);
+        Spring(m_ResPos, ref m_Pos, ref m_Velo, 0.2f, 0.5f, 7.0f);
         transform.position = m_Pos;
 
     }
