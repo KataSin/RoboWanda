@@ -17,7 +17,7 @@ public class testScript : MonoBehaviour
         //自身のメッシュ取得
         m_DeadRobotMeshs = GetRobotMesh(transform.GetComponentsInChildren<Transform>());
 
-        m_RobotMeshs.Sort(delegate(GameObject left,GameObject right) { return string.Compare(left.name, right.name); });
+        m_RobotMeshs.Sort(delegate (GameObject left, GameObject right) { return string.Compare(left.name, right.name); });
         m_DeadRobotMeshs.Sort(delegate (GameObject left, GameObject right) { return string.Compare(left.name, right.name); });
         int a = 0;
 
@@ -27,18 +27,17 @@ public class testScript : MonoBehaviour
     void Update()
     {
         int count = 0;
-        foreach(var i in m_RobotMeshs)
+        foreach (var i in m_RobotMeshs)
         {
             if (i.name != m_DeadRobotMeshs[count].name)
             {
                 int a = 0;
                 continue;
             }
-            m_DeadRobotMeshs[count].transform.position = i.GetComponent<SkinnedMeshRenderer>().rootBone.gameObject.transform.position+new Vector3(50,0,0);
-            m_DeadRobotMeshs[count].transform.rotation = i.GetComponent<SkinnedMeshRenderer>().rootBone.gameObject.transform.rotation;
+            SkinnedMeshRenderer mesh = i.GetComponent<SkinnedMeshRenderer>();
+            m_DeadRobotMeshs[count].transform.position = mesh.rootBone.gameObject.transform.position+mesh.bounds.center;
+            m_DeadRobotMeshs[count].transform.rotation = mesh.rootBone.gameObject.transform.rotation;
 
-            var bones = i.GetComponent<SkinnedMeshRenderer>().bones;
-            
             count++;
         }
     }
@@ -52,7 +51,7 @@ public class testScript : MonoBehaviour
     private List<GameObject> GetRobotMesh(Transform[] trans)
     {
         List<GameObject> meshs = new List<GameObject>();
-        foreach(var i in trans)
+        foreach (var i in trans)
         {
             string name = i.gameObject.name.Substring(0, 3);
             if (name == "Cyl" ||
