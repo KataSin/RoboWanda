@@ -41,7 +41,7 @@ public class Break_Other : MonoBehaviour
         {
             m_break_time += 1f * Time.deltaTime;
 
-            m_down_pos_Y += 0.1f * transform.localScale.y * Time.deltaTime;
+            m_down_pos_Y += 0.01f * transform.localScale.y * Time.deltaTime;
 
             Collapse();
 

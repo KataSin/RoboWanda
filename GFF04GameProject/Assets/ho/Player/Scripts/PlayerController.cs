@@ -228,7 +228,7 @@ public class PlayerController : MonoBehaviour
 
     void Fall()
     {
-        if (transform.position.y <= 13.5f
+        if (transform.position.y <= 0.7f
             || s_Heri == null)
         {
             m_Animator.speed = 1;
@@ -257,9 +257,6 @@ public class PlayerController : MonoBehaviour
                 rope_destibation_[i].transform.position -= transform.up / 4f;
             transform.position -= transform.up / 4f;
         }
-
-
-
     }
 
     void OnAnimatorIK()

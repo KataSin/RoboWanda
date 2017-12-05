@@ -43,6 +43,10 @@ public class Break : MonoBehaviour
     private float m_break_time;
 
     //ビルの回転
+    [SerializeField]
+    private Quaternion m_origin_rotation;
+
+    //ビルの回転
     private Quaternion m_Bill_rotation;
 
     //破壊後の回転
@@ -67,6 +71,9 @@ public class Break : MonoBehaviour
     [SerializeField]
     private GameObject originBill_obj_;
 
+    [SerializeField]
+    private float m_origin_rotationY;
+
     // Use this for initialization
     void Start()
     {
@@ -78,8 +85,9 @@ public class Break : MonoBehaviour
         TypeAdaptation();
 
         //初期化
-        m_Bill_rotation = Quaternion.identity;
-        m_Break_rotation = Quaternion.identity;
+        m_origin_rotation = transform.rotation;
+        //m_Bill_rotation = Quaternion.identity;
+        //m_Break_rotation = Quaternion.identity;
 
         navMOb_ = navMOb_obj_.GetComponent<NavMeshObstacle>();
     }
@@ -148,7 +156,7 @@ public class Break : MonoBehaviour
         //回転
         if (!collide_manager_.Get_BreakAfterFlag())
             transform.rotation =
-                Quaternion.Lerp(Quaternion.Euler(0f, 0f, 0f), m_Bill_rotation, m_break_time / m_rotated_time);
+                Quaternion.Lerp(m_origin_rotation, m_Bill_rotation, m_break_time / m_rotated_time);
     }
 
     //倒壊方向判定
@@ -161,32 +169,32 @@ public class Break : MonoBehaviour
                 //前
                 case 1:
                     OutBreak_Smoke();
-                    m_Bill_rotation = Quaternion.Euler(90f, 0f, 0f);
-                    m_Break_rotation = Quaternion.Euler(90f, 0f, 0f);
+                    m_Bill_rotation = Quaternion.Euler(90f, m_origin_rotationY, 0f);
+                    m_Break_rotation = Quaternion.Euler(90f, m_origin_rotationY, 0f);
 
                     break;
 
                 //左
                 case 2:
                     OutBreak_Smoke();
-                    m_Bill_rotation = Quaternion.Euler(0f, 0f, 90f);
-                    m_Break_rotation = Quaternion.Euler(0f, 0f, 90f);
+                    m_Bill_rotation = Quaternion.Euler(0f, m_origin_rotationY, 90f);
+                    m_Break_rotation = Quaternion.Euler(0f, m_origin_rotationY, 90f);
 
                     break;
 
                 //後ろ
                 case 3:
                     OutBreak_Smoke();
-                    m_Bill_rotation = Quaternion.Euler(-90f, 0f, 0f);
-                    m_Break_rotation = Quaternion.Euler(-90f, 0f, 0f);
+                    m_Bill_rotation = Quaternion.Euler(-90f, m_origin_rotationY, 0f);
+                    m_Break_rotation = Quaternion.Euler(-90f, m_origin_rotationY, 0f);
 
                     break;
 
                 //右
                 case 4:
                     OutBreak_Smoke();
-                    m_Bill_rotation = Quaternion.Euler(0f, 0f, -90f);
-                    m_Break_rotation = Quaternion.Euler(0f, 0f, -90f);
+                    m_Bill_rotation = Quaternion.Euler(0f, m_origin_rotationY, -90f);
+                    m_Break_rotation = Quaternion.Euler(0f, m_origin_rotationY, -90f);
 
                     break;
 
@@ -202,7 +210,7 @@ public class Break : MonoBehaviour
         if (!isOutBreak)
         {
             Vector3 ob_pos = transform.position;
-            //ob_pos.y = 0f;
+            ob_pos.y = 0f;
             GameObject smoke = Instantiate(sand_smoke_manager_, ob_pos, Quaternion.identity);
             smoke.transform.Find("desert_Horizontal").localScale = transform.localScale * m_sand_smoke_scalar;
             smoke.transform.Find("desert_Vertical").localScale = transform.localScale * m_sand_smoke_scalar;
@@ -222,7 +230,7 @@ public class Break : MonoBehaviour
             if (!isAfter && !collide_manager_.Get_BreakAfterFlag())
             {
                 Vector3 ba_pos = new Vector3(
-                    transform.position.x, 10f, transform.position.z);
+                    transform.position.x, 0f, transform.position.z);
 
                 if (originBill_obj_ != null)
                 {

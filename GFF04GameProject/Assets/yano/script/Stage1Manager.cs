@@ -19,27 +19,36 @@ public class Stage1Manager : MonoBehaviour
     [SerializeField]
     private List<GameObject> arows_;
 
+    [SerializeField]
+    private GameObject robot_;
+
     private OverState state_ = OverState.Retry;
+
+    float test;
+
+    private bool isLScene;
 
     // Use this for initialization
     void Start()
     {
         scene_ = GameObject.Find("SceneController").GetComponent<SceneController>();
+        test = 0f;
+        isLScene = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(black_curtain_.GetComponent<BlackOut_UI>().Get_ClearGO())
+        if (black_curtain_.GetComponent<BlackOut_UI>().Get_ClearGO())
         {
-            if(state_==OverState.Retry)
+            if (state_ == OverState.Retry)
             {
                 arows_[0].SetActive(true);
                 arows_[1].SetActive(false);
                 arows_[2].SetActive(false);
 
-                if(Input.GetKeyDown(KeyCode.Return))
-                    scene_.SceneChange("NightTest 1");
+                if (Input.GetKeyDown(KeyCode.Return))
+                    scene_.SceneChange("newnewNightTest 1");
 
                 if (Input.GetKeyDown(KeyCode.DownArrow))
                     state_ = OverState.TitleTo;
@@ -53,7 +62,7 @@ public class Stage1Manager : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Return))
                     scene_.SceneChange("Title");
 
-                
+
 
                 if (Input.GetKeyDown(KeyCode.UpArrow))
                     state_ = OverState.Retry;
@@ -72,6 +81,13 @@ public class Stage1Manager : MonoBehaviour
             }
         }
 
+        if (black_curtain_.GetComponent<BlackOut_UI>().Get_ClearGC()
+            && !isLScene)
+        {
+            StartCoroutine(scene_.SceneLoad("Result"));
+            isLScene = true;
+        }
+
         //ステージ上の全キャラクターのHPチェック
         Check_CharaHp();
     }
@@ -79,8 +95,12 @@ public class Stage1Manager : MonoBehaviour
     //ステージ上の全キャラクターのHPチェック
     private void Check_CharaHp()
     {
-        //if (robotMana_.GetRobotHP() <= 0)
-        //    scene_.SceneChange("Result");
+        if (robot_.GetComponent<RobotManager>().GetRobotHP() <= 0f)
+        {
+            test += 1.0f * Time.deltaTime;
+            if (test >= 35.0f)
+                black_curtain_.GetComponent<BlackOut_UI>().GameClearFead();
+        }
 
         //else if (player_.IsDead())
         //    scene_.SceneChange("GameOver");

@@ -23,7 +23,7 @@ public class LoadingManager : MonoBehaviour
     {
         if(!isLScene)
         {
-            StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("NightTest 1"));
+            StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("newnewNightTest 1"));
             isLScene = true;
         }
     }

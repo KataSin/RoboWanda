@@ -95,19 +95,21 @@ public class tower_collide : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<RobotDamage>() != null
-            &&
-            parent_Tower_.transform.rotation != Quaternion.identity)
-        {
-            isOriginChange = true;
-        }
+        //if (other.GetComponent<RobotDamage>() != null
+        //    &&
+        //    parent_Tower_.transform.rotation != Quaternion.identity)
+        //{
+        //    isOriginChange = true;
+        //}
 
         //ここに対象オブジェクトを指名
-        if ((other.gameObject.tag == "bom"
+        if (other.GetComponent<RobotDamage>() != null
+            || 
+            other.gameObject.tag == "bom"
             ||
             other.gameObject.tag == "RobotArmAttack"
             ||
-            other.gameObject.tag == "RobotBeam")
+            other.gameObject.tag == "RobotBeam"
             ||
             other.gameObject.tag == "Missile")
         {

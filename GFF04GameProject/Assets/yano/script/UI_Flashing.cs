@@ -44,9 +44,12 @@ public class UI_Flashing : MonoBehaviour
 
     private void Alpha_Flashing()
     {
-        if(canvas_.GetComponent<TitleManager>().titleState_==TitleManager.TitleState.Start)
+        if (canvas_ != null)
         {
-            m_flsh_timer = 0.1f;
+            if (canvas_.GetComponent<TitleManager>().titleState_ == TitleManager.TitleState.Start)
+            {
+                m_flsh_timer = 0.1f;
+            }
         }
 
         m_lerp_color = ui_text_.color;
