@@ -70,7 +70,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1660377369132156}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4573419039619944}
@@ -166,18 +166,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_VeryClosePositionX: 1
-  m_VeryClosePositionY: -0.1
+  m_VeryClosePositionY: 0.5
   m_VeryClosePositionZ: -2
   m_ClosePositionX: 0
   m_ClosePositionY: 0.5
   m_ClosePositionZ: -3
   m_NormalPositionX: 0
-  m_NormalPositionY: 0.5
+  m_NormalPositionY: 1.5
   m_NormalPositionZ: -5
   m_FarPositionX: 0
-  m_FarPositionY: 0.5
+  m_FarPositionY: 1.5
   m_FarPositionZ: -20
   m_Speed: 10
+  m_EventSpeed: 10
 --- !u!114 &114536233480326674
 MonoBehaviour:
   m_ObjectHideFlags: 1
