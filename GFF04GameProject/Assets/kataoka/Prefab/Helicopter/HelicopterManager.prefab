@@ -113,7 +113,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1313202791067960}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.157, y: 1.461, z: -0.125}
+  m_LocalPosition: {x: -0.163, y: 1.461, z: -0.316}
   m_LocalScale: {x: 1, y: 1.0000001, z: 1.0000001}
   m_Children: []
   m_Father: {fileID: 4156131484190994}
@@ -143,7 +143,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1291654693738338}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.803, y: 1.577, z: -0.765}
+  m_LocalPosition: {x: 0.803, y: 1.577, z: -1.117}
   m_LocalScale: {x: 1, y: 1.0000001, z: 1.0000001}
   m_Children: []
   m_Father: {fileID: 4156131484190994}
@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb0e72198183beb4980712c17b03d0be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PointSpeed: 2
+  m_PointSpeed: 4
 --- !u!114 &114341638380598154
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb0e72198183beb4980712c17b03d0be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PointSpeed: -0.5
+  m_PointSpeed: -1
 --- !u!114 &114683782427400724
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb0e72198183beb4980712c17b03d0be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PointSpeed: -0.1
+  m_PointSpeed: -0.5
 --- !u!114 &114972231629821746
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -250,4 +250,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb0e72198183beb4980712c17b03d0be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PointSpeed: 1.5
+  m_PointSpeed: 3
