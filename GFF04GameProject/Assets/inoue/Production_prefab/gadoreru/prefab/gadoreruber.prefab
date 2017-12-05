@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33332382026281316}
   - component: {fileID: 23753338481084370}
   - component: {fileID: 65600057738162892}
+  - component: {fileID: 208834274621932104}
   m_Layer: 0
   m_Name: gadoreruber
   m_TagString: Untagged
@@ -36,7 +37,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1528150442409976}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.773044, y: 0.43853155, z: -12.827842}
+  m_LocalPosition: {x: -5.554, y: 0.43853155, z: -13.064}
   m_LocalScale: {x: 0.35, y: 0.35, z: 0.35}
   m_Children: []
   m_Father: {fileID: 0}
@@ -93,3 +94,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.22275628, y: 2.1683493, z: 0.23421943}
   m_Center: {x: 0.008216265, y: 1.0443943, z: 0.010782591}
+--- !u!208 &208834274621932104
+NavMeshObstacle:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1528150442409976}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.11100001, y: 1.0840001, z: 0.117000006}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.008, y: 1.044, z: 0.011000001}
+  m_TimeToStationary: 0.5
