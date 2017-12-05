@@ -234,18 +234,22 @@ public class PlayerController : MonoBehaviour
             m_Animator.speed = 1;
             m_IsStartFall = false;
 
-            if (!m_isClear)
-            {
-                Destroy(rope_destibation_[1]);
-                rope_destibation_.RemoveAt(1);
-                Destroy(rope_destibation_[0]);
-                rope_destibation_.RemoveAt(0);
-
-                m_isClear = true;
-            }
+            
             t += 1.0f * Time.deltaTime;
             if (t >= 0.8f)
+            {
                 m_State = PlayerState.Normal;
+
+                if (!m_isClear)
+                {
+                    Destroy(rope_destibation_[1]);
+                    rope_destibation_.RemoveAt(1);
+                    Destroy(rope_destibation_[0]);
+                    rope_destibation_.RemoveAt(0);
+
+                    m_isClear = true;
+                }
+            }
             transform.parent = null;
         }
 
