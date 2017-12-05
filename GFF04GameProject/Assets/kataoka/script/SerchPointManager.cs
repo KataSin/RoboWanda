@@ -49,7 +49,7 @@ public class SerchPointManager : MonoBehaviour
 
         for (int i = 0; i <= m_SerchLights.Count - 1; i++)
         {
-            if (m_SerchLights[i] == null)
+            if (m_SerchLights[i].GetComponent<NavMeshAgent>() == null)
             {
                 int random = Random.Range(0, m_SpawnPoints.Count - 1);
                 m_SerchLights[i] = Instantiate(m_SerchLightPrefab, m_SpawnPoints[random], Quaternion.identity);
