@@ -88,9 +88,9 @@ public class PlayStartHeri : MonoBehaviour
 
 
                         t2 += 1.0f * Time.deltaTime;
-                        rope_obj_.transform.localPosition = Vector3.Lerp(new Vector3(m_originL_Ropepos.x, 14f, m_originL_Ropepos.z), new Vector3(m_originL_Ropepos.x, -13f, m_originL_Ropepos.z), t2 / 1.5f);
+                        //rope_obj_.transform.localPosition = Vector3.Lerp(new Vector3(m_originL_Ropepos.x, 14f, m_originL_Ropepos.z), new Vector3(m_originL_Ropepos.x, -13f, m_originL_Ropepos.z), t2 / 1.5f);
 
-                        if (t2 >= 1.5f)
+                        if (t2 >= 1f)
                             isStop = true;
                     }
 
