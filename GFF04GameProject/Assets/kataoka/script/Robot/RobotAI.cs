@@ -83,7 +83,11 @@ public class RobotAI : MonoBehaviour
 
             if (Vector3.Distance(agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject().transform.position, agent.transform.position) <= 100.0f)
             {
-                manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
+                if (attackTime >= 10.0f)
+                {
+                    manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
+                    attackTime = 0.0f;
+                }
                 return;
             }
             manager.SetAction(RobotAction.RobotState.ROBOT_TO_BILL_MOVE, true);
