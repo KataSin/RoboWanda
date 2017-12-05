@@ -46,9 +46,6 @@ public class TitleManager : MonoBehaviour
     [SerializeField]
     private GameObject Heri;
 
-    [SerializeField]
-    private GameObject blackoutCurtain_;
-
     private float m_feadSTimer;
 
     [SerializeField]
@@ -145,9 +142,9 @@ public class TitleManager : MonoBehaviour
 
             if (m_feadSTimer >= 4f)
             {
-                blackoutCurtain_.GetComponent<BlackOut_UI>().BlackOut();
+                GetComponent<BlackOut_UI>().BlackOut();
 
-                if (blackoutCurtain_.GetComponent<BlackOut_UI>().Get_Clear() == true
+                if (GetComponent<BlackOut_UI>().Get_Clear() == true
                     && !isLScene)
                 {
                     StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("Loading"));
