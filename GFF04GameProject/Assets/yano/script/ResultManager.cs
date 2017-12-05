@@ -16,9 +16,6 @@ public class ResultManager : MonoBehaviour
     private SceneController scene_;
 
     [SerializeField]
-    private GameObject black_curtain_;
-
-    [SerializeField]
     private GameObject camera_;
 
     [SerializeField]
@@ -48,7 +45,7 @@ public class ResultManager : MonoBehaviour
     {
         if (state_ == ResultState.Fead)
         {
-            black_curtain_.GetComponent<BlackOut_UI>().FeadIn();
+            GetComponent<BlackOut_UI>().FeadIn();
             camera_.GetComponent<ResultCamera>().ResultMove();
 
             if (camera_.GetComponent<ResultCamera>().Get_Clear())
@@ -62,7 +59,7 @@ public class ResultManager : MonoBehaviour
 
             if (Input.anyKeyDown)
             {
-                black_curtain_.GetComponent<BlackOut_UI>().ResetT();
+                GetComponent<BlackOut_UI>().ResetT();
                 state_ = ResultState.Finish;
             }
         }
@@ -75,9 +72,9 @@ public class ResultManager : MonoBehaviour
 
             if (m_finishTimer >= 4f)
             {
-                black_curtain_.GetComponent<BlackOut_UI>().BlackOut();
+                GetComponent<BlackOut_UI>().BlackOut();
 
-                if (black_curtain_.GetComponent<BlackOut_UI>().Get_Clear()
+                if (GetComponent<BlackOut_UI>().Get_Clear()
                     && !isLScene)
                 {
                     StartCoroutine(scene_.SceneLoad("Title"));

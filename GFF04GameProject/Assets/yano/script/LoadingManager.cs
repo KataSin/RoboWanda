@@ -7,9 +7,6 @@ public class LoadingManager : MonoBehaviour
     [SerializeField]
     private GameObject sceneCnt_;
 
-    [SerializeField]
-    private GameObject neko_;
-
     private bool isLScene;
 
     // Use this for initialization
