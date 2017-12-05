@@ -9,6 +9,12 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    enum PlayerCameraMode
+    {
+        Normal,     // 通常
+        Event,       // イベント
+    }
+
     [SerializeField]
     private float m_RotateSpeedY = 180.0f;  // y軸回転速度
     [SerializeField]
@@ -23,6 +29,12 @@ public class CameraController : MonoBehaviour
     Vector3 offset;                         // プレイヤーとカメラ間のオフセット距離
     GameObject m_Player;                    // プレイヤーオブジェクト
 
+    [SerializeField]
+    private PlayerCameraMode mode_;
+
+    [SerializeField]
+    private GameObject cameraPos_;
+
     // Use this for initialization
     void Start()
     {
@@ -32,6 +44,8 @@ public class CameraController : MonoBehaviour
         {
             offset = transform.position - m_Player.transform.position;
         }
+
+        mode_ = PlayerCameraMode.Event;
     }
 
     // Update is called once per frame
@@ -39,29 +53,54 @@ public class CameraController : MonoBehaviour
     {
         if (m_Player != null)
         {
-            if (!m_Player.GetComponent<PlayerController>().IsDead())
+            CheckMode();
+
+            if (m_Player.GetComponent<PlayerController>().GetPlayerState() == 0)
             {
-                // 回転
-                // 方向入力を取得
-                float axisVertical = Input.GetAxisRaw("Vertical_R");        // x軸
-                float axisHorizontal = Input.GetAxisRaw("Horizontal_R");    // y軸
+                offset = transform.position - m_Player.transform.position;
+            }
 
-                transform.Rotate(Vector3.up, axisHorizontal * Time.deltaTime * m_RotateSpeedY, Space.World);  // y軸回転
+            if (mode_ == PlayerCameraMode.Normal)
+            {
+                if (!m_Player.GetComponent<PlayerController>().IsDead())
+                {
+                    // 回転
+                    // 方向入力を取得
+                    float axisVertical = Input.GetAxisRaw("Vertical_R");        // x軸
+                    float axisHorizontal = Input.GetAxisRaw("Horizontal_R");    // y軸
 
-                // x軸回転
-                pitch += axisVertical * Time.deltaTime * m_RotateSpeedX;
-                pitch = Mathf.Clamp(pitch, m_PitchMin, m_PitchMax);        // 角度を制限する
+                    transform.Rotate(Vector3.up, axisHorizontal * Time.deltaTime * m_RotateSpeedY, Space.World);  // y軸回転
 
-                Vector3 rotation = transform.rotation.eulerAngles;
-                rotation.x = pitch;
-                transform.rotation = Quaternion.Euler(rotation);
-                rotation.z = 0.0f;
+                    // x軸回転
+                    pitch += axisVertical * Time.deltaTime * m_RotateSpeedX;
+                    pitch = Mathf.Clamp(pitch, m_PitchMin, m_PitchMax);        // 角度を制限する
+
+                    Vector3 rotation = transform.rotation.eulerAngles;
+                    rotation.x = pitch;
+                    transform.rotation = Quaternion.Euler(rotation);
+                    rotation.z = 0.0f;
+                }
             }
         }
     }
 
     void LateUpdate()
     {
-        transform.position = m_Player.transform.position + offset;
+        if (mode_ == PlayerCameraMode.Normal)
+            transform.position = m_Player.transform.position + offset;
+    }
+
+    private void CheckMode()
+    {
+        switch (cameraPos_.GetComponent<CameraPosition>().GetMode())
+        {
+            case 1:
+                mode_ = PlayerCameraMode.Normal;
+                break;
+
+            default:
+                mode_ = PlayerCameraMode.Event;
+                break;
+        }
     }
 }

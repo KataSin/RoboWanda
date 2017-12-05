@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class BlackOut_UI : MonoBehaviour
 {
     [SerializeField]
-    private GameObject balck_curtain_onj_;
+    private GameObject black_curtain_obj_;
 
-    private Image balck_curtain_;
+    private Image black_curtain_;
 
     private Color m_lerp_color;
 
@@ -26,13 +26,13 @@ public class BlackOut_UI : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        balck_curtain_ = balck_curtain_onj_.GetComponent<Image>();
+        black_curtain_ = black_curtain_obj_.GetComponent<Image>();
 
         t = 0f;
         t1 = 0f;
         t2 = 0f;
 
-        m_lerp_color = balck_curtain_.color;
+        m_lerp_color = black_curtain_.color;
 
 
         isClear = false;
@@ -52,7 +52,7 @@ public class BlackOut_UI : MonoBehaviour
 
         m_lerp_color.a = Mathf.Lerp(0.0f, 1.0f, t / m_blackFeadTime);
 
-        balck_curtain_.color = m_lerp_color;
+        black_curtain_.color = m_lerp_color;
 
         CheackClear();
 
@@ -64,7 +64,7 @@ public class BlackOut_UI : MonoBehaviour
 
         m_lerp_color.a = Mathf.Lerp(1.0f, 0.0f, t / m_blackFeadTime);
 
-        balck_curtain_.color = m_lerp_color;
+        black_curtain_.color = m_lerp_color;
 
         CheackClear();
     }
@@ -75,7 +75,7 @@ public class BlackOut_UI : MonoBehaviour
 
         m_lerp_color.a = Mathf.Lerp(0.0f, 1.0f, t1 / m_blackFeadTime2);
 
-        balck_curtain_.color = m_lerp_color;
+        black_curtain_.color = m_lerp_color;
 
         CheackClear();
     }
@@ -84,9 +84,9 @@ public class BlackOut_UI : MonoBehaviour
     {
         t2 += 1.0f * Time.deltaTime;
 
-        m_lerp_color.a = Mathf.Lerp(0.0f, 0.5f, t2 / m_blackFeadTime2);
+        m_lerp_color.a = Mathf.Lerp(0.0f, 0.3f, t2 / m_blackFeadTime2);
 
-        balck_curtain_.color = m_lerp_color;
+        black_curtain_.color = m_lerp_color;
 
         CheackClear();
     }

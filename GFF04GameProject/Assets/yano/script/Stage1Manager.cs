@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Stage1Manager : MonoBehaviour
 {
@@ -13,8 +14,7 @@ public class Stage1Manager : MonoBehaviour
         TurtorialTo,
     }
 
-    [SerializeField]
-    private GameObject black_curtain_;
+    private OverState state_ = OverState.Retry;
 
     [SerializeField]
     private List<GameObject> arows_;
@@ -22,9 +22,16 @@ public class Stage1Manager : MonoBehaviour
     [SerializeField]
     private GameObject robot_;
 
-    private OverState state_ = OverState.Retry;
+    [SerializeField]
+    private GameObject camera_pos_;
 
-    float test;
+    [SerializeField]
+    private GameObject boss_ui_;
+
+    [SerializeField]
+    private GameObject go_uis_;
+
+    private float test;
 
     private bool isLScene;
 
@@ -34,12 +41,30 @@ public class Stage1Manager : MonoBehaviour
         scene_ = GameObject.Find("SceneController").GetComponent<SceneController>();
         test = 0f;
         isLScene = false;
+        go_uis_.SetActive(false);
+        boss_ui_.GetComponent<Text>().enabled = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (black_curtain_.GetComponent<BlackOut_UI>().Get_ClearGO())
+        if (!GetComponent<BlackOut_UI>().Get_Clear())
+            GetComponent<BlackOut_UI>().FeadIn();
+
+        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1)
+            boss_ui_.GetComponent<Text>().enabled = true;
+
+        //クリアかオーバーかのチェック
+        ClearOverCheck();
+
+        //ステージ上の全キャラクターのHPチェック
+        Check_CharaHp();
+    }
+
+    //クリアかオーバーかのチェック
+    private void ClearOverCheck()
+    {
+        if (GetComponent<BlackOut_UI>().Get_ClearGO())
         {
             if (state_ == OverState.Retry)
             {
@@ -81,29 +106,38 @@ public class Stage1Manager : MonoBehaviour
             }
         }
 
-        if (black_curtain_.GetComponent<BlackOut_UI>().Get_ClearGC()
+        if (GetComponent<BlackOut_UI>().Get_ClearGC()
             && !isLScene)
         {
             StartCoroutine(scene_.SceneLoad("Result"));
             isLScene = true;
         }
-
-        //ステージ上の全キャラクターのHPチェック
-        Check_CharaHp();
     }
 
     //ステージ上の全キャラクターのHPチェック
     private void Check_CharaHp()
     {
+        //ボスのチェック
         if (robot_.GetComponent<RobotManager>().GetRobotHP() <= 0f)
         {
             test += 1.0f * Time.deltaTime;
             if (test >= 35.0f)
-                black_curtain_.GetComponent<BlackOut_UI>().GameClearFead();
+            {
+                GetComponent<BlackOut_UI>().GameClearFead();
+                boss_ui_.GetComponent<Text>().enabled = false;
+            }
         }
 
-        //else if (player_.IsDead())
-        //    scene_.SceneChange("GameOver");
+        //プレイヤーのチェック
+        if (camera_pos_.GetComponent<CameraPosition>().GetDeadFinish())
+        {
+            boss_ui_.GetComponent<Text>().enabled = false;
+            GetComponent<BlackOut_UI>().GameOverFead();
+            if (GetComponent<BlackOut_UI>().Get_ClearGO())
+            {
+                go_uis_.SetActive(true);
+            }
+        }
     }
 
 }

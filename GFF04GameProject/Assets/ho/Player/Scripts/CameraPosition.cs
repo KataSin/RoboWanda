@@ -10,8 +10,10 @@ using UnityEngine;
 // カメラモード
 enum PlayerCameraMode
 {
+    Landing,
     Normal,     // 通常
-    Event       // イベント
+    Dead,
+    Event,       // イベント
 }
 
 // カメラ距離
@@ -108,10 +110,20 @@ public class CameraPosition : MonoBehaviour
     private GameObject m_Player;                // プレイヤー
     private bool m_IsAiming = false;            // プレイヤーは照準状態であるか
 
+    [SerializeField]
     private PlayerCameraMode m_Mode;            // カメラモード
     private CameraDistance m_Distance;          // カメラとプレイヤーの距離
     private int m_DistanceSelect;
     bool m_IsTriggered;                         // 十字キーの操作判定
+
+    private float t, t1;
+    private float m_intervalTimer;
+
+    private Vector3 m_origin_pos;
+    private Vector3 m_deadBefore_pos;
+    private Quaternion m_origin_rotation;
+
+    private bool isDeadFinish;
 
     // Use this for initialization
     void Start()
@@ -136,9 +148,18 @@ public class CameraPosition : MonoBehaviour
         m_EventPositionY = 0.0f;
         m_EventPositionZ = 0.0f;
 
-        m_Mode = PlayerCameraMode.Normal;
+        m_Mode = PlayerCameraMode.Landing;
         m_DistanceSelect = 2;
         m_IsTriggered = false;
+
+        t = 0f;
+
+        m_intervalTimer = 0f;
+
+        m_origin_pos = transform.localPosition;
+        m_origin_rotation = transform.localRotation;
+
+        isDeadFinish = false;
     }
 
     // Update is called once per frame
@@ -289,8 +310,14 @@ public class CameraPosition : MonoBehaviour
         // カメラの状態に応じて処理を行う
         switch (m_Mode)
         {
+            case PlayerCameraMode.Landing:
+                LandingMode();
+                break;
             case PlayerCameraMode.Normal:
                 NormalMode();
+                break;
+            case PlayerCameraMode.Dead:
+                DeadMode();
                 break;
             case PlayerCameraMode.Event:
                 EventMode();
@@ -301,9 +328,38 @@ public class CameraPosition : MonoBehaviour
         }
     }
 
+    //プレイヤー着地時の挙動
+    void LandingMode()
+    {
+        if (m_Player.GetComponent<PlayerController>().GetPlayerState() == 0)
+        {
+            transform.LookAt(m_Player.transform.position);
+            m_origin_rotation = transform.localRotation;
+        }
+
+        else if (m_Player.GetComponent<PlayerController>().GetPlayerState() != 0)
+        {
+            t += 1.0f * Time.deltaTime;
+
+            transform.localPosition = Vector3.Lerp(m_origin_pos, new Vector3(0f, 0.5f, -5f), t / 1f);
+            transform.localRotation = Quaternion.Slerp(m_origin_rotation, Quaternion.identity, t / 1f);
+
+            if (t >= 1f)
+                m_Mode = PlayerCameraMode.Normal;
+        }
+    }
+
     // 通常時の挙動
     void NormalMode()
     {
+        if (m_Player.GetComponent<PlayerController>().GetPlayerState() == 4)
+        {
+            m_Mode = PlayerCameraMode.Dead;
+            t = 0f;
+            m_deadBefore_pos = transform.position;
+            return;
+        }
+
         // カメラの距離を変更
         switch (m_DistanceSelect)
         {
@@ -399,6 +455,30 @@ public class CameraPosition : MonoBehaviour
         }
     }
 
+    //死亡時の挙動
+    void DeadMode()
+    {
+        if (t < 3f)
+            transform.LookAt(m_Player.transform.position + m_Player.transform.forward);
+
+        m_intervalTimer += 1.0f * Time.deltaTime;
+
+        if (m_intervalTimer >= 2f)
+        {
+            t += 1.0f * Time.deltaTime;
+
+            transform.position = 
+                Vector3.Lerp(
+                    m_deadBefore_pos,
+                    m_Player.transform.position + m_Player.transform.forward + new Vector3(0f, 3f, 0f),
+                    t / 3f
+                    );
+
+            if (t >= 3f)
+                isDeadFinish = true;
+        }
+    }
+
     // イベントカメラの挙動
     void EventMode()
     {
@@ -457,5 +537,17 @@ public class CameraPosition : MonoBehaviour
 
         // 通常モードに移行
         m_Mode = PlayerCameraMode.Normal;
+    }
+
+    //現在のカメラモードの取得
+    public int GetMode()
+    {
+        return (int)m_Mode;
+    }
+
+    //死亡カメラが終わったかどうかの取得
+    public bool GetDeadFinish()
+    {
+        return isDeadFinish;
     }
 }
