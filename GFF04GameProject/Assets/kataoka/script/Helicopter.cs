@@ -59,7 +59,7 @@ public class Helicopter : MonoBehaviour
         Vector3 vec = (m_Robot.transform.position - transform.position);
         vec.y = 0;
         transform.rotation =
-            Quaternion.AngleAxis(m_Velo.magnitude * 40.0f, rotateVec) *
+            Quaternion.AngleAxis(m_Velo.magnitude * 130.0f, rotateVec) *
             Quaternion.LookRotation(vec);
 
         m_Propeller.transform.localEulerAngles += new Vector3(0,0,1000)*Time.deltaTime;
