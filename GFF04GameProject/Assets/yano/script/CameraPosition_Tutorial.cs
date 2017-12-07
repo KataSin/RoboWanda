@@ -12,6 +12,7 @@ enum T_PlayerCameraMode
 {
     Tutorial_1,
     Tutorial_2,
+    Tutorial_3,
     Normal,     // 通常
     Dead,
     Event,       // イベント
@@ -130,6 +131,7 @@ public class CameraPosition_Tutorial : MonoBehaviour
 
     private bool t_CameraFead1;
     private bool t_CameraFead2;
+    private bool t_CameraFead3;
 
     [SerializeField]
     private List<GameObject> clear_point;
@@ -174,6 +176,8 @@ public class CameraPosition_Tutorial : MonoBehaviour
         isDeadFinish = false;
 
         t_CameraFead1 = false;
+        t_CameraFead2 = false;
+        t_CameraFead3 = false;
     }
 
     // Update is called once per frame
@@ -330,6 +334,9 @@ public class CameraPosition_Tutorial : MonoBehaviour
             case T_PlayerCameraMode.Tutorial_2:
                 Tutorial2Mode();
                 break;
+            case T_PlayerCameraMode.Tutorial_3:
+                Tutorial3Mode();
+                break;
             case T_PlayerCameraMode.Normal:
                 NormalMode();
                 break;
@@ -408,6 +415,36 @@ public class CameraPosition_Tutorial : MonoBehaviour
         t = Mathf.Clamp(t, 0f, 2f);
     }
 
+    void Tutorial3Mode()
+    {
+        if (!t_CameraFead3)
+            t += 1.0f * Time.deltaTime;
+        else
+        {
+            t -= 1.0f * Time.deltaTime;
+            if (t < 0f)
+                m_Mode = T_PlayerCameraMode.Normal;
+        }
+
+        transform.LookAt(clear_point[2].transform.position);
+
+        transform.position =
+            Vector3.Lerp(m_origin_pos, new Vector3(3.36f, 6.76f, 63.96f), t / 2f);
+        transform.rotation =
+            Quaternion.Slerp(m_origin_rotation, Quaternion.Euler(-18.066f, -4.692f, 0f), t / 2f);
+
+        if (t >= 2f)
+        {
+            m_intervalTimer += 1.0f * Time.deltaTime;
+
+            if (Input.GetKeyDown(KeyCode.Space)
+                || m_intervalTimer >= 3f)
+                t_CameraFead3 = true;
+        }
+
+        t = Mathf.Clamp(t, 0f, 2f);
+    }
+
     // 通常時の挙動
     void NormalMode()
     {
@@ -426,6 +463,15 @@ public class CameraPosition_Tutorial : MonoBehaviour
             && !t_CameraFead2)
         {
             m_Mode = T_PlayerCameraMode.Tutorial_2;
+            t = 0f;
+            m_intervalTimer = 0f;
+            return;
+        }
+
+        if (tutorialMana_.GetComponent<TutorialManager>().GetTutorialState() == 3
+            && !t_CameraFead3)
+        {
+            m_Mode = T_PlayerCameraMode.Tutorial_3;
             t = 0f;
             m_intervalTimer = 0f;
             return;
