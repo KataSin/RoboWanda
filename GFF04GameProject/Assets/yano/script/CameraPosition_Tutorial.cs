@@ -11,6 +11,7 @@ using UnityEngine;
 enum T_PlayerCameraMode
 {
     Tutorial_1,
+    Tutorial_2,
     Normal,     // 通常
     Dead,
     Event,       // イベント
@@ -116,7 +117,9 @@ public class CameraPosition_Tutorial : MonoBehaviour
     private int m_DistanceSelect;
     bool m_IsTriggered;                         // 十字キーの操作判定
 
-    private float t, t1;
+    [SerializeField]
+    private float t;
+    private float t1;
     private float m_intervalTimer;
 
     private Vector3 m_origin_pos;
@@ -126,6 +129,13 @@ public class CameraPosition_Tutorial : MonoBehaviour
     private bool isDeadFinish;
 
     private bool t_CameraFead1;
+    private bool t_CameraFead2;
+
+    [SerializeField]
+    private List<GameObject> clear_point;
+
+    [SerializeField]
+    private GameObject tutorialMana_;
 
     // Use this for initialization
     void Start()
@@ -317,6 +327,9 @@ public class CameraPosition_Tutorial : MonoBehaviour
             case T_PlayerCameraMode.Tutorial_1:
                 Tutorial1Mode();
                 break;
+            case T_PlayerCameraMode.Tutorial_2:
+                Tutorial2Mode();
+                break;
             case T_PlayerCameraMode.Normal:
                 NormalMode();
                 break;
@@ -340,24 +353,59 @@ public class CameraPosition_Tutorial : MonoBehaviour
         {
             t -= 1.0f * Time.deltaTime;
             if (t < 0f)
+            {
+                m_intervalTimer = 0f;
                 m_Mode = T_PlayerCameraMode.Normal;
+            }
         }
 
-        GameObject l_cp_ = GameObject.FindGameObjectWithTag("ClearPoint");
-        transform.LookAt(l_cp_.transform.position);
+        transform.LookAt(clear_point[0].transform.position);
 
         transform.position =
-            Vector3.Lerp(m_origin_pos, new Vector3(3.91f, 4.1425f, 9.35f), t / 3f);
+            Vector3.Lerp(m_origin_pos, new Vector3(3.91f, 4.1425f, 9.35f), t / 2f);
         transform.rotation =
-            Quaternion.Slerp(m_origin_rotation, Quaternion.Euler(11.108f, -36.469f, 0f), t / 3f);
+            Quaternion.Slerp(m_origin_rotation, Quaternion.Euler(11.108f, -36.469f, 0f), t / 2f);
 
-        if (t >= 3f)
+        if (t >= 2f)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            m_intervalTimer += 1.0f * Time.deltaTime;
+
+            if (Input.GetKeyDown(KeyCode.Space)
+                || m_intervalTimer >= 3f)
                 t_CameraFead1 = true;
         }
 
-        t = Mathf.Clamp(t, 0f, 3f);
+        t = Mathf.Clamp(t, 0f, 2f);
+    }
+
+    void Tutorial2Mode()
+    {
+        if (!t_CameraFead2)
+            t += 1.0f * Time.deltaTime;
+        else
+        {
+            t -= 1.0f * Time.deltaTime;
+            if (t < 0f)
+                m_Mode = T_PlayerCameraMode.Normal;
+        }
+
+        transform.LookAt(clear_point[1].transform.position);
+
+        transform.position =
+            Vector3.Lerp(m_origin_pos, new Vector3(3.91f, 4.1425f, 47.97f), t / 2f);
+        transform.rotation =
+            Quaternion.Slerp(m_origin_rotation, Quaternion.Euler(10.556f, -30.835f, 0f), t / 2f);
+
+        if (t >= 2f)
+        {
+            m_intervalTimer += 1.0f * Time.deltaTime;
+
+            if (Input.GetKeyDown(KeyCode.Space)
+                || m_intervalTimer >= 3f)
+                t_CameraFead2 = true;
+        }
+
+        t = Mathf.Clamp(t, 0f, 2f);
     }
 
     // 通常時の挙動
@@ -366,9 +414,21 @@ public class CameraPosition_Tutorial : MonoBehaviour
         m_origin_pos = transform.position;
         m_origin_rotation = transform.rotation;
 
-        if (Input.GetKeyDown(KeyCode.T))
+        if (tutorialMana_.GetComponent<TutorialManager>().GetTutorialState() == 1
+            && !t_CameraFead1)
         {
             m_Mode = T_PlayerCameraMode.Tutorial_1;
+            m_intervalTimer = 0f;
+            return;
+        }
+
+        if (tutorialMana_.GetComponent<TutorialManager>().GetTutorialState() == 2
+            && !t_CameraFead2)
+        {
+            m_Mode = T_PlayerCameraMode.Tutorial_2;
+            t = 0f;
+            m_intervalTimer = 0f;
+            return;
         }
 
         if (m_Player.GetComponent<PlayerController_Tutorial>().GetPlayerState() == 4)
