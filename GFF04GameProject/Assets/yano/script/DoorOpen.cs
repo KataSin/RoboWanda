@@ -10,6 +10,9 @@ public class DoorOpen : MonoBehaviour
 
     private bool isClear;
 
+    [SerializeField]
+    private float m_afterLposY;
+
     // Use this for initialization
     void Start()
     {
@@ -28,7 +31,7 @@ public class DoorOpen : MonoBehaviour
         isClear = (t >= 2f) ? true : false;
 
         transform.localPosition =
-            Vector3.Lerp(m_origin_pos, new Vector3(m_origin_pos.x, 15f, m_origin_pos.z), t / 2f);
+            Vector3.Lerp(m_origin_pos, new Vector3(m_origin_pos.x, m_afterLposY, m_origin_pos.z), t / 2f);
     }
 
     public void Open()
