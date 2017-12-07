@@ -87,15 +87,15 @@ public class CameraController_Tutorial : MonoBehaviour
 
     private void CheckMode()
     {
-        switch (cameraPos_.GetComponent<CameraPosition_Tutorial>().GetMode())
-        {
-            case 1:
-                mode_ = T_PlayerCameraMode.Normal;
-                break;
+        //switch (cameraPos_.GetComponent<CameraPosition_Tutorial>().GetMode())
+        //{
+        //    case 1:
+        //        mode_ = T_PlayerCameraMode.Normal;
+        //        break;
 
-            default:
-                mode_ = T_PlayerCameraMode.Event;
-                break;
-        }
+        //    default:
+        //        mode_ = T_PlayerCameraMode.Event;
+        //        break;
+        //}
     }
 }
