@@ -56,6 +56,7 @@ public class ResultManager : MonoBehaviour
         else if (state_ == ResultState.Result)
         {
             result_uis_.SetActive(true);
+            result_uis_.GetComponent<ResultScore>().ScoreUpdate();
 
             if (Input.anyKeyDown)
             {

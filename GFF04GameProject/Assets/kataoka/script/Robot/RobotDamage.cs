@@ -6,10 +6,17 @@ public class RobotDamage : MonoBehaviour
 {
     //ロボットマネージャー
     private RobotManager m_Manager;
+
+    //スコアマネージャー
+    private GameObject scoreMana_;
+
     // Use this for initialization
     void Start()
     {
         m_Manager = GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>();
+
+        if (GameObject.FindGameObjectWithTag("ScoreManager"))
+            scoreMana_ = GameObject.FindGameObjectWithTag("ScoreManager");
     }
 
     // Update is called once per frame
@@ -23,10 +30,11 @@ public class RobotDamage : MonoBehaviour
         if (other.tag == "bom")
         {
             m_Manager.Damage(10);
+            scoreMana_.GetComponent<ScoreManager>().SetAtackScore(10);
         }
         if (other.tag == "TowerCollision")
         {
-            if (other.transform.parent.GetComponent<tower_collide_manager>().Get_HitOther() == 1&&
+            if (other.transform.parent.GetComponent<tower_collide_manager>().Get_HitOther() == 1 &&
                  !other.transform.parent.GetComponent<tower_collide_manager>().Get_RobotHit())
             {
                 other.transform.parent.GetComponent<tower_collide_manager>().Set_RobotHit(true);

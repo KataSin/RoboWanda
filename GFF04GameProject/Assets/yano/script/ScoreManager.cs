@@ -12,6 +12,12 @@ public class ScoreManager : MonoBehaviour
     [SerializeField]
     private int m_attack_score;
 
+    [SerializeField]
+    private int m_tower_Total;
+
+    [SerializeField]
+    private int m_break_towerCount;
+
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -20,12 +26,13 @@ public class ScoreManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        m_break_towerCount = m_tower_Total;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(GameObject.FindGameObjectWithTag("Timer"))
+        if (GameObject.FindGameObjectWithTag("Timer"))
         {
             timer_ = GameObject.FindGameObjectWithTag("Timer");
         }
@@ -44,8 +51,18 @@ public class ScoreManager : MonoBehaviour
         return m_attack_score;
     }
 
+    public float Get_BillRatio()
+    {
+        return (float)m_break_towerCount / m_tower_Total;
+    }
+
     public void SetAtackScore(int attackScore)
     {
         m_attack_score += attackScore;
+    }
+
+    public void SetBreakCount()
+    {
+        m_break_towerCount--;
     }
 }

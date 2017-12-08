@@ -27,6 +27,8 @@ public class Break_Other : MonoBehaviour
     private GameObject obuild_collide_manager_obj_;
     private obuild_collide_manager obuild_collide_manager_;
 
+    private GameObject scoreMana_;
+
     // Use this for initialization
     void Start()
     {
@@ -54,7 +56,15 @@ public class Break_Other : MonoBehaviour
         transform.position += new Vector3(0f, -m_down_pos_Y, 0f);
 
         if (m_break_time >= 5f)
+        {
+            if (GameObject.FindGameObjectWithTag("ScoreManager"))
+            {
+                scoreMana_ = GameObject.FindGameObjectWithTag("ScoreManager");
+                scoreMana_.GetComponent<ScoreManager>().SetBreakCount();
+            }
+
             Destroy(this.gameObject);
+        }
     }
 
     private void OutBreakSmoke()
