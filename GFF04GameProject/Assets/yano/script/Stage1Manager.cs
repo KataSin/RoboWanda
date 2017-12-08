@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class Stage1Manager : MonoBehaviour
 {
-    private SceneController scene_;
+    [SerializeField]
+    private GameObject scene_;
 
     private enum OverState
     {
@@ -41,7 +42,6 @@ public class Stage1Manager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        scene_ = GameObject.Find("SceneController").GetComponent<SceneController>();
         test = 0f;
         isLScene = false;
         go_uis_.SetActive(false);
@@ -83,7 +83,7 @@ public class Stage1Manager : MonoBehaviour
                 arows_[2].SetActive(false);
 
                 if (Input.GetKeyDown(KeyCode.Return))
-                    scene_.SceneChange("newnewNightTest 1");
+                    StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("newnewNightTest 1"));
 
                 if (Input.GetKeyDown(KeyCode.DownArrow))
                     state_ = OverState.TitleTo;
@@ -96,7 +96,7 @@ public class Stage1Manager : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
-                    scene_.SceneChange("Title");                   
+                    StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("Title"));
                 }
 
 
@@ -121,7 +121,7 @@ public class Stage1Manager : MonoBehaviour
         if (GetComponent<BlackOut_UI>().Get_ClearGC()
             && !isLScene)
         {
-            StartCoroutine(scene_.SceneLoad("Result"));
+            StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("Result"));
             isLScene = true;
         }
     }

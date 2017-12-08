@@ -13,7 +13,8 @@ public class ResultManager : MonoBehaviour
 
     public ResultState state_;
 
-    private SceneController scene_;
+    [SerializeField]
+    private GameObject scene_;
 
     [SerializeField]
     private GameObject camera_;
@@ -31,7 +32,6 @@ public class ResultManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        scene_ = GameObject.Find("SceneController").GetComponent<SceneController>();
         state_ = ResultState.Fead;
 
         result_uis_.SetActive(false);
@@ -77,7 +77,7 @@ public class ResultManager : MonoBehaviour
                 if (GetComponent<BlackOut_UI>().Get_Clear()
                     && !isLScene)
                 {
-                    StartCoroutine(scene_.SceneLoad("Title"));
+                    StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("Title"));
                     isLScene = true;
                 }
             }

@@ -214,55 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ffd6432d695924faa38151f622d020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneCnt_: {fileID: 833491755}
-  neko_: {fileID: 0}
---- !u!1001 &833491754
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4231185805562934, guid: e83986f2118205a419b7ddcdf54ac832, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4231185805562934, guid: e83986f2118205a419b7ddcdf54ac832, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4231185805562934, guid: e83986f2118205a419b7ddcdf54ac832, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4231185805562934, guid: e83986f2118205a419b7ddcdf54ac832, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4231185805562934, guid: e83986f2118205a419b7ddcdf54ac832, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4231185805562934, guid: e83986f2118205a419b7ddcdf54ac832, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4231185805562934, guid: e83986f2118205a419b7ddcdf54ac832, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4231185805562934, guid: e83986f2118205a419b7ddcdf54ac832, type: 2}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: e83986f2118205a419b7ddcdf54ac832, type: 2}
-  m_IsPrefabParent: 0
---- !u!1 &833491755 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1873724859773738, guid: e83986f2118205a419b7ddcdf54ac832,
-    type: 2}
-  m_PrefabInternal: {fileID: 833491754}
+  sceneCnt_: {fileID: 1873724859773738, guid: e83986f2118205a419b7ddcdf54ac832, type: 2}
 --- !u!1 &957970434
 GameObject:
   m_ObjectHideFlags: 0
