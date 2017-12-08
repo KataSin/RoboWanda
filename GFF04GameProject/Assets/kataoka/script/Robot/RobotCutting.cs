@@ -14,7 +14,7 @@ public class RobotCutting : MonoBehaviour
         m_Robot = GameObject.FindGameObjectWithTag("Robot");
 
         var arms = transform.GetComponentsInChildren<Transform>();
-        var robotcols=
+        var robotcols = m_Robot.transform.GetComponentsInChildren<Transform>();
         m_LeftArms = new List<GameObject>();
         m_RightArms = new List<GameObject>();
         foreach (var i in arms)
@@ -28,7 +28,17 @@ public class RobotCutting : MonoBehaviour
                 m_RightArms.Add(i.gameObject);
             }
         }
-
+        foreach(var i in robotcols)
+        {
+            if(i.name== "RightArmCol")
+            {
+                m_RightArms.Add(i.gameObject);
+            }
+            if (i.name == "LeftArmCol")
+            {
+                m_LeftArms.Add(i.gameObject);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -36,7 +46,7 @@ public class RobotCutting : MonoBehaviour
     {
         if (m_Robot.GetComponent<RobotManager>().GetRobotHP() <= 50)
         {
-            foreach(var i in m_RightArms)
+            foreach (var i in m_RightArms)
             {
                 i.SetActive(false);
             }
