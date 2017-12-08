@@ -31,6 +31,9 @@ public class Stage1Manager : MonoBehaviour
     [SerializeField]
     private GameObject go_uis_;
 
+    [SerializeField]
+    private GameObject timer_ui_;
+
     private float test;
 
     private bool isLScene;
@@ -42,7 +45,8 @@ public class Stage1Manager : MonoBehaviour
         test = 0f;
         isLScene = false;
         go_uis_.SetActive(false);
-        boss_ui_.GetComponent<Text>().enabled = false;
+        timer_ui_.SetActive(false);
+        boss_ui_.GetComponent<Image>().enabled = false;
     }
 
     // Update is called once per frame
@@ -52,7 +56,13 @@ public class Stage1Manager : MonoBehaviour
             GetComponent<BlackOut_UI>().FeadIn();
 
         if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1)
-            boss_ui_.GetComponent<Text>().enabled = true;
+        {
+            boss_ui_.GetComponent<Image>().enabled = true;
+            timer_ui_.SetActive(true);
+
+            if (robot_.GetComponent<RobotManager>().GetRobotHP() > 0f)
+                timer_ui_.GetComponent<Timer>().TimerUpdate();
+        }
 
         //クリアかオーバーかのチェック
         ClearOverCheck();
@@ -85,7 +95,9 @@ public class Stage1Manager : MonoBehaviour
                 arows_[2].SetActive(false);
 
                 if (Input.GetKeyDown(KeyCode.Return))
-                    scene_.SceneChange("Title");
+                {
+                    scene_.SceneChange("Title");                   
+                }
 
 
 
@@ -124,14 +136,15 @@ public class Stage1Manager : MonoBehaviour
             if (test >= 35.0f)
             {
                 GetComponent<BlackOut_UI>().GameClearFead();
-                boss_ui_.GetComponent<Text>().enabled = false;
+                boss_ui_.GetComponent<Image>().enabled = false;
             }
         }
 
         //プレイヤーのチェック
         if (camera_pos_.GetComponent<CameraPosition>().GetDeadFinish())
         {
-            boss_ui_.GetComponent<Text>().enabled = false;
+            timer_ui_.SetActive(false);
+            boss_ui_.GetComponent<Image>().enabled = false;
             GetComponent<BlackOut_UI>().GameOverFead();
             if (GetComponent<BlackOut_UI>().Get_ClearGO())
             {
