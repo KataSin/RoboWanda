@@ -23,8 +23,6 @@ public class TitleManager : MonoBehaviour
 
     private ModeState modeState_ = ModeState.Yes;
 
-    private SceneController scene_;
-
     [SerializeField]
     private float nextViewTimer;
 
@@ -48,7 +46,6 @@ public class TitleManager : MonoBehaviour
 
     private float m_feadSTimer;
 
-    [SerializeField]
     private GameObject sceneCnt_;
 
     private bool isLScene;
@@ -56,7 +53,6 @@ public class TitleManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        //scene_ = GameObject.Find("SceneController").GetComponent<SceneController>();
         nextViewTimer = 0f;
         m_feadSTimer = 0f;
         isLScene = false;
@@ -147,12 +143,11 @@ public class TitleManager : MonoBehaviour
                 if (GetComponent<BlackOut_UI>().Get_Clear() == true
                     && !isLScene)
                 {
+                    sceneCnt_ = GameObject.FindGameObjectWithTag("SceneController");
                     StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("Loading"));
                     isLScene = true;
                 }
             }
         }
-
-
     }
 }
