@@ -67,8 +67,8 @@ public class RobotManager : MonoBehaviour
     {
         Debug.Log(m_RobotState);
         //ロボット仮HPUI
-        Text text = GameObject.FindGameObjectWithTag("RobotHp").GetComponent<Text>();
-        text.text = "RobotHp:" + m_RobotHp.ToString();
+        Image image = GameObject.FindGameObjectWithTag("RobotHp").GetComponent<Image>();
+        image.fillAmount = (float)m_RobotHp / 100.0f;
 
         if (Input.GetKey(KeyCode.N))
         {
