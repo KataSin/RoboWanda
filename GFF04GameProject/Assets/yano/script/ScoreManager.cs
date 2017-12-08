@@ -12,7 +12,6 @@ public class ScoreManager : MonoBehaviour
     [SerializeField]
     private int m_attack_score;
 
-
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
