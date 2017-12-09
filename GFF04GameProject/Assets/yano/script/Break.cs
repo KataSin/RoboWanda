@@ -74,6 +74,8 @@ public class Break : MonoBehaviour
     [SerializeField]
     private float m_origin_rotationY;
 
+    private GameObject scoreMana_;
+
     // Use this for initialization
     void Start()
     {
@@ -257,6 +259,12 @@ public class Break : MonoBehaviour
             //8s経過後
             if (m_break_time >= (9f * m_tower_revision))
             {
+                if (GameObject.FindGameObjectWithTag("ScoreManager"))
+                {
+                    scoreMana_ = GameObject.FindGameObjectWithTag("ScoreManager");
+                    scoreMana_.GetComponent<ScoreManager>().SetBreakCount();
+                }
+
                 //自分を消去
                 Destroy(gameObject);
             }
