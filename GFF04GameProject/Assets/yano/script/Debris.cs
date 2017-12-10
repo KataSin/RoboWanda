@@ -15,6 +15,8 @@ public class Debris : MonoBehaviour
     private Rigidbody rigids_;
     private Vector3 clampVelocities;
 
+    private float m_breakTimer;
+
 
     // Use this for initialization
     void Start()
@@ -23,8 +25,13 @@ public class Debris : MonoBehaviour
 
     void Update()
     {
+        if (m_breakTimer >= 8f)
+            Destroy(this.gameObject);
+
+        m_breakTimer += 1.0f * Time.deltaTime;
+
         //破片の破壊制御(点滅も)
-        destroyDebris(m_remainDebris);
+        //destroyDebris(m_remainDebris);
     }
 
     //破片の破壊制御(点滅も)
@@ -41,7 +48,7 @@ public class Debris : MonoBehaviour
                     {
                         //点滅(アクティブ制御)
                         debris_[i].GetComponent<Renderer>().enabled = !debris_[i].GetComponent<Renderer>().enabled;
-                        
+
                         //点滅インターバル再設定
                         debris_[i].GetComponent<DebrisGround>().Set_Interval(0.05f);
                     }

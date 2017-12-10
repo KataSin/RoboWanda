@@ -61,5 +61,7 @@ public class DebrisGround : MonoBehaviour
     {
         if (other.gameObject.tag == "Ground")
             isGround = true;
+
+        GetComponent<MeshCollider>().isTrigger = true;
     }
 }

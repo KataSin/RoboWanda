@@ -7,6 +7,7 @@ public class tower_Type : MonoBehaviour
     private enum TowerType
     {
         Low,
+        Middle,
         High,
         Other,
     }
@@ -26,9 +27,9 @@ public class tower_Type : MonoBehaviour
     private BreakType breakType;
 
     //タワーのタイプ取得
-    public uint Get_TowerType()
+    public int Get_TowerType()
     {
-        return (uint)towerType;
+        return (int)towerType;
     }
 
     //タワーの崩壊状態の取得
