@@ -7,6 +7,9 @@ public class SceneController : MonoBehaviour
 {
     private AsyncOperation asyncOp_;
 
+    [SerializeField]
+    private int m_nextScene;
+
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -38,5 +41,15 @@ public class SceneController : MonoBehaviour
     public string Get_CurrentScene()
     {
         return SceneManager.GetActiveScene().ToString();
+    }
+
+    public int GetNextScene()
+    {
+        return m_nextScene;
+    }
+
+    public void SetNextScene(int scene)
+    {
+        m_nextScene = scene;
     }
 }

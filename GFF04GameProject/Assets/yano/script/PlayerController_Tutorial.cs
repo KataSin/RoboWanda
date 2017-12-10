@@ -78,7 +78,8 @@ public class PlayerController_Tutorial : MonoBehaviour
     //ボムスポーン(片岡実装)
     private GameObject m_BomSpawn;
 
-
+    [SerializeField]
+    private GameObject camera_pos_;
 
     // Use this for initialization
     void Start()
@@ -198,22 +199,26 @@ public class PlayerController_Tutorial : MonoBehaviour
     // 通常時の処理
     void Normal()
     {
-        // 通常時の移動処理
-        NormalMove();
-
-        // RTボタンを押すとダッシュ
-        m_IsDash = (Input.GetAxis("Dash") > 0.5f) ? true : false;
-
-        // RBボタンを押すと爆弾投げ状態に
-        if (Input.GetButton("Aim"))
+        if (camera_pos_.GetComponent<CameraPosition_Tutorial>().Get_CntActive())
         {
-            m_State = T_PlayerState.Aiming;
-        }
+            // 通常時の移動処理
+            NormalMove();
 
-        // Bボタンを押すとしゃがむ
-        if (Input.GetButtonDown("Creeping"))
-        {
-            m_State = T_PlayerState.Creeping;
+            // RTボタンを押すとダッシュ
+            m_IsDash = (Input.GetAxis("Dash") > 0.5f) ? true : false;
+
+            // RBボタンを押すと爆弾投げ状態に
+            if (Input.GetButton("Aim"))
+            {
+                m_State = T_PlayerState.Aiming;
+            }
+
+            // Bボタンを押すとしゃがむ
+            if (Input.GetButtonDown("Creeping"))
+            {
+                m_State = T_PlayerState.Creeping;
+            }
+
         }
     }
 
@@ -387,14 +392,17 @@ public class PlayerController_Tutorial : MonoBehaviour
         forward.Normalize();
 
         // 方向入力を取得
+
         float axisHorizontal = Input.GetAxisRaw("Horizontal_L");    // x軸（左右）
         float axisVertical = Input.GetAxisRaw("Vertical_L");        // z軸（上下）
+
 
         // 減速する（入力が無い場合）
         if (axisHorizontal == 0 && axisVertical == 0)
         {
             m_Speed = Mathf.Max(m_Speed - m_CurrentBrakePower * Time.deltaTime, 0);
         }
+
 
         // 接地状態であれば加速可能
         if (m_Controller.isGrounded)
