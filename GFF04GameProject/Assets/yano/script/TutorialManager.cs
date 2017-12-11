@@ -54,6 +54,9 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private GameObject controller_ico_;
 
+    private AudioSource bgm_;
+
+
     private float m_intervalTime;
 
     private float m_startInterval;
@@ -63,6 +66,10 @@ public class TutorialManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        bgm_ = GetComponent<AudioSource>();
+        bgm_.volume = 0f;
+        bgm_.Play();
+
         missionC_ui_.SetActive(false);
         mission1_ui_.SetActive(false);
         mission2_ui_.SetActive(false);
@@ -119,7 +126,11 @@ public class TutorialManager : MonoBehaviour
         if (!tutorial_canvas_.GetComponent<BlackOut_UI>().Get_Clear())
         {
             tutorial_canvas_.GetComponent<BlackOut_UI>().FeadIn();
+            bgm_.volume = 
+                Mathf.Lerp(0f, 0.1f,
+                tutorial_canvas_.GetComponent<BlackOut_UI>().GetT() / tutorial_canvas_.GetComponent<BlackOut_UI>().GetBFeadTime());
         }
+
         else
         {
             m_state = TutorialState.Start;
@@ -248,7 +259,12 @@ public class TutorialManager : MonoBehaviour
     private void End_Update()
     {
         if (!tutorial_canvas_.GetComponent<BlackOut_UI>().Get_Clear())
+        {
             tutorial_canvas_.GetComponent<BlackOut_UI>().BlackOut();
+            bgm_.volume =
+                Mathf.Lerp(0.1f, 0f,
+                tutorial_canvas_.GetComponent<BlackOut_UI>().GetT() / tutorial_canvas_.GetComponent<BlackOut_UI>().GetBFeadTime());
+        }
 
         else if (tutorial_canvas_.GetComponent<BlackOut_UI>().Get_Clear()
             && sceneCnt_ != null
@@ -257,7 +273,7 @@ public class TutorialManager : MonoBehaviour
             StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("newnewNightTest 1"));
             isLScene = true;
         }
-           
+
     }
 
     public int GetTutorialState()

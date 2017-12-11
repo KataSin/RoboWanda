@@ -91,6 +91,11 @@ public class PlayerController : MonoBehaviour
     //ボムスポーン(片岡実装)
     private GameObject m_BomSpawn;
 
+    // グレネードランチャー
+    [SerializeField]
+    private GameObject m_Launcher;
+
+    private AudioSource[] player_se_;
 
 
     // Use this for initialization
@@ -98,6 +103,7 @@ public class PlayerController : MonoBehaviour
     {
         m_Controller = GetComponent<CharacterController>();
         m_Animator = GetComponent<Animator>();
+        player_se_ = GetComponents<AudioSource>();
 
         m_State = PlayerState.StartFall;
         m_CurrentSpeedLimit = m_MaxSpeed;
@@ -124,6 +130,14 @@ public class PlayerController : MonoBehaviour
 
         t = 0f;
         //
+
+        // グレネードランチャーが登録されなかった場合、強制終了
+        if (m_Launcher == null)
+        {
+            Debug.Log("エラー発生したので終了します");
+            Debug.Log("Error Log：グレネードランチャーが存在しない");
+            Application.Quit();
+        }
     }
 
     // Update is called once per frame
@@ -178,12 +192,10 @@ public class PlayerController : MonoBehaviour
         // プレイヤーが地面にいる場合、y軸加速度を0にする
         if (m_Controller.isGrounded) m_VelocityY = 0.0f;
 
-        // プレイヤーと地面との距離を取得（着地アニメーション用）
-
-
         // アニメーターにプレイヤーの状態を知らせる
         if (m_State != PlayerState.StartFall)
             m_Animator.SetBool("IsGrounded", m_Controller.isGrounded);
+
         m_Animator.SetBool("IsAiming", m_IsAiming);
         m_Animator.SetBool("IsCreeping", m_IsCreeping);
         m_Animator.SetBool("IsDead", m_IsDead);
@@ -234,10 +246,12 @@ public class PlayerController : MonoBehaviour
             m_Animator.speed = 1;
             m_IsStartFall = false;
 
-            
+
             t += 1.0f * Time.deltaTime;
             if (t >= 0.8f)
             {
+                // グレネードランチャーを表示し、通常状態に移行（Ho実装、2017/12/11）
+                m_Launcher.SetActive(true);
                 m_State = PlayerState.Normal;
 
                 if (!m_isClear)
@@ -474,6 +488,17 @@ public class PlayerController : MonoBehaviour
         if (axisHorizontal == 0 && axisVertical == 0)
         {
             m_Speed = Mathf.Max(m_Speed - m_CurrentBrakePower * Time.deltaTime, 0);
+
+            if (m_Speed == 0)
+                player_se_[1].Stop();
+        }
+
+        else if (axisHorizontal != 0 || axisVertical != 0 || m_Speed != 0)
+        {
+            if (!player_se_[1].isPlaying)
+            {
+                player_se_[1].Play();
+            }
         }
 
         // 接地状態であれば加速可能
@@ -487,12 +512,14 @@ public class PlayerController : MonoBehaviour
             // 速度制限、ブレーキ速度、および回転速度の変更
             if (m_IsDash)
             {
+                player_se_[1].pitch = 2.4f;
                 m_CurrentSpeedLimit = m_MaxSpeedDash;
                 m_CurrentBrakePower = m_BrakePowerDash;
                 m_CurrentRotateSpeed = m_RotateSpeedDash;
             }
             else
             {
+                player_se_[1].pitch = 1.2f;
                 if (m_CurrentSpeedLimit > m_MaxSpeed)
                 {
                     m_CurrentSpeedLimit -= 0.2f;
@@ -555,6 +582,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Bomb_Throw"))
         {
             m_BomSpawn.GetComponent<BomSpawn>().SpawnBom();
+            player_se_[0].Play();
         }
 
         // RBボタンを放すと通常状態に戻る
@@ -743,6 +771,8 @@ public class PlayerController : MonoBehaviour
     // 死亡時の処理
     void Dead()
     {
+        // グレネードランチャーの表示を消す
+        m_Launcher.SetActive(false);
         // 死亡モーションを再生
         m_Animator.Play("Dead");
     }
