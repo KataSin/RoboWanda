@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class LoadingManager : MonoBehaviour
 {
-    [SerializeField]
     private GameObject sceneCnt_;
 
     private bool isLScene;
@@ -13,14 +12,22 @@ public class LoadingManager : MonoBehaviour
     void Start()
     {
         isLScene = false;
+
+        if (GameObject.FindGameObjectWithTag("SceneController"))
+            sceneCnt_ = GameObject.FindGameObjectWithTag("SceneController");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(!isLScene)
+        if (!isLScene && sceneCnt_ != null)
         {
-            StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("newnewNightTest 1"));
+            if (sceneCnt_.GetComponent<SceneController>().GetNextScene() == 0)
+                StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("newnewNightTest 1"));
+
+            else if (sceneCnt_.GetComponent<SceneController>().GetNextScene() == 1)
+                StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("Tutorial"));
+
             isLScene = true;
         }
     }

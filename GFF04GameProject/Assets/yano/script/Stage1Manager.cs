@@ -5,14 +5,12 @@ using UnityEngine.UI;
 
 public class Stage1Manager : MonoBehaviour
 {
-    [SerializeField]
     private GameObject scene_;
 
     private enum OverState
     {
         Retry,
         TitleTo,
-        TurtorialTo,
     }
 
     private OverState state_ = OverState.Retry;
@@ -47,6 +45,12 @@ public class Stage1Manager : MonoBehaviour
         go_uis_.SetActive(false);
         timer_ui_.SetActive(false);
         boss_ui_.GetComponent<Image>().enabled = false;
+
+        arows_[0].SetActive(false);
+        arows_[1].SetActive(false);
+
+        if (GameObject.FindGameObjectWithTag("SceneController"))
+            scene_ = GameObject.FindGameObjectWithTag("SceneController");
     }
 
     // Update is called once per frame
@@ -80,9 +84,8 @@ public class Stage1Manager : MonoBehaviour
             {
                 arows_[0].SetActive(true);
                 arows_[1].SetActive(false);
-                arows_[2].SetActive(false);
 
-                if (Input.GetKeyDown(KeyCode.Return))
+                if (Input.GetKeyDown(KeyCode.Return) && scene_ != null)
                     StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("newnewNightTest 1"));
 
                 if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -92,34 +95,20 @@ public class Stage1Manager : MonoBehaviour
             {
                 arows_[0].SetActive(false);
                 arows_[1].SetActive(true);
-                arows_[2].SetActive(false);
 
-                if (Input.GetKeyDown(KeyCode.Return))
+                if (Input.GetKeyDown(KeyCode.Return) && scene_ != null)
                 {
                     StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("Title"));
                 }
 
-
-
                 if (Input.GetKeyDown(KeyCode.UpArrow))
                     state_ = OverState.Retry;
-
-                else if (Input.GetKeyDown(KeyCode.DownArrow))
-                    state_ = OverState.TurtorialTo;
-            }
-            else if (state_ == OverState.TurtorialTo)
-            {
-                arows_[0].SetActive(false);
-                arows_[1].SetActive(false);
-                arows_[2].SetActive(true);
-
-                if (Input.GetKeyDown(KeyCode.UpArrow))
-                    state_ = OverState.TitleTo;
             }
         }
 
         if (GetComponent<BlackOut_UI>().Get_ClearGC()
-            && !isLScene)
+            && !isLScene
+            && scene_ != null)
         {
             StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("Result"));
             isLScene = true;

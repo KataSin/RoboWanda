@@ -70,14 +70,29 @@ public class Break : MonoBehaviour
 
     [SerializeField]
     private GameObject originBill_obj_;
+    private Vector3 m_origin_Lpos;
 
     [SerializeField]
     private float m_origin_rotationY;
 
+    private GameObject scoreMana_;
+
+    [SerializeField]
+    private GameObject after_bill_;
+
+    [SerializeField]
+    private GameObject gareki_bill_;
+
+    [SerializeField]
+    private GameObject bill_Lpoint_;
+
+    private AudioSource break_se_;
+
+
     // Use this for initialization
     void Start()
     {
-        towerType_ = this.gameObject.GetComponent<tower_Type>();
+        towerType_ = GetComponent<tower_Type>();
 
         collide_manager_ = collide_manager_obj_.GetComponent<tower_collide_manager>();
 
@@ -90,6 +105,12 @@ public class Break : MonoBehaviour
         //m_Break_rotation = Quaternion.identity;
 
         navMOb_ = navMOb_obj_.GetComponent<NavMeshObstacle>();
+
+        m_origin_Lpos = originBill_obj_.transform.localPosition;
+
+        gareki_bill_.SetActive(false);
+
+        break_se_ = GetComponent<AudioSource>();
     }
 
     //ビルの大きさによる補正
@@ -102,8 +123,13 @@ public class Break : MonoBehaviour
                 m_tower_revision = 1f;
                 break;
 
-            //High
             case 1:
+                m_tower_revision = 1f;
+                break;
+
+
+            //High
+            case 2:
                 m_tower_revision = 1.4f;
                 break;
         }
@@ -122,7 +148,7 @@ public class Break : MonoBehaviour
             m_down_pos_Y += 0.001f * (transform.localScale.y * m_sand_smoke_scalar) * Time.deltaTime;
 
             //倒壊中、後の処理
-            BreakAfter();
+            //BreakAfter();
         }
 
         //倒壊挙動制御
@@ -151,12 +177,16 @@ public class Break : MonoBehaviour
 
         //落下
         if (isBreak)
-            transform.position += new Vector3(0f, -m_down_pos_Y, 0f);
+        {
+
+
+            //transform.position += new Vector3(0f, -m_down_pos_Y, 0f);
+        }
 
         //回転
-        if (!collide_manager_.Get_BreakAfterFlag())
-            transform.rotation =
-                Quaternion.Lerp(m_origin_rotation, m_Bill_rotation, m_break_time / m_rotated_time);
+        //if (!collide_manager_.Get_BreakAfterFlag())
+        //    transform.rotation =
+        //        Quaternion.Lerp(m_origin_rotation, m_Bill_rotation, m_break_time / m_rotated_time);
     }
 
     //倒壊方向判定
@@ -209,15 +239,51 @@ public class Break : MonoBehaviour
     {
         if (!isOutBreak)
         {
+            Destroy(originBill_obj_);
+            Destroy(bill_Lpoint_);
+            Destroy(collide_manager_obj_);
+
             Vector3 ob_pos = transform.position;
             ob_pos.y = 0f;
             GameObject smoke = Instantiate(sand_smoke_manager_, ob_pos, Quaternion.identity);
             smoke.transform.Find("desert_Horizontal").localScale = transform.localScale * m_sand_smoke_scalar;
             smoke.transform.Find("desert_Vertical").localScale = transform.localScale * m_sand_smoke_scalar;
 
+            Instantiate(after_bill_, transform);
+            after_bill_.transform.localPosition = m_origin_Lpos;
+
+            gareki_bill_.SetActive(true);
+            //GareakiAdjustment();
+
+            if (GameObject.FindGameObjectWithTag("ScoreManager"))
+            {
+                scoreMana_ = GameObject.FindGameObjectWithTag("ScoreManager");
+                scoreMana_.GetComponent<ScoreManager>().SetBreakCount();
+            }
+
+            break_se_.Play();
+
             isBreak = true;
             isOutBreak = true;
         }
+    }
+
+    private void GareakiAdjustment()
+    {
+        //switch (test_)
+        //{
+        //    case 0:
+        //        gareki_bill_.transform.localPosition = new Vector3(0f, -13.3f, 0f);
+        //        gareki_bill_.transform.localRotation = Quaternion.Euler(0f, 10f, 0f);
+        //        gareki_bill_.transform.localScale = new Vector3(15f, 15f, 15f);
+        //        break;
+
+        //    case 1:
+        //        gareki_bill_.transform.localPosition = new Vector3(0f, -162f, 0f);
+        //        gareki_bill_.transform.localRotation = Quaternion.Euler(0f, 10f + (m_origin_rotationY + 180f), 0f);
+        //        gareki_bill_.transform.localScale = new Vector3(328f, 243f, 243f);
+        //        break;
+        //}
     }
 
     //倒壊中、後の処理
@@ -257,6 +323,8 @@ public class Break : MonoBehaviour
             //8s経過後
             if (m_break_time >= (9f * m_tower_revision))
             {
+
+
                 //自分を消去
                 Destroy(gameObject);
             }

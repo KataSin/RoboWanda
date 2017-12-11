@@ -26,12 +26,12 @@ public class GameManager : MonoBehaviour
     {
         if (GameObject.FindGameObjectWithTag("SceneController") == null)
         {
-            Instantiate(sceneCnt_);
+            Instantiate(sceneCnt_, transform);
         }
 
         if (GameObject.FindGameObjectWithTag("ScoreManager") == null)
         {
-            Instantiate(scoreMana_);
+            Instantiate(scoreMana_, transform);
         }
     }
 }

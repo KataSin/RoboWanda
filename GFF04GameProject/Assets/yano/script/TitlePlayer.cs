@@ -21,6 +21,9 @@ public class TitlePlayer : MonoBehaviour
 
     private Animator animator_;
 
+    [SerializeField]
+    private GameObject titleMana_;
+
     // Use this for initialization
     void Start()
     {
@@ -45,6 +48,7 @@ public class TitlePlayer : MonoBehaviour
 
         animator_.SetBool("Standflag", standFlag);
         animator_.SetBool("Smokeflag", smokeFlag);
+        animator_.SetBool("Skip", titleMana_.GetComponent<TitleManager>().GetStandClear());
 
         smokeFlag = false;
     }

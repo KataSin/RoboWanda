@@ -23,7 +23,9 @@ public class Timer : MonoBehaviour
         m_timer_text = GetComponent<Text>();
 
         m_Timer = 300f;
+        minute = 5;
         second = 60f;
+        second_string = "00";
     }
 
     // Update is called once per frame
@@ -34,6 +36,8 @@ public class Timer : MonoBehaviour
 
     public void TimerUpdate()
     {
+        m_timer_text.text = "0" + minute.ToString() + ":" + second_string;
+
         m_elapsedTimer += 1.0f * Time.deltaTime;
         m_Timer -= 1.0f * Time.deltaTime;
         second -= 1.0f * Time.deltaTime;
@@ -63,7 +67,7 @@ public class Timer : MonoBehaviour
                 second_string = "0" + ((int)second).ToString();
         }
 
-        m_timer_text.text = "0" + minute.ToString() + ":" + second_string;
+       
     }
 
     public float Get_ElapsedTimer()

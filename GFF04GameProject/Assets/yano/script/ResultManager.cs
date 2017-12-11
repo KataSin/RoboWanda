@@ -13,7 +13,6 @@ public class ResultManager : MonoBehaviour
 
     public ResultState state_;
 
-    [SerializeField]
     private GameObject scene_;
 
     [SerializeField]
@@ -38,6 +37,9 @@ public class ResultManager : MonoBehaviour
 
         m_finishTimer = 0f;
         isLScene = false;
+
+        if (GameObject.FindGameObjectWithTag("SceneController"))
+            scene_ = GameObject.FindGameObjectWithTag("SceneController");
     }
 
     // Update is called once per frame
@@ -56,6 +58,7 @@ public class ResultManager : MonoBehaviour
         else if (state_ == ResultState.Result)
         {
             result_uis_.SetActive(true);
+            result_uis_.GetComponent<ResultScore>().ScoreUpdate();
 
             if (Input.anyKeyDown)
             {
@@ -75,7 +78,8 @@ public class ResultManager : MonoBehaviour
                 GetComponent<BlackOut_UI>().BlackOut();
 
                 if (GetComponent<BlackOut_UI>().Get_Clear()
-                    && !isLScene)
+                    && !isLScene
+                    && scene_ != null)
                 {
                     StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("Title"));
                     isLScene = true;

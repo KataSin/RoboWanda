@@ -103,6 +103,16 @@ public class BlackOut_UI : MonoBehaviour
             isClearGO = true;
     }
 
+    public float GetT()
+    {
+        return t;
+    }
+
+    public float GetBFeadTime()
+    {
+        return m_blackFeadTime;
+    }
+
     public void ResetT()
     {
         t = 0f;
