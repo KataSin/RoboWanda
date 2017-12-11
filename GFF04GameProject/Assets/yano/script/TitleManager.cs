@@ -57,6 +57,8 @@ public class TitleManager : MonoBehaviour
 
     private bool isLScene;
 
+    private bool isStandClear;
+
     // Use this for initialization
     void Start()
     {
@@ -64,6 +66,7 @@ public class TitleManager : MonoBehaviour
         m_sallyTimer = 0f;
         m_feadSTimer = 0f;
         isLScene = false;
+        isStandClear = false;
     }
 
     // Update is called once per frame
@@ -74,7 +77,13 @@ public class TitleManager : MonoBehaviour
             titleCamera_.GetComponent<TitleCamera>().Set_Timer(1.0f * Time.deltaTime);
             titleCamera_.GetComponent<TitleCamera>().titleReadyCamera();
 
-            if (titleCamera_.GetComponent<TitleCamera>().Get_Timer()
+            if(Input.GetKeyDown(KeyCode.Return))
+            {
+                titleCamera_.GetComponent<TitleCamera>().
+                    Set_Timer(titleCamera_.GetComponent<TitleCamera>().Get_ReadyTime());
+            }
+
+            else if (titleCamera_.GetComponent<TitleCamera>().Get_Timer()
                 >= titleCamera_.GetComponent<TitleCamera>().Get_ReadyTime())
             {
                 title_uis_.SetActive(true);
@@ -100,7 +109,14 @@ public class TitleManager : MonoBehaviour
                 titleCamera_.GetComponent<TitleCamera>().Set_Timer(1.0f * Time.deltaTime);
                 titleCamera_.GetComponent<TitleCamera>().titleReadyToStart();
 
-                if ((titleCamera_.GetComponent<TitleCamera>().Get_Timer()
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    titleCamera_.GetComponent<TitleCamera>().
+                        Set_Timer(titleCamera_.GetComponent<TitleCamera>().Get_FeadTime());
+                    isStandClear = true;
+                }
+
+                else if ((titleCamera_.GetComponent<TitleCamera>().Get_Timer()
                     >= titleCamera_.GetComponent<TitleCamera>().Get_FeadTime()) && mode_uis_.activeSelf == false)
                 {
                     mode_uis_.SetActive(true);
@@ -177,5 +193,10 @@ public class TitleManager : MonoBehaviour
 
             
         }
+    }
+
+    public bool GetStandClear()
+    {
+        return isStandClear;
     }
 }

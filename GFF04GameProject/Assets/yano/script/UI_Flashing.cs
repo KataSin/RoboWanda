@@ -21,7 +21,7 @@ public class UI_Flashing : MonoBehaviour
 
     private float t;
 
-    private Text ui_text_;
+    private Image ui_text_;
 
     private AlphaValue alphaValue_ = AlphaValue.Decrease;
 
@@ -30,7 +30,7 @@ public class UI_Flashing : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        ui_text_ = GetComponent<Text>();
+        ui_text_ = GetComponent<Image>();
         t = 0f;
     }
 

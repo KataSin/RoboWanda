@@ -86,6 +86,8 @@ public class Break : MonoBehaviour
     [SerializeField]
     private GameObject bill_Lpoint_;
 
+    private AudioSource break_se_;
+
 
     // Use this for initialization
     void Start()
@@ -107,6 +109,8 @@ public class Break : MonoBehaviour
         m_origin_Lpos = originBill_obj_.transform.localPosition;
 
         gareki_bill_.SetActive(false);
+
+        break_se_ = GetComponent<AudioSource>();
     }
 
     //ビルの大きさによる補正
@@ -256,6 +260,8 @@ public class Break : MonoBehaviour
                 scoreMana_ = GameObject.FindGameObjectWithTag("ScoreManager");
                 scoreMana_.GetComponent<ScoreManager>().SetBreakCount();
             }
+
+            break_se_.Play();
 
             isBreak = true;
             isOutBreak = true;
