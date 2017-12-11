@@ -91,7 +91,9 @@ public class PlayerController : MonoBehaviour
     //ボムスポーン(片岡実装)
     private GameObject m_BomSpawn;
 
-
+    // グレネードランチャー
+    [SerializeField]
+    private GameObject m_Launcher;
 
     // Use this for initialization
     void Start()
@@ -124,6 +126,14 @@ public class PlayerController : MonoBehaviour
 
         t = 0f;
         //
+
+        // グレネードランチャーが登録されなかった場合、強制終了
+        if (m_Launcher == null)
+        {
+            Debug.Log("エラー発生したので終了します");
+            Debug.Log("Error Log：グレネードランチャーが存在しない");
+            Application.Quit();
+        }
     }
 
     // Update is called once per frame
@@ -178,12 +188,10 @@ public class PlayerController : MonoBehaviour
         // プレイヤーが地面にいる場合、y軸加速度を0にする
         if (m_Controller.isGrounded) m_VelocityY = 0.0f;
 
-        // プレイヤーと地面との距離を取得（着地アニメーション用）
-
-
         // アニメーターにプレイヤーの状態を知らせる
         if (m_State != PlayerState.StartFall)
             m_Animator.SetBool("IsGrounded", m_Controller.isGrounded);
+
         m_Animator.SetBool("IsAiming", m_IsAiming);
         m_Animator.SetBool("IsCreeping", m_IsCreeping);
         m_Animator.SetBool("IsDead", m_IsDead);
@@ -234,10 +242,12 @@ public class PlayerController : MonoBehaviour
             m_Animator.speed = 1;
             m_IsStartFall = false;
 
-            
+
             t += 1.0f * Time.deltaTime;
             if (t >= 0.8f)
             {
+                // グレネードランチャーを表示し、通常状態に移行（Ho実装、2017/12/11）
+                m_Launcher.SetActive(true);
                 m_State = PlayerState.Normal;
 
                 if (!m_isClear)
@@ -743,6 +753,8 @@ public class PlayerController : MonoBehaviour
     // 死亡時の処理
     void Dead()
     {
+        // グレネードランチャーの表示を消す
+        m_Launcher.SetActive(false);
         // 死亡モーションを再生
         m_Animator.Play("Dead");
     }
