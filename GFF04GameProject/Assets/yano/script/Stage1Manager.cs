@@ -25,7 +25,7 @@ public class Stage1Manager : MonoBehaviour
     private GameObject camera_pos_;
 
     [SerializeField]
-    private GameObject boss_ui_;
+    private List<GameObject> boss_ui_;
 
     [SerializeField]
     private GameObject go_uis_;
@@ -44,7 +44,8 @@ public class Stage1Manager : MonoBehaviour
         isLScene = false;
         go_uis_.SetActive(false);
         timer_ui_.SetActive(false);
-        boss_ui_.GetComponent<Image>().enabled = false;
+        boss_ui_[0].SetActive(false);
+        boss_ui_[1].GetComponent<Image>().enabled = false;
 
         arows_[0].SetActive(false);
         arows_[1].SetActive(false);
@@ -61,7 +62,8 @@ public class Stage1Manager : MonoBehaviour
 
         if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1)
         {
-            boss_ui_.GetComponent<Image>().enabled = true;
+            boss_ui_[0].SetActive(true);
+            boss_ui_[1].GetComponent<Image>().enabled = true;
             timer_ui_.SetActive(true);
 
             if (robot_.GetComponent<RobotManager>().GetRobotHP() > 0f)
@@ -85,10 +87,10 @@ public class Stage1Manager : MonoBehaviour
                 arows_[0].SetActive(true);
                 arows_[1].SetActive(false);
 
-                if (Input.GetKeyDown(KeyCode.Return) && scene_ != null)
-                    StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("newnewNightTest 1"));
+                if (Input.GetButtonDown("Submit") && scene_ != null)
+                    StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("lightTest 1"));
 
-                if (Input.GetKeyDown(KeyCode.DownArrow))
+                if (Input.GetAxis("Vertical_L") <= -1f)
                     state_ = OverState.TitleTo;
             }
             else if (state_ == OverState.TitleTo)
@@ -96,12 +98,12 @@ public class Stage1Manager : MonoBehaviour
                 arows_[0].SetActive(false);
                 arows_[1].SetActive(true);
 
-                if (Input.GetKeyDown(KeyCode.Return) && scene_ != null)
+                if (Input.GetButtonDown("Submit") && scene_ != null)
                 {
                     StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("Title"));
                 }
 
-                if (Input.GetKeyDown(KeyCode.UpArrow))
+                if (Input.GetAxis("Vertical_L") >= 1f)
                     state_ = OverState.Retry;
             }
         }
@@ -125,7 +127,8 @@ public class Stage1Manager : MonoBehaviour
             if (test >= 35.0f)
             {
                 GetComponent<BlackOut_UI>().GameClearFead();
-                boss_ui_.GetComponent<Image>().enabled = false;
+                boss_ui_[0].SetActive(false);
+                boss_ui_[1].GetComponent<Image>().enabled = false;
             }
         }
 
@@ -133,7 +136,8 @@ public class Stage1Manager : MonoBehaviour
         if (camera_pos_.GetComponent<CameraPosition>().GetDeadFinish())
         {
             timer_ui_.SetActive(false);
-            boss_ui_.GetComponent<Image>().enabled = false;
+            boss_ui_[0].SetActive(false);
+            boss_ui_[1].GetComponent<Image>().enabled = false;
             GetComponent<BlackOut_UI>().GameOverFead();
             if (GetComponent<BlackOut_UI>().Get_ClearGO())
             {

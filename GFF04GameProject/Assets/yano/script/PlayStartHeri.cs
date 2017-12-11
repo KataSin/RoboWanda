@@ -33,6 +33,8 @@ public class PlayStartHeri : MonoBehaviour
     private bool isClear;
     private bool isStop;
 
+    private AudioSource heri_se_;
+
     // Use this for initialization
     void Start()
     {
@@ -53,6 +55,8 @@ public class PlayStartHeri : MonoBehaviour
 
         isClear = false;
         isStop = false;
+
+        heri_se_ = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -130,7 +134,14 @@ public class PlayStartHeri : MonoBehaviour
                         Vector3.Lerp(new Vector3(m_originL_Ropepos.x, -13f, m_originL_Ropepos.z), new Vector3(m_originL_Ropepos.x, 14f, m_originL_Ropepos.z), t3 / 1.5f);
                 }
                 else if (t3 >= 4f)
+                {
                     transform.position -= transform.forward;
+
+                    if(t3>10f)
+                    {
+                        heri_se_.Stop();
+                    }
+                }
             }
         }
     }

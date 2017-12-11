@@ -40,8 +40,8 @@ public class Missile : MonoBehaviour
         m_LerpTime = 0.0f;
         //頂点座標は
         m_VertexPos = ((transform.position + m_Player.transform.position) / 2.0f) +
-            new Vector3(Random.Range(-30, 30), 0.0f, Random.Range(-30, 30));
-        m_VertexPos.y = 300.0f + Random.Range(-50, 50);
+            new Vector3(Random.Range(-5,5), 0.0f, Random.Range(-5, 5));
+        m_VertexPos.y = 60.0f + Random.Range(-10, 10);
 
         m_SpawnPos = transform.position;
         m_SpawnToVertexVec = m_VertexPos - m_SpawnPos;

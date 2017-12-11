@@ -97,6 +97,8 @@ public class PlayerController : MonoBehaviour
 
     private AudioSource[] player_se_;
 
+    private int test;
+
 
     // Use this for initialization
     void Start()
@@ -216,6 +218,7 @@ public class PlayerController : MonoBehaviour
             if (m_State != PlayerState.Dead)
             {
                 m_State = PlayerState.Dead;
+                player_se_[1].Stop();
             }
         }
     }
@@ -227,6 +230,7 @@ public class PlayerController : MonoBehaviour
         if (other.GetComponent<RobotDamage>() != null)
         {
             m_State = PlayerState.Dead;
+            player_se_[1].Stop();
         }
 
         // 倒壊中のビルと接触したら死亡
@@ -235,6 +239,7 @@ public class PlayerController : MonoBehaviour
             || other.gameObject.name == "DeathCollide")
         {
             m_State = PlayerState.Dead;
+            player_se_[1].Stop();
         }
     }
 
@@ -775,6 +780,11 @@ public class PlayerController : MonoBehaviour
         m_Launcher.SetActive(false);
         // 死亡モーションを再生
         m_Animator.Play("Dead");
+        
+        if (test == 20)
+            player_se_[2].Play();
+
+        test++;
     }
 
     public int GetPlayerState()

@@ -13,6 +13,9 @@ public class BomSpawn : MonoBehaviour
     [SerializeField, Tooltip("投げる力")]
     public float m_Power = 100.0f;
 
+    [SerializeField]
+    private GameObject player_;
+
     //軌道線を表示させているかどうか
     private bool m_IsLineDraw;
     //投げるベクトル
@@ -101,6 +104,7 @@ public class BomSpawn : MonoBehaviour
     public void SpawnBom()
     {
         GameObject bom = Instantiate(m_BomPrefab, transform.position, Quaternion.identity);
+        bom.transform.rotation = Quaternion.Euler(90f, 0f, -(player_.transform.rotation.y * 180f / Mathf.PI) * 2f);
         bom.GetComponent<Rigidbody>().AddForce(m_Vec * m_Power);
     }
     /// <summary>

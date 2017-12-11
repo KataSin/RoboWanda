@@ -35,7 +35,7 @@ public class Bomb_v2 : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
         // 他の爆弾とプレイヤーとの接触判定は発生しない
-        if (other.tag == "Bomb" || other.tag == "Player") return;
+        if (other.tag == "Bomb" || other.tag == "Player"||other.tag=="SandSmoke") return;
 
 
         //矢野追加10270231
