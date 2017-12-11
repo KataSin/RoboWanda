@@ -20,6 +20,7 @@ public class Helicopter : MonoBehaviour
     public GameObject m_HeliBreakPrefab;
     private GameObject m_Robot;
 
+
     private Vector3 m_ResPos;
     private Vector3 m_Pos;
     private Vector3 m_SpringVelo;
@@ -37,6 +38,9 @@ public class Helicopter : MonoBehaviour
         m_ResPos = transform.position;
         m_Pos = transform.position;
         m_SpringVelo = Vector3.zero;
+
+
+
 
         m_IsBreak = false;
     }
@@ -62,7 +66,7 @@ public class Helicopter : MonoBehaviour
             Quaternion.AngleAxis(m_Velo.magnitude * 130.0f, rotateVec) *
             Quaternion.LookRotation(vec);
 
-        m_Propeller.transform.localEulerAngles += new Vector3(0,0,1000)*Time.deltaTime;
+        m_Propeller.transform.localEulerAngles += new Vector3(0, 0, 1000) * Time.deltaTime;
 
         Spring(m_ResPos, ref m_Pos, ref m_Velo, 0.2f, 0.5f, 7.0f);
         transform.position = m_Pos;
@@ -89,7 +93,7 @@ public class Helicopter : MonoBehaviour
         return lhs.x * rhs.z - rhs.x * lhs.z;
     }
 
-    
+
     /// <summary>
     /// バネ補間をする
     /// </summary>
@@ -125,7 +129,7 @@ public class Helicopter : MonoBehaviour
             m_IsBreak = true;
         }
     }
-   
+
 
 
 }

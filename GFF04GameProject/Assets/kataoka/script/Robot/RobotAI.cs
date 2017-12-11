@@ -49,18 +49,18 @@ public class RobotAI : MonoBehaviour
         attackTime += Time.deltaTime;
         if (PlayerToRobotRay("Player", 0, out player))
         {
-            if (Player_Robot_Distance(100.0f))
+            if (Player_Robot_Distance(10.0f))
             {
-                if (attackTime >= 5.0f)
+                if (attackTime >= 1.0f)
                 {
                     manager.SetAction(RobotAction.RobotState.ROBOT_LEG_ATTACK, false);
                     attackTime = 0.0f;
                 }
             }
             //見えててかつ遠かったらビームアタック
-            else if (!Player_Robot_Distance(200.0f))
+            else if (!Player_Robot_Distance(30.0f))
             {
-                if (attackTime >= 10.0f)
+                if (attackTime >= 2.0f)
                 {
                     manager.SetAction(RobotAction.RobotState.ROBOT_MISSILE_ATTACK, false);
                     attackTime = 0.0f;
