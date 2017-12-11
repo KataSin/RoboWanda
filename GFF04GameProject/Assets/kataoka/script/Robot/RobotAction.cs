@@ -96,6 +96,9 @@ public class RobotAction : MonoBehaviour
     float m_Friction;
     float m_Mass;
 
+    //矢野実装
+    private AudioSource[] boss_se_;
+
     void Start()
     {
         m_Bills = new List<GameObject>();
@@ -139,6 +142,8 @@ public class RobotAction : MonoBehaviour
         m_BeamStartPos = Vector3.zero;
         m_BeamEndPos = Vector3.zero;
         m_BeamLerpTime = 0.0f;
+
+        boss_se_ = GetComponents<AudioSource>();
     }
     /// <summary>
     /// ロボットがプレイヤーに向かって動く
@@ -168,6 +173,9 @@ public class RobotAction : MonoBehaviour
                 m_RobotState = RobotState.ROBOT_TO_PLAYER_MOVE;
                 m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
                 m_Animator.SetFloat("RobotSpeed", m_NavAgent.velocity.magnitude);
+
+                if (!boss_se_[0].isPlaying)
+                    boss_se_[0].Play();
 
                 return false;
             };
@@ -294,6 +302,8 @@ public class RobotAction : MonoBehaviour
                 }
             }
 
+            if (!boss_se_[1].isPlaying)
+                boss_se_[1].Play();
 
             m_RobotState = RobotState.ROBOT_BEAM_ATTACK;
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);

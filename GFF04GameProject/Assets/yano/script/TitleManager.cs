@@ -77,7 +77,7 @@ public class TitleManager : MonoBehaviour
             titleCamera_.GetComponent<TitleCamera>().Set_Timer(1.0f * Time.deltaTime);
             titleCamera_.GetComponent<TitleCamera>().titleReadyCamera();
 
-            if(Input.GetKeyDown(KeyCode.Return))
+            if (Input.anyKeyDown)
             {
                 titleCamera_.GetComponent<TitleCamera>().
                     Set_Timer(titleCamera_.GetComponent<TitleCamera>().Get_ReadyTime());
@@ -109,7 +109,7 @@ public class TitleManager : MonoBehaviour
                 titleCamera_.GetComponent<TitleCamera>().Set_Timer(1.0f * Time.deltaTime);
                 titleCamera_.GetComponent<TitleCamera>().titleReadyToStart();
 
-                if (Input.GetKeyDown(KeyCode.Return))
+                if (Input.anyKeyDown)
                 {
                     titleCamera_.GetComponent<TitleCamera>().
                         Set_Timer(titleCamera_.GetComponent<TitleCamera>().Get_FeadTime());
@@ -132,7 +132,7 @@ public class TitleManager : MonoBehaviour
 
                     sceneCnt_.GetComponent<SceneController>().SetNextScene(1);
 
-                    if (Input.GetKeyDown(KeyCode.S))
+                    if (Input.GetAxis("Vertical_L") <= -1.0f)
                         modeState_ = ModeState.No;
 
 
@@ -144,11 +144,11 @@ public class TitleManager : MonoBehaviour
 
                     sceneCnt_.GetComponent<SceneController>().SetNextScene(0);
 
-                    if (Input.GetKeyDown(KeyCode.W))
+                    if (Input.GetAxis("Vertical_L") >= 1.0f)
                         modeState_ = ModeState.Yes;
                 }
 
-                if (Input.GetKeyDown(KeyCode.Return))
+                if (Input.GetButtonDown("Submit"))
                 {
                     //mode_uis_.SetActive(false);
                     quetion_y_n_back_[0].SetActive(false);
@@ -166,7 +166,7 @@ public class TitleManager : MonoBehaviour
         {
             m_sallyTimer += 1.0f * Time.deltaTime;
 
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (Input.GetButtonDown("Submit"))
                 mode_uis_.SetActive(false);
 
             if (m_sallyTimer >= 4f || mode_uis_.activeSelf == false)
@@ -191,7 +191,7 @@ public class TitleManager : MonoBehaviour
                 }
             }
 
-            
+
         }
     }
 

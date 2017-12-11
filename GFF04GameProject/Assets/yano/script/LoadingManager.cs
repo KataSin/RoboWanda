@@ -23,7 +23,7 @@ public class LoadingManager : MonoBehaviour
         if (!isLScene && sceneCnt_ != null)
         {
             if (sceneCnt_.GetComponent<SceneController>().GetNextScene() == 0)
-                StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("newnewNightTest 1"));
+                StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("lightTest 1"));
 
             else if (sceneCnt_.GetComponent<SceneController>().GetNextScene() == 1)
                 StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("Tutorial"));

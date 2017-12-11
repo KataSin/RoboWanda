@@ -104,14 +104,16 @@ public class tower_collide : MonoBehaviour
 
         //ここに対象オブジェクトを指名
         if (other.GetComponent<RobotDamage>() != null
-            || 
+            ||
             other.gameObject.tag == "bom"
             ||
             other.gameObject.tag == "RobotArmAttack"
             ||
             other.gameObject.tag == "RobotBeam"
             ||
-            other.gameObject.tag == "Missile")
+            other.gameObject.tag == "Missile"
+            ||
+            other.gameObject.tag == "RobotEye")
         {
             isCollide = true;
 
