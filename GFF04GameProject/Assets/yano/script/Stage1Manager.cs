@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class Stage1Manager : MonoBehaviour
 {
-    [SerializeField]
     private GameObject scene_;
 
     private enum OverState
@@ -47,6 +46,9 @@ public class Stage1Manager : MonoBehaviour
         go_uis_.SetActive(false);
         timer_ui_.SetActive(false);
         boss_ui_.GetComponent<Image>().enabled = false;
+
+        if (GameObject.FindGameObjectWithTag("SceneController"))
+            scene_ = GameObject.FindGameObjectWithTag("SceneController");
     }
 
     // Update is called once per frame
@@ -82,7 +84,7 @@ public class Stage1Manager : MonoBehaviour
                 arows_[1].SetActive(false);
                 arows_[2].SetActive(false);
 
-                if (Input.GetKeyDown(KeyCode.Return))
+                if (Input.GetKeyDown(KeyCode.Return) && scene_ != null)
                     StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("newnewNightTest 1"));
 
                 if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -94,7 +96,7 @@ public class Stage1Manager : MonoBehaviour
                 arows_[1].SetActive(true);
                 arows_[2].SetActive(false);
 
-                if (Input.GetKeyDown(KeyCode.Return))
+                if (Input.GetKeyDown(KeyCode.Return) && scene_ != null)
                 {
                     StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("Title"));
                 }
@@ -119,7 +121,8 @@ public class Stage1Manager : MonoBehaviour
         }
 
         if (GetComponent<BlackOut_UI>().Get_ClearGC()
-            && !isLScene)
+            && !isLScene
+            && scene_ != null)
         {
             StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("Result"));
             isLScene = true;

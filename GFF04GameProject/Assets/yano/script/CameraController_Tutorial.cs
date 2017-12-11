@@ -61,19 +61,22 @@ public class CameraController_Tutorial : MonoBehaviour
                 {
                     // 回転
                     // 方向入力を取得
-                    float axisVertical = Input.GetAxisRaw("Vertical_R");        // x軸
-                    float axisHorizontal = Input.GetAxisRaw("Horizontal_R");    // y軸
+                    if (cameraPos_.GetComponent<CameraPosition_Tutorial>().Get_CntActive())
+                    {
+                        float axisVertical = Input.GetAxisRaw("Vertical_R");        // x軸
+                        float axisHorizontal = Input.GetAxisRaw("Horizontal_R");    // y軸
 
-                    transform.Rotate(Vector3.up, axisHorizontal * Time.deltaTime * m_RotateSpeedY, Space.World);  // y軸回転
+                        transform.Rotate(Vector3.up, axisHorizontal * Time.deltaTime * m_RotateSpeedY, Space.World);  // y軸回転
 
-                    // x軸回転
-                    pitch += axisVertical * Time.deltaTime * m_RotateSpeedX;
-                    pitch = Mathf.Clamp(pitch, m_PitchMin, m_PitchMax);        // 角度を制限する
+                        // x軸回転
+                        pitch += axisVertical * Time.deltaTime * m_RotateSpeedX;
+                        pitch = Mathf.Clamp(pitch, m_PitchMin, m_PitchMax);        // 角度を制限する
 
-                    Vector3 rotation = transform.rotation.eulerAngles;
-                    rotation.x = pitch;
-                    transform.rotation = Quaternion.Euler(rotation);
-                    rotation.z = 0.0f;
+                        Vector3 rotation = transform.rotation.eulerAngles;
+                        rotation.x = pitch;
+                        transform.rotation = Quaternion.Euler(rotation);
+                        rotation.z = 0.0f;
+                    }
                 }
             }
         }

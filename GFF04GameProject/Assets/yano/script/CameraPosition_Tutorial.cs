@@ -139,6 +139,8 @@ public class CameraPosition_Tutorial : MonoBehaviour
     [SerializeField]
     private GameObject tutorialMana_;
 
+    private bool isCntActive;
+
     // Use this for initialization
     void Start()
     {
@@ -178,6 +180,8 @@ public class CameraPosition_Tutorial : MonoBehaviour
         t_CameraFead1 = false;
         t_CameraFead2 = false;
         t_CameraFead3 = false;
+
+        isCntActive = false;
     }
 
     // Update is called once per frame
@@ -329,15 +333,19 @@ public class CameraPosition_Tutorial : MonoBehaviour
         switch (m_Mode)
         {
             case T_PlayerCameraMode.Tutorial_1:
+                isCntActive = false;
                 Tutorial1Mode();
                 break;
             case T_PlayerCameraMode.Tutorial_2:
+                isCntActive = false;
                 Tutorial2Mode();
                 break;
             case T_PlayerCameraMode.Tutorial_3:
+                isCntActive = false;
                 Tutorial3Mode();
                 break;
             case T_PlayerCameraMode.Normal:
+                isCntActive = true;
                 NormalMode();
                 break;
             case T_PlayerCameraMode.Dead:
@@ -451,7 +459,7 @@ public class CameraPosition_Tutorial : MonoBehaviour
         m_origin_pos = transform.position;
         m_origin_rotation = transform.rotation;
 
-        if (tutorialMana_.GetComponent<TutorialManager>().GetTutorialState() == 1
+        if (tutorialMana_.GetComponent<TutorialManager>().GetTutorialState() == 2
             && !t_CameraFead1)
         {
             m_Mode = T_PlayerCameraMode.Tutorial_1;
@@ -459,7 +467,7 @@ public class CameraPosition_Tutorial : MonoBehaviour
             return;
         }
 
-        if (tutorialMana_.GetComponent<TutorialManager>().GetTutorialState() == 2
+        if (tutorialMana_.GetComponent<TutorialManager>().GetTutorialState() == 3
             && !t_CameraFead2)
         {
             m_Mode = T_PlayerCameraMode.Tutorial_2;
@@ -468,7 +476,7 @@ public class CameraPosition_Tutorial : MonoBehaviour
             return;
         }
 
-        if (tutorialMana_.GetComponent<TutorialManager>().GetTutorialState() == 3
+        if (tutorialMana_.GetComponent<TutorialManager>().GetTutorialState() == 4
             && !t_CameraFead3)
         {
             m_Mode = T_PlayerCameraMode.Tutorial_3;
@@ -684,5 +692,10 @@ public class CameraPosition_Tutorial : MonoBehaviour
     public bool GetDeadFinish()
     {
         return isDeadFinish;
+    }
+
+    public bool Get_CntActive()
+    {
+        return isCntActive;
     }
 }

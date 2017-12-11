@@ -6,22 +6,29 @@ public class TutorialManager : MonoBehaviour
 {
     private enum TutorialState
     {
+        Fead,
         Start,
         Mission1,
         Mission2,
         Mission3,
+        End,
     }
 
     private TutorialState m_state;
+
+    private GameObject sceneCnt_;
 
     [SerializeField]
     private List<GameObject> clear_pod_;
 
     [SerializeField]
-    private GameObject tower_;
+    private GameObject bill_;
 
     [SerializeField]
     private GameObject mission_bar_;
+
+    [SerializeField]
+    private GameObject tutorial_canvas_;
 
     [SerializeField]
     private GameObject missionC_ui_;
@@ -51,6 +58,8 @@ public class TutorialManager : MonoBehaviour
 
     private float m_startInterval;
 
+    private bool isLScene;
+
     // Use this for initialization
     void Start()
     {
@@ -64,7 +73,12 @@ public class TutorialManager : MonoBehaviour
         m_intervalTime = 0f;
         m_startInterval = 0f;
 
-        m_state = TutorialState.Start;
+        m_state = TutorialState.Fead;
+
+        if (GameObject.FindGameObjectWithTag("SceneController"))
+            sceneCnt_ = GameObject.FindGameObjectWithTag("SceneController");
+
+        isLScene = false;
     }
 
     // Update is called once per frame
@@ -72,6 +86,10 @@ public class TutorialManager : MonoBehaviour
     {
         switch (m_state)
         {
+            case TutorialState.Fead:
+                Fead_Update();
+                break;
+
             case TutorialState.Start:
                 Start_Update();
                 break;
@@ -87,9 +105,26 @@ public class TutorialManager : MonoBehaviour
             case TutorialState.Mission3:
                 Mission3_Update();
                 break;
+
+            case TutorialState.End:
+                End_Update();
+                break;
         }
 
         Debug.Log(m_state);
+    }
+
+    private void Fead_Update()
+    {
+        if (!tutorial_canvas_.GetComponent<BlackOut_UI>().Get_Clear())
+        {
+            tutorial_canvas_.GetComponent<BlackOut_UI>().FeadIn();
+        }
+        else
+        {
+            m_state = TutorialState.Start;
+            tutorial_canvas_.GetComponent<BlackOut_UI>().ResetT();
+        }
     }
 
     private void Start_Update()
@@ -176,38 +211,53 @@ public class TutorialManager : MonoBehaviour
 
     void Mission3_Update()
     {
-        if (tower_ != null)
+
+        if (camera_pos_.GetComponent<CameraPosition_Tutorial>().GetMode() == 2
+           && camera_pos_.GetComponent<CameraPosition_Tutorial>().Get_T() >= 2f
+           && !bill_.GetComponent<Break>().Get_BreakFlag())
         {
-            if (camera_pos_.GetComponent<CameraPosition_Tutorial>().GetMode() == 2
-               && camera_pos_.GetComponent<CameraPosition_Tutorial>().Get_T() >= 2f
-               && !tower_.GetComponent<Break>().Get_BreakFlag())
-            {
-                mission_bar_.GetComponent<ui_imageScale>().ScaleChange();
+            mission_bar_.GetComponent<ui_imageScale>().ScaleChange();
 
-                if (mission_bar_.GetComponent<ui_imageScale>().GetClear())
-                {
-                    mission3_ui_.SetActive(true);
-                    //controller_ico_.SetActive(true);
-                }
+            if (mission_bar_.GetComponent<ui_imageScale>().GetClear())
+            {
+                mission3_ui_.SetActive(true);
+                //controller_ico_.SetActive(true);
             }
+        }
 
-            if (tower_.GetComponent<Break>().Get_BreakFlag())
-            {
+        if (bill_.GetComponent<Break>().Get_BreakFlag())
+        {
+            if (m_intervalTime < 2f)
                 missionC_ui_.SetActive(true);
-                mission3_ui_.SetActive(false);
-                //controller_ico_.SetActive(false);
-                mission_bar_.GetComponent<ui_imageScale>().ScaleBack();
+            mission3_ui_.SetActive(false);
+            //controller_ico_.SetActive(false);
+            mission_bar_.GetComponent<ui_imageScale>().ScaleBack();
 
-                m_intervalTime += 1.0f * Time.deltaTime;
+            m_intervalTime += 1.0f * Time.deltaTime;
+
+            if (m_intervalTime >= 2f)
+            {
+                m_state = TutorialState.End;
+                missionC_ui_.SetActive(false);
+
             }
         }
 
-        else if (tower_ == null)
+    }
+
+    private void End_Update()
+    {
+        if (!tutorial_canvas_.GetComponent<BlackOut_UI>().Get_Clear())
+            tutorial_canvas_.GetComponent<BlackOut_UI>().BlackOut();
+
+        else if (tutorial_canvas_.GetComponent<BlackOut_UI>().Get_Clear()
+            && sceneCnt_ != null
+            && !isLScene)
         {
-            missionC_ui_.SetActive(false);
-            //m_state = TutorialState.Mission3;
-            //m_intervalTime = 0f;
+            StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("newnewNightTest 1"));
+            isLScene = true;
         }
+           
     }
 
     public int GetTutorialState()
