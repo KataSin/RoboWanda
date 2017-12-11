@@ -95,11 +95,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameObject m_Launcher;
 
+    private AudioSource[] player_se_;
+
+
     // Use this for initialization
     void Start()
     {
         m_Controller = GetComponent<CharacterController>();
         m_Animator = GetComponent<Animator>();
+        player_se_ = GetComponents<AudioSource>();
 
         m_State = PlayerState.StartFall;
         m_CurrentSpeedLimit = m_MaxSpeed;
@@ -484,6 +488,17 @@ public class PlayerController : MonoBehaviour
         if (axisHorizontal == 0 && axisVertical == 0)
         {
             m_Speed = Mathf.Max(m_Speed - m_CurrentBrakePower * Time.deltaTime, 0);
+
+            if (m_Speed == 0)
+                player_se_[1].Stop();
+        }
+
+        else if (axisHorizontal != 0 || axisVertical != 0 || m_Speed != 0)
+        {
+            if (!player_se_[1].isPlaying)
+            {
+                player_se_[1].Play();
+            }
         }
 
         // 接地状態であれば加速可能
@@ -497,12 +512,14 @@ public class PlayerController : MonoBehaviour
             // 速度制限、ブレーキ速度、および回転速度の変更
             if (m_IsDash)
             {
+                player_se_[1].pitch = 2.4f;
                 m_CurrentSpeedLimit = m_MaxSpeedDash;
                 m_CurrentBrakePower = m_BrakePowerDash;
                 m_CurrentRotateSpeed = m_RotateSpeedDash;
             }
             else
             {
+                player_se_[1].pitch = 1.2f;
                 if (m_CurrentSpeedLimit > m_MaxSpeed)
                 {
                     m_CurrentSpeedLimit -= 0.2f;
@@ -565,6 +582,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Bomb_Throw"))
         {
             m_BomSpawn.GetComponent<BomSpawn>().SpawnBom();
+            player_se_[0].Play();
         }
 
         // RBボタンを放すと通常状態に戻る

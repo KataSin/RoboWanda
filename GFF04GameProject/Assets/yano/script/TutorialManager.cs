@@ -127,7 +127,7 @@ public class TutorialManager : MonoBehaviour
         {
             tutorial_canvas_.GetComponent<BlackOut_UI>().FeadIn();
             bgm_.volume = 
-                Mathf.Lerp(0f, 1f,
+                Mathf.Lerp(0f, 0.1f,
                 tutorial_canvas_.GetComponent<BlackOut_UI>().GetT() / tutorial_canvas_.GetComponent<BlackOut_UI>().GetBFeadTime());
         }
 
@@ -262,7 +262,7 @@ public class TutorialManager : MonoBehaviour
         {
             tutorial_canvas_.GetComponent<BlackOut_UI>().BlackOut();
             bgm_.volume =
-                Mathf.Lerp(1f, 0f,
+                Mathf.Lerp(0.1f, 0f,
                 tutorial_canvas_.GetComponent<BlackOut_UI>().GetT() / tutorial_canvas_.GetComponent<BlackOut_UI>().GetBFeadTime());
         }
 
