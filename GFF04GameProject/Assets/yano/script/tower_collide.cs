@@ -113,7 +113,9 @@ public class tower_collide : MonoBehaviour
             ||
             other.gameObject.tag == "Missile"
             ||
-            other.gameObject.tag == "RobotEye")
+            other.gameObject.tag == "ExplosionCollision"
+            ||
+            other.gameObject.tag == "BeamCollide")
         {
             isCollide = true;
 

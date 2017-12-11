@@ -41,4 +41,14 @@ public class ResultCamera : MonoBehaviour
     {
         return isClear;
     }
+
+    public void SetT(float l_t)
+    {
+        t = l_t;
+    }
+
+    public float GetMoveTime()
+    {
+        return moveTime;
+    }
 }

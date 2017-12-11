@@ -50,6 +50,12 @@ public class ResultManager : MonoBehaviour
             GetComponent<BlackOut_UI>().FeadIn();
             camera_.GetComponent<ResultCamera>().ResultMove();
 
+            if (Input.anyKeyDown)
+            {
+                GetComponent<BlackOut_UI>().SetT(GetComponent<BlackOut_UI>().GetBFeadTime());
+                camera_.GetComponent<ResultCamera>().SetT(camera_.GetComponent<ResultCamera>().GetMoveTime());
+            }
+
             if (camera_.GetComponent<ResultCamera>().Get_Clear())
                 state_ = ResultState.Result;
 

@@ -113,6 +113,11 @@ public class BlackOut_UI : MonoBehaviour
         return m_blackFeadTime;
     }
 
+    public void SetT(float l_t)
+    {
+        t = l_t;
+    }
+
     public void ResetT()
     {
         t = 0f;
