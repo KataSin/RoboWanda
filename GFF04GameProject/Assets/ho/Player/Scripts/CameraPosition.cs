@@ -339,13 +339,13 @@ public class CameraPosition : MonoBehaviour
 
         else if (m_Player.GetComponent<PlayerController>().GetPlayerState() != 0)
         {
-            t += 1.0f * Time.deltaTime;
-
             transform.localPosition = Vector3.Lerp(m_origin_pos, new Vector3(0f, 0.5f, -5f), t / 1f);
             transform.localRotation = Quaternion.Slerp(m_origin_rotation, Quaternion.identity, t / 1f);
 
             if (t >= 1f)
                 m_Mode = PlayerCameraMode.Normal;
+
+            t += 1.0f * Time.deltaTime;
         }
     }
 
@@ -549,5 +549,10 @@ public class CameraPosition : MonoBehaviour
     public bool GetDeadFinish()
     {
         return isDeadFinish;
+    }
+
+    public float GetT()
+    {
+        return t;
     }
 }

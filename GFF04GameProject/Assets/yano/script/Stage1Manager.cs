@@ -37,6 +37,9 @@ public class Stage1Manager : MonoBehaviour
 
     private bool isLScene;
 
+    [SerializeField]
+    private GameObject bezeru_ui_;
+
     // Use this for initialization
     void Start()
     {
@@ -59,6 +62,11 @@ public class Stage1Manager : MonoBehaviour
     {
         if (!GetComponent<BlackOut_UI>().Get_Clear())
             GetComponent<BlackOut_UI>().FeadIn();
+
+        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 0)
+        {
+            bezeru_ui_.GetComponent<ui_Bezeru>().SetT(camera_pos_.GetComponent<CameraPosition>().GetT());
+        }
 
         if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1)
         {
