@@ -51,8 +51,8 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private GameObject door2_;
 
-    [SerializeField]
-    private GameObject controller_ico_;
+    //[SerializeField]
+    //private GameObject controller_ico_;
 
     private AudioSource bgm_;
 
@@ -75,7 +75,7 @@ public class TutorialManager : MonoBehaviour
         mission2_ui_.SetActive(false);
         mission3_ui_.SetActive(false);
 
-        controller_ico_.SetActive(false);
+        //controller_ico_.SetActive(false);
 
         m_intervalTime = 0f;
         m_startInterval = 0f;
@@ -157,7 +157,7 @@ public class TutorialManager : MonoBehaviour
             if (mission_bar_.GetComponent<ui_imageScale>().GetClear())
             {
                 mission1_ui_.SetActive(true);
-                controller_ico_.SetActive(true);
+                //controller_ico_.SetActive(true);
             }
         }
 
@@ -167,7 +167,7 @@ public class TutorialManager : MonoBehaviour
         {
             missionC_ui_.SetActive(true);
             mission1_ui_.SetActive(false);
-            controller_ico_.SetActive(false);
+            //controller_ico_.SetActive(false);
             mission_bar_.GetComponent<ui_imageScale>().ScaleBack();
 
             m_intervalTime += 1.0f * Time.deltaTime;
@@ -195,7 +195,7 @@ public class TutorialManager : MonoBehaviour
             if (mission_bar_.GetComponent<ui_imageScale>().GetClear())
             {
                 mission2_ui_.SetActive(true);
-                controller_ico_.SetActive(true);
+                //controller_ico_.SetActive(true);
             }
         }
 
@@ -203,7 +203,7 @@ public class TutorialManager : MonoBehaviour
         {
             missionC_ui_.SetActive(true);
             mission2_ui_.SetActive(false);
-            controller_ico_.SetActive(false);
+            //controller_ico_.SetActive(false);
             mission_bar_.GetComponent<ui_imageScale>().ScaleBack();
 
             m_intervalTime += 1.0f * Time.deltaTime;
@@ -270,7 +270,7 @@ public class TutorialManager : MonoBehaviour
             && sceneCnt_ != null
             && !isLScene)
         {
-            StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("newnewNightTest 1"));
+            StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("lightTest 1"));
             isLScene = true;
         }
 

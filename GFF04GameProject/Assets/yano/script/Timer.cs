@@ -72,6 +72,11 @@ public class Timer : MonoBehaviour
         
     }
 
+    public float GetTimer()
+    {
+        return m_Timer;
+    }
+
     public float Get_ElapsedTimer()
     {
         return m_elapsedTimer;

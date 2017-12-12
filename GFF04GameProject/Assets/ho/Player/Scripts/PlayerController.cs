@@ -99,6 +99,8 @@ public class PlayerController : MonoBehaviour
 
     private int test;
 
+    private GameObject timer_;
+
 
     // Use this for initialization
     void Start()
@@ -132,11 +134,22 @@ public class PlayerController : MonoBehaviour
 
         t = 0f;
         //
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (GameObject.FindGameObjectWithTag("Timer"))
+            timer_ = GameObject.FindGameObjectWithTag("Timer");
+
+        if (timer_ != null)
+        {
+            if (timer_.GetComponent<Timer>().GetTimer() <= 0f)
+                return;
+        }
+
         // プレイヤーの状態に応じて処理を行う
         switch (m_State)
         {
@@ -782,7 +795,7 @@ public class PlayerController : MonoBehaviour
         m_Launcher.SetActive(false);
         // 死亡モーションを再生
         m_Animator.Play("Dead");
-        
+
         if (test == 20)
             player_se_[2].Play();
 
