@@ -24,8 +24,8 @@ public class Stage1Manager : MonoBehaviour
     [SerializeField]
     private GameObject camera_pos_;
 
-    [SerializeField]
-    private List<GameObject> boss_ui_;
+    //[SerializeField]
+    //private List<GameObject> boss_ui_;
 
     [SerializeField]
     private GameObject go_uis_;
@@ -44,8 +44,8 @@ public class Stage1Manager : MonoBehaviour
         isLScene = false;
         go_uis_.SetActive(false);
         timer_ui_.SetActive(false);
-        boss_ui_[0].SetActive(false);
-        boss_ui_[1].GetComponent<Image>().enabled = false;
+        //boss_ui_[0].SetActive(false);
+        //boss_ui_[1].GetComponent<Image>().enabled = false;
 
         arows_[0].SetActive(false);
         arows_[1].SetActive(false);
@@ -62,8 +62,8 @@ public class Stage1Manager : MonoBehaviour
 
         if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1)
         {
-            boss_ui_[0].SetActive(true);
-            boss_ui_[1].GetComponent<Image>().enabled = true;
+            //boss_ui_[0].SetActive(true);
+            //boss_ui_[1].GetComponent<Image>().enabled = true;
             timer_ui_.SetActive(true);
 
             if (robot_.GetComponent<RobotManager>().GetRobotHP() > 0f)
@@ -127,17 +127,18 @@ public class Stage1Manager : MonoBehaviour
             if (test >= 35.0f)
             {
                 GetComponent<BlackOut_UI>().GameClearFead();
-                boss_ui_[0].SetActive(false);
-                boss_ui_[1].GetComponent<Image>().enabled = false;
+                //boss_ui_[0].SetActive(false);
+                //boss_ui_[1].GetComponent<Image>().enabled = false;
             }
         }
 
         //プレイヤーのチェック
-        if (camera_pos_.GetComponent<CameraPosition>().GetDeadFinish())
+        if (camera_pos_.GetComponent<CameraPosition>().GetDeadFinish()
+            || timer_ui_.GetComponent<Timer>().GetTimer() <= 0f)
         {
             timer_ui_.SetActive(false);
-            boss_ui_[0].SetActive(false);
-            boss_ui_[1].GetComponent<Image>().enabled = false;
+            //boss_ui_[0].SetActive(false);
+            //boss_ui_[1].GetComponent<Image>().enabled = false;
             GetComponent<BlackOut_UI>().GameOverFead();
             if (GetComponent<BlackOut_UI>().Get_ClearGO())
             {

@@ -35,6 +35,8 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private GameObject cameraPos_;
 
+    private GameObject timer_;
+
     // Use this for initialization
     void Start()
     {
@@ -46,6 +48,8 @@ public class CameraController : MonoBehaviour
         }
 
         mode_ = PlayerCameraMode.Event;
+
+        
     }
 
     // Update is called once per frame
@@ -53,6 +57,14 @@ public class CameraController : MonoBehaviour
     {
         if (m_Player != null)
         {
+            if (GameObject.FindGameObjectWithTag("Timer"))
+                timer_ = GameObject.FindGameObjectWithTag("Timer");
+            if (timer_ != null)
+            {
+                if (timer_.GetComponent<Timer>().GetTimer() <= 0f)
+                    return;
+            }
+
             CheckMode();
 
             if (m_Player.GetComponent<PlayerController>().GetPlayerState() == 0)
