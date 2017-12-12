@@ -132,14 +132,6 @@ public class PlayerController : MonoBehaviour
 
         t = 0f;
         //
-
-        // グレネードランチャーが登録されなかった場合、強制終了
-        if (m_Launcher == null)
-        {
-            Debug.Log("エラー発生したので終了します");
-            Debug.Log("Error Log：グレネードランチャーが存在しない");
-            Application.Quit();
-        }
     }
 
     // Update is called once per frame
@@ -227,7 +219,17 @@ public class PlayerController : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
         // 敵ロボットと接触したら死亡
-        if (other.GetComponent<RobotDamage>() != null)
+        if (other.GetComponent<RobotDamage>() != null
+            ||
+            other.gameObject.tag == "RobotArmAttack"
+            ||
+            other.gameObject.tag == "RobotBeam"
+            ||
+            other.gameObject.tag == "Missile"
+            ||
+            other.gameObject.tag == "ExplosionCollision"
+            ||
+            other.gameObject.tag == "BeamCollide")
         {
             m_State = PlayerState.Dead;
             player_se_[1].Stop();

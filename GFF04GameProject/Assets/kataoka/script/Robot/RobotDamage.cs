@@ -30,7 +30,9 @@ public class RobotDamage : MonoBehaviour
         if (other.tag == "bom")
         {
             m_Manager.Damage(10);
-            scoreMana_.GetComponent<ScoreManager>().SetAtackScore(10);
+
+            if (scoreMana_ != null)
+                scoreMana_.GetComponent<ScoreManager>().SetAtackScore(10);
         }
         if (other.tag == "TowerCollision")
         {
