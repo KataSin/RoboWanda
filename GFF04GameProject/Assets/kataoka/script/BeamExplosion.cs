@@ -27,6 +27,7 @@ public class BeamExplosion : MonoBehaviour
         {
             Instantiate(m_Exprosion, transform.position, Quaternion.identity);
             gameObject.AddComponent<SphereCollider>();
+            gameObject.GetComponent<SphereCollider>().isTrigger = true;
             m_ExprosionFlag = false;
         }
 

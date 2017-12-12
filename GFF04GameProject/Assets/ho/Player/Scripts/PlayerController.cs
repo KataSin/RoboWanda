@@ -227,6 +227,10 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    public void OnCollisionEnter(Collision other)
+    {
+        Debug.Log(other.gameObject.name);
+    }
 
     // 接触判定
     public void OnTriggerEnter(Collider other)
