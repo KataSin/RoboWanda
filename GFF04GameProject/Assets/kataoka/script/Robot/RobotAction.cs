@@ -302,9 +302,6 @@ public class RobotAction : MonoBehaviour
                 }
             }
 
-            if (!boss_se_[1].isPlaying)
-                boss_se_[1].Play();
-
             m_RobotState = RobotState.ROBOT_BEAM_ATTACK;
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
             return endAnim;

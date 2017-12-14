@@ -19,9 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4599929684888538}
-  - component: {fileID: 33950806096377264}
   - component: {fileID: 135212434660092542}
-  - component: {fileID: 23106032165652044}
   - component: {fileID: 54214291749928912}
   - component: {fileID: 114058273655503116}
   - component: {fileID: 82335396783421448}
@@ -45,45 +43,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23106032165652044
-MeshRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1786774095278696}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 1
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
---- !u!33 &33950806096377264
-MeshFilter:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1786774095278696}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!54 &54214291749928912
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -190,8 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe518c21295bfc04282a3515ceeaf53c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  exlosion_obj_: {fileID: 1520053568753228, guid: 04549e70b340b64419b91fe0c0ec9d0a,
-    type: 2}
+  exlosion_obj_: {fileID: 100006, guid: 93485fd5fc2ccf2439cb3239186f6382, type: 2}
 --- !u!135 &135212434660092542
 SphereCollider:
   m_ObjectHideFlags: 1

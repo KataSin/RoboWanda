@@ -8,8 +8,6 @@ public class RobotBeam : MonoBehaviour
     private Vector3 m_Vec;
     [SerializeField, Tooltip("爆発エフェクト")]
     public GameObject m_BonEffect;
-    [SerializeField]
-    private GameObject m_beamCollide;
     //ラインレンダラー
     private LineRenderer m_LineRenderer;
     //Lineのスタートする場所
@@ -80,7 +78,6 @@ public class RobotBeam : MonoBehaviour
             if (m_Frame % 3 == 0)
             {
                 Instantiate(m_BonEffect, hit.point, Quaternion.identity);
-                Instantiate(m_beamCollide, hit.point, Quaternion.identity);
             }
         }
         m_BeamLength = Mathf.Clamp(m_BeamLength, 0.0f, 1000.0f);
