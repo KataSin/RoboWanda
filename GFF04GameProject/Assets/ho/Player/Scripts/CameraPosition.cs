@@ -125,6 +125,9 @@ public class CameraPosition : MonoBehaviour
 
     private bool isDeadFinish;
 
+    /*[SerializeField]
+    private GameObject m_CameraBack;*/
+
     // Use this for initialization
     void Start()
     {
@@ -437,7 +440,7 @@ public class CameraPosition : MonoBehaviour
         transform.localPosition = Vector3.Lerp(transform.localPosition, new_position, m_Speed * Time.deltaTime);
 
         // カメラがフィールドや障害物に透過しないようにする
-        Ray ray = new Ray(m_Player.transform.position + Vector3.up, transform.position - m_Player.transform.position - Vector3.up);
+        /*Ray ray = new Ray(m_Player.transform.position + Vector3.up, transform.position - m_Player.transform.position - Vector3.up);
         float distance = Vector3.Distance(m_Player.transform.position, transform.position);
         // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
         RaycastHit hitInfo;
@@ -452,6 +455,23 @@ public class CameraPosition : MonoBehaviour
         {
             // Debug.Log("壁に遮られた");
             transform.position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.1f, hitInfo.point.z);
+        }*/
+        Ray ray = new Ray(m_Player.transform.position + Vector3.up, transform.position - m_Player.transform.position - Vector3.up);
+        float distance = Vector3.Distance(m_Player.transform.position, transform.position);
+        // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
+        {
+            // Debug.Log("壁に遮られた");
+            if (m_Distance == CameraDistance.Far)
+            {
+                transform.position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.5f, hitInfo.point.z);
+            }
+            else
+            {
+                transform.position = new Vector3(hitInfo.point.x, hitInfo.point.y, hitInfo.point.z);
+            }
         }
     }
 
@@ -467,7 +487,7 @@ public class CameraPosition : MonoBehaviour
         {
             t += 1.0f * Time.deltaTime;
 
-            transform.position = 
+            transform.position =
                 Vector3.Lerp(
                     m_deadBefore_pos,
                     m_Player.transform.position + m_Player.transform.forward + new Vector3(0f, 3f, 0f),
