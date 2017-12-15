@@ -24,7 +24,7 @@ public class smoke_collide : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            camera_.GetComponent<CameraShake>().Shake((m_distance - 20f) / 10f);
+            camera_.GetComponent<CameraShake>().Shake((m_distance - 25f) / 25f);
         }
     }
 }

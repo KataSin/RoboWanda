@@ -29,11 +29,15 @@ public class Break_Other : MonoBehaviour
 
     private GameObject scoreMana_;
 
+    private AudioSource break_se_;
+
     // Use this for initialization
     void Start()
     {
         obuild_collide_manager_ =
             obuild_collide_manager_obj_.GetComponent<obuild_collide_manager>();
+
+        break_se_ = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -47,7 +51,7 @@ public class Break_Other : MonoBehaviour
 
             Collapse();
 
-            OutBreakSmoke();    
+            OutBreakSmoke();
         }
     }
 
@@ -63,7 +67,8 @@ public class Break_Other : MonoBehaviour
                 scoreMana_.GetComponent<ScoreManager>().SetBreakCount();
             }
 
-            Destroy(this.gameObject);
+            if (!break_se_.isPlaying)
+                Destroy(this.gameObject);
         }
     }
 
@@ -76,6 +81,8 @@ public class Break_Other : MonoBehaviour
             GameObject smoke = Instantiate(sand_smoke_manager_, ob_pos, Quaternion.identity);
             smoke.transform.Find("desert_Horizontal").localScale = transform.localScale * m_sand_smoke_scalar;
             smoke.transform.Find("desert_Vertical").localScale = transform.localScale * m_sand_smoke_scalar;
+
+            break_se_.Play();
 
             isOutBreak = true;
         }
