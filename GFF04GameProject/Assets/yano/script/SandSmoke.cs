@@ -8,9 +8,7 @@ public class SandSmoke : MonoBehaviour
     [SerializeField]
     private List<ParticleSystem> sand_smokes_;
 
-    //倒壊経過時間
-    [SerializeField]
-    private float m_break_time;
+    private bool isClear;
 
     // Use this for initialization
     void Start()
@@ -18,26 +16,25 @@ public class SandSmoke : MonoBehaviour
         //砂煙を停止
         for (int i = 0; i < sand_smokes_.Count; ++i)
             sand_smokes_[i].Stop();
+
+        isClear = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        m_break_time += 1.0f * Time.deltaTime;
-
-        if (m_break_time < 12f)
+        if (!isClear)
         {
             for (int i = 0; i < sand_smokes_.Count; ++i)
                 sand_smokes_[i].Play();
+
+            isClear = true;
         }
 
-        else if (m_break_time >= 12f)
+        else if (isClear
+            && (!sand_smokes_[0].isPlaying && !sand_smokes_[1].isPlaying))
         {
-            for (int i = 0; i < sand_smokes_.Count; ++i)
-                sand_smokes_[i].Stop();
-
-            if (m_break_time >= 14f)
-                Destroy(this.gameObject);
-        }        
+            Destroy(this.gameObject);            
+        }
     }
 }

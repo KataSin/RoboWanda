@@ -129,7 +129,6 @@ MonoBehaviour:
   sand_smokes_:
   - {fileID: 198870370312573896}
   - {fileID: 198298515361715570}
-  m_break_time: 0
 --- !u!135 &135064384652677262
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -140,7 +139,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.7
+  m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!198 &198298515361715570
 ParticleSystem:
@@ -855,15 +854,15 @@ ParticleSystem:
         - serializedVersion: 2
           time: 0
           value: 1
-          inSlope: -1
-          outSlope: -1
-          tangentMode: 0
+          inSlope: 0.55172664
+          outSlope: -0.2769424
+          tangentMode: 1
         - serializedVersion: 2
           time: 1
           value: 0
-          inSlope: -1
-          outSlope: -1
-          tangentMode: 0
+          inSlope: -2.2350874
+          outSlope: -0.561506
+          tangentMode: 1
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 0
@@ -4116,15 +4115,15 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 2
           time: 0
-          value: 0.7407411
-          inSlope: -0.58974695
-          outSlope: -0.58974695
-          tangentMode: 0
+          value: 1
+          inSlope: -0.78456044
+          outSlope: -0.36670113
+          tangentMode: 5
         - serializedVersion: 2
           time: 1
           value: 0
-          inSlope: -1
-          outSlope: -1
+          inSlope: -2.1438594
+          outSlope: -2.1438594
           tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
