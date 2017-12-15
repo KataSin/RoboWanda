@@ -4,14 +4,33 @@ using UnityEngine;
 
 public class BomSpawn : MonoBehaviour
 {
+    public enum Bom
+    {
+        BOM,
+        LIGHT_BOM,
+        SMOKE_BOM
+    }
+
+
     [SerializeField, Tooltip("爆弾プレハブ")]
     public GameObject m_BomPrefab;
-    [SerializeField, Tooltip("着地地点オブジェクト")]
+    [SerializeField, Tooltip("閃光弾プレハブ")]
+    public GameObject m_LightBomPrefab;
+    [SerializeField, Tooltip("煙爆弾プレハブ")]
+    public GameObject m_SmokeBomPrefab;
+
+
+
+    [SerializeField, Tooltip("着地地点オブジェクト"), Space(15)]
     public GameObject m_LandingPoint;
+    [SerializeField, Tooltip("頂点オブジェクト")]
+    public GameObject m_VertexPoint;
     [SerializeField, Tooltip("挙動のテストプレハブ")]
     public GameObject m_Point;
-    [SerializeField, Tooltip("投げる力")]
+    [SerializeField, Tooltip("通常投げる力")]
     public float m_Power = 100.0f;
+    [SerializeField, Tooltip("強い投げる力")]
+    public float m_HighPower = 200.0f;
 
     [SerializeField]
     private GameObject player_;
@@ -20,13 +39,22 @@ public class BomSpawn : MonoBehaviour
     private bool m_IsLineDraw;
     //投げるベクトル
     private Vector3 m_Vec;
-
+    //投げるボムの種類
+    public Bom m_Bom;
+    //ラインレンダラー
+    private LineRenderer m_LineRenderer;
     private List<GameObject> points;
     // Use this for initialization
     void Start()
     {
         //初期化
         points = new List<GameObject>();
+
+        m_LineRenderer = GetComponent<LineRenderer>();
+
+        m_LineRenderer.positionCount = 0;
+        m_LineRenderer.enabled = false;
+
         m_IsLineDraw = false;
         //軌道ポイント生成
         for (int time = 0; time <= 200; time++)
@@ -44,26 +72,35 @@ public class BomSpawn : MonoBehaviour
         //表示しないならアクティブをfalseにしてリターン
         if (!m_IsLineDraw)
         {
-            foreach (var i in points)
-            {
-                i.SetActive(false);
-            }
+            //foreach (var i in points)
+            //{
+            //    i.SetActive(false);
+            //}
+            m_LineRenderer.enabled = false;
             m_LandingPoint.SetActive(false);
             return;
         }
-
-        m_Vec = m_Vec * m_Power;
-
+        m_LineRenderer.enabled = true;
+        float power = m_Power;
+        if (m_Bom == Bom.LIGHT_BOM)
+            power = m_HighPower;
+        m_Vec = m_Vec * power;
         //ポジション設定
         for (int time = 0; time <= 200; time++)
         {
             Vector3 pos = Force(transform.position, m_Vec, 0.1f, Physics.gravity, 1, time * 0.1f);
             points[time].transform.position = pos;
         }
+        int colNum = 0;
+        //反映するポイント
+        List<Vector3> linePoints = new List<Vector3>();
+
         //線設定
-        for (int i = 0; i <= 200; i++)
+        for (int i = 0; i <= points.Count - 1; i++)
         {
+            
             Vector3 start = points[i].transform.position;
+
             if (points.Count - 1 < i + 1) break;
             Vector3 end = points[i + 1].transform.position;
 
@@ -79,23 +116,38 @@ public class BomSpawn : MonoBehaviour
                     Quaternion.Euler(m_LandingPoint.transform.eulerAngles.x + 90,
                     m_LandingPoint.transform.eulerAngles.y,
                     m_LandingPoint.transform.eulerAngles.z);
-                for (int j = i + 1; j <= 200; j++)
-                {
-                    points[i].SetActive(false);
-                }
+
+                m_LandingPoint.SetActive(true);
+                //for (int j = i + 1; j <= 200; j++)
+                //{
+                //    points[i].SetActive(false);
+                //}
                 break;
             }
             else
             {
-                points[i].SetActive(true);
+                linePoints.Add(points[i].transform.position);
             }
             //着地地点表示するか
-            m_LandingPoint.SetActive(true);
+            
             if (i == 200)
             {
                 m_LandingPoint.SetActive(false);
             }
+            colNum++;
         }
+        m_LineRenderer.positionCount = linePoints.Count;
+        if (m_Bom == BomSpawn.Bom.LIGHT_BOM)
+        {
+            m_LineRenderer.positionCount = colNum / 2;
+        }
+        for(int i = 0; i < m_LineRenderer.positionCount; i++)
+        {
+            m_LineRenderer.SetPosition(i, linePoints[i]);
+        }
+        
+
+
 
     }
     /// <summary>
@@ -103,19 +155,46 @@ public class BomSpawn : MonoBehaviour
     /// </summary>
     public void SpawnBom()
     {
-        GameObject bom = Instantiate(m_BomPrefab, transform.position, Quaternion.identity);
+        GameObject prefab = m_BomPrefab;
+        switch (m_Bom)
+        {
+            case Bom.BOM:
+                {
+                    prefab = m_BomPrefab;
+                    break;
+                }
+            case Bom.LIGHT_BOM:
+                {
+                    prefab = m_LightBomPrefab;
+                    break;
+                }
+            case Bom.SMOKE_BOM:
+                {
+                    prefab = m_SmokeBomPrefab;
+                    break;
+                }
+
+        }
+        GameObject bom = Instantiate(prefab, transform.position, Quaternion.identity);
         bom.transform.rotation = Quaternion.Euler(90f, 0f, -(player_.transform.rotation.y * 180f / Mathf.PI) * 2f);
-        bom.GetComponent<Rigidbody>().AddForce(m_Vec * m_Power);
+
+
+        bom.GetComponent<Rigidbody>().AddForce(m_Vec);
     }
+
+
+
+
     /// <summary>
     /// ボムの投げるベクトルとパワーを設定する
     /// </summary>
     /// <param name="vec">ベクトル</param>
     /// <param name="power">パワー</param>
-    public void Set(Vector3 vec, float power)
+    public void Set(Vector3 vec, float power, Bom bom=Bom.BOM)
     {
         m_Vec = vec;
         m_Power = power;
+        m_Bom = bom;
     }
     /// <summary>
     /// 軌道線を表示するかどうか
