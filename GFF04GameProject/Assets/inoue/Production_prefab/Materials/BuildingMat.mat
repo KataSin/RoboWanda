@@ -7,9 +7,15 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: BuildingMat
+<<<<<<< HEAD
+  m_Shader: {fileID: 34, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: _NORMALMAP
+  m_LightmapFlags: 4
+=======
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _EMISSION _NORMALMAP
   m_LightmapFlags: 1
+>>>>>>> 557d55bc69b2570920dd2e7a9bf07202d1a2fba0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -65,7 +71,12 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+<<<<<<< HEAD
+    - _Parallax: 0.02
+    - _Shininess: 0.7
+=======
     - _Parallax: 0.005
+>>>>>>> 557d55bc69b2570920dd2e7a9bf07202d1a2fba0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -73,4 +84,10 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+<<<<<<< HEAD
+    - _Emission: {r: 0, g: 0, b: 0, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 0}
+=======
     - _EmissionColor: {r: 0.5955882, g: 0.5901518, b: 0.51676035, a: 1}
+>>>>>>> 557d55bc69b2570920dd2e7a9bf07202d1a2fba0
