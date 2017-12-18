@@ -333,7 +333,7 @@ public class CameraPosition : MonoBehaviour
     {
         if (m_Player.GetComponent<PlayerController>().GetPlayerState() == 0)
         {
-            transform.LookAt(m_Player.transform.position);
+            transform.LookAt(m_Player.transform.position + new Vector3(0f, 0.6f, 0f));
             m_origin_rotation = transform.localRotation;
         }
 
@@ -467,7 +467,7 @@ public class CameraPosition : MonoBehaviour
         {
             t += 1.0f * Time.deltaTime;
 
-            transform.position = 
+            transform.position =
                 Vector3.Lerp(
                     m_deadBefore_pos,
                     m_Player.transform.position + m_Player.transform.forward + new Vector3(0f, 3f, 0f),

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayStartHeri : MonoBehaviour
 {
-    private float t, t1, t2, t3;
+    private float t, t1, t2, t3, t4;
 
     [SerializeField]
     private float m_LOverTime;
@@ -42,6 +42,7 @@ public class PlayStartHeri : MonoBehaviour
         t1 = 0f;
         t2 = 0f;
         t3 = 0f;
+        t4 = 0f;
         m_intervalTimer1 = 0f;
         m_intervalTimer2 = 0f;
 
@@ -57,6 +58,7 @@ public class PlayStartHeri : MonoBehaviour
         isStop = false;
 
         heri_se_ = GetComponent<AudioSource>();
+        heri_se_.spatialBlend = 0f;
     }
 
     // Update is called once per frame
@@ -70,6 +72,16 @@ public class PlayStartHeri : MonoBehaviour
             if (m_speed <= 0.1f)
                 m_speed = 0.1f;
             t += m_speed * Time.deltaTime;
+
+            if (Input.GetKeyDown(KeyCode.S)
+                ||
+                Input.GetButtonDown("Submit"))
+            {
+                t = m_LOverTime;
+                t1 = 4f;
+                t2 = 1f;
+                heri_se_.Stop();
+            }
 
             if (t >= m_LOverTime)
             {
@@ -88,14 +100,15 @@ public class PlayStartHeri : MonoBehaviour
 
                     if (t1 >= 4f)
                     {
-                        t1 = 4f;
-
-
-                        t2 += 1.0f * Time.deltaTime;
-                        //rope_obj_.transform.localPosition = Vector3.Lerp(new Vector3(m_originL_Ropepos.x, 14f, m_originL_Ropepos.z), new Vector3(m_originL_Ropepos.x, -13f, m_originL_Ropepos.z), t2 / 1.5f);
-
                         if (t2 >= 1f)
+                        {
+                            if (!isStop)
+                                heri_se_.Play();
                             isStop = true;
+                        }
+
+                        t1 = 4f;
+                        t2 += 1.0f * Time.deltaTime;
                     }
 
                     MoveFallPoint();
@@ -106,6 +119,12 @@ public class PlayStartHeri : MonoBehaviour
                 MoveLandingOverPoint();
         }
         MoveLeave();
+
+        if (isStop)
+        {
+            heri_se_.spatialBlend = Mathf.Lerp(0f, 1f, t4 / 4f);
+            t4 += 1.0f * Time.deltaTime;
+        }
     }
 
     private void MoveLandingOverPoint()
@@ -137,7 +156,7 @@ public class PlayStartHeri : MonoBehaviour
                 {
                     transform.position -= transform.forward;
 
-                    if(t3>10f)
+                    if (t3 > 10f)
                     {
                         heri_se_.Stop();
                     }
