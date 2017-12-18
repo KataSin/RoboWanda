@@ -275,7 +275,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 9c0a1d6ad86699d44b16107351977ee9, type: 2}
+  - {fileID: 2100000, guid: cfe7b154b102c3c4092e844e99b8d4b5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -539,7 +539,9 @@ MonoBehaviour:
   collide_manager_obj_: {fileID: 1817534840337936}
   originBill_obj_: {fileID: 1011931572755394}
   m_origin_rotationY: 0
-  scoreMana_: {fileID: 1340720680772012, guid: 52d8db514bbb37b4e88dc3081cd634da, type: 2}
+  after_bill_: {fileID: 0}
+  gareki_bill_: {fileID: 0}
+  bill_Lpoint_: {fileID: 0}
 --- !u!114 &114914155448994510
 MonoBehaviour:
   m_ObjectHideFlags: 1

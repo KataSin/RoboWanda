@@ -278,10 +278,13 @@ public class PlayerController : MonoBehaviour
 
                 if (!m_isClear)
                 {
-                    Destroy(rope_destibation_[1]);
-                    rope_destibation_.RemoveAt(1);
-                    Destroy(rope_destibation_[0]);
-                    rope_destibation_.RemoveAt(0);
+                    if (rope_destibation_.Count != 0)
+                    {
+                        Destroy(rope_destibation_[1]);
+                        rope_destibation_.RemoveAt(1);
+                        Destroy(rope_destibation_[0]);
+                        rope_destibation_.RemoveAt(0);
+                    }
 
                     m_isClear = true;
                 }
