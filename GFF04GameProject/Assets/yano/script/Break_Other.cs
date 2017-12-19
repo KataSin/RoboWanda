@@ -27,8 +27,13 @@ public class Break_Other : MonoBehaviour
     private GameObject obuild_collide_manager_obj_;
     private obuild_collide_manager obuild_collide_manager_;
 
+    [SerializeField]
+    private GameObject gareki_obj_;
+
     private GameObject scoreMana_;
 
+    [SerializeField]
+    private GameObject other_parent_;
     private AudioSource break_se_;
 
     // Use this for initialization
@@ -37,7 +42,9 @@ public class Break_Other : MonoBehaviour
         obuild_collide_manager_ =
             obuild_collide_manager_obj_.GetComponent<obuild_collide_manager>();
 
-        break_se_ = GetComponent<AudioSource>();
+        gareki_obj_.SetActive(false);
+
+        break_se_ = other_parent_.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -83,6 +90,8 @@ public class Break_Other : MonoBehaviour
             smoke.transform.Find("desert_Vertical").localScale = transform.localScale * m_sand_smoke_scalar;
 
             break_se_.Play();
+
+            gareki_obj_.SetActive(true);
 
             isOutBreak = true;
         }

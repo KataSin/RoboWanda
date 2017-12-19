@@ -109,7 +109,9 @@ public class CameraController : MonoBehaviour
             case 1:
                 mode_ = PlayerCameraMode.Normal;
                 break;
-
+            case 2:
+                mode_ = PlayerCameraMode.Normal;
+                break;
             default:
                 mode_ = PlayerCameraMode.Event;
                 break;

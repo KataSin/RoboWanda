@@ -89,7 +89,7 @@ public class HeliLineMissileManager : MonoBehaviour
             RaycastHit hit;
             m_DrawFlag = false;
             int layer = ~(1 << 14);
-            if (Physics.Raycast(ray,out hit, 100.0f,layer))
+            if (Physics.Raycast(ray,out hit, 150.0f,layer))
             {
                 i.landingPoint.transform.Find("Particle System").GetComponent<ParticleSystem>().Play();
                 i.landingPoint.SetActive(true);
@@ -103,16 +103,6 @@ public class HeliLineMissileManager : MonoBehaviour
                 
             }
 
-        }
-
-        //ベクトル更新
-        foreach (var i in m_LineObject)
-        {
-            foreach (var missile in i.missiles)
-            {
-                Vector3 vec = (i.landingPoint.transform.position - missile.transform.position).normalized;
-                missile.GetComponent<HeliMissileObj>().MissileVec(vec);
-            }
         }
 
         //発射する場合
@@ -140,15 +130,20 @@ public class HeliLineMissileManager : MonoBehaviour
 
             }
         }
+        //LineRenderer 表示
+        SetEnable(m_DrawFlag);
 
-        if (m_DrawFlag)
+        //ベクトル更新
+        foreach (var i in m_LineObject)
         {
-            SetEnable(true);
+            foreach (var missile in i.missiles)
+            {
+                if (missile == null) return;
+                Vector3 vec = (i.landingPoint.transform.position - missile.transform.position).normalized;
+                missile.GetComponent<HeliMissileObj>().MissileVec(vec);
+            }
         }
-        else
-        {
-            SetEnable(false);
-        }
+
     }
     /// <summary>
     /// 表示するかどうか

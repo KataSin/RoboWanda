@@ -178,7 +178,10 @@ public class BomSpawn : MonoBehaviour
         GameObject bom = Instantiate(prefab, transform.position, Quaternion.identity);
         bom.transform.rotation = Quaternion.Euler(90f, 0f, -(player_.transform.rotation.y * 180f / Mathf.PI) * 2f);
 
-
+        float power = m_Power;
+        if (m_Bom == Bom.LIGHT_BOM)
+            power = m_HighPower;
+        m_Vec = m_Vec * power;
         bom.GetComponent<Rigidbody>().AddForce(m_Vec);
     }
 

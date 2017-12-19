@@ -304,7 +304,10 @@ public class PlayerController : MonoBehaviour
 
     void OnAnimatorIK()
     {
-        if (m_State == PlayerState.StartFall)
+        if (m_State == PlayerState.StartFall
+            &&
+            (rope_destibation_[0] != null
+            && rope_destibation_[1] != null))
         {
             m_Animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
             m_Animator.SetIKPosition(AvatarIKGoal.LeftHand, rope_destibation_[0].transform.position);
