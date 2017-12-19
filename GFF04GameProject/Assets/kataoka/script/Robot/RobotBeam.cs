@@ -71,9 +71,11 @@ public class RobotBeam : MonoBehaviour
         //ビームのあたり判定
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
-        int layer = ~(1 << 10|1<<15);
+        int layer = ~(1 << 10 | 1 << 15);
         if (Physics.Raycast(ray, out hit, m_BeamLen, layer))
         {
+            Debug.Log(hit.collider.name);
+
             m_Frame++;
             if (m_Frame % 3 == 0)
             {
