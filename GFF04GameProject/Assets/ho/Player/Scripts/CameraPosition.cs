@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// スクリプト：カメラ位置制御
+/// スクリプト：カメラ座標制御
 /// 製作者：Ho Siu Ki（何兆祺）
 /// </summary>
 
@@ -96,9 +96,6 @@ public class CameraPosition : MonoBehaviour
 
     [SerializeField]
     private GameObject m_Prediction;             // カメラの予測座標
-
-    /*[SerializeField]
-    private GameObject m_CameraBack;*/
 
     // Use this for initialization
     void Start()
@@ -280,7 +277,7 @@ public class CameraPosition : MonoBehaviour
         // カメラの最終座標を計算してから移動させる
         Ray ray = new Ray(m_Player.transform.position + Vector3.up, m_Prediction.transform.position - m_Player.transform.position - Vector3.up);
         float distance = Vector3.Distance(m_Player.transform.position, m_Prediction.transform.position);
-        Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
+        // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
         RaycastHit hitInfo;
 
         if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
@@ -304,31 +301,121 @@ public class CameraPosition : MonoBehaviour
             m_Mode = PlayerCameraMode.Normal;
         }
 
-        // カメラの座標を変更
-        Vector3 new_position;
-        new_position.x = m_VeryClosePositionX;
-        new_position.y = m_VeryClosePositionY;
-        new_position.z = m_VeryClosePositionZ;
-
-        // カメラの予測座標を更新（相対座標を使用）
-        m_Prediction.transform.localPosition = new_position;
-
-        // カメラがフィールドや障害物に透過しないようにする
-        // カメラの最終座標を計算してから移動させる
-        Ray ray = new Ray(m_Player.transform.position + Vector3.up, m_Prediction.transform.position - m_Player.transform.position - Vector3.up);
-        float distance = Vector3.Distance(m_Player.transform.position, m_Prediction.transform.position);
-        Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
-        RaycastHit hitInfo;
-
-        if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
+        // カメラの距離を変更
+        switch (m_DistanceSelect)
         {
-            // Debug.Log("壁に遮られた");
-            Vector3 hit_position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.3f, hitInfo.point.z);
-            transform.position = Vector3.Lerp(transform.position, hit_position, m_Speed * Time.deltaTime);
+            case 0:
+                m_Distance = CameraDistance.VeryClose;
+                break;
+            case 1:
+                m_Distance = CameraDistance.Close;
+                break;
+            case 2:
+                m_Distance = CameraDistance.Normal;
+                break;
+            case 3:
+                m_Distance = CameraDistance.Far;
+                break;
+            default:
+                m_Distance = CameraDistance.Normal;
+                break;
+        }
+
+        // 十字キーの入力が無い場合、操作判定を解除
+        if (Input.GetAxisRaw("Camera_Distance") == 0)
+        {
+            m_IsTriggered = false;
+        }
+        // 十字キーでカメラの距離を選択
+        if (m_IsTriggered == false)
+        {
+            // 上ボタン
+            if (Input.GetAxisRaw("Camera_Distance") < -0.9)
+            {
+                m_IsTriggered = true;
+                m_DistanceSelect = m_DistanceSelect + 1;
+            }
+            // 下ボタン
+            if (Input.GetAxisRaw("Camera_Distance") > 0.9)
+            {
+                m_IsTriggered = true;
+                m_DistanceSelect = m_DistanceSelect - 1;
+            }
+        }
+        m_DistanceSelect = Mathf.Clamp(m_DistanceSelect, 0, 3);
+
+        // カメラが一番遠い座標にあったら
+        if (m_DistanceSelect == 3)
+        {
+            // カメラの座標を変更
+            Vector3 new_position;
+            new_position.x = m_FarPositionX;
+            new_position.y = m_FarPositionY;
+            new_position.z = m_FarPositionZ;
+
+            // カメラの予測座標を更新（相対座標を使用）
+            m_Prediction.transform.localPosition = new_position;
+
+            // カメラがフィールドや障害物に透過しないようにする
+            // カメラの最終座標を計算してから移動させる
+            Ray ray = new Ray(m_Player.transform.position + Vector3.up, m_Prediction.transform.position - m_Player.transform.position - Vector3.up);
+            float distance = Vector3.Distance(m_Player.transform.position, m_Prediction.transform.position);
+            // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
+            RaycastHit hitInfo;
+
+            if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
+            {
+                // Debug.Log("壁に遮られた");
+                Vector3 hit_position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.3f, hitInfo.point.z);
+
+                float distance2 = Vector3.Distance(m_Player.transform.position, hit_position);
+                if (distance2 < 12.0f)
+                {
+                    Vector3 final_position;
+                    final_position.x = m_VeryClosePositionX;
+                    final_position.y = m_VeryClosePositionY;
+                    final_position.z = m_VeryClosePositionZ;
+
+                    transform.localPosition = Vector3.Lerp(transform.localPosition, final_position, m_Speed / 4 * Time.deltaTime);
+                }
+                else
+                {
+                    transform.position = Vector3.Lerp(transform.position, hit_position, m_Speed / 4 * Time.deltaTime);
+                }
+            }
+            else
+            {
+                transform.position = Vector3.Lerp(transform.position, m_Prediction.transform.position, m_Speed / 4 * Time.deltaTime);
+            }
         }
         else
         {
-            transform.position = Vector3.Lerp(transform.position, m_Prediction.transform.position, m_Speed * Time.deltaTime);
+            // カメラの座標を変更
+            Vector3 new_position;
+            new_position.x = m_VeryClosePositionX;
+            new_position.y = m_VeryClosePositionY;
+            new_position.z = m_VeryClosePositionZ;
+
+            // カメラの予測座標を更新（相対座標を使用）
+            m_Prediction.transform.localPosition = new_position;
+
+            // カメラがフィールドや障害物に透過しないようにする
+            // カメラの最終座標を計算してから移動させる
+            Ray ray = new Ray(m_Player.transform.position + Vector3.up, m_Prediction.transform.position - m_Player.transform.position - Vector3.up);
+            float distance = Vector3.Distance(m_Player.transform.position, m_Prediction.transform.position);
+            // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
+            RaycastHit hitInfo;
+
+            if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
+            {
+                // Debug.Log("壁に遮られた");
+                Vector3 hit_position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.3f, hitInfo.point.z);
+                transform.position = Vector3.Lerp(transform.position, hit_position, m_Speed * Time.deltaTime);
+            }
+            else
+            {
+                transform.position = Vector3.Lerp(transform.position, m_Prediction.transform.position, m_Speed * Time.deltaTime);
+            }
         }
     }
 

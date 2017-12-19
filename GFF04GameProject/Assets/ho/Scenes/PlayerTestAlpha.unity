@@ -672,7 +672,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 713330493}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &742471821
+--- !u!1001 &919954389
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -710,6 +710,10 @@ Prefab:
     - target: {fileID: 4526169278337938, guid: e3bbf79fdb80c574e823635c734a6129, type: 2}
       propertyPath: m_RootOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1660377369132156, guid: e3bbf79fdb80c574e823635c734a6129, type: 2}
+      propertyPath: m_Name
+      value: CameraPivot
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e3bbf79fdb80c574e823635c734a6129, type: 2}
