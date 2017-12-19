@@ -13,6 +13,10 @@ public class HeliMissileObj : MonoBehaviour
     private Vector3 m_Vec;
 
     private float m_SpawnTime;
+
+    [SerializeField]
+    private AudioClip missile_se_;
+
     // Use this for initialization
     void Start()
     {
@@ -31,6 +35,8 @@ public class HeliMissileObj : MonoBehaviour
             transform.parent = null;
             transform.position += m_Vec * 40.0f * Time.deltaTime;
             transform.rotation = Quaternion.LookRotation(m_Vec) * Quaternion.Euler(0, 90, 0);
+
+            GetComponent<AudioSource>().PlayOneShot(missile_se_);
         }
 
         if (m_SpawnTime >= 6.0f) Destroy(gameObject);
@@ -38,7 +44,7 @@ public class HeliMissileObj : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Helicopter") return;
+        if (other.tag == "Helicopter" || other.tag == "SandSmoke") return;
         Instantiate(m_ExprosionEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
