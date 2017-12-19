@@ -91,9 +91,9 @@ public class Debris : MonoBehaviour
         {
             rigids_ = debris_[i].GetComponent<Rigidbody>();
             clampVelocities = rigids_.velocity;
-            clampVelocities.x = Mathf.Clamp(rigids_.velocity.x, -10f, 10f);
-            clampVelocities.z = Mathf.Clamp(rigids_.velocity.z, -10f, 10f);
-            clampVelocities.y = Mathf.Clamp(rigids_.velocity.y, rigids_.velocity.y, 10f);
+            clampVelocities.x = Mathf.Clamp(rigids_.velocity.x, -2f, 2f);
+            clampVelocities.z = Mathf.Clamp(rigids_.velocity.z, -2f, 2f);
+            clampVelocities.y = Mathf.Clamp(rigids_.velocity.y, rigids_.velocity.y, 2f);
             rigids_.velocity = clampVelocities;
         }
     }
