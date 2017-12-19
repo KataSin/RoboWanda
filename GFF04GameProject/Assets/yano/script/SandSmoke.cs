@@ -34,7 +34,7 @@ public class SandSmoke : MonoBehaviour
         else if (isClear
             && (!sand_smokes_[0].isPlaying && !sand_smokes_[1].isPlaying))
         {
-            Destroy(this.gameObject);            
+            Destroy(this.gameObject);
         }
     }
 }

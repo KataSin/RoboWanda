@@ -98,7 +98,7 @@ public class GeroBeam : MonoBehaviour {
 				RaycastHit hit;
 				if(workNLG <= 0)
 					break;
-                int layerMask = ~(1 << LayerMask.NameToLayer("NoBeamHit") | 1 << 2);
+                int layerMask = ~(1 << LayerMask.NameToLayer("NoBeamHit") | 1 << 2 | 1 << 15);
                 if (Physics.Raycast(NowPos,F_Vec[i],out hit,BlockLen*workNLG,layerMask)){
     				GameObject hitobj = hit.collider.gameObject;
 					NowLength = ((BlockLen*i)+hit.distance)/MaxLength+0.005f;
