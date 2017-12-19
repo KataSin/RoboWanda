@@ -22,7 +22,7 @@ public class HelicopterMissileManager : MonoBehaviour
         m_LeftMissiles = new List<GameObject>();
 
         var trans = transform.GetComponentsInChildren<Transform>();
-        foreach(var i in trans)
+        foreach (var i in trans)
         {
             if (i.name == "MissileRight")
             {
@@ -49,10 +49,13 @@ public class HelicopterMissileManager : MonoBehaviour
         }
         if (m_FiringFlag)
         {
-            if (m_Time >= 0.8f)
+            if (m_Time >= 0.2f)
             {
-                m_LeftMissiles[m_FiringIndex].GetComponent<HeliMissileObj>().FiringMissile();
-                m_RightMissiles[m_FiringIndex].GetComponent<HeliMissileObj>().FiringMissile();
+                if (m_LeftMissiles[m_FiringIndex] != null)
+                    m_LeftMissiles[m_FiringIndex].GetComponent<HeliMissileObj>().FiringMissile();
+                if (m_RightMissiles[m_FiringIndex] != null)
+                    m_RightMissiles[m_FiringIndex].GetComponent<HeliMissileObj>().FiringMissile();
+                m_Time = 0.0f;
                 m_FiringIndex++;
             }
         }

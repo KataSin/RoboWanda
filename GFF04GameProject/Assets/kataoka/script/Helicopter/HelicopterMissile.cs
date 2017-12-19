@@ -39,6 +39,9 @@ public class HelicopterMissile : MonoBehaviour
     private float m_LerpAttackTime;
 
     private HelicopterMissileManager m_MissileManager;
+
+    public GameObject m_Light;
+
     // Use this for initialization
     void Start()
     {
@@ -73,6 +76,7 @@ public class HelicopterMissile : MonoBehaviour
     void Update()
     {
 
+        m_Light.transform.rotation = Quaternion.LookRotation((m_Robot.transform.position + new Vector3(0, 4, 0)) - transform.position);
         //もし戻ってきたら消す
         if (m_ReturnFlag && Vector3.Distance(m_SpawnPos, transform.position) <= 10.0f)
         {

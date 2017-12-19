@@ -10,18 +10,15 @@ public class HeliMissileObj : MonoBehaviour
 
     public GameObject m_FireEffect;
 
-    private AudioSource missile_se_;
-    private bool isClear;
-
     private Vector3 m_Vec;
+
+    private float m_SpawnTime;
     // Use this for initialization
     void Start()
     {
         m_FiringMissileFlag = false;
         m_Vec = Vector3.zero;
-
-        missile_se_ = GetComponent<AudioSource>();
-        isClear = false;
+        m_SpawnTime = 0.0f;
     }
 
     // Update is called once per frame
@@ -29,18 +26,19 @@ public class HeliMissileObj : MonoBehaviour
     {
         if (m_FiringMissileFlag)
         {
+            m_SpawnTime += Time.deltaTime;
             m_FireEffect.SetActive(true);
             transform.parent = null;
             transform.position += m_Vec * 40.0f * Time.deltaTime;
             transform.rotation = Quaternion.LookRotation(m_Vec) * Quaternion.Euler(0, 90, 0);
-            if (!isClear)
-                missile_se_.Play();
-            isClear = true;
         }
+
+        if (m_SpawnTime >= 6.0f) Destroy(gameObject);
     }
 
     public void OnTriggerEnter(Collider other)
     {
+        if (other.tag == "Helicopter") return;
         Instantiate(m_ExprosionEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
