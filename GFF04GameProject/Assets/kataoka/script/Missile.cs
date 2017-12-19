@@ -40,7 +40,7 @@ public class Missile : MonoBehaviour
         m_LerpTime = 0.0f;
         //頂点座標は
         m_VertexPos = ((transform.position + m_Player.transform.position) / 2.0f) +
-            new Vector3(Random.Range(-5,5), 0.0f, Random.Range(-5, 5));
+            new Vector3(Random.Range(-5, 5), 0.0f, Random.Range(-5, 5));
         m_VertexPos.y = 60.0f + Random.Range(-10, 10);
 
         m_SpawnPos = transform.position;
@@ -108,7 +108,8 @@ public class Missile : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag != "Missile" && other.tag != "ExplosionCollision")
+        if (other.tag != "Missile" && other.tag != "ExplosionCollision"
+            && other.tag != "SandSmoke")
         {
             Instantiate(m_Exprosion, transform.position, Quaternion.identity);
             Destroy(gameObject);
