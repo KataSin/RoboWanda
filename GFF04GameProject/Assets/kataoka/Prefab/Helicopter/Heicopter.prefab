@@ -466,8 +466,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1902529391699550}
-  m_LocalRotation: {x: 0.0018653251, y: -0.0005566776, z: -0.0006189436, w: 0.999998}
-  m_LocalPosition: {x: -3.29, y: 45.59, z: -1.67}
+  m_LocalRotation: {x: -0.00057329517, y: 0.9996873, z: -0.0018798579, w: 0.024930729}
+  m_LocalPosition: {x: 0.4, y: 16.2, z: 29.3}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4456855484205112}
@@ -475,7 +475,7 @@ Transform:
   - {fileID: 4983796573081300}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0.21400002, y: -0.064, z: -0.071}
+  m_LocalEulerAnglesHint: {x: 0.21400002, y: 177.143, z: -0.071}
 --- !u!4 &4601444192627658
 Transform:
   m_ObjectHideFlags: 1
@@ -1135,7 +1135,7 @@ Light:
   serializedVersion: 8
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 3
+  m_Intensity: 4
   m_Range: 102.785995
   m_SpotAngle: 28.89961
   m_CookieSize: 10
@@ -1213,7 +1213,7 @@ MonoBehaviour:
   m_ColorFilterMask:
     serializedVersion: 2
     m_Bits: 0
-  m_Brightness: 0.37
+  m_Brightness: 0.7
   m_BrightnessColored: 5
   m_Extinction: 0.5
   m_MinDistFromCamera: 0
