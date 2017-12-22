@@ -74,8 +74,6 @@ public class RobotBeam : MonoBehaviour
         int layer = ~(1 << 10 | 1 << 15);
         if (Physics.Raycast(ray, out hit, m_BeamLen, layer))
         {
-            Debug.Log(hit.collider.name);
-
             m_Frame++;
             if (m_Frame % 3 == 0)
             {

@@ -42,6 +42,8 @@ public class HelicopterMissile : MonoBehaviour
 
     public GameObject m_Light;
 
+    private AudioClip heri_se_;
+
     // Use this for initialization
     void Start()
     {
@@ -70,6 +72,9 @@ public class HelicopterMissile : MonoBehaviour
 
         m_LerpSeveRotate = Quaternion.identity;
         m_LerpSevePos = Vector3.zero;
+
+        heri_se_ = GetComponent<AudioSource>().clip;
+        GetComponent<AudioSource>().PlayOneShot(heri_se_);
     }
 
     // Update is called once per frame
