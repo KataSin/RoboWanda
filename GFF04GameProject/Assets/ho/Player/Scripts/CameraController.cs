@@ -106,10 +106,13 @@ public class CameraController : MonoBehaviour
     {
         switch (cameraPos_.GetComponent<CameraPosition>().GetMode())
         {
-            case 1:
-                mode_ = PlayerCameraMode.Normal;
+            case 0:
+                mode_ = PlayerCameraMode.Event;
                 break;
             case 2:
+                mode_ = PlayerCameraMode.Normal;
+                break;
+            case 3:
                 mode_ = PlayerCameraMode.Normal;
                 break;
             default:
