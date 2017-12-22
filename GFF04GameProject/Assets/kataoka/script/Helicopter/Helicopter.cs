@@ -26,6 +26,8 @@ public class Helicopter : MonoBehaviour
     private Vector3 m_SpringVelo;
 
 
+    private AudioClip heri_se_;
+
     // Use this for initialization
     void Start()
     {
@@ -39,10 +41,10 @@ public class Helicopter : MonoBehaviour
         m_Pos = transform.position;
         m_SpringVelo = Vector3.zero;
 
-
-
-
         m_IsBreak = false;
+
+        heri_se_ = GetComponent<AudioSource>().clip;
+        GetComponent<AudioSource>().PlayOneShot(heri_se_);
     }
 
     // Update is called once per frame
