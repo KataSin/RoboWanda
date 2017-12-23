@@ -72,10 +72,10 @@ public class Stage1Manager : MonoBehaviour
         {
             //boss_ui_[0].SetActive(true);
             //boss_ui_[1].GetComponent<Image>().enabled = true;
-            timer_ui_.SetActive(true);
+            timer_ui_.SetActive(false);
 
-            if (robot_.GetComponent<RobotManager>().GetRobotHP() > 0f)
-                timer_ui_.GetComponent<Timer>().TimerUpdate();
+            //if (robot_.GetComponent<RobotManager>().GetRobotHP() > 0f)
+            //    timer_ui_.GetComponent<Timer>().TimerUpdate();
         }
 
         //クリアかオーバーかのチェック

@@ -14,7 +14,8 @@ enum PlayerState
     Normal,     // 通常
     Aiming,     // 照準中
     Creeping,   // 匍匐
-    Dead        // 死亡
+    Dead,       // 死亡
+    Passing     // 乗り越える
 }
 
 public class PlayerController : MonoBehaviour
@@ -111,6 +112,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         m_Controller = GetComponent<CharacterController>();
+
         m_Animator = GetComponent<Animator>();
 
         playerSe_ = GetComponents<AudioSource>();
@@ -144,7 +146,6 @@ public class PlayerController : MonoBehaviour
         t = 0f;
 
         test = 0f;
-        //
     }
 
     // Update is called once per frame
@@ -190,6 +191,13 @@ public class PlayerController : MonoBehaviour
                 m_IsCreeping = true;
                 m_IsDead = false;
                 break;
+            // 乗り越える
+            case PlayerState.Passing:
+                Passing();
+                m_IsAiming = false;
+                m_IsCreeping = false;
+                m_IsDead = false;
+                break;
             // 死亡
             case PlayerState.Dead:
                 Dead();
@@ -227,21 +235,37 @@ public class PlayerController : MonoBehaviour
         }*/
 
         // 死亡テスト
-        if (Input.GetKeyDown("space"))
+        /* if (Input.GetKeyDown("space"))
         {
             if (m_State != PlayerState.Dead)
             {
                 m_State = PlayerState.Dead;
                 playerSe_[1].Stop();
             }
-        }
-    }
-    public void OnCollisionEnter(Collision other)
-    {
-        Debug.Log(other.gameObject.name);
+        }*/
     }
 
-    // 接触判定
+    // キャラクターコントローラーの接触判定
+    public void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        // Debug.Log(hit.gameObject.name);
+        if (m_State == PlayerState.Passing && hit.gameObject.tag == "GuardRail")
+        {
+            Physics.IgnoreCollision(m_Controller, hit.collider);
+        }
+        // ガードレールと接触したら、乗り越える
+        else if (hit.gameObject.tag == "GuardRail")
+        {
+            m_State = PlayerState.Passing;
+        }
+    }
+
+    public void OnCollisionEnter(Collision other)
+    {
+        // Debug.Log(other.gameObject.name);
+    }
+
+    // Capsule Colliderの接触判定
     public void OnTriggerEnter(Collider other)
     {
         // 敵ロボットと接触したら死亡
@@ -803,6 +827,36 @@ public class PlayerController : MonoBehaviour
         current_speed = m_Controller.velocity.magnitude;
         if (current_speed > m_CurrentSpeedLimit) current_speed = m_CurrentSpeedLimit;
         m_Animator.SetFloat("CreepingSpeed", current_speed);
+    }
+
+    // 乗り越える処理
+    void Passing()
+    {
+        // グレネードランチャーの表示を消す
+        m_Launcher.SetActive(false);
+
+        m_Animator.Play("Passing");
+        // Debug.Log(m_PassingTime);
+
+        /* if (m_PassingTime <= 0.0f)
+        {
+            // グレネードランチャーを表示
+            m_Launcher.SetActive(true);
+            // 通常状態に戻る
+            m_State = PlayerState.Normal;
+        }*/
+
+        // 乗り越えるアニメーションが終了すると、通常状態に戻る
+        AnimatorStateInfo AniInfo;     // アニメーションの状態
+        AniInfo = gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+        if (AniInfo.normalizedTime <= 0.9f)
+        {
+            // グレネードランチャーを表示
+            m_Launcher.SetActive(true);
+            // 通常状態に戻る
+            m_State = PlayerState.Normal;
+        }
     }
 
     // 死亡時の処理

@@ -10,11 +10,21 @@ using UnityEngine;
 // カメラモード
 enum PlayerCameraMode
 {
+    None,
     Landing,    // 着地
     Normal,     // 通常
     Aim,        // 照準
     Dead,       // 死亡
     Event,      // イベント
+}
+
+enum EventCameraState
+{
+    None,
+    Jeep,
+    LeadJeep,
+    Bomber,
+    Tank,
 }
 
 // カメラ距離
@@ -97,6 +107,25 @@ public class CameraPosition : MonoBehaviour
     [SerializeField]
     private GameObject m_Prediction;             // カメラの予測座標
 
+    [SerializeField]
+    private EventCameraState m_EMode;           //イベントカメラモード
+
+    private GameObject jeepMana_;
+
+    private GameObject[] jeeps_;
+
+    private GameObject bomber_;
+
+    private GameObject tank_;
+
+    private Vector3 m_tank_pos;
+
+    private float m_test;
+
+    private bool isM0;
+
+    private bool isMAllClear;
+
     // Use this for initialization
     void Start()
     {
@@ -123,6 +152,16 @@ public class CameraPosition : MonoBehaviour
 
         isDeadFinish = false;
 
+        m_EMode = EventCameraState.None;
+
+        if (GameObject.FindGameObjectWithTag("JeepManager"))
+            jeepMana_ = GameObject.FindGameObjectWithTag("JeepManager");
+
+        m_test = 0f;
+
+        isM0 = false;
+        isMAllClear = false;
+
         if (m_Prediction != null)
             m_Prediction.transform.localPosition = transform.localPosition;
     }
@@ -133,6 +172,8 @@ public class CameraPosition : MonoBehaviour
         // カメラの状態に応じて処理を行う
         switch (m_Mode)
         {
+            case PlayerCameraMode.None:
+                break;
             case PlayerCameraMode.Landing:
                 LandingMode();
                 break;
@@ -181,6 +222,12 @@ public class CameraPosition : MonoBehaviour
     // 通常時の挙動
     void NormalMode()
     {
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            m_Mode = PlayerCameraMode.Event;
+            return;
+        }
+
         // プレイヤーが死んだら、死亡モードに移行
         if (m_Player.GetComponent<PlayerController>().GetPlayerState() == 4)
         {
@@ -446,10 +493,102 @@ public class CameraPosition : MonoBehaviour
     // イベントカメラの挙動
     void EventMode()
     {
-        Vector3 new_position = new Vector3(m_EventPositionX, m_EventPositionY, m_EventPositionZ);
+        switch (m_EMode)
+        {
+            case EventCameraState.None:
+                EventStartMode();
+                break;
+            case EventCameraState.Jeep:
+                JeepMode();
+                break;
+            case EventCameraState.LeadJeep:
+                LJeepMode();
+                break;
+            case EventCameraState.Bomber:
+                BomberMode();
+                break;
+            case EventCameraState.Tank:
+                TankMode();
+                break;
+        }
 
-        // カメラの位置を更新
-        transform.position = Vector3.Lerp(transform.position, new_position, m_EventSpeed * Time.deltaTime);
+
+        //Vector3 new_position = new Vector3(m_EventPositionX, m_EventPositionY, m_EventPositionZ);
+
+        //// カメラの位置を更新
+        //transform.position = Vector3.Lerp(transform.position, new_position, m_EventSpeed * Time.deltaTime);
+    }
+
+    private void EventStartMode()
+    {
+        if (jeepMana_ != null)
+        {
+            transform.position = jeepMana_.transform.position;
+            jeeps_ = GameObject.FindGameObjectsWithTag("Jeep");
+        }
+        m_EMode = EventCameraState.Jeep;
+        transform.rotation = Quaternion.Euler(-7.929f, 62.404f, 0.557f);
+    }
+
+    private void JeepMode()
+    {
+        if (jeeps_[jeeps_.Length - 1].transform.position.x <= transform.position.x - 3f)
+        {
+            m_EMode = EventCameraState.LeadJeep;
+        }
+    }
+
+    private void LJeepMode()
+    {
+        transform.LookAt(jeeps_[0].transform.position + jeeps_[0].transform.forward + (jeeps_[0].transform.up * 2.2f));
+        transform.position = jeeps_[0].transform.position + (-jeeps_[0].transform.forward * 6f) + (jeeps_[0].transform.up * 4f);
+
+        if ((m_test >= 2f || Input.GetKeyDown(KeyCode.U))
+            && !isMAllClear)
+        {
+            isM0 = true;
+
+            if (m_test >= 4f)
+            {
+                m_EMode = EventCameraState.Bomber;
+                bomber_ = GameObject.FindGameObjectWithTag("Bomber");
+                m_test = 0f;
+            }
+        }
+
+        m_test += 1.0f * Time.deltaTime;
+    }
+
+    private void BomberMode()
+    {
+        transform.LookAt(bomber_.transform.position + (-bomber_.transform.forward * 14f));
+        transform.position = bomber_.transform.position
+            + new Vector3(bomber_.transform.right.x * 34f, 7.6f, bomber_.transform.forward.z * 18f);
+
+        if (m_test >= 4f)
+        {
+            m_EMode = EventCameraState.Tank;
+            tank_ = GameObject.FindGameObjectWithTag("Tank");
+            m_tank_pos = tank_.transform.position;
+            m_test = 0f;
+        }
+
+        m_test += 1.0f * Time.deltaTime;
+    }
+
+    private void TankMode()
+    {
+        transform.rotation = Quaternion.Euler(0f, -34.4f, 0f);
+        transform.position = m_tank_pos + new Vector3(-tank_.transform.right.x * 10f, 5f, tank_.transform.forward.z * 30f);
+
+        if (m_test >= 4f)
+        {
+            m_EMode = EventCameraState.LeadJeep;
+            m_test = 0f;
+            isMAllClear = true;
+        }
+
+        m_test += 1.0f * Time.deltaTime;
     }
 
     // イベントカメラに移行
@@ -509,6 +648,11 @@ public class CameraPosition : MonoBehaviour
         return (int)m_Mode;
     }
 
+    public int GetEMode()
+    {
+        return (int)m_EMode;
+    }
+
     //死亡カメラが終わったかどうかの取得
     public bool GetDeadFinish()
     {
@@ -518,5 +662,15 @@ public class CameraPosition : MonoBehaviour
     public float GetT()
     {
         return t;
+    }
+
+    public bool Get_M0Flag()
+    {
+        return isM0;
+    }
+
+    public bool Get_MAllFlag()
+    {
+        return isMAllClear;
     }
 }
