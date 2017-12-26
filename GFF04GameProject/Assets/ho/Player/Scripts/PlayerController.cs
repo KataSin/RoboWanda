@@ -88,6 +88,7 @@ public class PlayerController : MonoBehaviour
     //
 
     float m_current_speed;
+    float m_passing_time;
 
     //ボムスポーン(片岡実装)
     private GameObject m_BomSpawn;
@@ -249,13 +250,17 @@ public class PlayerController : MonoBehaviour
     public void OnControllerColliderHit(ControllerColliderHit hit)
     {
         // Debug.Log(hit.gameObject.name);
+
+        // 乗り越え中、ガードレールとの接触判定を無視
         if (m_State == PlayerState.Passing && hit.gameObject.tag == "GuardRail")
         {
             Physics.IgnoreCollision(m_Controller, hit.collider);
         }
+
         // ガードレールと接触したら、乗り越える
-        else if (hit.gameObject.tag == "GuardRail")
+        if (hit.gameObject.tag == "GuardRail")
         {
+            m_passing_time = 0.5f;
             m_State = PlayerState.Passing;
         }
     }
@@ -834,7 +839,7 @@ public class PlayerController : MonoBehaviour
     {
         // グレネードランチャーの表示を消す
         m_Launcher.SetActive(false);
-
+        // 乗り越えるモーションを再生
         m_Animator.Play("Passing");
         // Debug.Log(m_PassingTime);
 
@@ -846,17 +851,25 @@ public class PlayerController : MonoBehaviour
             m_State = PlayerState.Normal;
         }*/
 
+        // 移動処理
+        Vector3 velocity = transform.forward * m_MaxSpeed;
+        m_Controller.Move(velocity * Time.deltaTime);
+
         // 乗り越えるアニメーションが終了すると、通常状態に戻る
         AnimatorStateInfo AniInfo;     // アニメーションの状態
         AniInfo = gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
 
-        if (AniInfo.normalizedTime <= 0.9f)
+        // if (AniInfo.normalizedTime <= 0.9f)
+        if (m_passing_time <= 0 && AniInfo.normalizedTime <= 0.9f)
         {
             // グレネードランチャーを表示
             m_Launcher.SetActive(true);
             // 通常状態に戻る
             m_State = PlayerState.Normal;
         }
+
+        m_passing_time -= Time.deltaTime;
+        Debug.Log(m_passing_time);
     }
 
     // 死亡時の処理
