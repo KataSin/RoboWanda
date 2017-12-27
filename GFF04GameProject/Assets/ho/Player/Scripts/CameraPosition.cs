@@ -102,6 +102,9 @@ public class CameraPosition : MonoBehaviour
     private Vector3 m_deadBefore_pos;
     private Quaternion m_origin_rotation;
 
+    private Vector3 m_eventB_pos;
+    private Quaternion m_eventB_rotation;
+
     private bool isDeadFinish;
 
     [SerializeField]
@@ -125,6 +128,10 @@ public class CameraPosition : MonoBehaviour
     private bool isM0;
 
     private bool isMAllClear;
+
+    private bool isBlack;
+
+    private bool isEventEnd;
 
     // Use this for initialization
     void Start()
@@ -161,6 +168,8 @@ public class CameraPosition : MonoBehaviour
 
         isM0 = false;
         isMAllClear = false;
+        isBlack = false;
+        isEventEnd = false;
 
         if (m_Prediction != null)
             m_Prediction.transform.localPosition = transform.localPosition;
@@ -224,6 +233,8 @@ public class CameraPosition : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.U))
         {
+            m_eventB_pos = transform.localPosition;
+            m_eventB_rotation = transform.localRotation;
             m_Mode = PlayerCameraMode.Event;
             return;
         }
@@ -532,6 +543,11 @@ public class CameraPosition : MonoBehaviour
 
     private void JeepMode()
     {
+        if (jeeps_[jeeps_.Length - 1].transform.position.x <= transform.position.x + 3f)
+        {
+            isBlack = true;
+        }
+
         if (jeeps_[jeeps_.Length - 1].transform.position.x <= transform.position.x - 3f)
         {
             m_EMode = EventCameraState.LeadJeep;
@@ -541,7 +557,8 @@ public class CameraPosition : MonoBehaviour
     private void LJeepMode()
     {
         transform.LookAt(jeeps_[0].transform.position + jeeps_[0].transform.forward + (jeeps_[0].transform.up * 2.2f));
-        transform.position = jeeps_[0].transform.position + (-jeeps_[0].transform.forward * 6f) + (jeeps_[0].transform.up * 4f);
+        if (!isEventEnd)
+            transform.position = jeeps_[0].transform.position + (-jeeps_[0].transform.forward * 6f) + (jeeps_[0].transform.up * 4f);
 
         if ((m_test >= 2f || Input.GetKeyDown(KeyCode.U))
             && !isMAllClear)
@@ -556,6 +573,19 @@ public class CameraPosition : MonoBehaviour
             }
         }
 
+        else if (isMAllClear && m_test >= 4f)
+        {
+            isEventEnd = true;
+            if (m_test >= 12f)
+            {
+                m_Mode = PlayerCameraMode.Normal;
+                m_EMode = EventCameraState.None;
+
+                transform.localPosition = m_eventB_pos;
+                transform.localRotation = m_eventB_rotation;
+            }
+        }
+
         m_test += 1.0f * Time.deltaTime;
     }
 
@@ -565,7 +595,7 @@ public class CameraPosition : MonoBehaviour
         transform.position = bomber_.transform.position
             + new Vector3(bomber_.transform.right.x * 34f, 7.6f, bomber_.transform.forward.z * 18f);
 
-        if (m_test >= 4f)
+        if (m_test >= 8f)
         {
             m_EMode = EventCameraState.Tank;
             tank_ = GameObject.FindGameObjectWithTag("Tank");
@@ -581,7 +611,7 @@ public class CameraPosition : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, -34.4f, 0f);
         transform.position = m_tank_pos + new Vector3(-tank_.transform.right.x * 10f, 5f, tank_.transform.forward.z * 30f);
 
-        if (m_test >= 4f)
+        if (m_test >= 8f)
         {
             m_EMode = EventCameraState.LeadJeep;
             m_test = 0f;
@@ -672,5 +702,15 @@ public class CameraPosition : MonoBehaviour
     public bool Get_MAllFlag()
     {
         return isMAllClear;
+    }
+
+    public bool Get_BlackFlag()
+    {
+        return isBlack;
+    }
+
+    public bool Get_EventEnd()
+    {
+        return isEventEnd;
     }
 }

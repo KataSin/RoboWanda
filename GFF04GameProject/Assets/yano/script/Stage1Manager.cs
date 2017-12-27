@@ -40,11 +40,14 @@ public class Stage1Manager : MonoBehaviour
     [SerializeField]
     private GameObject bezeru_ui_;
 
+    private bool isStart;
+
     // Use this for initialization
     void Start()
     {
         test = 0f;
         isLScene = false;
+        isStart = false;
         go_uis_.SetActive(false);
         timer_ui_.SetActive(false);
         //boss_ui_[0].SetActive(false);
@@ -60,8 +63,11 @@ public class Stage1Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!GetComponent<BlackOut_UI>().Get_Clear())
+        if (!GetComponent<BlackOut_UI>().Get_Clear()
+            &&!isStart)
             GetComponent<BlackOut_UI>().FeadIn();
+        if (GetComponent<BlackOut_UI>().Get_Clear())
+            isStart = true;
 
         if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 0)
         {
