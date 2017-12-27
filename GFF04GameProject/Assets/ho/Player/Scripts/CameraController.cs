@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private float m_RotateSpeedY = 180.0f;  // y軸回転速度
     [SerializeField]
-    private float m_RotateSpeedX = 90.0f;  // x軸回転速度
+    private float m_RotateSpeedX = 90.0f;   // x軸回転速度
 
     float pitch = 0.0f;                     // 仰角
     [SerializeField]

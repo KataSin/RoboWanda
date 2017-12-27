@@ -869,7 +869,7 @@ public class PlayerController : MonoBehaviour
         }
 
         m_passing_time -= Time.deltaTime;
-        Debug.Log(m_passing_time);
+        // Debug.Log(m_passing_time);
     }
 
     // 死亡時の処理
