@@ -25,6 +25,7 @@ enum EventCameraState
     LeadJeep,
     Bomber,
     Tank,
+    Tank2,
 }
 
 // カメラ距離
@@ -125,7 +126,11 @@ public class CameraPosition : MonoBehaviour
 
     private float m_test;
 
+    private float m_T2;
+
     private bool isM0;
+
+    private bool isM2;
 
     private bool isMAllClear;
 
@@ -165,8 +170,10 @@ public class CameraPosition : MonoBehaviour
             jeepMana_ = GameObject.FindGameObjectWithTag("JeepManager");
 
         m_test = 0f;
+        m_T2 = 0f;
 
         isM0 = false;
+        isM2 = false;
         isMAllClear = false;
         isBlack = false;
         isEventEnd = false;
@@ -521,6 +528,9 @@ public class CameraPosition : MonoBehaviour
             case EventCameraState.Tank:
                 TankMode();
                 break;
+            case EventCameraState.Tank2:
+                Tank2Mode();
+                break;
         }
 
 
@@ -595,7 +605,7 @@ public class CameraPosition : MonoBehaviour
         transform.position = bomber_.transform.position
             + new Vector3(bomber_.transform.right.x * 34f, 7.6f, bomber_.transform.forward.z * 18f);
 
-        if (m_test >= 8f)
+        if (m_test >= 6f)
         {
             m_EMode = EventCameraState.Tank;
             tank_ = GameObject.FindGameObjectWithTag("Tank");
@@ -608,14 +618,38 @@ public class CameraPosition : MonoBehaviour
 
     private void TankMode()
     {
-        transform.rotation = Quaternion.Euler(0f, -34.4f, 0f);
-        transform.position = m_tank_pos + new Vector3(-tank_.transform.right.x * 10f, 5f, tank_.transform.forward.z * 30f);
+        if (!isM2)
+            transform.rotation = Quaternion.Euler(-10f, -22.7f, 0f);
+        transform.position = m_tank_pos + new Vector3(tank_.transform.right.x * 8f, -1f, -tank_.transform.forward.z * 27f);
 
-        if (m_test >= 8f)
+        if (m_test >= 6f)
         {
-            m_EMode = EventCameraState.LeadJeep;
-            m_test = 0f;
+            isM2 = true;
+            if (isM2)
+            {
+                transform.rotation = 
+                    Quaternion.Slerp(Quaternion.Euler(-10f, -22.7f, 0f), Quaternion.Euler(18f, -22.7f, 0f), m_T2 / 1.2f);
+                m_T2 += 1.0f * Time.deltaTime;
+
+                if (m_T2 >= 1.2f)
+                {
+                    m_test = 0f;
+                    m_EMode = EventCameraState.Tank2;
+                }
+            }
+
+        }
+
+        m_test += 1.0f * Time.deltaTime;
+    }
+
+    private void Tank2Mode()
+    {
+        if (m_test >= 6f)
+        {
             isMAllClear = true;
+            m_test = 0f;
+            m_EMode = EventCameraState.LeadJeep;
         }
 
         m_test += 1.0f * Time.deltaTime;

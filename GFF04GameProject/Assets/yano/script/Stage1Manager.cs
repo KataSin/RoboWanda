@@ -69,19 +69,27 @@ public class Stage1Manager : MonoBehaviour
         if (GetComponent<BlackOut_UI>().Get_Clear())
             isStart = true;
 
-        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 0)
-        {
-            bezeru_ui_.GetComponent<ui_Bezeru>().SetT(camera_pos_.GetComponent<CameraPosition>().GetT());
-        }
+        //if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 2
+        //    &&
+        //    camera_pos_.GetComponent<CameraPosition>().Get_EventEnd())
+        //{
+        //    bezeru_ui_.GetComponent<ui_Bezeru>().SetT(camera_pos_.GetComponent<CameraPosition>().GetT());
+        //}
 
-        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1)
+        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 2)
         {
+            if(camera_pos_.GetComponent<CameraPosition>().Get_EventEnd()
+                && GetComponent<BlackOut_UI>().Get_Clear())
+            {
+                timer_ui_.SetActive(true);
+                bezeru_ui_.GetComponent<ui_Bezeru>().FeadOut();
+
+                if (robot_.GetComponent<RobotManager>().GetRobotHP() > 0f)
+                    timer_ui_.GetComponent<Timer>().TimerUpdate();
+            }
+
             //boss_ui_[0].SetActive(true);
-            //boss_ui_[1].GetComponent<Image>().enabled = true;
-            timer_ui_.SetActive(false);
-
-            //if (robot_.GetComponent<RobotManager>().GetRobotHP() > 0f)
-            //    timer_ui_.GetComponent<Timer>().TimerUpdate();
+            //boss_ui_[1].GetComponent<Image>().enabled = true;            
         }
 
         //クリアかオーバーかのチェック

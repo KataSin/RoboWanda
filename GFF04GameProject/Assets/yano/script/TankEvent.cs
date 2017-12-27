@@ -26,7 +26,7 @@ public class TankEvent : MonoBehaviour
     {
         if (camera_pos_.GetComponent<CameraPosition>().GetEMode() == 4)
         {
-            transform.position = Vector3.Lerp(m_origin_pos, m_origin_pos + (transform.forward * 8f), t / 2f);
+            //transform.position = Vector3.Lerp(m_origin_pos, m_origin_pos + (transform.forward * 8f), t / 2f);
             t += 1.0f * Time.deltaTime;
         }
     }
