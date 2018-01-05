@@ -26,6 +26,7 @@ enum EventCameraState
     Bomber,
     Tank,
     Tank2,
+    BossDead,
 }
 
 // カメラ距離
@@ -138,6 +139,10 @@ public class CameraPosition : MonoBehaviour
 
     private bool isEventEnd;
 
+    private GameObject boss_;
+    private GameObject bossPivot_;
+    private float m_T3;
+
     // Use this for initialization
     void Start()
     {
@@ -171,6 +176,7 @@ public class CameraPosition : MonoBehaviour
 
         m_test = 0f;
         m_T2 = 0f;
+        m_T3 = 0f;
 
         isM0 = false;
         isM2 = false;
@@ -180,11 +186,25 @@ public class CameraPosition : MonoBehaviour
 
         if (m_Prediction != null)
             m_Prediction.transform.localPosition = transform.localPosition;
+
+        if (GameObject.FindGameObjectWithTag("Robot"))
+            boss_ = GameObject.FindGameObjectWithTag("Robot");
+        if (GameObject.FindGameObjectWithTag("RobotCameraP"))
+            bossPivot_ = GameObject.FindGameObjectWithTag("RobotCameraP");
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (boss_ != null)
+        {
+            if (boss_.GetComponent<RobotManager>().GetRobotHP() <= 0f)
+            {
+                m_Mode = PlayerCameraMode.Event;
+                m_EMode = EventCameraState.BossDead;
+            }
+        }
+
         // カメラの状態に応じて処理を行う
         switch (m_Mode)
         {
@@ -345,7 +365,9 @@ public class CameraPosition : MonoBehaviour
         // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
         RaycastHit hitInfo;
 
-        if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
+        if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage"))
+            &&
+            m_EMode != EventCameraState.BossDead)
         {
             // Debug.Log("壁に遮られた");
             Vector3 hit_position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.3f, hitInfo.point.z);
@@ -428,7 +450,9 @@ public class CameraPosition : MonoBehaviour
             // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
             RaycastHit hitInfo;
 
-            if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
+            if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage"))
+                &&
+                m_EMode != EventCameraState.BossDead)
             {
                 // Debug.Log("壁に遮られた");
                 Vector3 hit_position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.3f, hitInfo.point.z);
@@ -471,7 +495,9 @@ public class CameraPosition : MonoBehaviour
             // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
             RaycastHit hitInfo;
 
-            if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
+            if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage"))
+                &&
+                m_EMode != EventCameraState.BossDead)
             {
                 // Debug.Log("壁に遮られた");
                 Vector3 hit_position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.3f, hitInfo.point.z);
@@ -530,6 +556,9 @@ public class CameraPosition : MonoBehaviour
                 break;
             case EventCameraState.Tank2:
                 Tank2Mode();
+                break;
+            case EventCameraState.BossDead:
+                BossDeadMode();
                 break;
         }
 
@@ -627,7 +656,7 @@ public class CameraPosition : MonoBehaviour
             isM2 = true;
             if (isM2)
             {
-                transform.rotation = 
+                transform.rotation =
                     Quaternion.Slerp(Quaternion.Euler(-10f, -22.7f, 0f), Quaternion.Euler(18f, -22.7f, 0f), m_T2 / 1.2f);
                 m_T2 += 1.0f * Time.deltaTime;
 
@@ -653,6 +682,39 @@ public class CameraPosition : MonoBehaviour
         }
 
         m_test += 1.0f * Time.deltaTime;
+    }
+
+    private void BossDeadMode()
+    {
+        transform.LookAt(bossPivot_.transform.position /*+ bossPivot_.transform.up * 10f*/);
+
+        //float l_bossForward = boss_.transform.forward.z;
+        //l_bossForward
+
+        Vector3 l_bossCameraPos = bossPivot_.transform.position + (-boss_.transform.right * 20f) + (boss_.transform.forward * 20f);
+        l_bossCameraPos.y = 7f;
+        transform.position = l_bossCameraPos;
+
+        //transform.position =
+        //    new Vector3(
+        //        bossPivot_.transform.position.x,
+        //        10f,
+        //        bossPivot_.transform.position.z + boss_.transform.forward.z * 30f
+        //        );
+
+        //transform.position = Vector3.Lerp(
+        //    new Vector3(
+        //        bossPivot_.transform.position.x,
+        //        10f,
+        //        bossPivot_.transform.position.z + boss_.transform.forward.z * 30f),
+        //    new Vector3(
+        //        bossPivot_.transform.position.x + -boss_.transform.right.x * 30f,
+        //        10f,
+        //        bossPivot_.transform.position.z + boss_.transform.forward.z * 20f),
+        //    m_T3 / 20f
+        //    );
+
+        m_T3 += 1.0f * Time.deltaTime;
     }
 
     // イベントカメラに移行

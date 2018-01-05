@@ -26,6 +26,9 @@ public class CameraShake : MonoBehaviour
     GameObject m_EnemyRobot;        // 敵ロボット
     float m_Distance = 1000.0f;     // プレイヤーとロボットの距離
 
+    [SerializeField]
+    private GameObject cameraPos_;
+
     // Use this for initialization
     void Start()
     {
@@ -38,6 +41,13 @@ public class CameraShake : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (cameraPos_.GetComponent<CameraPosition>().GetEMode() == 6)
+        {
+            transform.localPosition = Vector3.zero;
+            m_LifeTime = 0.0f;
+            return;
+        }
+
         // 敵ロボットが存在する場合
         if (m_EnemyRobot != null)
         {
