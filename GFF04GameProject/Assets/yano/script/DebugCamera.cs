@@ -4,11 +4,22 @@ using UnityEngine;
 
 public class DebugCamera : MonoBehaviour
 {
+    private float m_rotateRight;
+
+    private float m_mousePosX, m_mousePosY;
+
+    [SerializeField]
+    private bool isMouseFlag;
 
     // Use this for initialization
     void Start()
     {
+        m_rotateRight = 0f;
 
+        m_mousePosX = 0f;
+        m_mousePosY = 0f;
+
+        isMouseFlag = false;
     }
 
     // Update is called once per frame
@@ -29,14 +40,31 @@ public class DebugCamera : MonoBehaviour
         else if (Input.GetKey(KeyCode.Alpha6))
             transform.position -= transform.up / 2f;
 
-        if (Input.GetKey(KeyCode.Alpha7))
-            transform.Rotate(-transform.up * 2f);
-        else if (Input.GetKey(KeyCode.Alpha8))
-            transform.Rotate(transform.up * 2f);
+        if (Input.GetKeyDown(KeyCode.M))
+            isMouseFlag = !isMouseFlag;
 
-        if (Input.GetKey(KeyCode.Alpha9))
-            transform.Rotate(transform.right * 2f);
-        else if (Input.GetKey(KeyCode.Alpha0))
-            transform.Rotate(-transform.right * 2f);
+        switch(isMouseFlag)
+        {
+            case false:
+
+                if (Input.GetKey(KeyCode.Alpha7))
+                    transform.Rotate(-Vector3.up * 2f, Space.World);
+                else if (Input.GetKey(KeyCode.Alpha8))
+                    transform.Rotate(Vector3.up * 2f, Space.World);
+
+                if (Input.GetKey(KeyCode.Alpha9))
+                    transform.Rotate(Vector3.right * 2f);
+                else if (Input.GetKey(KeyCode.Alpha0))
+                    transform.Rotate(-Vector3.right * 2f);
+
+                break;
+
+            case true:
+
+                transform.Rotate(-Vector3.right * Input.GetAxis("MouseY") / 8f);
+                transform.Rotate(Vector3.up * Input.GetAxis("MouseX") / 8f, Space.World);
+
+                break;
+        }
     }
 }
