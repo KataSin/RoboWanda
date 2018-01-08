@@ -39,10 +39,16 @@ public class CameraDebuger : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.B))
             debugCamera_.enabled = !debugCamera_.enabled;
 
-        if(debugCamera_.enabled)
+        if (debugCamera_.enabled)
+        {
             m_Mode = CameraMode.Debug;
+            Cursor.visible = false;
+        }
         else
+        {
             m_Mode = CameraMode.Main;
+            Cursor.visible = true;
+        }
     }
 
     public int GetMode()

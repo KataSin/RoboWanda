@@ -21,13 +21,26 @@ public class ResultHeri : MonoBehaviour
     }
 
     public void FinishHeriMove()
-    {
-        t += 1.0f * Time.deltaTime;
+    {        
         m_speed += 1.0f * Time.deltaTime;
         if (m_speed >= 5f)
             m_speed = 5f;
 
-        transform.rotation = Quaternion.Slerp(Quaternion.Euler(0f, -38.685f, 0f), Quaternion.Euler(0f, -145, 0f), t / 3f);
+        if (m_speed >= 1f)
+        {
+            transform.rotation = Quaternion.Slerp(Quaternion.Euler(0f, -38.685f, 0f), Quaternion.Euler(-10f, -145, -20f), t / 5f);
+            t += 1.0f * Time.deltaTime;
+        }
         transform.position -= (transform.forward * m_speed) / 10f;
+    }
+
+    public float Get_Speed()
+    {
+        return m_speed;
+    }
+
+    public float Get_T()
+    {
+        return t;
     }
 }

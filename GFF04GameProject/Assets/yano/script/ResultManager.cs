@@ -75,6 +75,12 @@ public class ResultManager : MonoBehaviour
         else if (state_ == ResultState.Finish)
         {
             heri_.GetComponent<ResultHeri>().FinishHeriMove();
+            
+            if (heri_.GetComponent<ResultHeri>().Get_Speed() >= 1f)
+            {
+                camera_.GetComponent<ResultCamera>().FinishRotate();
+                camera_.GetComponent<ResultCamera>().FinishMove();
+            }
             result_uis_.SetActive(false);
 
             m_finishTimer += 1.0f * Time.deltaTime;

@@ -75,6 +75,9 @@ public class PlayStartHeri : MonoBehaviour
             &&
             camera_pos_.GetComponent<CameraPosition>().GetMode() != 5))
         {
+            if (!heri_se_.isPlaying)
+                heri_se_.PlayOneShot(heri_se_.clip);
+
             m_speed -= 0.12f * Time.deltaTime;
             if (m_speed <= 0.1f)
                 m_speed = 0.1f;
