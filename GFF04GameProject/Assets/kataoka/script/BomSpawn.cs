@@ -35,6 +35,9 @@ public class BomSpawn : MonoBehaviour
     [SerializeField]
     private GameObject player_;
 
+    //頂点の座標
+    private Vector3 m_VertexPos;
+
     //軌道線を表示させているかどうか
     private bool m_IsLineDraw;
     //投げるベクトル
@@ -69,6 +72,8 @@ public class BomSpawn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(m_Bom);
+
         //表示しないならアクティブをfalseにしてリターン
         if (!m_IsLineDraw)
         {
@@ -140,6 +145,7 @@ public class BomSpawn : MonoBehaviour
         if (m_Bom == BomSpawn.Bom.LIGHT_BOM)
         {
             m_LineRenderer.positionCount = colNum / 2;
+            m_VertexPos = linePoints[m_LineRenderer.positionCount];
         }
         for(int i = 0; i < m_LineRenderer.positionCount; i++)
         {
@@ -176,6 +182,8 @@ public class BomSpawn : MonoBehaviour
 
         }
         GameObject bom = Instantiate(prefab, transform.position, Quaternion.identity);
+        if (m_Bom == Bom.LIGHT_BOM) bom.GetComponent<LightBullet>().SetVertex(m_VertexPos);
+
         bom.transform.rotation = Quaternion.Euler(90f, 0f, -(player_.transform.rotation.y * 180f / Mathf.PI) * 2f);
 
         float power = m_Power;
@@ -197,7 +205,7 @@ public class BomSpawn : MonoBehaviour
     {
         m_Vec = vec;
         m_Power = power;
-        m_Bom = bom;
+        m_Bom = Bom.LIGHT_BOM;
     }
     /// <summary>
     /// 軌道線を表示するかどうか

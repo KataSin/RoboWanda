@@ -6,8 +6,6 @@ public class BeamExplosion : MonoBehaviour
 {
     [SerializeField, Tooltip("爆発エフェクト")]
     public GameObject m_Exprosion;
-    [SerializeField, Tooltip("爆発の遅延時間")]
-    public float m_ExprosionDelay;
     //爆発あたり判定の時間
     private float m_Timer;
     //爆発フラグ
@@ -23,15 +21,15 @@ public class BeamExplosion : MonoBehaviour
     void Update()
     {
         m_Timer += Time.deltaTime;
-        if (m_Timer >= m_ExprosionDelay&&m_ExprosionFlag)
+        if (m_ExprosionFlag)
         {
             Instantiate(m_Exprosion, transform.position, Quaternion.identity);
             gameObject.AddComponent<SphereCollider>();
-            gameObject.GetComponent<SphereCollider>().isTrigger = true;
+            gameObject.GetComponent<SphereCollider>().isTrigger = true;                ;
             m_ExprosionFlag = false;
         }
 
-        if (m_Timer >= m_ExprosionDelay + 0.5f)
+        if (m_Timer >= 0.5f)
         {
             Destroy(gameObject);
         }

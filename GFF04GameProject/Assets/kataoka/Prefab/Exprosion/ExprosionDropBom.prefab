@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 54484792064625182}
   - component: {fileID: 82294519435625722}
   m_Layer: 10
-  m_Name: ExplosionPrefab
+  m_Name: ExprosionDropBom
   m_TagString: ExplosionCollision
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,8 +37,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1984701231398710}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 743.146, y: -8446.268, z: 4077.3914}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalPosition: {x: -94.51324, y: 0.5290266, z: 96.94798}
+  m_LocalScale: {x: 24.045916, y: 24.045921, z: 24.045921}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -149,9 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc94113d58753b048b19714e033c3054, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Exprosion: {fileID: 1722825145612598, guid: dcc42140cdc43744fb499aa91751cc72,
+  m_Exprosion: {fileID: 1807026077270236, guid: c4c09a8169d1d0845916b88ab3da83d9,
     type: 2}
-  m_ExprosionDelay: 0
 --- !u!135 &135282259662492504
 SphereCollider:
   m_ObjectHideFlags: 1
