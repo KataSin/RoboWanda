@@ -438,7 +438,7 @@ public class PlayerControllerAlpha : MonoBehaviour
     {
         // 片岡実装
         // ベクトルとパワーを設定
-        m_BomSpawn.Set(Camera.main.transform.forward.normalized, 100.0f);
+        m_BomSpawn.Set(Camera.main.transform.forward.normalized, 100.0f,BomSpawn.Bom.LIGHT_BOM);
         // LBボタンを押すと、爆弾を投擲
         if (Input.GetButtonDown("Bomb_Throw"))
         {
