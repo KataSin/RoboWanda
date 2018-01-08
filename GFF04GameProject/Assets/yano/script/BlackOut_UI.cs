@@ -12,7 +12,7 @@ public class BlackOut_UI : MonoBehaviour
 
     private Color m_lerp_color;
 
-    private float t, t1, t2;
+    private float t, t1, t2, t3, t4;
 
     [SerializeField]
     private float m_blackFeadTime;
@@ -21,7 +21,7 @@ public class BlackOut_UI : MonoBehaviour
     private float m_blackFeadTime2;
 
     [SerializeField]
-    private bool isClear, isClearGO,isClearGC;
+    private bool isClear, isClearGO, isClearGC, isJeepClear;
 
     // Use this for initialization
     void Start()
@@ -31,6 +31,8 @@ public class BlackOut_UI : MonoBehaviour
         t = 0f;
         t1 = 0f;
         t2 = 0f;
+        t3 = 0f;
+        t4 = 0f;
 
         m_lerp_color = black_curtain_.color;
 
@@ -38,6 +40,7 @@ public class BlackOut_UI : MonoBehaviour
         isClear = false;
         isClearGO = false;
         isClearGC = false;
+        isJeepClear = false;
     }
 
     // Update is called once per frame
@@ -55,7 +58,6 @@ public class BlackOut_UI : MonoBehaviour
         black_curtain_.color = m_lerp_color;
 
         CheackClear();
-
     }
 
     public void FeadIn()
@@ -67,6 +69,30 @@ public class BlackOut_UI : MonoBehaviour
         black_curtain_.color = m_lerp_color;
 
         CheackClear();
+    }
+
+    public void JeepOut(float feadTime)
+    {
+        t3 += 1.0f * Time.deltaTime;
+
+        m_lerp_color.a = Mathf.Lerp(0.0f, 1.0f, t3 / feadTime);
+
+        black_curtain_.color = m_lerp_color;
+
+        if (t3 >= feadTime)
+            isJeepClear = true;
+    }
+
+    public void JeepIn(float feadTime)
+    {
+        t4 += 1.0f * Time.deltaTime;
+
+        m_lerp_color.a = Mathf.Lerp(1.0f, 0.0f, t4 / feadTime);
+
+        black_curtain_.color = m_lerp_color;
+
+        if (t4 >= feadTime)
+            isJeepClear = true;
     }
 
     public void GameClearFead()
@@ -124,6 +150,11 @@ public class BlackOut_UI : MonoBehaviour
         isClear = false;
     }
 
+    public void ResetJC()
+    {
+        isJeepClear = false;
+    }
+
     public bool Get_Clear()
     {
         return isClear;
@@ -137,5 +168,10 @@ public class BlackOut_UI : MonoBehaviour
     public bool Get_ClearGC()
     {
         return isClearGC;
+    }
+
+    public bool Get_ClearJ()
+    {
+        return isJeepClear;
     }
 }

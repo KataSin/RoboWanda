@@ -39,9 +39,12 @@ public class ResultScore : MonoBehaviour
         m_attackScore = 0;
         m_billPersent = 0f;
 
-        TimerApplication();
-        AttackScoreApplication();
-        BillRatioApplication();
+        if (GameObject.FindGameObjectWithTag("ScoreManager"))
+        {
+            TimerApplication();
+            AttackScoreApplication();
+            BillRatioApplication();
+        }
     }
 
     public void ScoreUpdate()

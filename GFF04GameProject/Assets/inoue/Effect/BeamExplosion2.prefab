@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 198859765860737252}
   - component: {fileID: 199556058958875276}
   - component: {fileID: 82872961666705396}
+  - component: {fileID: 114117364708046060}
   m_Layer: 0
   m_Name: BeamExplosion2
   m_TagString: Untagged
@@ -238,7 +239,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: a8dfbaf9a52b25243b313a2ceb511202, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -308,6 +309,17 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!114 &114117364708046060
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1722825145612598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c251b106c9c5872469d143f4e91bbb96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!198 &198278876937245824
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -19444,7 +19456,7 @@ ParticleSystem:
   serializedVersion: 5
   lengthInSec: 5
   simulationSpeed: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0

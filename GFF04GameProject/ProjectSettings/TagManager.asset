@@ -43,12 +43,13 @@ TagManager:
   - LoadingText
   - SandSmoke
   - BeamCollide
-  - HeliManager
-  - RobotLightManager
-  - TankPoint
-  - FxTemporaire
-  - LightCollision
+  - GuardRail
+  - Bomber
+  - JeepManager
+  - Jeep
   - Tank
+  - RobotCameraP
+  - TankHeri
   layers:
   - Default
   - TransparentFX
@@ -66,7 +67,7 @@ TagManager:
   - Player
   - Missile
   - Smoke
-  - Tank
+  - GuardRail
   - 
   - 
   - 

@@ -14,7 +14,8 @@ enum PlayerState
     Normal,     // 通常
     Aiming,     // 照準中
     Creeping,   // 匍匐
-    Dead        // 死亡
+    Dead,       // 死亡
+    Passing     // 乗り越える
 }
 
 public class PlayerController : MonoBehaviour
@@ -87,6 +88,7 @@ public class PlayerController : MonoBehaviour
     //
 
     float m_current_speed;
+    float m_passing_time;
 
     //ボムスポーン(片岡実装)
     private GameObject m_BomSpawn;
@@ -95,9 +97,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameObject m_Launcher;
 
-    private AudioSource[] player_se_;
+    private AudioClip playerSe_attack_;
+    private AudioClip playerSe_walk_;
+    private AudioClip playerSe_die_;
+    private AudioSource[] playerSe_;
 
-    private int test;
+    private float test;
+
+    private bool isDse;
 
     private GameObject timer_;
 
@@ -106,8 +113,13 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         m_Controller = GetComponent<CharacterController>();
+
         m_Animator = GetComponent<Animator>();
-        player_se_ = GetComponents<AudioSource>();
+
+        playerSe_ = GetComponents<AudioSource>();
+        playerSe_attack_ = playerSe_[0].clip;
+        playerSe_walk_ = playerSe_[1].clip;
+        playerSe_die_ = playerSe_[2].clip;
 
         m_State = PlayerState.StartFall;
         m_CurrentSpeedLimit = m_MaxSpeed;
@@ -133,7 +145,8 @@ public class PlayerController : MonoBehaviour
         m_Animator.speed = 0f;
 
         t = 0f;
-        //
+
+        test = 0f;
     }
 
     // Update is called once per frame
@@ -179,6 +192,13 @@ public class PlayerController : MonoBehaviour
                 m_IsCreeping = true;
                 m_IsDead = false;
                 break;
+            // 乗り越える
+            case PlayerState.Passing:
+                Passing();
+                m_IsAiming = false;
+                m_IsCreeping = false;
+                m_IsDead = false;
+                break;
             // 死亡
             case PlayerState.Dead:
                 Dead();
@@ -216,21 +236,41 @@ public class PlayerController : MonoBehaviour
         }*/
 
         // 死亡テスト
-        if (Input.GetKeyDown("space"))
+        /* if (Input.GetKeyDown("space"))
         {
             if (m_State != PlayerState.Dead)
             {
                 m_State = PlayerState.Dead;
-                player_se_[1].Stop();
+                playerSe_[1].Stop();
             }
-        }
-    }
-    public void OnCollisionEnter(Collision other)
-    {
-        Debug.Log(other.gameObject.name);
+        }*/
     }
 
-    // 接触判定
+    // キャラクターコントローラーの接触判定
+    public void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        // Debug.Log(hit.gameObject.name);
+
+        // 乗り越え中、ガードレールとの接触判定を無視
+        if (m_State == PlayerState.Passing && hit.gameObject.tag == "GuardRail")
+        {
+            Physics.IgnoreCollision(m_Controller, hit.collider);
+        }
+
+        // ガードレールと接触したら、乗り越える
+        if (hit.gameObject.tag == "GuardRail")
+        {
+            m_passing_time = 0.5f;
+            m_State = PlayerState.Passing;
+        }
+    }
+
+    public void OnCollisionEnter(Collision other)
+    {
+        // Debug.Log(other.gameObject.name);
+    }
+
+    // Capsule Colliderの接触判定
     public void OnTriggerEnter(Collider other)
     {
         // 敵ロボットと接触したら死亡
@@ -247,7 +287,7 @@ public class PlayerController : MonoBehaviour
             other.gameObject.tag == "BeamCollide")
         {
             m_State = PlayerState.Dead;
-            player_se_[1].Stop();
+            playerSe_[1].Stop();
         }
 
         // 倒壊中のビルと接触したら死亡
@@ -256,7 +296,7 @@ public class PlayerController : MonoBehaviour
             || other.gameObject.name == "DeathCollide")
         {
             m_State = PlayerState.Dead;
-            player_se_[1].Stop();
+            playerSe_[1].Stop();
         }
     }
 
@@ -516,16 +556,14 @@ public class PlayerController : MonoBehaviour
         if (axisHorizontal == 0 && axisVertical == 0)
         {
             m_Speed = Mathf.Max(m_Speed - m_CurrentBrakePower * Time.deltaTime, 0);
-
-            if (m_Speed == 0)
-                player_se_[1].Stop();
+            playerSe_[1].Stop();
         }
 
-        else if (axisHorizontal != 0 || axisVertical != 0 || m_Speed != 0)
+        else if (axisHorizontal != 0 || axisVertical != 0)
         {
-            if (!player_se_[1].isPlaying)
+            if (!playerSe_[1].isPlaying)
             {
-                player_se_[1].Play();
+                playerSe_[1].PlayOneShot(playerSe_walk_);
             }
         }
 
@@ -540,14 +578,14 @@ public class PlayerController : MonoBehaviour
             // 速度制限、ブレーキ速度、および回転速度の変更
             if (m_IsDash)
             {
-                player_se_[1].pitch = 2.4f;
+                playerSe_[1].pitch = 2.4f;
                 m_CurrentSpeedLimit = m_MaxSpeedDash;
                 m_CurrentBrakePower = m_BrakePowerDash;
                 m_CurrentRotateSpeed = m_RotateSpeedDash;
             }
             else
             {
-                player_se_[1].pitch = 1.2f;
+                playerSe_[1].pitch = 1.2f;
                 if (m_CurrentSpeedLimit > m_MaxSpeed)
                 {
                     m_CurrentSpeedLimit -= 0.2f;
@@ -610,7 +648,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Bomb_Throw"))
         {
             m_BomSpawn.GetComponent<BomSpawn>().SpawnBom();
-            player_se_[0].Play();
+            playerSe_[0].PlayOneShot(playerSe_attack_);
         }
 
         // RBボタンを放すと通常状態に戻る
@@ -796,6 +834,44 @@ public class PlayerController : MonoBehaviour
         m_Animator.SetFloat("CreepingSpeed", current_speed);
     }
 
+    // 乗り越える処理
+    void Passing()
+    {
+        // グレネードランチャーの表示を消す
+        m_Launcher.SetActive(false);
+        // 乗り越えるモーションを再生
+        m_Animator.Play("Passing");
+        // Debug.Log(m_PassingTime);
+
+        /* if (m_PassingTime <= 0.0f)
+        {
+            // グレネードランチャーを表示
+            m_Launcher.SetActive(true);
+            // 通常状態に戻る
+            m_State = PlayerState.Normal;
+        }*/
+
+        // 移動処理
+        Vector3 velocity = transform.forward * m_MaxSpeed;
+        m_Controller.Move(velocity * Time.deltaTime);
+
+        // 乗り越えるアニメーションが終了すると、通常状態に戻る
+        AnimatorStateInfo AniInfo;     // アニメーションの状態
+        AniInfo = gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+        // if (AniInfo.normalizedTime <= 0.9f)
+        if (m_passing_time <= 0 && AniInfo.normalizedTime <= 0.9f)
+        {
+            // グレネードランチャーを表示
+            m_Launcher.SetActive(true);
+            // 通常状態に戻る
+            m_State = PlayerState.Normal;
+        }
+
+        m_passing_time -= Time.deltaTime;
+        // Debug.Log(m_passing_time);
+    }
+
     // 死亡時の処理
     void Dead()
     {
@@ -804,10 +880,14 @@ public class PlayerController : MonoBehaviour
         // 死亡モーションを再生
         m_Animator.Play("Dead");
 
-        if (test == 20)
-            player_se_[2].Play();
+        //死亡SE
+        if (test >= 0.8f && !isDse)
+        {
+            playerSe_[2].PlayOneShot(playerSe_die_);
+            isDse = true;
+        }
 
-        test++;
+        test += 1.0f * Time.deltaTime;
     }
 
     public int GetPlayerState()

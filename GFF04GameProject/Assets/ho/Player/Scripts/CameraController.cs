@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private float m_RotateSpeedY = 180.0f;  // y軸回転速度
     [SerializeField]
-    private float m_RotateSpeedX = 90.0f;  // x軸回転速度
+    private float m_RotateSpeedX = 90.0f;   // x軸回転速度
 
     float pitch = 0.0f;                     // 仰角
     [SerializeField]
@@ -106,10 +106,13 @@ public class CameraController : MonoBehaviour
     {
         switch (cameraPos_.GetComponent<CameraPosition>().GetMode())
         {
-            case 1:
-                mode_ = PlayerCameraMode.Normal;
+            case 0:
+                mode_ = PlayerCameraMode.Event;
                 break;
             case 2:
+                mode_ = PlayerCameraMode.Normal;
+                break;
+            case 3:
                 mode_ = PlayerCameraMode.Normal;
                 break;
             default:

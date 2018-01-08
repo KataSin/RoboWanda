@@ -33,7 +33,7 @@ MonoBehaviour:
     m_Settings:
       method: 0
       fxaaSettings:
-        preset: 2
+        preset: 3
       taaSettings:
         jitterSpread: 0.75
         sharpen: 0.3
@@ -69,9 +69,9 @@ MonoBehaviour:
       screenEdgeMask:
         intensity: 0.03
   depthOfField:
-    m_Enabled: 1
+    m_Enabled: 0
     m_Settings:
-      focusDistance: 6.82
+      focusDistance: 1.62
       aperture: 5.6
       focalLength: 50
       useCameraFov: 0
@@ -100,7 +100,7 @@ MonoBehaviour:
     m_Enabled: 1
     m_Settings:
       bloom:
-        intensity: 0.52
+        intensity: 0.95
         threshold: 1.04
         softKnee: 0.718
         radius: 1
@@ -118,7 +118,7 @@ MonoBehaviour:
         neutralBlackOut: 0.0177
         neutralWhiteOut: 6.29
         neutralWhiteLevel: 10.92
-        neutralWhiteClip: 10
+        neutralWhiteClip: 8.62
       basic:
         postExposure: 1.17
         temperature: 0
@@ -139,8 +139,8 @@ MonoBehaviour:
           offset: {r: 1, g: 1, b: 1, a: 0}
         linear:
           lift: {r: 1, g: 1, b: 1, a: 0}
-          gamma: {r: 1, g: 1, b: 1, a: 0}
-          gain: {r: 0.8664396, g: 0.95896375, b: 1, a: 0}
+          gamma: {r: 1, g: 0.9467233, b: 0.96608174, a: 0}
+          gain: {r: 0.8664396, g: 0.95896375, b: 1, a: 0.06434316}
       curves:
         master:
           curve:
@@ -286,10 +286,10 @@ MonoBehaviour:
       spectralTexture: {fileID: 0}
       intensity: 0.1
   grain:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
       colored: 1
-      intensity: 0.5
+      intensity: 0.05
       size: 1
       luminanceContribution: 0.8
   vignette:

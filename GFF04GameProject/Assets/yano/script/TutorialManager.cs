@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class TutorialManager : MonoBehaviour
     private GameObject tutorial_canvas_;
 
     [SerializeField]
-    private GameObject missionC_ui_;
+    private Image missionC_ui_;
 
     [SerializeField]
     private GameObject mission1_ui_;
@@ -70,7 +71,7 @@ public class TutorialManager : MonoBehaviour
         bgm_.volume = 0f;
         bgm_.Play();
 
-        missionC_ui_.SetActive(false);
+        missionC_ui_.enabled = false;
         mission1_ui_.SetActive(false);
         mission2_ui_.SetActive(false);
         mission3_ui_.SetActive(false);
@@ -126,7 +127,7 @@ public class TutorialManager : MonoBehaviour
         if (!tutorial_canvas_.GetComponent<BlackOut_UI>().Get_Clear())
         {
             tutorial_canvas_.GetComponent<BlackOut_UI>().FeadIn();
-            bgm_.volume = 
+            bgm_.volume =
                 Mathf.Lerp(0f, 0.1f,
                 tutorial_canvas_.GetComponent<BlackOut_UI>().GetT() / tutorial_canvas_.GetComponent<BlackOut_UI>().GetBFeadTime());
         }
@@ -165,7 +166,7 @@ public class TutorialManager : MonoBehaviour
         if (clear_pod_[0].GetComponent<ClearPoint>().GetClear()
             && !door_.GetComponent<DoorOpen>().GetClear())
         {
-            missionC_ui_.SetActive(true);
+            missionC_ui_.enabled = true;
             mission1_ui_.SetActive(false);
             //controller_ico_.SetActive(false);
             mission_bar_.GetComponent<ui_imageScale>().ScaleBack();
@@ -178,7 +179,7 @@ public class TutorialManager : MonoBehaviour
 
         if (door_.GetComponent<DoorOpen>().GetClear())
         {
-            missionC_ui_.SetActive(false);
+            missionC_ui_.enabled = false;
             m_state = TutorialState.Mission2;
             m_intervalTime = 0f;
         }
@@ -201,7 +202,7 @@ public class TutorialManager : MonoBehaviour
 
         if (clear_pod_[1].GetComponent<ClearPoint>().GetClear())
         {
-            missionC_ui_.SetActive(true);
+            missionC_ui_.enabled = true;
             mission2_ui_.SetActive(false);
             //controller_ico_.SetActive(false);
             mission_bar_.GetComponent<ui_imageScale>().ScaleBack();
@@ -214,7 +215,7 @@ public class TutorialManager : MonoBehaviour
 
         if (door2_.GetComponent<DoorOpen>().GetClear())
         {
-            missionC_ui_.SetActive(false);
+            missionC_ui_.enabled = false;
             m_state = TutorialState.Mission3;
             m_intervalTime = 0f;
         }
@@ -239,7 +240,7 @@ public class TutorialManager : MonoBehaviour
         if (bill_.GetComponent<Break>().Get_BreakFlag())
         {
             if (m_intervalTime < 2f)
-                missionC_ui_.SetActive(true);
+                missionC_ui_.enabled = true;
             mission3_ui_.SetActive(false);
             //controller_ico_.SetActive(false);
             mission_bar_.GetComponent<ui_imageScale>().ScaleBack();
@@ -249,7 +250,7 @@ public class TutorialManager : MonoBehaviour
             if (m_intervalTime >= 2f)
             {
                 m_state = TutorialState.End;
-                missionC_ui_.SetActive(false);
+                missionC_ui_.enabled = false;
 
             }
         }

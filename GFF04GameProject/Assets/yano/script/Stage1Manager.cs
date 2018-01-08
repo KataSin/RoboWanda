@@ -40,11 +40,14 @@ public class Stage1Manager : MonoBehaviour
     [SerializeField]
     private GameObject bezeru_ui_;
 
+    private bool isStart;
+
     // Use this for initialization
     void Start()
     {
         test = 0f;
         isLScene = false;
+        isStart = false;
         go_uis_.SetActive(false);
         timer_ui_.SetActive(false);
         //boss_ui_[0].SetActive(false);
@@ -60,22 +63,33 @@ public class Stage1Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!GetComponent<BlackOut_UI>().Get_Clear())
+        if (!GetComponent<BlackOut_UI>().Get_Clear()
+            &&!isStart)
             GetComponent<BlackOut_UI>().FeadIn();
+        if (GetComponent<BlackOut_UI>().Get_Clear())
+            isStart = true;
 
-        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 0)
-        {
-            bezeru_ui_.GetComponent<ui_Bezeru>().SetT(camera_pos_.GetComponent<CameraPosition>().GetT());
-        }
+        //if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 2
+        //    &&
+        //    camera_pos_.GetComponent<CameraPosition>().Get_EventEnd())
+        //{
+        //    bezeru_ui_.GetComponent<ui_Bezeru>().SetT(camera_pos_.GetComponent<CameraPosition>().GetT());
+        //}
 
-        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1)
+        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 2)
         {
+            if(camera_pos_.GetComponent<CameraPosition>().Get_EventEnd()
+                && GetComponent<BlackOut_UI>().Get_Clear())
+            {
+                timer_ui_.SetActive(true);
+                bezeru_ui_.GetComponent<ui_Bezeru>().FeadOut();
+
+                if (robot_.GetComponent<RobotManager>().GetRobotHP() > 0f)
+                    timer_ui_.GetComponent<Timer>().TimerUpdate();
+            }
+
             //boss_ui_[0].SetActive(true);
-            //boss_ui_[1].GetComponent<Image>().enabled = true;
-            timer_ui_.SetActive(true);
-
-            if (robot_.GetComponent<RobotManager>().GetRobotHP() > 0f)
-                timer_ui_.GetComponent<Timer>().TimerUpdate();
+            //boss_ui_[1].GetComponent<Image>().enabled = true;            
         }
 
         //クリアかオーバーかのチェック
@@ -132,7 +146,7 @@ public class Stage1Manager : MonoBehaviour
         if (robot_.GetComponent<RobotManager>().GetRobotHP() <= 0f)
         {
             test += 1.0f * Time.deltaTime;
-            if (test >= 35.0f)
+            if (test >= 30.0f)
             {
                 GetComponent<BlackOut_UI>().GameClearFead();
                 //boss_ui_[0].SetActive(false);

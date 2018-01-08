@@ -10,11 +10,23 @@ using UnityEngine;
 // カメラモード
 enum PlayerCameraMode
 {
+    None,
     Landing,    // 着地
     Normal,     // 通常
     Aim,        // 照準
     Dead,       // 死亡
     Event,      // イベント
+}
+
+enum EventCameraState
+{
+    None,
+    Jeep,
+    LeadJeep,
+    Bomber,
+    Tank,
+    Tank2,
+    BossDead,
 }
 
 // カメラ距離
@@ -92,10 +104,48 @@ public class CameraPosition : MonoBehaviour
     private Vector3 m_deadBefore_pos;
     private Quaternion m_origin_rotation;
 
+    private Vector3 m_eventB_pos;
+    private Quaternion m_eventB_rotation;
+
     private bool isDeadFinish;
 
     [SerializeField]
     private GameObject m_Prediction;             // カメラの予測座標
+
+    [SerializeField]
+    private EventCameraState m_EMode;           //イベントカメラモード
+
+    private GameObject jeepMana_;
+
+    private GameObject[] jeeps_;
+
+    private GameObject bomber_;
+
+    private GameObject tankHeri_;
+
+    private GameObject tank_;
+
+    private Vector3 m_tankHeri_pos;
+
+    private Vector3 m_tank_pos;
+
+    private float m_test;
+
+    private float m_T2;
+
+    private bool isM0;
+
+    private bool isM2;
+
+    private bool isMAllClear;
+
+    private bool isBlack;
+
+    private bool isEventEnd;
+
+    private GameObject boss_;
+    private GameObject bossPivot_;
+    private float m_T3;
 
     // Use this for initialization
     void Start()
@@ -110,7 +160,6 @@ public class CameraPosition : MonoBehaviour
         m_EventPositionY = 0.0f;
         m_EventPositionZ = 0.0f;
 
-        m_Mode = PlayerCameraMode.Landing;
         m_DistanceSelect = 2;
         m_IsTriggered = false;
 
@@ -123,16 +172,49 @@ public class CameraPosition : MonoBehaviour
 
         isDeadFinish = false;
 
+        m_eventB_pos = transform.localPosition;
+        m_eventB_rotation = transform.localRotation;
+        m_Mode = PlayerCameraMode.Event;
+
+        if (GameObject.FindGameObjectWithTag("JeepManager"))
+            jeepMana_ = GameObject.FindGameObjectWithTag("JeepManager");
+
+        m_test = 0f;
+        m_T2 = 0f;
+        m_T3 = 0f;
+
+        isM0 = false;
+        isM2 = false;
+        isMAllClear = false;
+        isBlack = false;
+        isEventEnd = false;
+
         if (m_Prediction != null)
             m_Prediction.transform.localPosition = transform.localPosition;
+
+        if (GameObject.FindGameObjectWithTag("Robot"))
+            boss_ = GameObject.FindGameObjectWithTag("Robot");
+        if (GameObject.FindGameObjectWithTag("RobotCameraP"))
+            bossPivot_ = GameObject.FindGameObjectWithTag("RobotCameraP");
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (boss_ != null)
+        {
+            if (boss_.GetComponent<RobotManager>().GetRobotHP() <= 0f)
+            {
+                m_Mode = PlayerCameraMode.Event;
+                m_EMode = EventCameraState.BossDead;
+            }
+        }
+
         // カメラの状態に応じて処理を行う
         switch (m_Mode)
         {
+            case PlayerCameraMode.None:
+                break;
             case PlayerCameraMode.Landing:
                 LandingMode();
                 break;
@@ -280,7 +362,9 @@ public class CameraPosition : MonoBehaviour
         // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
         RaycastHit hitInfo;
 
-        if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
+        if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage"))
+            &&
+            m_EMode != EventCameraState.BossDead)
         {
             // Debug.Log("壁に遮られた");
             Vector3 hit_position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.3f, hitInfo.point.z);
@@ -363,7 +447,9 @@ public class CameraPosition : MonoBehaviour
             // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
             RaycastHit hitInfo;
 
-            if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
+            if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage"))
+                &&
+                m_EMode != EventCameraState.BossDead)
             {
                 // Debug.Log("壁に遮られた");
                 Vector3 hit_position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.3f, hitInfo.point.z);
@@ -406,7 +492,9 @@ public class CameraPosition : MonoBehaviour
             // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
             RaycastHit hitInfo;
 
-            if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
+            if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage"))
+                &&
+                m_EMode != EventCameraState.BossDead)
             {
                 // Debug.Log("壁に遮られた");
                 Vector3 hit_position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.3f, hitInfo.point.z);
@@ -446,10 +534,215 @@ public class CameraPosition : MonoBehaviour
     // イベントカメラの挙動
     void EventMode()
     {
-        Vector3 new_position = new Vector3(m_EventPositionX, m_EventPositionY, m_EventPositionZ);
+        switch (m_EMode)
+        {
+            case EventCameraState.None:
+                EventStartMode();
+                break;
+            case EventCameraState.Jeep:
+                JeepMode();
+                break;
+            case EventCameraState.LeadJeep:
+                LJeepMode();
+                break;
+            case EventCameraState.Bomber:
+                BomberMode();
+                EventSkip();
+                break;
+            case EventCameraState.Tank:
+                TankMode();
+                EventSkip();
+                break;
+            case EventCameraState.Tank2:
+                Tank2Mode();
+                EventSkip();
+                break;
+            case EventCameraState.BossDead:
+                BossDeadMode();
+                break;
+        }
 
-        // カメラの位置を更新
-        transform.position = Vector3.Lerp(transform.position, new_position, m_EventSpeed * Time.deltaTime);
+
+        //Vector3 new_position = new Vector3(m_EventPositionX, m_EventPositionY, m_EventPositionZ);
+
+        //// カメラの位置を更新
+        //transform.position = Vector3.Lerp(transform.position, new_position, m_EventSpeed * Time.deltaTime);
+    }
+
+    private void EventStartMode()
+    {
+        if (jeepMana_ != null)
+        {
+            transform.position = jeepMana_.transform.position;
+            jeeps_ = GameObject.FindGameObjectsWithTag("Jeep");
+        }
+        m_EMode = EventCameraState.Jeep;
+        transform.rotation = Quaternion.Euler(-7.929f, 62.404f, 0.557f);
+    }
+
+    private void JeepMode()
+    {
+        if (jeeps_[jeeps_.Length - 1].transform.position.x <= transform.position.x + 3f)
+        {
+            isBlack = true;
+        }
+
+        if (jeeps_[jeeps_.Length - 1].transform.position.x <= transform.position.x - 3f)
+        {
+            m_EMode = EventCameraState.LeadJeep;
+        }
+    }
+
+    private void LJeepMode()
+    {        
+        if (!isEventEnd)
+            transform.position = jeeps_[0].transform.position + (-jeeps_[0].transform.forward * 6f) + (jeeps_[0].transform.up * 4f);
+        transform.LookAt(jeeps_[0].transform.position + jeeps_[0].transform.forward + (jeeps_[0].transform.up * 2.2f));
+
+        if ((m_test >= 2f || Input.GetKeyDown(KeyCode.U))
+            && !isMAllClear)
+        {
+            isM0 = true;
+
+            if (m_test >= 4f)
+            {
+                m_EMode = EventCameraState.Bomber;
+                bomber_ = GameObject.FindGameObjectWithTag("Bomber");
+                m_test = 0f;
+            }
+
+            EventSkip();
+        }
+
+        else if (isMAllClear && m_test >= 4f)
+        {
+            isEventEnd = true;
+            if (m_test >= 12f)
+            {
+                m_Mode = PlayerCameraMode.Landing;
+                m_EMode = EventCameraState.None;
+
+                transform.localPosition = m_eventB_pos;
+                transform.localRotation = m_eventB_rotation;
+            }
+        }
+
+        m_test += 1.0f * Time.deltaTime;
+    }
+
+    private void BomberMode()
+    {
+        transform.LookAt(bomber_.transform.position + (-bomber_.transform.forward * 14f));
+        transform.position = bomber_.transform.position
+            + new Vector3(bomber_.transform.right.x * 34f, 7.6f, bomber_.transform.forward.z * 18f);
+
+        if (m_test >= 6f)
+        {
+            m_EMode = EventCameraState.Tank;
+            tankHeri_ = GameObject.FindGameObjectWithTag("TankHeri");
+            m_tankHeri_pos = tankHeri_.transform.position;
+            tank_ = GameObject.FindGameObjectWithTag("Tank");
+            m_tank_pos = tank_.transform.position;
+            m_test = 0f;
+        }
+
+        m_test += 1.0f * Time.deltaTime;
+    }
+
+    private void TankMode()
+    {
+        if (!isM2)
+        {
+            transform.rotation = Quaternion.Euler(-10f, -22.7f, 0f);
+            transform.position = m_tankHeri_pos + new Vector3(tankHeri_.transform.right.x * 12f, -5f, -tankHeri_.transform.forward.z * 40f);
+        }
+
+        if (m_test >= 6f)
+        {
+            isM2 = true;
+            if (isM2)
+            {
+                transform.position =
+                    Vector3.Lerp(
+                        m_tankHeri_pos + new Vector3(tankHeri_.transform.right.x * 12f, -5f, -tankHeri_.transform.forward.z * 40f),
+                        m_tank_pos + new Vector3(-tank_.transform.right.x * 8f, 10f, tank_.transform.forward.z * 24f),
+                        m_T2 / 2f
+                        );
+
+                transform.rotation =
+                    Quaternion.Slerp(Quaternion.Euler(-10f, -22.7f, 0f), Quaternion.Euler(18f, -22.7f, 0f), m_T2 / 2f);
+
+                m_T2 += 1.0f * Time.deltaTime;
+
+                if (m_T2 >= 2f)
+                {
+                    m_test = 0f;
+                    m_EMode = EventCameraState.Tank2;
+                }
+            }
+        }
+
+        m_test += 1.0f * Time.deltaTime;
+    }
+
+    private void Tank2Mode()
+    {
+        if (m_test >= 6f)
+        {
+            isMAllClear = true;
+            m_test = 0f;
+            m_EMode = EventCameraState.LeadJeep;
+        }
+
+        m_test += 1.0f * Time.deltaTime;
+    }
+
+    private void BossDeadMode()
+    {
+        transform.LookAt(bossPivot_.transform.position /*+ bossPivot_.transform.up * 10f*/);
+
+        //float l_bossForward = boss_.transform.forward.z;
+        //l_bossForward
+
+        Vector3 l_bossCameraPos = bossPivot_.transform.position + (-boss_.transform.right * 20f) + (boss_.transform.forward * 20f);
+        l_bossCameraPos.y = 7f;
+        transform.position = l_bossCameraPos;
+
+        //transform.position =
+        //    new Vector3(
+        //        bossPivot_.transform.position.x,
+        //        10f,
+        //        bossPivot_.transform.position.z + boss_.transform.forward.z * 30f
+        //        );
+
+        //transform.position = Vector3.Lerp(
+        //    new Vector3(
+        //        bossPivot_.transform.position.x,
+        //        10f,
+        //        bossPivot_.transform.position.z + boss_.transform.forward.z * 30f),
+        //    new Vector3(
+        //        bossPivot_.transform.position.x + -boss_.transform.right.x * 30f,
+        //        10f,
+        //        bossPivot_.transform.position.z + boss_.transform.forward.z * 20f),
+        //    m_T3 / 20f
+        //    );
+
+        m_T3 += 1.0f * Time.deltaTime;
+    }
+
+    private void EventSkip()
+    {
+        if (Input.GetKeyDown(KeyCode.S)
+            || Input.GetButtonDown("Submit"))
+        {
+            isM0 = true;
+            isM2 = true;
+            isMAllClear = true;
+
+            m_test = 0f;
+
+            m_EMode = EventCameraState.LeadJeep;
+        }
     }
 
     // イベントカメラに移行
@@ -509,6 +802,11 @@ public class CameraPosition : MonoBehaviour
         return (int)m_Mode;
     }
 
+    public int GetEMode()
+    {
+        return (int)m_EMode;
+    }
+
     //死亡カメラが終わったかどうかの取得
     public bool GetDeadFinish()
     {
@@ -518,5 +816,25 @@ public class CameraPosition : MonoBehaviour
     public float GetT()
     {
         return t;
+    }
+
+    public bool Get_M0Flag()
+    {
+        return isM0;
+    }
+
+    public bool Get_MAllFlag()
+    {
+        return isMAllClear;
+    }
+
+    public bool Get_BlackFlag()
+    {
+        return isBlack;
+    }
+
+    public bool Get_EventEnd()
+    {
+        return isEventEnd;
     }
 }
