@@ -16,6 +16,7 @@ public class Bombing : MonoBehaviour
     void Start()
     {
         m_Time = 0.0f;
+        GameObject.FindGameObjectWithTag("RobotLightManager").GetComponent<StrategyRobotLightManager>().m_IsLight = true;
     }
 
     // Update is called once per frame
@@ -26,7 +27,11 @@ public class Bombing : MonoBehaviour
         //回転
         transform.rotation = Quaternion.LookRotation(m_Vec);
         //削除処理
-        if (Vector3.Distance(transform.position, m_GoalPos) <= 1.0f) Destroy(gameObject);
+        if (Vector3.Distance(transform.position, m_GoalPos) <= 2.0f)
+        {
+            GameObject.FindGameObjectWithTag("RobotLightManager").GetComponent<StrategyRobotLightManager>().m_IsLight = false;
+            Destroy(gameObject);
+        }
 
         if (m_BomPrefab == null) return;
 

@@ -30,7 +30,7 @@ public class TankCenterManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var tanks = GameObject.FindGameObjectsWithTag("Tank");
+        var tanks = GameObject.FindGameObjectsWithTag("GameTank");
         int pointsize = tanks.Length;
         if (m_PointSize != pointsize)
         {
@@ -77,6 +77,6 @@ public class TankCenterManager : MonoBehaviour
             tanks[i].GetComponent<Tank>().SetGoTankPos(m_CenterPoint[i].centerPoint.transform.position);
         }
 
-        transform.position = m_Robot.transform.position+new Vector3(0,10,0);
+        transform.position = m_Robot.transform.position + new Vector3(0, 10, 0);
     }
 }

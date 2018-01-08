@@ -65,7 +65,7 @@ public class HelicopterTank : MonoBehaviour
         //これはやばい
         if (Vector3.Distance(transform.position, pointPos) < 9.0f)
         {
-            if (/*m_TankPoint.GetComponent<StrategyTankPoint>().GetTankDownFlag()*/true)
+            if (m_TankPoint.GetComponent<StrategyTankPoint>().GetTankDownFlag())
                 m_DropPointDisFlag = true;
             else
             {
