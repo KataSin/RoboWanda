@@ -146,9 +146,9 @@ public class Stage1Manager : MonoBehaviour
         if (robot_.GetComponent<RobotManager>().GetRobotHP() <= 0f)
         {
             test += 1.0f * Time.deltaTime;
-            if (test >= 35.0f)
+            if (test >= 20.0f)
             {
-                //GetComponent<BlackOut_UI>().GameClearFead();
+                GetComponent<BlackOut_UI>().GameClearFead();
                 //boss_ui_[0].SetActive(false);
                 //boss_ui_[1].GetComponent<Image>().enabled = false;
             }

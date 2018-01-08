@@ -21,6 +21,9 @@ public class PlayStartHeri : MonoBehaviour
     private GameObject landingCamera_;
 
     [SerializeField]
+    private GameObject camera_pos_;
+
+    [SerializeField]
     private GameObject player_;
 
     [SerializeField]
@@ -66,7 +69,11 @@ public class PlayStartHeri : MonoBehaviour
     {
         // m_speed -= (0.8f / (m_LOverTime)) * Time.deltaTime;
 
-        if (player_.GetComponent<PlayerController>().GetPlayerState() == 0)
+        if (player_.GetComponent<PlayerController>().GetPlayerState() == 0
+            &&
+            (camera_pos_.GetComponent<CameraPosition>().GetMode() != 0
+            &&
+            camera_pos_.GetComponent<CameraPosition>().GetMode() != 5))
         {
             m_speed -= 0.12f * Time.deltaTime;
             if (m_speed <= 0.1f)

@@ -58,18 +58,24 @@ public class Stage1EventUI : MonoBehaviour
         && isClear)
         {
             mission_text_[0].SetActive(true);
+
+            GetComponent<BlackOut_UI>().ResetT();
         }
 
         if (camera_pos_.GetComponent<CameraPosition>().GetEMode() == 3)
         {
             mission_text_[0].SetActive(false);
             mission_text_[1].SetActive(true);
+
+            GetComponent<BlackOut_UI>().ResetT();
         }
 
         if (camera_pos_.GetComponent<CameraPosition>().GetEMode() == 4)
         {
             mission_text_[1].SetActive(false);
             mission_text_[2].SetActive(true);
+
+            GetComponent<BlackOut_UI>().ResetT();
         }
 
         if (camera_pos_.GetComponent<CameraPosition>().GetEMode() == 5)
@@ -83,6 +89,9 @@ public class Stage1EventUI : MonoBehaviour
         if (camera_pos_.GetComponent<CameraPosition>().GetEMode() == 2
             && camera_pos_.GetComponent<CameraPosition>().Get_MAllFlag())
         {
+            mission_text_[0].SetActive(false);
+            mission_text_[1].SetActive(false);
+            mission_text_[2].SetActive(false);
             mission_text_[3].SetActive(false);
             mission_text_[4].SetActive(true);
 
