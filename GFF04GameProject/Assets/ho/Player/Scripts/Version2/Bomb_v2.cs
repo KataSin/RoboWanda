@@ -30,7 +30,8 @@ public class Bomb_v2 : MonoBehaviour
     {
 
         // RBボタンが押されてない間に、LBボタンを押すと起爆
-        if (!Input.GetButton("Aim") && Input.GetButtonDown("Bomb_Throw"))
+        if ((!Input.GetButton("Aim") && !Input.GetKey(KeyCode.P)) 
+            && (Input.GetButtonDown("Bomb_Throw")||Input.GetKeyDown(KeyCode.O)))
         {
             Destroy(gameObject);
             // 爆発の当たり判定を発生
@@ -39,7 +40,7 @@ public class Bomb_v2 : MonoBehaviour
 
         if (isLanding)
         {
-            transform.rotation=m_currentRotation;
+            transform.rotation = m_currentRotation;
             return;
         }
 
