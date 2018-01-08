@@ -498,7 +498,7 @@ public class PlayerController_Tutorial : MonoBehaviour
 
         var a = m_BomSpawn.GetComponent<BomSpawn>();
         //片岡の実装
-        m_BomSpawn.GetComponent<BomSpawn>().Set(Camera.main.transform.forward, 150.0f);
+        m_BomSpawn.GetComponent<BomSpawn>().Set(Camera.main.transform.forward, 150.0f,BomSpawn.Bom.LIGHT_BOM);
         m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(true);
 
         if (Input.GetButtonDown("Bomb_Throw"))

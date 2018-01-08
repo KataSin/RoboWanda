@@ -39,7 +39,7 @@ public class ResultCamera : MonoBehaviour
     {
         t += 1.0f * Time.deltaTime;
 
-        transform.position = Vector3.Lerp(m_origin_pos, new Vector3(5.74f, -2.49f, -21.68f), t / moveTime);
+        transform.position = Vector3.Lerp(m_origin_pos, new Vector3(-1.3f, -0.18f, -13.3f), t / moveTime);
 
         if (t >= moveTime)
             isClear = true;
@@ -47,7 +47,7 @@ public class ResultCamera : MonoBehaviour
 
     public void FinishMove()
     {
-        transform.position = Vector3.Lerp(new Vector3(5.74f, -2.49f, -21.68f), new Vector3(5.74f, 0f, -21.68f), t2 / 2f);
+        transform.position = Vector3.Lerp(new Vector3(-1.3f, -0.18f, -13.3f), new Vector3(-8.86f, -0.18f, -18.8f), t2 / 3f);
 
         t2 += 1.0f * Time.deltaTime;
     }

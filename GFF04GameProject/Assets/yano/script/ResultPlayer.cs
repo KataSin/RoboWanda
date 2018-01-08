@@ -7,10 +7,7 @@ public class ResultPlayer : MonoBehaviour
     private Animator animator_;
 
     [SerializeField]
-    private GameObject destinationL_;
-
-    [SerializeField]
-    private GameObject destinationR_;
+    private GameObject look_pos_;
 
     // Use this for initialization
     void Start()
@@ -28,10 +25,7 @@ public class ResultPlayer : MonoBehaviour
 
     void OnAnimatorIK()
     {
-        animator_.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
-        animator_.SetIKPosition(AvatarIKGoal.LeftHand, destinationL_.transform.position);
-
-        animator_.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
-        animator_.SetIKPosition(AvatarIKGoal.RightHand, destinationR_.transform.position);
+        animator_.SetLookAtWeight(1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+        animator_.SetLookAtPosition(look_pos_.transform.position);
     }
 }
