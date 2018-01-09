@@ -286,8 +286,8 @@ public class PlayerController : MonoBehaviour
             ||
             other.gameObject.tag == "BeamCollide")
         {
-            //m_State = PlayerState.Dead;
-            //playerSe_[1].Stop();
+            m_State = PlayerState.Dead;
+            playerSe_[1].Stop();
         }
 
         // 倒壊中のビルと接触したら死亡
@@ -295,8 +295,8 @@ public class PlayerController : MonoBehaviour
             || (other.tag == "DebrisCollision" && !other.GetComponent<DebrisGround>().Hit_Ground())
             || other.gameObject.name == "DeathCollide")
         {
-            //m_State = PlayerState.Dead;
-            //playerSe_[1].Stop();
+            m_State = PlayerState.Dead;
+            playerSe_[1].Stop();
         }
     }
 

@@ -597,6 +597,7 @@ public class CameraPosition : MonoBehaviour
     {        
         if (!isEventEnd)
             transform.position = jeeps_[0].transform.position + (-jeeps_[0].transform.forward * 6f) + (jeeps_[0].transform.up * 4f);
+
         transform.LookAt(jeeps_[0].transform.position + jeeps_[0].transform.forward + (jeeps_[0].transform.up * 2.2f));
 
         if ((m_test >= 2f || Input.GetKeyDown(KeyCode.U))

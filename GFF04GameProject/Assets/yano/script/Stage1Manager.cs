@@ -110,7 +110,7 @@ public class Stage1Manager : MonoBehaviour
                 arows_[1].SetActive(false);
 
                 if (Input.GetButtonDown("Submit") && scene_ != null)
-                    StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("lightTest 1"));
+                    StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("lightTest 5"));
 
                 if (Input.GetAxis("Vertical_L") <= -1f)
                     state_ = OverState.TitleTo;

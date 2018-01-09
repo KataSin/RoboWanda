@@ -51,70 +51,70 @@ public class BlackOut_UI : MonoBehaviour
 
     public void BlackOut()
     {
-        t += 1.0f * Time.deltaTime;
-
         m_lerp_color.a = Mathf.Lerp(0.0f, 1.0f, t / m_blackFeadTime);
 
         black_curtain_.color = m_lerp_color;
 
         CheackClear();
+
+        t += 1.0f * Time.deltaTime;
     }
 
     public void FeadIn()
     {
-        t += 1.0f * Time.deltaTime;
-
         m_lerp_color.a = Mathf.Lerp(1.0f, 0.0f, t / m_blackFeadTime);
 
         black_curtain_.color = m_lerp_color;
 
         CheackClear();
+
+        t += 1.0f * Time.deltaTime;
     }
 
     public void JeepOut(float feadTime)
     {
-        t3 += 1.0f * Time.deltaTime;
-
         m_lerp_color.a = Mathf.Lerp(0.0f, 1.0f, t3 / feadTime);
 
         black_curtain_.color = m_lerp_color;
 
         if (t3 >= feadTime)
             isJeepClear = true;
+
+        t3 += 1.0f * Time.deltaTime;
     }
 
     public void JeepIn(float feadTime)
     {
-        t4 += 1.0f * Time.deltaTime;
-
         m_lerp_color.a = Mathf.Lerp(1.0f, 0.0f, t4 / feadTime);
 
         black_curtain_.color = m_lerp_color;
 
         if (t4 >= feadTime)
             isJeepClear = true;
+
+        t4 += 1.0f * Time.deltaTime;
     }
 
     public void GameClearFead()
     {
-        t1 += 1.0f * Time.deltaTime;
-
         m_lerp_color.a = Mathf.Lerp(0.0f, 1.0f, t1 / m_blackFeadTime2);
 
         black_curtain_.color = m_lerp_color;
 
         CheackClear();
+
+        t1 += 1.0f * Time.deltaTime;
     }
 
     public void GameOverFead()
     {
-        t2 += 1.0f * Time.deltaTime;
-
         m_lerp_color.a = Mathf.Lerp(0.0f, 0.3f, t2 / m_blackFeadTime2);
 
         black_curtain_.color = m_lerp_color;
 
         CheackClear();
+
+        t2 += 1.0f * Time.deltaTime;
     }
 
     private void CheackClear()
