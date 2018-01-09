@@ -16,9 +16,6 @@ public class BomSpawn : MonoBehaviour
     public GameObject m_BomPrefab;
     [SerializeField, Tooltip("閃光弾プレハブ")]
     public GameObject m_LightBomPrefab;
-    [SerializeField, Tooltip("煙爆弾プレハブ")]
-    public GameObject m_SmokeBomPrefab;
-
 
 
     [SerializeField, Tooltip("着地地点オブジェクト"), Space(15)]
@@ -73,6 +70,9 @@ public class BomSpawn : MonoBehaviour
     void Update()
     {
         Debug.Log(m_Bom);
+
+
+
 
         //表示しないならアクティブをfalseにしてリターン
         if (!m_IsLineDraw)
@@ -176,14 +176,15 @@ public class BomSpawn : MonoBehaviour
                 }
             case Bom.SMOKE_BOM:
                 {
-                    prefab = m_SmokeBomPrefab;
+                    prefab = m_BomPrefab;
                     break;
                 }
 
         }
         GameObject bom = Instantiate(prefab, transform.position, Quaternion.identity);
         if (m_Bom == Bom.LIGHT_BOM) bom.GetComponent<LightBullet>().SetVertex(m_VertexPos);
-
+        if (m_Bom == Bom.SMOKE_BOM) bom.GetComponent<Bomb_v2>().m_Bullet = Bom.SMOKE_BOM;
+        else if (m_Bom == Bom.BOM) bom.GetComponent<Bomb_v2>().m_Bullet = Bom.BOM;
         bom.transform.rotation = Quaternion.Euler(90f, 0f, -(player_.transform.rotation.y * 180f / Mathf.PI) * 2f);
 
         float power = m_Power;
