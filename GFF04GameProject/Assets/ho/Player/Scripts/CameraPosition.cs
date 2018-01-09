@@ -176,10 +176,19 @@ public class CameraPosition : MonoBehaviour
 
         m_eventB_pos = transform.localPosition;
         m_eventB_rotation = transform.localRotation;
-        m_Mode = PlayerCameraMode.Event;
+        
+        if(!GameObject.FindGameObjectWithTag("JeepManager")
+            ||
+            !GameObject.FindGameObjectWithTag("StartHeri"))
+        {
+            m_Mode = PlayerCameraMode.Normal;
+        }
 
-        if (GameObject.FindGameObjectWithTag("JeepManager"))
+        else if (GameObject.FindGameObjectWithTag("JeepManager"))
+        {
             jeepMana_ = GameObject.FindGameObjectWithTag("JeepManager");
+            m_Mode = PlayerCameraMode.Event;
+        }
 
         m_test = 0f;
         m_T2 = 0f;
