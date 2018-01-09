@@ -33,21 +33,29 @@ public class Stage1EventUI : MonoBehaviour
         if (camera_pos_.GetComponent<CameraPosition>().Get_BlackFlag()
             && !isClear)
         {
-            GetComponent<BlackOut_UI>().JeepOut(0.2f);
+            GetComponent<BlackOut_UI>().JeepOut(1.0f);
+
+            camera_pos_.GetComponent<CameraPosition>().Set_BlackT3(GetComponent<BlackOut_UI>().Get_T3());
+
+            if (GetComponent<BlackOut_UI>().Get_ClearJ())
+            {
+                GetComponent<BlackOut_UI>().ResetJC();
+                isClear = true;
+            }
         }
 
-        if (GetComponent<BlackOut_UI>().Get_ClearJ()
-            && !isClear)
-        {
-            isClear = true;
-            GetComponent<BlackOut_UI>().ResetJC();
-        }
+        //if (GetComponent<BlackOut_UI>().Get_ClearJ()
+        //    && !isClear)
+        //{
+        //    GetComponent<BlackOut_UI>().ResetJC();
+        //    isClear = true;
+        //}
 
         else if (isClear
             && camera_pos_.GetComponent<CameraPosition>().GetEMode() == 2
             && !camera_pos_.GetComponent<CameraPosition>().Get_MAllFlag())
         {
-            GetComponent<BlackOut_UI>().JeepIn(0.8f);
+            GetComponent<BlackOut_UI>().JeepIn(1.0f);
         }
 
 

@@ -77,7 +77,7 @@ public class BlackOut_UI : MonoBehaviour
 
         black_curtain_.color = m_lerp_color;
 
-        if (t3 >= feadTime)
+        if (black_curtain_.color.a >= 1.0f)
             isJeepClear = true;
 
         t3 += 1.0f * Time.deltaTime;
@@ -108,7 +108,7 @@ public class BlackOut_UI : MonoBehaviour
 
     public void GameOverFead()
     {
-        m_lerp_color.a = Mathf.Lerp(0.0f, 0.3f, t2 / m_blackFeadTime2);
+        m_lerp_color.a = Mathf.Lerp(0.0f, 0.6f, t2 / m_blackFeadTime2);
 
         black_curtain_.color = m_lerp_color;
 
@@ -173,5 +173,10 @@ public class BlackOut_UI : MonoBehaviour
     public bool Get_ClearJ()
     {
         return isJeepClear;
+    }
+
+    public float Get_T3()
+    {
+        return t3;
     }
 }
