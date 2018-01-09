@@ -12,11 +12,16 @@ public class Bomb_v2 : MonoBehaviour
     private float m_Force = 6.0f;       // 与える力
     [SerializeField]
     private GameObject m_Explosion;     // 爆発の当たり判定
+
+    public GameObject m_SmokeExplosion;
     Rigidbody m_RigidBody;
 
     private Quaternion m_currentRotation;
 
     private bool isLanding;
+
+    public BomSpawn.Bom m_Bullet;
+
 
     // Use this for initialization
     void Start()
@@ -35,7 +40,11 @@ public class Bomb_v2 : MonoBehaviour
         {
             Destroy(gameObject);
             // 爆発の当たり判定を発生
-            Instantiate(m_Explosion, transform.position, Quaternion.identity);
+            if (m_Bullet == BomSpawn.Bom.BOM)
+                Instantiate(m_Explosion, transform.position, Quaternion.identity);
+            else
+                Instantiate(m_SmokeExplosion, transform.position, Quaternion.identity);
+
         }
 
         if (isLanding)

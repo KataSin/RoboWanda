@@ -16,9 +16,6 @@ public class BomSpawn : MonoBehaviour
     public GameObject m_BomPrefab;
     [SerializeField, Tooltip("閃光弾プレハブ")]
     public GameObject m_LightBomPrefab;
-    [SerializeField, Tooltip("煙爆弾プレハブ")]
-    public GameObject m_SmokeBomPrefab;
-
 
 
     [SerializeField, Tooltip("着地地点オブジェクト"), Space(15)]
@@ -74,6 +71,21 @@ public class BomSpawn : MonoBehaviour
     {
         Debug.Log(m_Bom);
 
+        //切り替えボタン
+        // 左ボタン
+        if (Input.GetAxisRaw("Bullet_Select") < -0.9)
+        {
+            m_Bom = (Bom)((int)m_Bom + 1);
+        }
+        // 右ボタン
+        if (Input.GetAxisRaw("Bullet_Select") > 0.9)
+        {
+            m_Bom = (Bom)((int)m_Bom - 1);
+        }
+
+        if ((int)m_Bom < 0) m_Bom = (Bom)2;
+        if ((int)m_Bom > 2) m_Bom = (Bom)0;
+        
         //表示しないならアクティブをfalseにしてリターン
         if (!m_IsLineDraw)
         {
@@ -103,7 +115,7 @@ public class BomSpawn : MonoBehaviour
         //線設定
         for (int i = 0; i <= points.Count - 1; i++)
         {
-            
+
             Vector3 start = points[i].transform.position;
 
             if (points.Count - 1 < i + 1) break;
@@ -134,7 +146,7 @@ public class BomSpawn : MonoBehaviour
                 linePoints.Add(points[i].transform.position);
             }
             //着地地点表示するか
-            
+
             if (i == 200)
             {
                 m_LandingPoint.SetActive(false);
@@ -147,11 +159,11 @@ public class BomSpawn : MonoBehaviour
             m_LineRenderer.positionCount = colNum / 2;
             m_VertexPos = linePoints[m_LineRenderer.positionCount];
         }
-        for(int i = 0; i < m_LineRenderer.positionCount; i++)
+        for (int i = 0; i < m_LineRenderer.positionCount; i++)
         {
             m_LineRenderer.SetPosition(i, linePoints[i]);
         }
-        
+
 
 
 
@@ -176,14 +188,15 @@ public class BomSpawn : MonoBehaviour
                 }
             case Bom.SMOKE_BOM:
                 {
-                    prefab = m_SmokeBomPrefab;
+                    prefab = m_BomPrefab;
                     break;
                 }
 
         }
         GameObject bom = Instantiate(prefab, transform.position, Quaternion.identity);
         if (m_Bom == Bom.LIGHT_BOM) bom.GetComponent<LightBullet>().SetVertex(m_VertexPos);
-
+        if (m_Bom == Bom.SMOKE_BOM) bom.GetComponent<Bomb_v2>().m_Bullet = Bom.SMOKE_BOM;
+        else if (m_Bom == Bom.BOM) bom.GetComponent<Bomb_v2>().m_Bullet = Bom.BOM;
         bom.transform.rotation = Quaternion.Euler(90f, 0f, -(player_.transform.rotation.y * 180f / Mathf.PI) * 2f);
 
         float power = m_Power;
@@ -201,11 +214,11 @@ public class BomSpawn : MonoBehaviour
     /// </summary>
     /// <param name="vec">ベクトル</param>
     /// <param name="power">パワー</param>
-    public void Set(Vector3 vec, float power, Bom bom=Bom.BOM)
+    public void Set(Vector3 vec, float power, Bom bom = Bom.BOM)
     {
         m_Vec = vec;
         m_Power = power;
-        m_Bom = Bom.BOM;
+        //m_Bom = Bom.BOM;
     }
     /// <summary>
     /// 軌道線を表示するかどうか

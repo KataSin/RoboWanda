@@ -4946,10 +4946,10 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: f3f56696001b13b479ed8e8a9a513064, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -5199,8 +5199,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BomPrefab: {fileID: 1864201436001362, guid: 183c4dbc0ab404c40b6c3d9ca44bdd9a,
     type: 2}
-  m_LightBomPrefab: {fileID: 0}
-  m_SmokeBomPrefab: {fileID: 0}
+  m_LightBomPrefab: {fileID: 1744724172229138, guid: f6e420b7f7db8ec4292419b714cada45,
+    type: 2}
   m_LandingPoint: {fileID: 1492196718808080, guid: 19314fdbe7ce4a34185f04605bfcacc0,
     type: 2}
   m_VertexPoint: {fileID: 0}
@@ -5254,6 +5254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LOverTime: 4
   landingCamera_: {fileID: 0}
+  camera_pos_: {fileID: 0}
   player_: {fileID: 1158747146339274}
   rope_obj_: {fileID: 1602376719456784}
 --- !u!114 &114662547383910574
@@ -5385,7 +5386,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 11b134eff7272554ab56b6af531cc879, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
