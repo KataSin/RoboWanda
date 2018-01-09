@@ -286,8 +286,8 @@ public class PlayerController : MonoBehaviour
             ||
             other.gameObject.tag == "BeamCollide")
         {
-            m_State = PlayerState.Dead;
-            playerSe_[1].Stop();
+            //m_State = PlayerState.Dead;
+            //playerSe_[1].Stop();
         }
 
         // 倒壊中のビルと接触したら死亡
@@ -295,8 +295,8 @@ public class PlayerController : MonoBehaviour
             || (other.tag == "DebrisCollision" && !other.GetComponent<DebrisGround>().Hit_Ground())
             || other.gameObject.name == "DeathCollide")
         {
-            m_State = PlayerState.Dead;
-            playerSe_[1].Stop();
+            //m_State = PlayerState.Dead;
+            //playerSe_[1].Stop();
         }
     }
 
@@ -367,7 +367,9 @@ public class PlayerController : MonoBehaviour
         m_IsDash = (Input.GetAxis("Dash") > 0.5f) ? true : false;
 
         // RBボタンを押すと爆弾投げ状態に
-        if (Input.GetButton("Aim"))
+        if (Input.GetButton("Aim")
+            ||
+            Input.GetKey(KeyCode.P))
         {
             m_State = PlayerState.Aiming;
         }
@@ -645,14 +647,18 @@ public class PlayerController : MonoBehaviour
         m_BomSpawn.GetComponent<BomSpawn>().Set(Camera.main.transform.forward, 150.0f);
         m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(true);
 
-        if (Input.GetButtonDown("Bomb_Throw"))
+        if (Input.GetButtonDown("Bomb_Throw")
+            ||
+            Input.GetKeyDown(KeyCode.O))
         {
             m_BomSpawn.GetComponent<BomSpawn>().SpawnBom();
             playerSe_[0].PlayOneShot(playerSe_attack_);
         }
 
         // RBボタンを放すと通常状態に戻る
-        if (!Input.GetButton("Aim"))
+        if (!Input.GetButton("Aim")
+            &&
+            !Input.GetKey(KeyCode.P))
         {
             m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(false);
             m_State = PlayerState.Normal;

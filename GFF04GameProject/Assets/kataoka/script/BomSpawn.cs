@@ -206,7 +206,7 @@ public class BomSpawn : MonoBehaviour
     {
         m_Vec = vec;
         m_Power = power;
-        m_Bom = Bom.LIGHT_BOM;
+        m_Bom = Bom.BOM;
     }
     /// <summary>
     /// 軌道線を表示するかどうか
