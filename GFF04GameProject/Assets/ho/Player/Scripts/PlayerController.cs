@@ -252,17 +252,42 @@ public class PlayerController : MonoBehaviour
         // Debug.Log(hit.gameObject.name);
 
         // 乗り越え中、ガードレールとの接触判定を無視
+        /*
         if (m_State == PlayerState.Passing && hit.gameObject.tag == "GuardRail")
         {
             Physics.IgnoreCollision(m_Controller, hit.collider);
         }
+        */
+
+        if (m_State == PlayerState.Passing)
+        {
+            Physics.IgnoreLayerCollision(13, 16, true);
+        }
+        else if (hit.gameObject.tag == "GuardRail")
+        {
+            m_passing_time = 0.5f;
+            m_State = PlayerState.Passing;
+        }
+
+
+        /*
+        if (m_State != PlayerState.Passing && hit.gameObject.tag == "GuardRail")
+        {
+            m_passing_time = 0.5f;
+            m_State = PlayerState.Passing;
+        }
+        */
 
         // ガードレールと接触したら、乗り越える
+        /*
         if (hit.gameObject.tag == "GuardRail")
         {
             m_passing_time = 0.5f;
             m_State = PlayerState.Passing;
         }
+        */
+
+
     }
 
     public void OnCollisionEnter(Collision other)
@@ -859,7 +884,7 @@ public class PlayerController : MonoBehaviour
 
         // 移動処理
         Vector3 velocity = transform.forward * m_MaxSpeed;
-        m_Controller.Move(velocity * Time.deltaTime);
+        m_Controller.Move(velocity / 2.0f * Time.deltaTime);
 
         // 乗り越えるアニメーションが終了すると、通常状態に戻る
         AnimatorStateInfo AniInfo;     // アニメーションの状態
@@ -872,6 +897,7 @@ public class PlayerController : MonoBehaviour
             m_Launcher.SetActive(true);
             // 通常状態に戻る
             m_State = PlayerState.Normal;
+            Physics.IgnoreLayerCollision(13, 16, false);
         }
 
         m_passing_time -= Time.deltaTime;
