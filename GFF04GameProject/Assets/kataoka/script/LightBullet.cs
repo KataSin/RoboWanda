@@ -22,7 +22,7 @@ public class LightBullet : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        m_IsExprosion = false;
+        //m_IsExprosion = false;
         mRigid = GetComponent<Rigidbody>();
     }
 

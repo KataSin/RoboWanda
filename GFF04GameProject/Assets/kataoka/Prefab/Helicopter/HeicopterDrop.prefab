@@ -240,6 +240,7 @@ GameObject:
   - component: {fileID: 4809739873698040}
   - component: {fileID: 82180974139153834}
   - component: {fileID: 114165896363296786}
+  - component: {fileID: 54630030972526284}
   m_Layer: 0
   m_Name: HeicopterDrop
   m_TagString: Untagged
@@ -965,6 +966,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1045907027939594}
   m_Mesh: {fileID: 4300002, guid: 4e438c1421fb4124ca9585e70362113b, type: 3}
+--- !u!54 &54630030972526284
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1660910123290582}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!82 &82180974139153834
 AudioSource:
   m_ObjectHideFlags: 1
