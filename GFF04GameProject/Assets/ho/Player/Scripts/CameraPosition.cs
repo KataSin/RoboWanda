@@ -620,9 +620,9 @@ public class CameraPosition : MonoBehaviour
 
             if (m_test >= 4f)
             {
-                m_EMode = EventCameraState.Bomber;
-                bomber_ = GameObject.FindGameObjectWithTag("Bomber");
-                m_test = 0f;
+                //m_EMode = EventCameraState.Bomber;
+                //bomber_ = GameObject.FindGameObjectWithTag("Bomber");
+                //m_test = 0f;
             }
 
             EventSkip();
