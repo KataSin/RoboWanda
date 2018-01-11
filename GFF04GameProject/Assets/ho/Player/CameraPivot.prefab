@@ -98,8 +98,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1660377369132156}
-  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 66.6, y: 4.7980003, z: 95.1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4573419039619944}
@@ -211,6 +211,7 @@ MonoBehaviour:
   m_EventSpeed: 10
   m_Mode: 0
   m_Prediction: {fileID: 1688882057673104}
+  m_EMode: 0
 --- !u!114 &114206475334373814
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -236,6 +237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ShakeTime: 0
   m_Force: 3
+  cameraPos_: {fileID: 1917802577353176}
 --- !u!114 &114540851185170396
 MonoBehaviour:
   m_ObjectHideFlags: 1

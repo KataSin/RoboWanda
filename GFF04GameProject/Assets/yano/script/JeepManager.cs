@@ -14,11 +14,11 @@ public class JeepManager : MonoBehaviour
         Instantiate(jeeps_[1], new Vector3(transform.position.x + 51.1f, 0.42f, 96.6f), Quaternion.Euler(0f, -90f, 0f));
         Instantiate(jeeps_[2], new Vector3(transform.position.x + 61.1f, 0.42f, 96.6f), Quaternion.Euler(0f, -90f, 0f));
         Instantiate(jeeps_[3], new Vector3(transform.position.x + 71.1f, 0.42f, 96.6f), Quaternion.Euler(0f, -90f, 0f));
+
     }
 
     // Update is called once per frame
     void Update()
     {
-
     }
 }

@@ -37,7 +37,8 @@ public class Timer : MonoBehaviour
 
     public void TimerUpdate()
     {
-        m_timer_text.text = "0" + minute.ToString() + ":" + second_string;
+        GetComponent<Text>().text = "0" + minute.ToString() + ":" + second_string;
+        //m_timer_text.text = "0" + minute.ToString() + ":" + second_string;
 
         m_elapsedTimer += 1.0f * Time.deltaTime;
         m_Timer -= 1.0f * Time.deltaTime;
@@ -69,7 +70,7 @@ public class Timer : MonoBehaviour
                 second_string = "0" + ((int)second).ToString();
         }
 
-        
+
     }
 
     public float GetTimer()
