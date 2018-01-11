@@ -19,7 +19,7 @@ public class MapScan : MonoBehaviour
         m_interval = 4f;
 
         isScanAlpha = false;
-        isScan = true;
+        isScan = false;
 
         m_origin_color = GetComponent<Image>().color;
         m_origin_color.a = 0f;

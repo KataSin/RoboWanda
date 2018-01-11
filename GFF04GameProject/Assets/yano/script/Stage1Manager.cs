@@ -76,17 +76,21 @@ public class Stage1Manager : MonoBehaviour
         //    bezeru_ui_.GetComponent<ui_Bezeru>().SetT(camera_pos_.GetComponent<CameraPosition>().GetT());
         //}
 
-        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 2)
+        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1)
+        {
+            timer_ui_.SetActive(true);
+            if (robot_.GetComponent<RobotManager>().GetRobotHP() > 0f)
+                timer_ui_.GetComponent<Timer>().TimerUpdate();
+        }
+
+            if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 2)
         {
             if(camera_pos_.GetComponent<CameraPosition>().Get_EventEnd()
                 && GetComponent<BlackOut_UI>().Get_Clear())
-            {
-                timer_ui_.SetActive(true);
-                bezeru_ui_.GetComponent<ui_Bezeru>().FeadOut();
-
-                if (robot_.GetComponent<RobotManager>().GetRobotHP() > 0f)
-                    timer_ui_.GetComponent<Timer>().TimerUpdate();
+            {              
+                bezeru_ui_.GetComponent<ui_Bezeru>().FeadOut();               
             }
+           
 
             //boss_ui_[0].SetActive(true);
             //boss_ui_[1].GetComponent<Image>().enabled = true;            
