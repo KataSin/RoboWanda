@@ -17,6 +17,7 @@ public class BomSpawn : MonoBehaviour
     [SerializeField, Tooltip("閃光弾プレハブ")]
     public GameObject m_LightBomPrefab;
 
+    public GameObject m_SmokeBomPrefab;
 
     [SerializeField, Tooltip("着地地点オブジェクト"), Space(15)]
     public GameObject m_LandingPoint;
@@ -188,14 +189,13 @@ public class BomSpawn : MonoBehaviour
                 }
             case Bom.SMOKE_BOM:
                 {
-                    prefab = m_BomPrefab;
+                    prefab = m_SmokeBomPrefab;
                     break;
                 }
 
         }
         GameObject bom = Instantiate(prefab, transform.position, Quaternion.identity);
         if (m_Bom == Bom.LIGHT_BOM) bom.GetComponent<LightBullet>().SetVertex(m_VertexPos);
-        if (m_Bom == Bom.SMOKE_BOM) bom.GetComponent<Bomb_v2>().m_Bullet = Bom.SMOKE_BOM;
         else if (m_Bom == Bom.BOM) bom.GetComponent<Bomb_v2>().m_Bullet = Bom.BOM;
         bom.transform.rotation = Quaternion.Euler(90f, 0f, -(player_.transform.rotation.y * 180f / Mathf.PI) * 2f);
 

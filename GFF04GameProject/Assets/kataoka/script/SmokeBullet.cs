@@ -11,8 +11,6 @@ public class SmokeBullet : MonoBehaviour
     void Start()
     {
         m_rb = GetComponent<Rigidbody>();
-
-        m_rb.AddForce(new Vector3(900, 0, 0));
     }
 
     // Update is called once per frame
