@@ -267,6 +267,10 @@ public class PlayerController : MonoBehaviour
         {
             Physics.IgnoreLayerCollision(13, 16, true);
         }
+        else if (m_State == PlayerState.Aiming)
+        {
+            // 乗り越えはしない
+        }
         else if (hit.gameObject.tag == "GuardRail")
         {
             m_passing_time = 0.5f;
