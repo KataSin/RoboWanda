@@ -44,7 +44,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1237490612538476
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,7 +131,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &114045730444243774
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -225,6 +225,8 @@ MonoBehaviour:
   m_ExplosionCount: {fileID: 1055900687513090}
   m_FlashGrenadeCount: {fileID: 1847958098293400}
   m_SmokeGrenadeCount: {fileID: 1203456748740856}
+  m_GetFlash: 0
+  m_GetSmoke: 0
   m_BomSpawn: {fileID: 0}
 --- !u!114 &114286964796735408
 MonoBehaviour:

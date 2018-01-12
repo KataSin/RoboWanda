@@ -55,7 +55,7 @@ public class Stage1EventUI : MonoBehaviour
             && camera_pos_.GetComponent<CameraPosition>().GetEMode() == 2
             && !camera_pos_.GetComponent<CameraPosition>().Get_MAllFlag())
         {
-            GetComponent<BlackOut_UI>().JeepIn(1.0f);
+            //GetComponent<BlackOut_UI>().JeepIn(1.0f);
         }
 
 

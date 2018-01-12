@@ -149,6 +149,11 @@ public class CameraPosition : MonoBehaviour
 
     private float m_black_t3;
 
+    [SerializeField]
+    private GameObject briefing_;
+
+    private float m_T4;
+
     // Use this for initialization
     void Start()
     {
@@ -176,8 +181,8 @@ public class CameraPosition : MonoBehaviour
 
         m_eventB_pos = transform.localPosition;
         m_eventB_rotation = transform.localRotation;
-        
-        if(!GameObject.FindGameObjectWithTag("JeepManager")
+
+        if (!GameObject.FindGameObjectWithTag("JeepManager")
             ||
             !GameObject.FindGameObjectWithTag("StartHeri"))
         {
@@ -193,6 +198,7 @@ public class CameraPosition : MonoBehaviour
         m_test = 0f;
         m_T2 = 0f;
         m_T3 = 0f;
+        m_T4 = 0f;
 
         isM0 = false;
         isM2 = false;
@@ -608,6 +614,22 @@ public class CameraPosition : MonoBehaviour
 
     private void LJeepMode()
     {
+        if (briefing_.GetComponent<BriefingManager>().Get_TextState() == 11
+            && briefing_ != null)
+        {
+            isEventEnd = true;
+            if (m_T4 >= 2f)
+            {                
+                m_Mode = PlayerCameraMode.Landing;
+                m_EMode = EventCameraState.None;
+
+                transform.localPosition = m_eventB_pos;
+                transform.localRotation = m_eventB_rotation;
+            }
+
+            m_T4 += 1.0f * Time.deltaTime;
+        }
+
         if (!isEventEnd)
             transform.position = jeeps_[0].transform.position + (-jeeps_[0].transform.forward * 6f) + (jeeps_[0].transform.up * 4f);
 
@@ -620,9 +642,9 @@ public class CameraPosition : MonoBehaviour
 
             if (m_test >= 4f)
             {
-                m_EMode = EventCameraState.Bomber;
-                bomber_ = GameObject.FindGameObjectWithTag("Bomber");
-                m_test = 0f;
+                //m_EMode = EventCameraState.Bomber;
+                //bomber_ = GameObject.FindGameObjectWithTag("Bomber");
+                //m_test = 0f;
             }
 
             EventSkip();
