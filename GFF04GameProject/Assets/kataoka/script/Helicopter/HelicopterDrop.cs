@@ -8,8 +8,6 @@ public class HelicopterDrop : MonoBehaviour
     public bool m_IsBreak;
     //ヘリコプターの速度
     private Vector3 m_Velo;
-    //ヘリコプターのベクトル
-    private Vector3 m_Vec;
     //ヘリコプターセーブ
     private Vector3 m_SevePos;
     //プロペラ
@@ -34,7 +32,6 @@ public class HelicopterDrop : MonoBehaviour
     private Vector3 m_Pos;
     private Vector3 m_SpringVelo;
 
-
     // Use this for initialization
     void Start()
     {
@@ -52,11 +49,15 @@ public class HelicopterDrop : MonoBehaviour
 
         m_IsDrop = false;
         m_IsDropArrival = false;
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
+
         if (m_IsBreak)
         {
             m_FireEffect.SetActive(true);
@@ -65,29 +66,21 @@ public class HelicopterDrop : MonoBehaviour
             transform.position += m_Velo * 10.0f * Time.deltaTime;
             return;
         }
-        //着地地点についているか
-        m_IsDropArrival = Vector3.Distance(transform.position, m_DropPoint) <= 3.0f;
-
-        //ヘリコプターの回転処理
-        m_Velo.y = 0.0f;
-        Vector3 rotateVec = Vector3.Cross(Vector3.up, m_Velo);
-        transform.rotation =
-        Quaternion.AngleAxis(m_Velo.magnitude * 50.0f, rotateVec) *
-        Quaternion.LookRotation(m_DropVec);
+        Vector3 vec = (10.0f * m_DropVec);
 
         m_Propeller.transform.localEulerAngles += new Vector3(0, 0, 1000) * Time.deltaTime;
 
-        if (!m_IsDrop)
-        {
-            m_ResPos = m_DropPoint;
-        }
-        else
-        {
-            m_ResPos += 5.0f * m_DropVec * Time.deltaTime;
-        }
+        //一秒に10unity進む
+        GetComponent<Rigidbody>().position += vec * Time.deltaTime;
 
-        Spring(m_ResPos, ref m_Pos, ref m_Velo, 0.04f, 0.2f, 2.0f);
-        transform.position = m_Pos;
+
+        Vector3 velo = GetComponent<Rigidbody>().velocity;
+        //ヘリコプターの回転処理
+        velo.y = 0.0f;
+        Vector3 rotateVec = Vector3.Cross(Vector3.up, velo);
+        transform.rotation =
+        Quaternion.AngleAxis(velo.magnitude * 20.0f, rotateVec) *
+        Quaternion.LookRotation(m_DropVec);
 
     }
 

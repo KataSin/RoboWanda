@@ -122,15 +122,15 @@ public class PlayerUIController : MonoBehaviour
         switch (m_Mode)
         {
             case BomSpawn.Bom.BOM:
-                Debug.Log("爆発弾選択中");
+                // Debug.Log("爆発弾選択中");
                 Bomb();
                 break;
             case BomSpawn.Bom.LIGHT_BOM:
-                Debug.Log("照明弾選択中");
+                // Debug.Log("照明弾選択中");
                 FlashGrenade();
                 break;
             case BomSpawn.Bom.SMOKE_BOM:
-                Debug.Log("煙玉選択中");
+                // Debug.Log("煙玉選択中");
                 SmokeGrenade();
                 break;
         }
