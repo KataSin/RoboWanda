@@ -127,7 +127,8 @@ public class Stage1EventUI : MonoBehaviour
                 EtoNFlag = true;
             }
 
-            else if (EtoNFlag)
+            else if (EtoNFlag
+                && !GetComponent<BlackOut_UI>().Get_Clear())
                 GetComponent<BlackOut_UI>().FeadIn();
         }
     }

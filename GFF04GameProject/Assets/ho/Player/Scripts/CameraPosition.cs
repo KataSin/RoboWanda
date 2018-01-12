@@ -530,13 +530,9 @@ public class CameraPosition : MonoBehaviour
         if (t < 3f)
             transform.LookAt(m_Player.transform.position + m_Player.transform.forward);
 
-        m_intervalTimer += 1.0f * Time.deltaTime;
-
         if (m_intervalTimer >= 2f)
         {
-            t += 1.0f * Time.deltaTime;
-
-            transform.position =
+           transform.position =
                 Vector3.Lerp(
                     m_deadBefore_pos,
                     m_Player.transform.position + m_Player.transform.forward + new Vector3(0f, 3f, 0f),
@@ -545,7 +541,11 @@ public class CameraPosition : MonoBehaviour
 
             if (t >= 3f)
                 isDeadFinish = true;
+
+            t += 1.0f * Time.deltaTime;
         }
+
+        m_intervalTimer += 1.0f * Time.deltaTime;
     }
 
     // イベントカメラの挙動

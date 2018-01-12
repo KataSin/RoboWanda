@@ -10,8 +10,10 @@ public class BlackOut_UI : MonoBehaviour
 
     private Image black_curtain_;
 
+    [SerializeField]
     private Color m_lerp_color;
 
+    [SerializeField]
     private float t, t1, t2, t3, t4;
 
     [SerializeField]

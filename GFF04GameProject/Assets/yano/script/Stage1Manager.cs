@@ -64,7 +64,7 @@ public class Stage1Manager : MonoBehaviour
     void Update()
     {
         if (!GetComponent<BlackOut_UI>().Get_Clear()
-            &&!isStart)
+            && !isStart)
             GetComponent<BlackOut_UI>().FeadIn();
         if (GetComponent<BlackOut_UI>().Get_Clear())
             isStart = true;
@@ -78,22 +78,27 @@ public class Stage1Manager : MonoBehaviour
 
         if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1)
         {
-            timer_ui_.SetActive(true);
-            if (robot_.GetComponent<RobotManager>().GetRobotHP() > 0f)
-                timer_ui_.GetComponent<Timer>().TimerUpdate();
+            timer_ui_.SetActive(true);           
         }
 
-            if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 2)
+        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 2)
         {
-            if(camera_pos_.GetComponent<CameraPosition>().Get_EventEnd()
+            if (camera_pos_.GetComponent<CameraPosition>().Get_EventEnd()
                 && GetComponent<BlackOut_UI>().Get_Clear())
-            {              
-                bezeru_ui_.GetComponent<ui_Bezeru>().FeadOut();               
+            {
+                bezeru_ui_.GetComponent<ui_Bezeru>().FeadOut();
             }
-           
+
 
             //boss_ui_[0].SetActive(true);
             //boss_ui_[1].GetComponent<Image>().enabled = true;            
+        }
+
+        if(camera_pos_.GetComponent<CameraPosition>().GetMode() == 1
+            || camera_pos_.GetComponent<CameraPosition>().GetMode() == 2)
+        {
+            if (robot_.GetComponent<RobotManager>().GetRobotHP() > 0f)
+                timer_ui_.GetComponent<Timer>().TimerUpdate();
         }
 
         //クリアかオーバーかのチェック
