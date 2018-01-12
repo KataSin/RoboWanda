@@ -81,6 +81,12 @@ public class BriefingManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            m_textState = 11;
+            this.gameObject.SetActive(false);           
+        }
+
         if (camera_pos_.GetComponent<CameraPosition>().GetEMode() == 2
             && !camera_pos_.GetComponent<CameraPosition>().Get_MAllFlag())
         {
@@ -128,7 +134,7 @@ public class BriefingManager : MonoBehaviour
                             {
                                 for (int i = 0; i < bomber_lines_.Count; i++)
                                 {
-                                    if (bomber_lines_[i].transform.localPosition.x 
+                                    if (bomber_lines_[i].transform.localPosition.x
                                         <= mapScan_briefing_.transform.localPosition.x)
                                     {
                                         bomber_lines_[i].SetActive(true);

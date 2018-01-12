@@ -2104,7 +2104,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1509400212802182}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.05, z: 94.4}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4463513521050008}
@@ -2643,6 +2643,7 @@ MonoBehaviour:
   m_MaxCreepingSpeed: 1
   m_AccelPowerCreeping: 0.5
   m_RotateSpeedCreeping: 45
+  m_PassDistance: 3
   m_State: 0
   rope_destibation_:
   - {fileID: 0}
@@ -2662,7 +2663,6 @@ MonoBehaviour:
   m_BomPrefab: {fileID: 1671173076217134, guid: 3d9194e6078c3c1479ff9b6ef80262ed,
     type: 2}
   m_LightBomPrefab: {fileID: 0}
-  m_SmokeBomPrefab: {fileID: 0}
   m_LandingPoint: {fileID: 1582210135153594}
   m_VertexPoint: {fileID: 0}
   m_Point: {fileID: 1878176742274818, guid: 48804f3a4e577224da4a0e50e2d072fc, type: 2}
