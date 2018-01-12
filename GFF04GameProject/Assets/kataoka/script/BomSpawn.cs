@@ -86,7 +86,7 @@ public class BomSpawn : MonoBehaviour
 
         if ((int)m_Bom < 0) m_Bom = (Bom)2;
         if ((int)m_Bom > 2) m_Bom = (Bom)0;
-        
+
         //表示しないならアクティブをfalseにしてリターン
         if (!m_IsLineDraw)
         {
@@ -216,7 +216,7 @@ public class BomSpawn : MonoBehaviour
     /// <param name="power">パワー</param>
     public void Set(Vector3 vec, float power, Bom bom = Bom.BOM)
     {
-        m_Vec = vec;
+        m_Vec = Camera.main.transform.forward;
         m_Power = power;
         //m_Bom = Bom.BOM;
     }

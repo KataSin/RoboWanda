@@ -64,7 +64,6 @@ public class StrategyDrop : MonoBehaviour
     void Update()
     {
         m_Time += Time.deltaTime;
-        Debug.Log(m_Time);
         for (int i = 0; i <= m_Helis.Count - 1; i++)
         {
             if (m_Helis[i].spawnFlag) continue;
