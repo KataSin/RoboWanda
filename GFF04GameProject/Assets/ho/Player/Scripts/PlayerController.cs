@@ -65,6 +65,10 @@ public class PlayerController : MonoBehaviour
     float m_CurrentBrakePower;                      // 現在のブレーキ速度
     float m_CurrentRotateSpeed;                     // 現在の回転速度
     Vector3 m_PrevPosition;                         // 前回の位置（回転処理用）
+
+    [SerializeField]
+    private float m_PassDistance;                   // 乗り越え距離
+
     // コンポーネントと他の変数
     CharacterController m_Controller;               // キャラクターコントローラー
     Animator m_Animator;                            // アニメーター
@@ -865,12 +869,12 @@ public class PlayerController : MonoBehaviour
         m_Animator.SetFloat("CreepingSpeed", current_speed);
     }
 
-    // 乗り越える処理
+    // 乗り越え処理
     void Passing()
     {
         // グレネードランチャーの表示を消す
         m_Launcher.SetActive(false);
-        // 乗り越えるモーションを再生
+        // 乗り越えモーションを再生
         m_Animator.Play("Passing");
         // Debug.Log(m_PassingTime);
 
@@ -883,10 +887,10 @@ public class PlayerController : MonoBehaviour
         }*/
 
         // 移動処理
-        Vector3 velocity = transform.forward * m_MaxSpeed;
-        m_Controller.Move(velocity / 2.0f * Time.deltaTime);
+        Vector3 velocity = transform.forward * m_PassDistance;
+        m_Controller.Move(velocity * Time.deltaTime);
 
-        // 乗り越えるアニメーションが終了すると、通常状態に戻る
+        // 乗り越えアニメーションが終了すると、通常状態に戻る
         AnimatorStateInfo AniInfo;     // アニメーションの状態
         AniInfo = gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
 
