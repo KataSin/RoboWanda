@@ -84,7 +84,7 @@ public class BriefingManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             m_textState = 11;
-            this.gameObject.SetActive(false);           
+            gameObject.SetActive(false);           
         }
 
         if (camera_pos_.GetComponent<CameraPosition>().GetEMode() == 2

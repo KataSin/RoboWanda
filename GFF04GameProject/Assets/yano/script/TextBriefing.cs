@@ -429,13 +429,14 @@ public class TextBriefing : MonoBehaviour
 
     private void P0TextUpdate()
     {
-        if (m_interval <= 0f
-            &&
-            m_charNum <= 9)
+        if (m_charNum <= 9)
         {
-            text_.text += m_text_char[m_charNum];
-            m_charNum++;
-            m_interval = 1f;
+            if (m_interval <= 0f)
+            {
+                text_.text += m_text_char[m_charNum];
+                m_charNum++;
+                m_interval = 1f;
+            }
         }
         m_interval -= 15.0f * Time.deltaTime;
     }
