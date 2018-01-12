@@ -10,6 +10,9 @@ public class Stage1EventUI : MonoBehaviour
     [SerializeField]
     private GameObject camera_pos_;
 
+    [SerializeField]
+    private GameObject briefing_;
+
     private bool isClear;
 
     private float m_finishTimer;
@@ -53,7 +56,8 @@ public class Stage1EventUI : MonoBehaviour
 
         else if (isClear
             && camera_pos_.GetComponent<CameraPosition>().GetEMode() == 2
-            && !camera_pos_.GetComponent<CameraPosition>().Get_MAllFlag())
+            && !camera_pos_.GetComponent<CameraPosition>().Get_MAllFlag()
+            /*&& briefing_.GetComponent<BriefingManager>().Get_TextState() >= 10*/)
         {
             //GetComponent<BlackOut_UI>().JeepIn(1.0f);
         }
@@ -65,31 +69,31 @@ public class Stage1EventUI : MonoBehaviour
         && GetComponent<BlackOut_UI>().Get_ClearJ()
         && isClear)
         {
-            mission_text_[0].SetActive(true);
+            //mission_text_[0].SetActive(true);
 
             GetComponent<BlackOut_UI>().ResetT();
         }
 
         if (camera_pos_.GetComponent<CameraPosition>().GetEMode() == 3)
         {
-            mission_text_[0].SetActive(false);
-            mission_text_[1].SetActive(true);
+            //mission_text_[0].SetActive(false);
+            //mission_text_[1].SetActive(true);
 
             GetComponent<BlackOut_UI>().ResetT();
         }
 
         if (camera_pos_.GetComponent<CameraPosition>().GetEMode() == 4)
         {
-            mission_text_[1].SetActive(false);
-            mission_text_[2].SetActive(true);
+            //mission_text_[1].SetActive(false);
+            //mission_text_[2].SetActive(true);
 
             GetComponent<BlackOut_UI>().ResetT();
         }
 
         if (camera_pos_.GetComponent<CameraPosition>().GetEMode() == 5)
         {
-            mission_text_[2].SetActive(false);
-            mission_text_[3].SetActive(true);
+            //mission_text_[2].SetActive(false);
+            //mission_text_[3].SetActive(true);
 
             GetComponent<BlackOut_UI>().ResetT();
         }
@@ -97,11 +101,11 @@ public class Stage1EventUI : MonoBehaviour
         if (camera_pos_.GetComponent<CameraPosition>().GetEMode() == 2
             && camera_pos_.GetComponent<CameraPosition>().Get_MAllFlag())
         {
-            mission_text_[0].SetActive(false);
-            mission_text_[1].SetActive(false);
-            mission_text_[2].SetActive(false);
-            mission_text_[3].SetActive(false);
-            mission_text_[4].SetActive(true);
+            //mission_text_[0].SetActive(false);
+            //mission_text_[1].SetActive(false);
+            //mission_text_[2].SetActive(false);
+            //mission_text_[3].SetActive(false);
+            //mission_text_[4].SetActive(true);
 
             if (camera_pos_.GetComponent<CameraPosition>().Get_EventEnd()
                 && m_finishTimer >= 6f)

@@ -618,8 +618,9 @@ public class CameraPosition : MonoBehaviour
             && briefing_ != null)
         {
             isEventEnd = true;
+
             if (m_T4 >= 2f)
-            {                
+            {
                 m_Mode = PlayerCameraMode.Landing;
                 m_EMode = EventCameraState.None;
 
@@ -647,7 +648,7 @@ public class CameraPosition : MonoBehaviour
                 //m_test = 0f;
             }
 
-            EventSkip();
+            //EventSkip();
         }
 
         else if (isMAllClear && m_test >= 4f)
