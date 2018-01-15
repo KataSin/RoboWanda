@@ -13,7 +13,8 @@ public class RobotDamage : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        m_Manager = GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>();
+        if (GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>() != null)
+            m_Manager = GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>();
 
         if (GameObject.FindGameObjectWithTag("ScoreManager"))
             scoreMana_ = GameObject.FindGameObjectWithTag("ScoreManager");
@@ -29,7 +30,8 @@ public class RobotDamage : MonoBehaviour
     {
         if (other.tag == "bom")
         {
-            m_Manager.Damage(10);
+            if (GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>() != null)
+                m_Manager.Damage(10);
 
             if (scoreMana_ != null)
                 scoreMana_.GetComponent<ScoreManager>().SetAtackScore(10);
