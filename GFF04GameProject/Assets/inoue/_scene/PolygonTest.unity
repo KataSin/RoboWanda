@@ -441,7 +441,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4155110105463982, guid: ebe953e2a3df0644e9ec123e43808d50, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -27.65
+      value: -26.8
       objectReference: {fileID: 0}
     - target: {fileID: 4155110105463982, guid: ebe953e2a3df0644e9ec123e43808d50, type: 2}
       propertyPath: m_LocalPosition.y
@@ -449,7 +449,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4155110105463982, guid: ebe953e2a3df0644e9ec123e43808d50, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -182.45
+      value: -180.74
       objectReference: {fileID: 0}
     - target: {fileID: 4155110105463982, guid: ebe953e2a3df0644e9ec123e43808d50, type: 2}
       propertyPath: m_LocalRotation.x
@@ -479,7 +479,7 @@ Prefab:
     - target: {fileID: 198312380422959014, guid: ebe953e2a3df0644e9ec123e43808d50,
         type: 2}
       propertyPath: randomSeed
-      value: -1885849396
+      value: 263516465
       objectReference: {fileID: 0}
     - target: {fileID: 198312380422959014, guid: ebe953e2a3df0644e9ec123e43808d50,
         type: 2}
@@ -510,6 +510,36 @@ Prefab:
         type: 2}
       propertyPath: ColorModule.gradient.maxGradient.atime0
       value: 30069
+      objectReference: {fileID: 0}
+    - target: {fileID: 199194554645618236, guid: ebe953e2a3df0644e9ec123e43808d50,
+        type: 2}
+      propertyPath: m_RenderMode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 199194554645618236, guid: ebe953e2a3df0644e9ec123e43808d50,
+        type: 2}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: 7f650a8adc57f0945b301cc73966b957, type: 3}
+    - target: {fileID: 198312380422959014, guid: ebe953e2a3df0644e9ec123e43808d50,
+        type: 2}
+      propertyPath: looping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198312380422959014, guid: ebe953e2a3df0644e9ec123e43808d50,
+        type: 2}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 199194554645618236, guid: ebe953e2a3df0644e9ec123e43808d50,
+        type: 2}
+      propertyPath: m_SortingFudge
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 199194554645618236, guid: ebe953e2a3df0644e9ec123e43808d50,
+        type: 2}
+      propertyPath: m_RenderAlignment
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ebe953e2a3df0644e9ec123e43808d50, type: 2}

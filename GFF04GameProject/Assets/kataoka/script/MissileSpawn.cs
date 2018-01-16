@@ -11,6 +11,7 @@ public class MissileSpawn : MonoBehaviour
     //ミサイル時間
     private float m_MissileTime;
     //ミサイル発射
+    [SerializeField]
     private bool m_MissileSpawnFlag;
     // Use this for initialization
     void Start()
