@@ -14,6 +14,7 @@ public class BriefingCamera : MonoBehaviour
     private float t, t1, t2, t3;
 
     private bool isClear;
+    private bool isPick;
     private bool isTopView;
     private bool isSideView;
 
@@ -33,6 +34,7 @@ public class BriefingCamera : MonoBehaviour
         t3 = 0f;
 
         isClear = false;
+        isPick = false;
         isTopView = false;
         isSideView = false;
     }
@@ -74,6 +76,9 @@ public class BriefingCamera : MonoBehaviour
     public void TargetCam_Move()
     {
         t += 2.0f * Time.deltaTime;
+
+        if (t >= 2f)
+            isPick = true;
     }
 
     public void TargetCam_Back()
@@ -108,5 +113,10 @@ public class BriefingCamera : MonoBehaviour
     public bool Get_Clear()
     {
         return isClear;
+    }
+
+    public bool Get_Pick()
+    {
+        return isPick;
     }
 }

@@ -32,7 +32,7 @@ public class BriefingManager2 : MonoBehaviour
 
     private bool isTrigger;
 
-    private float t1;
+    private float t1, t2;
 
     [SerializeField]
     private GameObject ch47_;
@@ -45,19 +45,39 @@ public class BriefingManager2 : MonoBehaviour
     [SerializeField]
     private GameObject ui_;
 
+    private GameObject sceneCnt_;
+
+    private bool isLScene;
+
+    [SerializeField]
+    private GameObject text_;
+
+    [SerializeField]
+    private int m_textState;
+
+    [SerializeField]
+    private GameObject target_ui_;
+
     // Use this for initialization
     void Start()
     {
         state_ = State.None;
-
+        m_textState = 1;
         isTrigger = false;
 
         bomber_.SetActive(false);
         ch47_.GetComponent<StrategyDropTank>().enabled = false;
+        target_ui_.SetActive(false);
 
         t1 = 0f;
+        t2 = 0f;
 
         isCh47 = false;
+
+        isLScene = false;
+
+        if (GameObject.FindGameObjectWithTag("SceneController"))
+            sceneCnt_ = GameObject.FindGameObjectWithTag("SceneController");
     }
 
     // Update is called once per frame
@@ -85,8 +105,15 @@ public class BriefingManager2 : MonoBehaviour
                 break;
             case State.Finish:
                 ui_.GetComponent<BlackOut_UI>().BlackOut();
+                if (!isLScene && sceneCnt_ != null)
+                {
+                    StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("lightTest 5"));
+                    isLScene = true;
+                }
                 break;
         }
+
+        text_.GetComponent<TextBriefing>().Set_State(m_textState);
     }
 
     private void NoneUpdate()
@@ -99,16 +126,26 @@ public class BriefingManager2 : MonoBehaviour
             state_ = State.One;
             tower_mana_.GetComponent<TowerManager>().InitBill();
             ui_.GetComponent<BlackOut_UI>().ResetT();
+
+            text_.GetComponent<TextBriefing>().TextReset();
+            m_textState++;
         }
     }
 
     private void OneUpdate()
     {
         briefing_cam_.GetComponent<BriefingCamera>().TargetCam_Move();
-
+        if (briefing_cam_.GetComponent<BriefingCamera>().Get_Pick())
+            target_ui_.SetActive(true);
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            state_ = State.Two;
+            text_.GetComponent<TextBriefing>().TextReset();
+            m_textState++;
+            if (m_textState == 3)
+            {
+                state_ = State.Two;
+                target_ui_.SetActive(false);
+            }
         }
     }
 
@@ -126,6 +163,8 @@ public class BriefingManager2 : MonoBehaviour
             &&
             robot_.GetComponent<BriefingRobot>().Get_MissileFinishFlag())
         {
+            text_.GetComponent<TextBriefing>().TextReset();
+            m_textState++;
             state_ = State.Three;
             bomber_.SetActive(true);
             tower_mana_.GetComponent<TowerManager>().TowerCheck();
@@ -137,8 +176,10 @@ public class BriefingManager2 : MonoBehaviour
         tower_mana_.GetComponent<TowerManager>().Tower2Up();
         briefing_cam_.GetComponent<BriefingCamera>().TopViewCam();
 
-        if (t1 >= 25f)
+        if (t1 >= 18f)
         {
+            text_.GetComponent<TextBriefing>().TextReset();
+            m_textState += 2;
             state_ = State.Four;
             tower_mana_.GetComponent<TowerManager>().TowerCheck2();
         }
@@ -159,6 +200,8 @@ public class BriefingManager2 : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
+            text_.GetComponent<TextBriefing>().TextReset();
+            m_textState += 2;
             state_ = State.Five;
         }
     }
@@ -169,6 +212,14 @@ public class BriefingManager2 : MonoBehaviour
         lightSpawn_.GetComponent<LightBomSpawn>().Spawn();
 
         if (robot_.GetComponent<BriefingRobot>().GetState() == 3)
-            state_ = State.Finish;
+        {
+            if (t2 >= 10f)
+            {
+                text_.GetComponent<TextBriefing>().TextReset();
+                m_textState += 2;
+                state_ = State.Finish;
+            }
+            t2 += 1.0f * Time.deltaTime;
+        }
     }
 }

@@ -271,7 +271,7 @@ public class TutorialManager : MonoBehaviour
             && sceneCnt_ != null
             && !isLScene)
         {
-            StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("lightTest 5"));
+            StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("Briefing"));
             isLScene = true;
         }
 

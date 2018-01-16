@@ -7,11 +7,13 @@ public class LightBomSpawn : MonoBehaviour
     [SerializeField]
     private GameObject lightBom_;
 
+    private float t;
     private bool isClear;
 
     // Use this for initialization
     void Start()
     {
+        t = 0f;
         isClear = false;
     }
 
@@ -23,10 +25,15 @@ public class LightBomSpawn : MonoBehaviour
 
     public void Spawn()
     {
-        if (!isClear)
+        if (t >= 4f)
         {
-            Instantiate(lightBom_, new Vector3(-70.3f, 17.14f, 103f), Quaternion.identity);
-            isClear = true;
+            if (!isClear)
+            {
+                Instantiate(lightBom_, new Vector3(-70.3f, 17.14f, 103f), Quaternion.identity);
+                isClear = true;
+            }
         }
+
+        t += 1.0f * Time.deltaTime;
     }
 }
