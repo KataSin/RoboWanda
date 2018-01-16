@@ -84,7 +84,7 @@ public class BriefingManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             m_textState = 11;
-            gameObject.SetActive(false);           
+            gameObject.SetActive(false);
         }
 
         if (camera_pos_.GetComponent<CameraPosition>().GetEMode() == 2
@@ -240,7 +240,8 @@ public class BriefingManager : MonoBehaviour
                             }
                         }
 
-                        if (Input.GetKeyDown(KeyCode.Z))
+                        if (Input.GetKeyDown(KeyCode.Z)
+                            /*&& text_briefing_.GetComponent<TextBriefing>().Get_TextFlag()*/)
                         {
                             text_briefing_.GetComponent<TextBriefing>().TextReset();
                             m_textState++;

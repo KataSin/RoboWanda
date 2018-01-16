@@ -45,6 +45,9 @@ public class BomSpawn : MonoBehaviour
     //ラインレンダラー
     private LineRenderer m_LineRenderer;
     private List<GameObject> points;
+
+    private bool isTrigger;
+
     // Use this for initialization
     void Start()
     {
@@ -65,6 +68,7 @@ public class BomSpawn : MonoBehaviour
             point.SetActive(false);
         }
 
+        isTrigger = false;
     }
 
     // Update is called once per frame
@@ -73,15 +77,23 @@ public class BomSpawn : MonoBehaviour
         Debug.Log(m_Bom);
 
         //切り替えボタン
+
+        if (Input.GetAxisRaw("Bullet_Select") == 0.0f)
+            isTrigger = false;
+
         // 左ボタン
-        if (Input.GetAxisRaw("Bullet_Select") < -0.9)
+        if (Input.GetAxisRaw("Bullet_Select") < -0.9
+            && !isTrigger)
         {
             m_Bom = (Bom)((int)m_Bom + 1);
+            isTrigger = true;
         }
         // 右ボタン
-        if (Input.GetAxisRaw("Bullet_Select") > 0.9)
+        if (Input.GetAxisRaw("Bullet_Select") > 0.9
+            && !isTrigger)
         {
             m_Bom = (Bom)((int)m_Bom - 1);
+            isTrigger = true;
         }
 
         if ((int)m_Bom < 0) m_Bom = (Bom)2;
