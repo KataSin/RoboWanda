@@ -25,16 +25,11 @@ public class MissileSpawn : MonoBehaviour
     {
         if (m_MissileSpawnFlag)
         {
-            m_MissileTime += Time.deltaTime;
-            if (m_MissileTime >= 0.1f)
+            for (int i = 0; i <= m_MissileNum;i++)
             {
-                m_MissileSpawnNum++;
                 Instantiate(m_Missile, transform.position, Quaternion.identity);
-                m_MissileTime = 0.0f;
-                    if(m_MissileSpawnNum>=m_MissileNum){
-                        m_MissileSpawnFlag = false;
-                    }
             }
+            m_MissileSpawnFlag = false;
         }
         else
         {

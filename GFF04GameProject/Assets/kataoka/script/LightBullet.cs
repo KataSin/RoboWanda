@@ -50,11 +50,11 @@ public class LightBullet : MonoBehaviour
                 m_Parasol.transform.parent = null;
                 transform.parent = m_Parasol.transform;
             }
-            float numSin = (Mathf.Sin(m_Time * Mathf.Deg2Rad)+1.0f)/2.0f;
-            
+            float numSin = (Mathf.Sin(m_Time * Mathf.Deg2Rad) + 1.0f) / 2.0f;
+
             m_Time += 50.0f * Time.deltaTime;
-            m_Parasol.transform.position -= new Vector3(0, 0.4f, 0)*Time.deltaTime;
-            m_Parasol.transform.rotation = Quaternion.AngleAxis(Mathf.Lerp(-40, 40,numSin), m_RightVec);
+            m_Parasol.transform.position -= new Vector3(0, 0.4f, 0) * Time.deltaTime;
+            m_Parasol.transform.rotation = Quaternion.AngleAxis(Mathf.Lerp(-40, 40, numSin), m_RightVec);
         }
     }
 
@@ -63,4 +63,8 @@ public class LightBullet : MonoBehaviour
         m_VertexPoint = vertexPoint;
     }
 
+    public void OnTriggerEnter(Collider other)
+    {
+
+    }
 }

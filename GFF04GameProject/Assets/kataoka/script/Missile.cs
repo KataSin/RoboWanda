@@ -32,6 +32,8 @@ public class Missile : MonoBehaviour
     //ベクトル
     private Vector3 m_PreVec;
 
+    private float m_LifeTime;
+
     // Use this for initialization
     void Start()
     {
@@ -47,7 +49,7 @@ public class Missile : MonoBehaviour
         m_SpawnToVertexVec = m_VertexPos - m_SpawnPos;
 
 
-        m_OneFire = transform.Find("Fire_One").gameObject;
+        m_OneFire = transform.Find("Smoke").gameObject;
         m_TowFire = transform.Find("Fire_Two").gameObject;
 
         m_OneFire.SetActive(true);
@@ -56,18 +58,21 @@ public class Missile : MonoBehaviour
         m_StartRotate = Quaternion.identity;
         m_EndRotate = Quaternion.identity;
         m_InitializeFlag = true;
+
+        m_LifeTime = 0.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
         m_Time += Time.deltaTime;
-        float speed = 2.0f;
+        float speedOne = 0.4f;
+        float speedTwo = 1.0f;
         float InitilizeVec = Mathf.Sqrt((m_VertexPos.y - m_SpawnPos.y) * 2.0f * 9.8f);
         float vertexTime = InitilizeVec / 9.8f;
 
 
-        if (vertexTime <= m_Time * speed)
+        if (vertexTime <= m_Time * speedOne)
         {
             if (m_InitializeFlag)
             {
@@ -84,19 +89,19 @@ public class Missile : MonoBehaviour
 
             if (m_LerpTime >= 1.0f)
             {
-                transform.position += transform.forward * 100.0f * speed * Time.deltaTime;
+                transform.position += transform.forward * 100.0f * speedTwo * Time.deltaTime;
             }
             return;
         }
 
         m_Vec = new Vector3(
-            m_SpawnToVertexVec.x / vertexTime * speed,
+            m_SpawnToVertexVec.x / vertexTime * speedOne,
             0.0f,
-            m_SpawnToVertexVec.z / vertexTime * speed
+            m_SpawnToVertexVec.z / vertexTime * speedOne
             );
         transform.position = new Vector3(
             transform.position.x,
-            InitilizeVec * m_Time * speed - 9.8f / 2.0f * Mathf.Pow(m_Time * speed, 2) + m_SpawnPos.y,
+            InitilizeVec * m_Time * speedOne - 9.8f / 2.0f * Mathf.Pow(m_Time * speedOne, 2) + m_SpawnPos.y,
             transform.position.z);
         transform.position += m_Vec * Time.deltaTime;
 
@@ -104,12 +109,13 @@ public class Missile : MonoBehaviour
         m_PreVec = transform.position - m_PreVec;
         transform.rotation = Quaternion.LookRotation(m_PreVec);
         m_PreVec = transform.position;
+
+        if (m_Time >= 20.0f) Destroy(gameObject);
     }
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag != "Missile" && other.tag != "ExplosionCollision"
-            && other.tag != "SandSmoke")
+        if (other.tag=="Ground"||other.tag=="TowerCollision"||other.tag=="RigidCollision")
         {
             Instantiate(m_Exprosion, transform.position, Quaternion.identity);
             Destroy(gameObject);
