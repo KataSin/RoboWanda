@@ -29,7 +29,8 @@ public class LightBomSpawn : MonoBehaviour
         {
             if (!isClear)
             {
-                Instantiate(lightBom_, new Vector3(-70.3f, 17.14f, 103f), Quaternion.identity);
+                GameObject lBom = Instantiate(lightBom_, new Vector3(-70.3f, 40.14f, 103f), Quaternion.identity);
+                lBom.GetComponent<LightBullet>().m_IsExprosion = true;
                 isClear = true;
             }
         }

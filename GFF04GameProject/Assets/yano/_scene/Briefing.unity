@@ -11669,7 +11669,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: d338386f6c8f49b41b73f304b021e9e8, type: 2}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.472}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -24704,6 +24704,12 @@ Prefab:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114859625283365888, guid: dd921e93434e75b4db476b70c6436b4d,
+        type: 2}
+      propertyPath: m_HeliTankPrefab
+      value: 
+      objectReference: {fileID: 1783065253732208, guid: 1c7f709ad06da1d49b9ae3e3983500fc,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dd921e93434e75b4db476b70c6436b4d, type: 2}
   m_IsPrefabParent: 0
