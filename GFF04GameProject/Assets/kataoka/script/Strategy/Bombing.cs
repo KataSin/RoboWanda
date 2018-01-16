@@ -27,7 +27,7 @@ public class Bombing : MonoBehaviour
         //回転
         transform.rotation = Quaternion.LookRotation(m_Vec);
         //削除処理
-        if (Vector3.Distance(transform.position, m_GoalPos) <= 2.0f)
+        if (Vector3.Distance(transform.position, m_GoalPos) <= 5.0f)
         {
             GameObject.FindGameObjectWithTag("RobotLightManager").GetComponent<StrategyRobotLightManager>().m_IsLight = false;
             Destroy(gameObject);
