@@ -10,7 +10,13 @@ public class RobotAI : MonoBehaviour
     private GameObject player;
     private NavMeshAgent agent;
     public GameObject robotEye;
-    private float attackTime;
+
+
+    private float legAttackTime;
+    private float beamAttackTime;
+    private float missileAttackTime;
+
+    private float billBreakTime;
     //見つかったかどうか
     private bool m_IsLookFlag;
 
@@ -30,7 +36,12 @@ public class RobotAI : MonoBehaviour
         agent = GameObject.FindGameObjectWithTag("Robot").GetComponent<NavMeshAgent>();
 
 
-        attackTime = 10.0f;
+        legAttackTime = 10.0f;
+        beamAttackTime = 10.0f;
+        missileAttackTime = 10.0f;
+        billBreakTime = 10.0f;
+
+
         m_IsLookFlag = false;
     }
 
@@ -46,25 +57,32 @@ public class RobotAI : MonoBehaviour
 
         //見えてたら
         GameObject player;
-        attackTime += Time.deltaTime;
+        missileAttackTime += Time.deltaTime;
+        beamAttackTime += Time.deltaTime;
+        legAttackTime += Time.deltaTime;
         if (PlayerToRobotRay("Player", 0, out player))
         {
             if (Player_Robot_Distance(10.0f))
             {
-                if (attackTime >= 1.0f)
+                if (legAttackTime >= 5.0f)
                 {
                     manager.SetAction(RobotAction.RobotState.ROBOT_LEG_ATTACK, false);
-                    attackTime = 0.0f;
+                    legAttackTime = 0.0f;
                 }
+                else
+                    manager.SetAction(RobotAction.RobotState.ROBOT_IDLE, true);
+
             }
             //見えててかつ遠かったらビームアタック
             else if (!Player_Robot_Distance(30.0f))
             {
-                if (attackTime >= 2.0f)
+                if (missileAttackTime >= 6.0f)
                 {
                     manager.SetAction(RobotAction.RobotState.ROBOT_MISSILE_ATTACK, false);
-                    attackTime = 0.0f;
+                    missileAttackTime = 0.0f;
                 }
+                else
+                    manager.SetAction(RobotAction.RobotState.ROBOT_IDLE, true);
             }
             else
             {
@@ -83,10 +101,10 @@ public class RobotAI : MonoBehaviour
 
             if (Vector3.Distance(agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject().transform.position, agent.transform.position) <= 100.0f)
             {
-                if (attackTime >= 10.0f)
+                if (billBreakTime >= 10.0f)
                 {
                     manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
-                    attackTime = 0.0f;
+                    billBreakTime = 0.0f;
                 }
                 return;
             }

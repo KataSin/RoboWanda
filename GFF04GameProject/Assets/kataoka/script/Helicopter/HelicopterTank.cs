@@ -27,6 +27,8 @@ public class HelicopterTank : MonoBehaviour
     //着いてからの時間
     private float m_ArrivalTime;
 
+    //線形保管用
+    float m_LerpTimer;
 
     private bool m_IsBreak;
     // Use this for initialization
@@ -41,6 +43,8 @@ public class HelicopterTank : MonoBehaviour
         m_PosY = transform.position.y;
 
         m_ArrivalTime = 0.0f;
+
+        m_LerpTimer = 0.0f;
     }
 
     // Update is called once per frame
@@ -57,6 +61,12 @@ public class HelicopterTank : MonoBehaviour
             transform.Find("HelicopterTank").Find("RopeJoint").GetComponent<HeliRope>().TankDestroy();
             return;
         }
+
+
+        m_LerpTimer += 0.05f * Time.deltaTime;
+        float lerpNum = Mathf.Lerp(0, 180, m_LerpTimer);
+
+
 
 
         Vector3 pointPos = new Vector3(m_TankPoint.transform.position.x, m_PosY, m_TankPoint.transform.position.z);

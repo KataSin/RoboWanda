@@ -35,6 +35,9 @@ public class TextBriefing : MonoBehaviour
     [SerializeField]
     private bool isClear;
 
+    [SerializeField]
+    private bool isText;
+
     // Use this for initialization
     void Start()
     {
@@ -51,6 +54,7 @@ public class TextBriefing : MonoBehaviour
         m_charNum = 0;
 
         isClear = false;
+        isText = false;
     }
 
     private void p0Char_Init()
@@ -295,7 +299,7 @@ public class TextBriefing : MonoBehaviour
         m_text_char[15] = '揮';
         m_text_char[16] = 'だ';
         m_text_char[17] = '。';
-       
+
         isClear = true;
     }
 
@@ -430,7 +434,7 @@ public class TextBriefing : MonoBehaviour
     private void P0TextUpdate()
     {
         if (m_charNum <= 9)
-        {
+        {         
             if (m_interval <= 0f)
             {
                 text_.text += m_text_char[m_charNum];
@@ -443,13 +447,14 @@ public class TextBriefing : MonoBehaviour
 
     private void P1TextUpdate()
     {
-        if (m_interval <= 0f
-            &&
-            m_charNum <= 19)
+        if (m_charNum <= 19)
         {
-            text_.text += m_text_char[m_charNum];
-            m_charNum++;
-            m_interval = 1f;
+            if (m_interval <= 0f)
+            {
+                text_.text += m_text_char[m_charNum];
+                m_charNum++;
+                m_interval = 1f;
+            }
         }
         m_interval -= 15.0f * Time.deltaTime;
     }
@@ -511,7 +516,7 @@ public class TextBriefing : MonoBehaviour
         if (m_interval <= 0f
             &&
             m_charNum <= 42)
-        {           
+        {
             text_.text += m_text_char[m_charNum];
             if (m_charNum == 16)
                 text_.text += System.Environment.NewLine;
@@ -573,5 +578,10 @@ public class TextBriefing : MonoBehaviour
         m_charNum = 0;
         m_interval = 1f;
         isClear = false;
+    }
+
+    public bool Get_TextFlag()
+    {
+        return isText;
     }
 }

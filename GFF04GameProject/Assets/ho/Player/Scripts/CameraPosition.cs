@@ -192,7 +192,7 @@ public class CameraPosition : MonoBehaviour
         else if (GameObject.FindGameObjectWithTag("JeepManager"))
         {
             jeepMana_ = GameObject.FindGameObjectWithTag("JeepManager");
-            m_Mode = PlayerCameraMode.Event;
+            m_Mode = PlayerCameraMode.Landing;
         }
 
         m_test = 0f;
@@ -204,7 +204,7 @@ public class CameraPosition : MonoBehaviour
         isM2 = false;
         isMAllClear = false;
         isBlack = false;
-        isEventEnd = false;
+        isEventEnd = true;
 
         if (m_Prediction != null)
             m_Prediction.transform.localPosition = transform.localPosition;

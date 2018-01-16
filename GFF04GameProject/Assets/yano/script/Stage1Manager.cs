@@ -40,6 +40,9 @@ public class Stage1Manager : MonoBehaviour
     [SerializeField]
     private GameObject bezeru_ui_;
 
+    [SerializeField]
+    private GameObject player_ui_;
+
     private bool isStart;
 
     // Use this for initialization
@@ -55,6 +58,8 @@ public class Stage1Manager : MonoBehaviour
 
         arows_[0].SetActive(false);
         arows_[1].SetActive(false);
+
+        player_ui_.SetActive(false);
 
         if (GameObject.FindGameObjectWithTag("SceneController"))
             scene_ = GameObject.FindGameObjectWithTag("SceneController");
@@ -78,7 +83,7 @@ public class Stage1Manager : MonoBehaviour
 
         if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1)
         {
-            timer_ui_.SetActive(true);           
+            timer_ui_.SetActive(true);
         }
 
         if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 2)
@@ -87,6 +92,9 @@ public class Stage1Manager : MonoBehaviour
                 && GetComponent<BlackOut_UI>().Get_Clear())
             {
                 bezeru_ui_.GetComponent<ui_Bezeru>().FeadOut();
+                if (bezeru_ui_.GetComponent<ui_Bezeru>().GetT() >=
+                    bezeru_ui_.GetComponent<ui_Bezeru>().GetFeadTime())
+                    player_ui_.SetActive(true);
             }
 
 
@@ -94,7 +102,7 @@ public class Stage1Manager : MonoBehaviour
             //boss_ui_[1].GetComponent<Image>().enabled = true;            
         }
 
-        if(camera_pos_.GetComponent<CameraPosition>().GetMode() == 1
+        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1
             || camera_pos_.GetComponent<CameraPosition>().GetMode() == 2)
         {
             if (robot_.GetComponent<RobotManager>().GetRobotHP() > 0f)
@@ -154,13 +162,16 @@ public class Stage1Manager : MonoBehaviour
         //ボスのチェック
         if (robot_.GetComponent<RobotManager>().GetRobotHP() <= 0f)
         {
-            test += 1.0f * Time.deltaTime;
+            
+            player_ui_.SetActive(false);
             if (test >= 30.0f)
             {
+                timer_ui_.SetActive(false);
                 GetComponent<BlackOut_UI>().GameClearFead();
                 //boss_ui_[0].SetActive(false);
                 //boss_ui_[1].GetComponent<Image>().enabled = false;
             }
+            test += 1.0f * Time.deltaTime;
         }
 
         //プレイヤーのチェック
@@ -168,6 +179,7 @@ public class Stage1Manager : MonoBehaviour
             || timer_ui_.GetComponent<Timer>().GetTimer() <= 0f)
         {
             timer_ui_.SetActive(false);
+            player_ui_.SetActive(false);
             //boss_ui_[0].SetActive(false);
             //boss_ui_[1].GetComponent<Image>().enabled = false;
             GetComponent<BlackOut_UI>().GameOverFead();
