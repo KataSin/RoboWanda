@@ -105,7 +105,8 @@ public class BriefingManager2 : MonoBehaviour
                 break;
             case State.Finish:
                 ui_.GetComponent<BlackOut_UI>().BlackOut();
-                if (!isLScene && sceneCnt_ != null)
+                if (!isLScene && sceneCnt_ != null
+                    && ui_.GetComponent<BlackOut_UI>().Get_Clear())
                 {
                     StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("lightTest 5"));
                     isLScene = true;
@@ -120,7 +121,7 @@ public class BriefingManager2 : MonoBehaviour
     {
         ui_.GetComponent<BlackOut_UI>().FeadIn();
 
-        if (Input.GetKeyDown(KeyCode.Z)
+        if ((Input.GetKeyDown(KeyCode.Z)|| Input.GetButtonDown("Submit"))
             && ui_.GetComponent<BlackOut_UI>().Get_Clear())
         {
             state_ = State.One;
@@ -137,7 +138,7 @@ public class BriefingManager2 : MonoBehaviour
         briefing_cam_.GetComponent<BriefingCamera>().TargetCam_Move();
         if (briefing_cam_.GetComponent<BriefingCamera>().Get_Pick())
             target_ui_.SetActive(true);
-        if (Input.GetKeyDown(KeyCode.Z))
+        if ((Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Submit")))
         {
             text_.GetComponent<TextBriefing>().TextReset();
             m_textState++;
@@ -159,7 +160,7 @@ public class BriefingManager2 : MonoBehaviour
             robot_.GetComponent<BriefingRobot>().Beam();
         }
 
-        if (Input.GetKeyDown(KeyCode.Z)
+        if ((Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Submit"))
             &&
             robot_.GetComponent<BriefingRobot>().Get_MissileFinishFlag())
         {
@@ -198,7 +199,7 @@ public class BriefingManager2 : MonoBehaviour
         }
         tower_mana_.GetComponent<TowerManager>().TowerBreak();
 
-        if (Input.GetKeyDown(KeyCode.Z))
+        if ((Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Submit")))
         {
             text_.GetComponent<TextBriefing>().TextReset();
             m_textState += 2;

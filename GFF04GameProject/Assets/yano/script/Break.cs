@@ -255,7 +255,8 @@ public class Break : MonoBehaviour
             gareki_bill_.SetActive(true);
             //GareakiAdjustment();
 
-            if (GameObject.FindGameObjectWithTag("ScoreManager"))
+            if (GameObject.FindGameObjectWithTag("ScoreManager")
+                && !GameObject.FindGameObjectWithTag("BriefingManager"))
             {
                 scoreMana_ = GameObject.FindGameObjectWithTag("ScoreManager");
                 scoreMana_.GetComponent<ScoreManager>().SetBreakCount();
