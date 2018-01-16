@@ -27,6 +27,8 @@ public class HelicopterTank : MonoBehaviour
     //着いてからの時間
     private float m_ArrivalTime;
 
+    //線形保管用
+    float m_LerpTimer;
 
     private bool m_IsBreak;
     // Use this for initialization
@@ -41,6 +43,8 @@ public class HelicopterTank : MonoBehaviour
         m_PosY = transform.position.y;
 
         m_ArrivalTime = 0.0f;
+
+        m_LerpTimer = 0.0f;
     }
 
     // Update is called once per frame
@@ -59,50 +63,56 @@ public class HelicopterTank : MonoBehaviour
         }
 
 
-        Vector3 pointPos = new Vector3(m_TankPoint.transform.position.x, m_PosY, m_TankPoint.transform.position.z);
-        m_ResPos = pointPos;
+        m_LerpTimer += 0.05f * Time.deltaTime;
+        float lerpNum = Mathf.Lerp(0, 180, m_LerpTimer);
 
-        //これはやばい
-        if (Vector3.Distance(transform.position, pointPos) < 9.0f)
-        {
-            if (m_TankPoint.GetComponent<StrategyTankPoint>().GetTankDownFlag())
-                m_DropPointDisFlag = true;
-            else
-            {
-                //到着してから一定時間で壊れる
-                m_ArrivalTime += Time.deltaTime;
-                if (m_ArrivalTime >= 1.0f)
-                {
-                    m_IsBreak = true;
-                    return;
-                }
-            }
-        }
-        if (m_DropPointDisFlag)
-        {
-            Vector3 point = m_TankPoint.transform.position + new Vector3(0, 3, 0);
-            m_ResPos = point;
-            if (Vector3.Distance(point, transform.position) < 2.0f)
-            {
-                transform.Find("HelicopterTank").Find("RopeJoint").GetComponent<HeliRope>().JointFree();
-                m_ReturnFlag = true;
-            }
-        }
-        if (m_ReturnFlag)
-        {
-            m_ResPos = pointPos;
-            if (Vector3.Distance(transform.position, pointPos) < 10.0f)
-                m_FrontFlag = true;
-        }
-        if (m_FrontFlag)
-        {
-            m_ResPos = pointPos + m_PointVec * 2.5f;
-        }
+        
 
-        Spring(m_ResPos, ref m_Pos, ref m_Velo, 0.04f, 0.2f, 5.0f);
 
-        transform.rotation = Quaternion.LookRotation(m_PointVec);
-        transform.position = m_Pos;
+        //Vector3 pointPos = new Vector3(m_TankPoint.transform.position.x, m_PosY, m_TankPoint.transform.position.z);
+        //m_ResPos = pointPos;
+
+        ////これはやばい
+        //if (Vector3.Distance(transform.position, pointPos) < 9.0f)
+        //{
+        //    if (m_TankPoint.GetComponent<StrategyTankPoint>().GetTankDownFlag())
+        //        m_DropPointDisFlag = true;
+        //    else
+        //    {
+        //        //到着してから一定時間で壊れる
+        //        m_ArrivalTime += Time.deltaTime;
+        //        if (m_ArrivalTime >= 1.0f)
+        //        {
+        //            m_IsBreak = true;
+        //            return;
+        //        }
+        //    }
+        //}
+        //if (m_DropPointDisFlag)
+        //{
+        //    Vector3 point = m_TankPoint.transform.position + new Vector3(0, 3, 0);
+        //    m_ResPos = point;
+        //    if (Vector3.Distance(point, transform.position) < 2.0f)
+        //    {
+        //        transform.Find("HelicopterTank").Find("RopeJoint").GetComponent<HeliRope>().JointFree();
+        //        m_ReturnFlag = true;
+        //    }
+        //}
+        //if (m_ReturnFlag)
+        //{
+        //    m_ResPos = pointPos;
+        //    if (Vector3.Distance(transform.position, pointPos) < 10.0f)
+        //        m_FrontFlag = true;
+        //}
+        //if (m_FrontFlag)
+        //{
+        //    m_ResPos = pointPos + m_PointVec * 2.5f;
+        //}
+
+        //Spring(m_ResPos, ref m_Pos, ref m_Velo, 0.04f, 0.2f, 5.0f);
+
+        //transform.rotation = Quaternion.LookRotation(m_PointVec);
+        //transform.position = m_Pos;
     }
 
     public void SetPoint(GameObject point)
