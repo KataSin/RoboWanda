@@ -15,7 +15,7 @@ enum PlayerState
     Aiming,     // 照準中
     Creeping,   // 匍匐
     Dead,       // 死亡
-    Passing     // 乗り越える
+    Passing     // 乗り越え
 }
 
 public class PlayerController : MonoBehaviour
@@ -68,6 +68,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private float m_PassDistance;                   // 乗り越え距離
+
+    float m_SpeedBeforePassing = 0.0f;              // 乗り越える前の速度
 
     // コンポーネントと他の変数
     CharacterController m_Controller;               // キャラクターコントローラー
@@ -198,7 +200,7 @@ public class PlayerController : MonoBehaviour
                 break;
             // 乗り越える
             case PlayerState.Passing:
-                Passing();
+                Passing_v2();
                 m_IsAiming = false;
                 m_IsCreeping = false;
                 m_IsDead = false;
@@ -256,46 +258,23 @@ public class PlayerController : MonoBehaviour
         // Debug.Log(hit.gameObject.name);
 
         // 乗り越え中、ガードレールとの接触判定を無視
-        /*
-        if (m_State == PlayerState.Passing && hit.gameObject.tag == "GuardRail")
-        {
-            Physics.IgnoreCollision(m_Controller, hit.collider);
-        }
-        */
-
         if (m_State == PlayerState.Passing)
         {
             Physics.IgnoreLayerCollision(13, 16, true);
         }
+        // エイム中は乗り越えない
         else if (m_State == PlayerState.Aiming)
         {
-            // 乗り越えはしない
+
         }
         else if (hit.gameObject.tag == "GuardRail")
         {
+            // 接触前の速度を保存
+            m_SpeedBeforePassing = m_current_speed;
+
             m_passing_time = 0.5f;
             m_State = PlayerState.Passing;
         }
-
-
-        /*
-        if (m_State != PlayerState.Passing && hit.gameObject.tag == "GuardRail")
-        {
-            m_passing_time = 0.5f;
-            m_State = PlayerState.Passing;
-        }
-        */
-
-        // ガードレールと接触したら、乗り越える
-        /*
-        if (hit.gameObject.tag == "GuardRail")
-        {
-            m_passing_time = 0.5f;
-            m_State = PlayerState.Passing;
-        }
-        */
-
-
     }
 
     public void OnCollisionEnter(Collision other)
@@ -880,15 +859,6 @@ public class PlayerController : MonoBehaviour
         m_Launcher.SetActive(false);
         // 乗り越えモーションを再生
         m_Animator.Play("Passing");
-        // Debug.Log(m_PassingTime);
-
-        /* if (m_PassingTime <= 0.0f)
-        {
-            // グレネードランチャーを表示
-            m_Launcher.SetActive(true);
-            // 通常状態に戻る
-            m_State = PlayerState.Normal;
-        }*/
 
         // 移動処理
         Vector3 velocity = transform.forward * m_PassDistance;
@@ -910,6 +880,34 @@ public class PlayerController : MonoBehaviour
 
         m_passing_time -= Time.deltaTime;
         // Debug.Log(m_passing_time);
+    }
+
+    // 乗り越え処理（改）
+    void Passing_v2()
+    {
+        // グレネードランチャーの表示を消す
+        m_Launcher.SetActive(false);
+        // 乗り越えモーションを再生
+        m_Animator.Play("Passing");
+
+        // 移動処理
+        Vector3 velocity = transform.forward * m_SpeedBeforePassing;
+        m_Controller.Move(velocity * Time.deltaTime);
+
+        // 乗り越えアニメーションが終了すると、通常状態に戻る
+        AnimatorStateInfo AniInfo;     // アニメーションの状態
+        AniInfo = gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+        if (m_passing_time <= 0 && AniInfo.normalizedTime <= 0.9f)
+        {
+            // グレネードランチャーを表示
+            m_Launcher.SetActive(true);
+            // 通常状態に戻る
+            m_State = PlayerState.Normal;
+            Physics.IgnoreLayerCollision(13, 16, false);
+        }
+
+        m_passing_time -= Time.deltaTime;
     }
 
     // 死亡時の処理
