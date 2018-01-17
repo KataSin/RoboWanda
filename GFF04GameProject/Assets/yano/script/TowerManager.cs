@@ -9,6 +9,7 @@ public class TowerManager : MonoBehaviour
     private float t, t1, t2;
 
     private bool isClear;
+    private bool isColorClear1, isColorClear2, isColorClear3, isColorClear4;
 
     [SerializeField]
     private List<GameObject> bills_;
@@ -36,6 +37,10 @@ public class TowerManager : MonoBehaviour
         t2 = 0f;
 
         isClear = false;
+        isColorClear1 = false;
+        isColorClear2 = false;
+        isColorClear3 = false;
+        isColorClear4 = false;
     }
 
     public void InitBill()
@@ -56,6 +61,9 @@ public class TowerManager : MonoBehaviour
     public void TowerUp()
     {
         transform.position = Vector3.Lerp(m_origin_pos, Vector3.zero, t / 2f);
+
+        for (int i = 0; i < bills_.Count; i++)
+            bills_[i].GetComponent<TowerMKCnt>().Instantiate(t);
 
         if (t >= 2f)
             isClear = true;
@@ -105,13 +113,63 @@ public class TowerManager : MonoBehaviour
 
     public void TowerBreak()
     {
-        if (t2 >= 6f)
+        if (t2 >= 4f)
+        {
+            BeforeBreakColor4();
+            if (t2 >= 6f)
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    bills_[i].GetComponent<Break>().Set_BreakFlag(true);
+                    bills_[i].GetComponent<Break>().OutBreak_Smoke();
+                }
+            }
+        }
+    }
+
+    public void BeforeBreakColor1()
+    {
+        if (!isColorClear1)
+        {
+            bills_[11].GetComponent<TowerMKCnt>().BeforeBreakColor();
+            bills_[12].GetComponent<TowerMKCnt>().BeforeBreakColor();
+
+            isColorClear1 = true;
+        }
+    }
+
+    public void BeforeBreakColor2()
+    {
+        if (!isColorClear2)
+        {
+            bills_[2].GetComponent<TowerMKCnt>().BeforeBreakColor();
+            bills_[3].GetComponent<TowerMKCnt>().BeforeBreakColor();
+            bills_[4].GetComponent<TowerMKCnt>().BeforeBreakColor();
+            bills_[6].GetComponent<TowerMKCnt>().BeforeBreakColor();
+
+            isColorClear2 = true;
+        }
+    }
+
+    public void BeforeBreakColor3()
+    {
+        if (!isColorClear3)
+        {
+            for (int i = 0; i < bills_.Count; i++)
+                bills_[i].GetComponent<TowerMKCnt>().BeforeBreakColor();
+
+            isColorClear3 = true;
+        }
+    }
+
+    public void BeforeBreakColor4()
+    {
+        if (!isColorClear4)
         {
             for (int i = 0; i < 7; i++)
-            {
-                bills_[i].GetComponent<Break>().Set_BreakFlag(true);
-                bills_[i].GetComponent<Break>().OutBreak_Smoke();
-            }
+                bills_[i].GetComponent<TowerMKCnt>().BeforeBreakColor();
+
+            isColorClear4 = true;
         }
     }
 

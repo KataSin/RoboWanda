@@ -32,7 +32,7 @@ public class BriefingManager2 : MonoBehaviour
 
     private bool isTrigger;
 
-    private float t1, t2;
+    private float t0, t1, t2;
 
     [SerializeField]
     private GameObject ch47_;
@@ -69,6 +69,7 @@ public class BriefingManager2 : MonoBehaviour
         ch47_.GetComponent<StrategyDropTank>().enabled = false;
         target_ui_.SetActive(false);
 
+        t0 = 0f;
         t1 = 0f;
         t2 = 0f;
 
@@ -121,7 +122,7 @@ public class BriefingManager2 : MonoBehaviour
     {
         ui_.GetComponent<BlackOut_UI>().FeadIn();
 
-        if ((Input.GetKeyDown(KeyCode.Z)|| Input.GetButtonDown("Submit"))
+        if ((Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Submit"))
             && ui_.GetComponent<BlackOut_UI>().Get_Clear())
         {
             state_ = State.One;
@@ -153,11 +154,22 @@ public class BriefingManager2 : MonoBehaviour
     private void TwoUpdate()
     {
         briefing_cam_.GetComponent<BriefingCamera>().TargetCam_Back();
-        if (briefing_cam_.GetComponent<BriefingCamera>().Get_Clear())
+
+        if (briefing_cam_.GetComponent<BriefingCamera>().Get_Clear()
+            && !tower_mana_.GetComponent<TowerManager>().Get_Clear())
             tower_mana_.GetComponent<TowerManager>().TowerUp();
+
         if (tower_mana_.GetComponent<TowerManager>().Get_Clear())
         {
-            robot_.GetComponent<BriefingRobot>().Beam();
+            tower_mana_.GetComponent<TowerManager>().BeforeBreakColor1();
+
+            if (t0 >= 2f)
+            {
+                robot_.GetComponent<BriefingRobot>().Beam();
+                if (t0 >= 7f)
+                    tower_mana_.GetComponent<TowerManager>().BeforeBreakColor2();
+            }
+            t0 += 1.0f * Time.deltaTime;
         }
 
         if ((Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Submit"))
@@ -177,12 +189,17 @@ public class BriefingManager2 : MonoBehaviour
         tower_mana_.GetComponent<TowerManager>().Tower2Up();
         briefing_cam_.GetComponent<BriefingCamera>().TopViewCam();
 
-        if (t1 >= 18f)
+        if (t1 >= 3f)
         {
-            text_.GetComponent<TextBriefing>().TextReset();
-            m_textState += 2;
-            state_ = State.Four;
-            tower_mana_.GetComponent<TowerManager>().TowerCheck2();
+            tower_mana_.GetComponent<TowerManager>().BeforeBreakColor3();
+
+            if (t1 >= 18f)
+            {
+                text_.GetComponent<TextBriefing>().TextReset();
+                m_textState += 2;
+                state_ = State.Four;
+                tower_mana_.GetComponent<TowerManager>().TowerCheck2();
+            }
         }
 
         t1 += 1.0f * Time.deltaTime;
