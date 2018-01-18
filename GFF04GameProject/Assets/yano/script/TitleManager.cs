@@ -59,6 +59,9 @@ public class TitleManager : MonoBehaviour
 
     private bool isStandClear;
 
+    [SerializeField]
+    private GameObject vc_;
+
     // Use this for initialization
     void Start()
     {
@@ -120,6 +123,7 @@ public class TitleManager : MonoBehaviour
                     >= titleCamera_.GetComponent<TitleCamera>().Get_FeadTime()) && mode_uis_.activeSelf == false)
                 {
                     mode_uis_.SetActive(true);
+                    vc_.GetComponent<AudioSource>().PlayOneShot(vc_.GetComponent<AudioSource>().clip);
                 }
             }
 

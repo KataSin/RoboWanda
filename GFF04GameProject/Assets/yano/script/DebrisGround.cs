@@ -64,4 +64,10 @@ public class DebrisGround : MonoBehaviour
 
         GetComponent<MeshCollider>().isTrigger = true;
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "UnderBrie")
+            GetComponent<MeshRenderer>().enabled = false;
+    }
 }
