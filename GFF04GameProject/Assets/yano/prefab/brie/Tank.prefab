@@ -187,7 +187,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4581047489401204}
-  - component: {fileID: 114509230159190796}
+  - component: {fileID: 114791239421304538}
   - component: {fileID: 54570491118021332}
   - component: {fileID: 59834607630907834}
   - component: {fileID: 195576854044993534}
@@ -2013,20 +2013,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 189.8855, y: 137, z: 418.9815}
   m_Center: {x: 0, y: -26.12, z: 0}
---- !u!114 &114509230159190796
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1284162301186528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbe630754a343c04ba4fa58e37e31157, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_GunRotateY: {fileID: 1191600742990820}
-  m_GunRotateX: {fileID: 1536298767226466}
-  m_SpawnBullet: {fileID: 1835214464357770}
 --- !u!114 &114586886547765056
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2041,6 +2027,20 @@ MonoBehaviour:
   m_Bullet: {fileID: 1064446041701694, guid: f3a65956822f14d449235054b82ddaba, type: 2}
   m_Exprosion: {fileID: 1327435583140030, guid: adade0514995ef54dafc9718b3c51f51,
     type: 2}
+--- !u!114 &114791239421304538
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1284162301186528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d687af85def29b047b6b62e2805968bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_GunRotateY: {fileID: 1191600742990820}
+  m_GunRotateX: {fileID: 1536298767226466}
+  m_SpawnBullet: {fileID: 1835214464357770}
 --- !u!195 &195576854044993534
 NavMeshAgent:
   m_ObjectHideFlags: 1

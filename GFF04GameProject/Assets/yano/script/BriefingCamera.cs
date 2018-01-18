@@ -24,7 +24,7 @@ public class BriefingCamera : MonoBehaviour
         m_origin_pos = new Vector3(-62.6f, 52.8f, -74.4f);
         m_targetCam_pos = new Vector3(-62.6f, 42f, 36.4f);
         m_topViewCam_pos = new Vector3(-62.6f, 98.7f, 88.3f);
-        m_sideViewCam_pos = new Vector3(-62.6f, 140.6f, 88.3f);
+        m_sideViewCam_pos = new Vector3(-62.6f, 145.6f, 88.3f);
         //m_sideViewCam_pos = new Vector3(-149f, 11.6f, 91.6f);
 
         m_origin_rotation = transform.rotation;
