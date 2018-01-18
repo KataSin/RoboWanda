@@ -139,8 +139,8 @@ public class TowerManager : MonoBehaviour
 
                 for (int i = 0; i < 6; i++)
                 {
-                    bills_other_[i].GetComponent<Break>().Set_BreakFlag(true);
-                    bills_other_[i].GetComponent<Break>().OutBreak_Smoke();
+                    bills_other_[i].GetComponent<Break_ST>().Set_BreakFlag(true);
+                    bills_other_[i].GetComponent<Break_ST>().OutBreak_Smoke();
                 }
             }
         }
