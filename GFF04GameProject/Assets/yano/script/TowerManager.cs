@@ -22,10 +22,16 @@ public class TowerManager : MonoBehaviour
     private List<GameObject> rebills_;
 
     [SerializeField]
+    private List<GameObject> bills_other_;
+
+    [SerializeField]
     private GameObject tower2_;
 
     [SerializeField]
     private GameObject tower3_;
+
+    [SerializeField]
+    private GameObject tower4_;
 
     // Use this for initialization
     void Start()
@@ -111,6 +117,13 @@ public class TowerManager : MonoBehaviour
         t2 += 1.0f * Time.deltaTime;
     }
 
+    public void Tower4Up()
+    {
+        tower4_.transform.position = Vector3.Lerp(new Vector3(0f, -21.4f, 0f), Vector3.zero, t2 / 2f);
+
+        t2 += 1.0f * Time.deltaTime;
+    }
+
     public void TowerBreak()
     {
         if (t2 >= 4f)
@@ -122,6 +135,12 @@ public class TowerManager : MonoBehaviour
                 {
                     bills_[i].GetComponent<Break>().Set_BreakFlag(true);
                     bills_[i].GetComponent<Break>().OutBreak_Smoke();
+                }
+
+                for (int i = 0; i < 6; i++)
+                {
+                    bills_other_[i].GetComponent<Break>().Set_BreakFlag(true);
+                    bills_other_[i].GetComponent<Break>().OutBreak_Smoke();
                 }
             }
         }
@@ -168,6 +187,9 @@ public class TowerManager : MonoBehaviour
         {
             for (int i = 0; i < 7; i++)
                 bills_[i].GetComponent<TowerMKCnt>().BeforeBreakColor();
+
+            for (int i = 0; i < 6; i++)
+                bills_other_[i].GetComponent<TowerMKCnt>().BeforeBreakColor();
 
             isColorClear4 = true;
         }

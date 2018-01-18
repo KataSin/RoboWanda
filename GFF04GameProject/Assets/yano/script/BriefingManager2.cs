@@ -208,6 +208,7 @@ public class BriefingManager2 : MonoBehaviour
     private void FourUpdate()
     {
         tower_mana_.GetComponent<TowerManager>().Tower3Up();
+        tower_mana_.GetComponent<TowerManager>().Tower4Up();
         briefing_cam_.GetComponent<BriefingCamera>().SideViewCam();
         if (!isCh47)
         {
