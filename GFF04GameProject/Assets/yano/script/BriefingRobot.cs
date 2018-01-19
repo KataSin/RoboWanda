@@ -64,7 +64,7 @@ public class BriefingRobot : MonoBehaviour
                 MissileUpdate();
                 break;
             case State.Dead:
-                isDead = true;
+                DeadUpdate();
                 break;
         }
 
@@ -139,6 +139,12 @@ public class BriefingRobot : MonoBehaviour
             isMissile = true;
             state_ = State.Missile;
         }
+    }
+
+    private void DeadUpdate()
+    {
+        isDead = true;
+        GetComponent<CapsuleCollider>().enabled = false;
     }
 
     public bool Get_MissileFinishFlag()

@@ -42,6 +42,6 @@ public class targetUItext : MonoBehaviour
             }
         }
 
-        m_interval -= 8.0f * Time.deltaTime;
+        m_interval -= 10.0f * Time.deltaTime;
     }
 }

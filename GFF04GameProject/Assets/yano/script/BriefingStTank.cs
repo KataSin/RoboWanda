@@ -17,6 +17,8 @@ public class BriefingStTank : MonoBehaviour
 
     private bool isClear;
 
+    private GameObject cloneTank_;
+
     // Use this for initialization
     void Start()
     {
@@ -39,6 +41,9 @@ public class BriefingStTank : MonoBehaviour
 
             isClear = true;
         }
+
+        if (GameObject.FindGameObjectWithTag("GameTank"))
+            cloneTank_ = GameObject.FindGameObjectWithTag("GameTank");
     }
 
     private void TankGoPointSet(GameObject l_tank, int l_i)
@@ -76,5 +81,10 @@ public class BriefingStTank : MonoBehaviour
     public void Set_SpawnFlag(bool l_flag)
     {
         isSpawn = l_flag;
+    }
+
+    public bool Get_Clear()
+    {
+        return cloneTank_.GetComponent<Tank2>().Get_Clear();
     }
 }

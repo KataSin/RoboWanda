@@ -25,11 +25,17 @@ public class Tank2 : MonoBehaviour
     [SerializeField]
     private int m_pointCount;
 
-    private float t0, t1, t2, t3;
+    private float t0, t1, t2, t3, t4, t5;
 
     private Vector3 m_origin_pos;
+    private Quaternion m_origin_rotation;
+    private Quaternion m_GXorigin_rotation;
+    private Quaternion m_GYorigin_rotation;
 
     private bool isMoveClear;
+    private bool isReValue;
+
+    private bool isClear;
 
     // Use this for initialization
     void Start()
@@ -43,9 +49,17 @@ public class Tank2 : MonoBehaviour
         t1 = 0f;
         t2 = 0f;
         t3 = 0f;
+        t4 = 0f;
+        t5 = 0f;
+
         m_origin_pos = transform.position;
+        m_origin_rotation = transform.rotation;
+        m_GXorigin_rotation = m_GunRotateX.transform.rotation;
+        m_GYorigin_rotation = m_GunRotateY.transform.rotation;
 
         isMoveClear = false;
+        isReValue = false;
+        isClear = false;
     }
 
     // Update is called once per frame
@@ -56,12 +70,16 @@ public class Tank2 : MonoBehaviour
         Quaternion lookY = Quaternion.LookRotation(vec);
         if (isMoveClear)
         {
-            //m_GunRotateY.transform.rotation = Quaternion.Euler(0.0f, lookY.eulerAngles.y, 0.0f);
-            m_GunRotateY.transform.rotation = 
-                Quaternion.Slerp(Quaternion.identity, Quaternion.Euler(0.0f, lookY.eulerAngles.y, 0.0f), t3 / 2f);
-            m_GunRotateX.transform.rotation = lookY;
+            m_GunRotateY.transform.rotation =
+                Quaternion.Slerp(m_GYorigin_rotation, Quaternion.Euler(0.0f, lookY.eulerAngles.y, 0.0f), t3 / 2f);
+
+            m_GunRotateX.transform.rotation =
+                Quaternion.Slerp(m_GXorigin_rotation, lookY, t3 - 2f / 2f);
 
             t3 += 1.0f * Time.deltaTime;
+
+            if (t3 >= 2f)
+                isClear = true;
         }
 
         bool colFlag = false;
@@ -84,17 +102,17 @@ public class Tank2 : MonoBehaviour
         }
 
         if (t0 >= 4f)
-            PointMove();
+            PointMoveRotation(lookY.eulerAngles.y);
 
         MoveClearCheck();
 
         t0 += 1.0f * Time.deltaTime;
     }
 
-    private void PointMove()
+    private void PointMoveRotation(float l_rotationY)
     {
-        if (t1 <= 6f && m_pointCount == 1)
-            transform.position = Vector3.Lerp(m_origin_pos, m_go_point1, t1 / 6f);
+        if (t1 <= 8f && m_pointCount == 1)
+            transform.position = Vector3.Lerp(m_origin_pos, m_go_point1, t1 / 8f);
 
         else if (t1 <= 3f && m_pointCount == 2)
             transform.position = Vector3.Lerp(m_origin_pos, m_go_point1, t1 / 3f);
@@ -102,8 +120,19 @@ public class Tank2 : MonoBehaviour
         if (t1 >= 3f && m_pointCount == 2)
         {
             transform.position = Vector3.Lerp(m_go_point1, m_go_point2, t2 / 3f);
+            transform.rotation = Quaternion.Slerp(m_origin_rotation, Quaternion.Euler(0.0f, l_rotationY, 0.0f), t5 / 2f);
 
-            t2 += 1.0f * Time.deltaTime;
+            t5 += 1.0f * Time.deltaTime;
+            if (t5 >= 2f)
+            {
+                t2 += 1.0f * Time.deltaTime;
+                if (!isReValue)
+                {
+                    m_GXorigin_rotation = m_GunRotateX.transform.rotation;
+                    m_GYorigin_rotation = m_GunRotateY.transform.rotation;
+                    isReValue = true;
+                }
+            }
         }
 
         t1 += 1.0f * Time.deltaTime;
@@ -113,7 +142,7 @@ public class Tank2 : MonoBehaviour
     {
         if (m_pointCount == 1)
         {
-            if (t1 >= 3f)
+            if (t1 >= 8f)
                 isMoveClear = true;
         }
         else if (m_pointCount == 2)
@@ -145,5 +174,10 @@ public class Tank2 : MonoBehaviour
     public void Set_GPoint2(Vector3 l_goPoint2)
     {
         m_go_point2 = l_goPoint2;
+    }
+
+    public bool Get_Clear()
+    {
+        return isClear;
     }
 }
