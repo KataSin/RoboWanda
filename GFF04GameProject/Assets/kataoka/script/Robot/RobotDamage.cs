@@ -13,7 +13,6 @@ public class RobotDamage : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        if (m_Manager == null) return;
         if (GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>() != null)
             m_Manager = GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>();
 
