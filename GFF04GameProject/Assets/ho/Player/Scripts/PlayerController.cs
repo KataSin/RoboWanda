@@ -16,7 +16,7 @@ enum PlayerState
     Creeping,   // 匍匐
     Dead,       // 死亡
     Passing,    // 乗り越え
-    Setting     // 爆弾設置
+    Setting     // 爆発物設置
 }
 
 public class PlayerController : MonoBehaviour
@@ -96,14 +96,17 @@ public class PlayerController : MonoBehaviour
 
     float m_current_speed;                          // 現在の移動速度
     float m_passing_time = 0.0f;                    // 乗り越え処理の残り時間
-    float m_setting_time = 0.0f;                     // 爆弾設置の残り時間
+    float m_setting_time = 0.0f;                    // 爆発物設置の残り時間
 
     GameObject m_BuildingNear;                      // 近くにある、倒壊したビル
+    [SerializeField]
+    private GameObject m_Explosive;                 // 爆発物のプレハブ
+    bool m_explosive_set;                           // 爆発物を設置したか
 
     //ボムスポーン(片岡実装)
     private GameObject m_BomSpawn;
 
-    // グレネードランチャー
+    // グレネードランチャーのモデル
     [SerializeField]
     private GameObject m_Launcher;
 
@@ -147,6 +150,7 @@ public class PlayerController : MonoBehaviour
         m_current_speed = 0.0f;
 
         m_BuildingNear = null;
+        m_explosive_set = false;
 
         //片岡実装
         m_BomSpawn = GameObject.FindGameObjectWithTag("BomSpawn");
@@ -159,6 +163,27 @@ public class PlayerController : MonoBehaviour
         t = 0f;
 
         test = 0f;
+
+        if (m_BomSpawn == null)
+        {
+            Debug.Log("エラー発生したので終了します");
+            Debug.Log("Error Log：擲弾オブジェクトが存在しない");
+            Application.Quit();
+        }
+
+        if (m_Launcher == null)
+        {
+            Debug.Log("エラー発生したので終了します");
+            Debug.Log("Error Log：ランチャーのモデルが存在しない");
+            Application.Quit();
+        }
+
+        if (m_Explosive == null)
+        {
+            Debug.Log("エラー発生したので終了します");
+            Debug.Log("Error Log：爆発物のプレハブが存在しない");
+            Application.Quit();
+        }
     }
 
     // Update is called once per frame
@@ -218,7 +243,7 @@ public class PlayerController : MonoBehaviour
                 m_IsCreeping = false;
                 m_IsDead = true;
                 break;
-            // 爆弾設置
+            // 爆発物設置
             case PlayerState.Setting:
                 Setting();
                 m_IsAiming = false;
@@ -264,7 +289,7 @@ public class PlayerController : MonoBehaviour
             }
         }*/
 
-        Debug.Log("現在の状態：" + m_State);
+        // Debug.Log("現在の状態：" + m_State);
     }
 
     // キャラクターコントローラーの接触判定
@@ -291,13 +316,13 @@ public class PlayerController : MonoBehaviour
             m_State = PlayerState.Passing;
         }
 
-        // 倒壊しているビルと接触している間、Aボタンを押すと、爆弾を設置
+        // 倒壊しているビルと接触している間、Aボタンを押すと、爆発物を設置
         if (hit.gameObject.tag == "Break_Tower_Can_Break" &&
             m_State == PlayerState.Normal &&
             Input.GetButtonDown("BombSet"))
         {
             m_BuildingNear = hit.gameObject;
-            Debug.Log("爆弾を設置する");
+            Debug.Log("爆発物を設置する");
 
             m_setting_time = 1.0f;
             m_State = PlayerState.Setting;
@@ -405,7 +430,7 @@ public class PlayerController : MonoBehaviour
         // RTボタンを押すとダッシュ
         m_IsDash = (Input.GetAxis("Dash") > 0.5f) ? true : false;
 
-        // RBボタンを押すと爆弾投げ状態に
+        // RBボタンを押すとボム投げ状態に
         if (Input.GetButton("Aim")
             ||
             Input.GetKey(KeyCode.P))
@@ -418,28 +443,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Creeping"))
         {
             m_State = PlayerState.Creeping;
-        }
-        */
-
-        // Bボタンを押すと、近くに倒れてるビルを探す
-        /*
-        if (Input.GetButtonDown("BombSet"))
-        {
-            Debug.Log("設置ボタンが押された");
-
-            // 最も近かったビルを取得
-            m_BuildingNear = SearchBuilding(gameObject, "");
-
-            if (m_BuildingNear == null) return;
-            else
-            {
-                float distance = Vector3.Distance(transform.position, m_BuildingNear.transform.position);
-                if (distance <= 30.0f)
-                {
-                    m_SettingTime = 1.0f;
-                    m_State = PlayerState.Setting;
-                }
-            }
         }
         */
     }
@@ -702,7 +705,7 @@ public class PlayerController : MonoBehaviour
     // 照準中の処理
     void Aiming()
     {
-        // 爆弾投げ時の移動処理
+        // ボム投げ時の移動処理
         AimingMove();
 
         var a = m_BomSpawn.GetComponent<BomSpawn>();
@@ -996,17 +999,25 @@ public class PlayerController : MonoBehaviour
         return m_IsAiming;
     }
 
-    // 爆弾設置の処理
+    // 爆発物設置の処理
     void Setting()
     {
         if (m_BuildingNear == null)
             return;
 
-        // ビルに向かって爆弾を設置
+        // ビルに向かって爆発物を設置
         transform.LookAt(m_BuildingNear.transform);
         // グレネードランチャーの表示を消す
         m_Launcher.SetActive(false);
         // 設置モーションを再生
+
+        // 爆発物を生成
+        if (m_setting_time <= 0.5f && m_explosive_set == false)
+        {
+            Vector3 explosive_position = new Vector3(transform.position.x + 0.1f, 0.5f, transform.position.z + 0.1f);
+            Instantiate(m_Explosive, explosive_position, Quaternion.identity);
+            m_explosive_set = true;
+        }
 
         // アニメーションが終了すると、通常状態に戻る
         if (m_setting_time <= 0)
@@ -1015,6 +1026,7 @@ public class PlayerController : MonoBehaviour
             m_Launcher.SetActive(true);
             // 通常状態に戻る
             m_State = PlayerState.Normal;
+            m_explosive_set = false;
         }
 
         m_setting_time -= Time.deltaTime;
