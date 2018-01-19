@@ -45,6 +45,10 @@ public class RobotDamage : MonoBehaviour
                 m_Manager.Damage(40);
             }
         }
+        if (other.tag == "ExplosionCollision")
+        {
+            m_Manager.Damage(1);
+        }
     }
 
 }

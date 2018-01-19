@@ -317,6 +317,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // 倒壊しているビルと接触している間、Aボタンを押すと、爆発物を設置
+        /*
         if (hit.gameObject.tag == "Break_Tower_Can_Break" &&
             m_State == PlayerState.Normal &&
             Input.GetButtonDown("BombSet"))
@@ -327,6 +328,7 @@ public class PlayerController : MonoBehaviour
             m_setting_time = 1.0f;
             m_State = PlayerState.Setting;
         }
+        */
     }
 
     public void OnCollisionEnter(Collision other)
@@ -337,6 +339,8 @@ public class PlayerController : MonoBehaviour
     // Capsule Colliderの接触判定
     public void OnTriggerEnter(Collider other)
     {
+        // Debug.Log(other.gameObject.name);
+
         // 敵ロボットと接触したら死亡
         if (other.GetComponent<RobotDamage>() != null
             ||
@@ -362,6 +366,11 @@ public class PlayerController : MonoBehaviour
             m_State = PlayerState.Dead;
             playerSe_[1].Stop();
         }
+    }
+
+    public void OnTriggerStay(Collision other)
+    {
+        Debug.Log(other.gameObject.name);
     }
 
     void Fall()
