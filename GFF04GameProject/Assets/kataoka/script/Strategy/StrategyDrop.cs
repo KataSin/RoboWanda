@@ -7,6 +7,10 @@ public class StrategyDrop : MonoBehaviour
     public float m_StrategyTime;
     public GameObject m_HeliDropPrefab;
 
+    public AudioClip m_WirelessClip;
+    private AudioSource m_AudioSource;
+
+
     public enum DropItem
     {
         SMOKE_BULLET,
@@ -20,7 +24,6 @@ public class StrategyDrop : MonoBehaviour
         public bool spawnFlag;
     }
 
-    //デバッグコマンドの実装
 
     public DropItem m_Drop;
     private List<GameObject> m_DropPoints;
@@ -55,7 +58,7 @@ public class StrategyDrop : MonoBehaviour
             m_Helis.Add(state);
         }
 
-
+        m_AudioSource = GameObject.FindGameObjectWithTag("StrategySound").GetComponent<AudioSource>();
         m_Time = 0.0f;
         m_IsSpawn = false;
     }
@@ -85,6 +88,9 @@ public class StrategyDrop : MonoBehaviour
                 i.heli.GetComponent<HelicopterDrop>().SetDrop(true);
                 i.heli.GetComponent<HelicopterDrop>().DropBox();
             }
+            m_AudioSource.clip = m_WirelessClip;
+            if (m_WirelessClip != null)
+                m_AudioSource.PlayOneShot(m_AudioSource.clip);
             Destroy(gameObject);
         }
     }
