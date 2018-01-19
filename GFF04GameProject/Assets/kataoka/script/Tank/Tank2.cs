@@ -25,7 +25,7 @@ public class Tank2 : MonoBehaviour
     [SerializeField]
     private int m_pointCount;
 
-    private float t0, t1, t2;
+    private float t0, t1, t2, t3;
 
     private Vector3 m_origin_pos;
 
@@ -42,6 +42,7 @@ public class Tank2 : MonoBehaviour
         t0 = 0f;
         t1 = 0f;
         t2 = 0f;
+        t3 = 0f;
         m_origin_pos = transform.position;
 
         isMoveClear = false;
@@ -55,8 +56,12 @@ public class Tank2 : MonoBehaviour
         Quaternion lookY = Quaternion.LookRotation(vec);
         if (isMoveClear)
         {
-            m_GunRotateY.transform.rotation = Quaternion.Euler(0.0f, lookY.eulerAngles.y, 0.0f);
+            //m_GunRotateY.transform.rotation = Quaternion.Euler(0.0f, lookY.eulerAngles.y, 0.0f);
+            m_GunRotateY.transform.rotation = 
+                Quaternion.Slerp(Quaternion.identity, Quaternion.Euler(0.0f, lookY.eulerAngles.y, 0.0f), t3 / 2f);
             m_GunRotateX.transform.rotation = lookY;
+
+            t3 += 1.0f * Time.deltaTime;
         }
 
         bool colFlag = false;
@@ -88,7 +93,10 @@ public class Tank2 : MonoBehaviour
 
     private void PointMove()
     {
-        if (t1 <= 3f || m_pointCount == 1)
+        if (t1 <= 6f && m_pointCount == 1)
+            transform.position = Vector3.Lerp(m_origin_pos, m_go_point1, t1 / 6f);
+
+        else if (t1 <= 3f && m_pointCount == 2)
             transform.position = Vector3.Lerp(m_origin_pos, m_go_point1, t1 / 3f);
 
         if (t1 >= 3f && m_pointCount == 2)
