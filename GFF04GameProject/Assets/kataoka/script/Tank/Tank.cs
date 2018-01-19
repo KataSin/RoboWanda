@@ -61,13 +61,15 @@ public class Tank : MonoBehaviour
 
     public void SetGoTankPos(Vector3 pos)
     {
+        if (m_Agent == null) return;
         if (!m_Agent.enabled) return;
         m_Agent.destination = pos;
     }
 
     public void Free()
     {
-        Destroy(GetComponent<Rigidbody>());
+        if (GetComponent<Rigidbody>() != null)
+            Destroy(GetComponent<Rigidbody>());
         m_Agent.enabled = true;
     }
 }
