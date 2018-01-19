@@ -245,8 +245,7 @@ public class Break : MonoBehaviour
 
             Vector3 ob_pos = transform.position;
             ob_pos.y = 0f;
-            if (GameObject.FindGameObjectWithTag("ScoreManager")
-                && !GameObject.FindGameObjectWithTag("BriefingManager"))
+            if (!GameObject.FindGameObjectWithTag("BriefingManager"))
             {
                 GameObject smoke = Instantiate(sand_smoke_manager_, ob_pos, Quaternion.identity);
                 smoke.transform.Find("desert_Horizontal").localScale = transform.localScale * m_sand_smoke_scalar;
