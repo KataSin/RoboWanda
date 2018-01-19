@@ -131,7 +131,7 @@ public class HeliLineMissileManager : MonoBehaviour
             }
         }
         //LineRenderer 表示
-        SetEnable(m_DrawFlag);
+        SetEnable(false);
 
         //ベクトル更新
         foreach (var i in m_LineObject)
