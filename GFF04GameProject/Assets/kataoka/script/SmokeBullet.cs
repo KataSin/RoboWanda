@@ -21,6 +21,7 @@ public class SmokeBullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        transform.LookAt(transform.position + m_rb.velocity);
         if (m_IsExprosion)
         {
             if (m_Ps.particleCount <= 0)
