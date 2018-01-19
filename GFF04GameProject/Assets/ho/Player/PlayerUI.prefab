@@ -164,7 +164,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 0 / 0
+  m_Text: "\u221E / \u221E"
 --- !u!114 &114062169452707094
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -225,9 +225,7 @@ MonoBehaviour:
   m_ExplosionCount: {fileID: 1055900687513090}
   m_FlashGrenadeCount: {fileID: 1847958098293400}
   m_SmokeGrenadeCount: {fileID: 1203456748740856}
-  m_GetFlash: 1
-  m_GetSmoke: 1
-  m_BomSpawn: {fileID: 0}
+  m_BomSpawn: {fileID: 1170849699440494, guid: 10ed33183c5417646b043e3d349322fb, type: 2}
 --- !u!114 &114286964796735408
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -308,7 +306,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 0 / 0
+  m_Text: "\u221E / \u221E"
 --- !u!114 &114378236087372454
 MonoBehaviour:
   m_ObjectHideFlags: 1

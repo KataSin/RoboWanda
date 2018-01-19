@@ -26,10 +26,12 @@ public class PlayerUIController : MonoBehaviour
 
     private BomSpawn.Bom m_Mode;            // UIモード（BomSpawnスクリプトから取得）
 
+    /*
     [SerializeField]
     bool m_GetFlash = false;                // 照明弾を入手したか
     [SerializeField]
     bool m_GetSmoke = false;                // スモーク弾を入手したか
+    */
 
     Vector3 m_ExplosionPosition;            // 現在 爆発弾表示の座標
     Vector3 m_FlashPosition;                // 現在 照明弾表示の座標
@@ -265,38 +267,27 @@ public class PlayerUIController : MonoBehaviour
         }
         */
 
-        if (!m_GetFlash && !m_GetSmoke)
-        {
-            // 表示しない
-        }
-        else if (!m_GetFlash && m_GetSmoke)
-        {
-            m_FlashGrenadeImage.SetActive(false);
-            m_FlashGrenadeCount.SetActive(false);
-
-            m_SmokeGrenadeImage.SetActive(true);
-            m_SmokeGrenadeCount.SetActive(true);
-        }
-        else
-        {
-            m_FlashGrenadeImage.SetActive(true);
-            m_FlashGrenadeCount.SetActive(true);
-
-            m_SmokeGrenadeImage.SetActive(false);
-            m_SmokeGrenadeCount.SetActive(false);
-        }
-
+        // 爆発弾を表示
         m_ExplosionImage.SetActive(true);
         m_ExplosionCount.SetActive(true);
+
+        // 照明弾を表示
+        m_FlashGrenadeImage.SetActive(true);
+        m_FlashGrenadeCount.SetActive(true);
+
+        // スモーク弾を非表示
+        m_SmokeGrenadeImage.SetActive(false);
+        m_SmokeGrenadeCount.SetActive(false);
 
         // 爆発弾表示の座標とスケール
         m_ExplosionPosition = new Vector3(430.0f, -290.0f, 0.0f);
         m_ExplosionScale = new Vector3(1.0f, 1.0f, 1.0f);
 
-        // 照明弾/スモーク弾表示の座標とスケール
+        // 照明弾表示の座標とスケール
         m_FlashPosition = new Vector3(471.0f, -195.0f, 0.0f);
         m_FlashScale = new Vector3(0.75f, 0.75f, 1.0f);
 
+        // スモーク弾表示の座標とスケール
         m_SmokePosition = new Vector3(471.0f, -195.0f, 0.0f);
         m_SmokeScale = new Vector3(0.75f, 0.75f, 1.0f);
 
@@ -346,27 +337,27 @@ public class PlayerUIController : MonoBehaviour
         }
         */
 
-        if (!m_GetSmoke)
-        {
+        // 爆発弾を非表示
+        m_ExplosionImage.SetActive(false);
+        m_ExplosionCount.SetActive(false);
 
-        }
-        else
-        {
-            m_SmokeGrenadeImage.SetActive(true);
-            m_SmokeGrenadeCount.SetActive(true);
+        // 照明弾を表示
+        m_FlashGrenadeImage.SetActive(true);
+        m_FlashGrenadeCount.SetActive(true);
 
-            m_ExplosionImage.SetActive(false);
-            m_ExplosionCount.SetActive(false);
-        }
+        // スモーク弾を表示
+        m_SmokeGrenadeImage.SetActive(true);
+        m_SmokeGrenadeCount.SetActive(true);
 
         // 照明弾表示の座標とスケール
         m_FlashPosition = new Vector3(430.0f, -290.0f, 0.0f);
         m_FlashScale = new Vector3(1.0f, 1.0f, 1.0f);
 
-        // スモーク弾/爆発弾表示の座標とスケール
+        // スモーク弾表示の座標とスケール
         m_SmokePosition = new Vector3(471.0f, -195.0f, 0.0f);
         m_SmokeScale = new Vector3(0.75f, 0.75f, 1.0f);
 
+        // 爆発弾表示の座標とスケール
         m_ExplosionPosition = new Vector3(471.0f, -195.0f, 0.0f);
         m_ExplosionScale = new Vector3(0.75f, 0.75f, 1.0f);
 
@@ -393,22 +384,27 @@ public class PlayerUIController : MonoBehaviour
     // スモーク弾選択中の処理
     void SmokeGrenade()
     {
-        // 照明弾の表示を消す
-        m_FlashGrenadeImage.SetActive(false);
-        m_FlashGrenadeCount.SetActive(false);
-
         // 爆発弾を表示
         m_ExplosionImage.SetActive(true);
         m_ExplosionCount.SetActive(true);
 
-        // スモーク表示の座標とスケール
+        // 照明弾を非表示
+        m_FlashGrenadeImage.SetActive(false);
+        m_FlashGrenadeCount.SetActive(false);
+
+        // スモーク弾を表示
+        m_SmokeGrenadeImage.SetActive(true);
+        m_SmokeGrenadeCount.SetActive(true);
+
+        // スモーク弾表示の座標とスケール
         m_SmokePosition = new Vector3(430.0f, -290.0f, 0.0f);
         m_SmokeScale = new Vector3(1.0f, 1.0f, 1.0f);
 
-        // 爆発弾/照明弾表示の座標とスケール
+        // 爆発弾表示の座標とスケール
         m_ExplosionPosition = new Vector3(471.0f, -195.0f, 0.0f);
         m_ExplosionScale = new Vector3(0.75f, 0.75f, 1.0f);
 
+        // 照明弾表示の座標とスケール
         m_FlashPosition = new Vector3(471.0f, -195.0f, 0.0f);
         m_FlashScale = new Vector3(0.75f, 0.75f, 1.0f);
 

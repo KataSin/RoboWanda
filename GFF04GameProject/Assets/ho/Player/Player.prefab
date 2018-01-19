@@ -2648,6 +2648,8 @@ MonoBehaviour:
   rope_destibation_:
   - {fileID: 0}
   - {fileID: 0}
+  m_Explosive: {fileID: 1460831187269360, guid: 903f7b09cd063b340b85cf763484f291,
+    type: 2}
   m_Launcher: {fileID: 1735204848521048}
 --- !u!114 &114981012563883342
 MonoBehaviour:
@@ -2663,6 +2665,7 @@ MonoBehaviour:
   m_BomPrefab: {fileID: 1671173076217134, guid: 3d9194e6078c3c1479ff9b6ef80262ed,
     type: 2}
   m_LightBomPrefab: {fileID: 0}
+  m_SmokeBomPrefab: {fileID: 0}
   m_LandingPoint: {fileID: 1582210135153594}
   m_VertexPoint: {fileID: 0}
   m_Point: {fileID: 1878176742274818, guid: 48804f3a4e577224da4a0e50e2d072fc, type: 2}
