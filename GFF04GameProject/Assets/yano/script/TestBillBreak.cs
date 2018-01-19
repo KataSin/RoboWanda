@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TestBillBreak : MonoBehaviour
 {
-    private Break break_;
+    private Break_ST break_;
 
     [SerializeField]
     [Header("ここにアタッチしたビルをテスト倒壊")]
@@ -16,7 +16,7 @@ public class TestBillBreak : MonoBehaviour
     void Start()
     {
         for (int i = 0; i < bills_.Count; ++i)
-            break_ = bills_[i].GetComponent<Break>();
+            break_ = bills_[i].GetComponent<Break_ST>();
 
         isClear = false;
     }
@@ -32,8 +32,6 @@ public class TestBillBreak : MonoBehaviour
         if (Input.GetKey(KeyCode.Alpha1))
         {
             break_.Set_BreakFlag(true);
-            break_.Set_Rotation(Quaternion.Euler(90f, 0f, 0f));
-            break_.Set_BreakRotation(Quaternion.Euler(90f, 0f, 0f));
             break_.OutBreak_Smoke();
 
             isClear = true;
@@ -41,8 +39,6 @@ public class TestBillBreak : MonoBehaviour
         else if (Input.GetKey(KeyCode.Alpha3))
         {
             break_.Set_BreakFlag(true);
-            break_.Set_Rotation(Quaternion.Euler(-90f, 0f, 0f));
-            break_.Set_BreakRotation(Quaternion.Euler(-90f, 0f, 0f));
             break_.OutBreak_Smoke();
 
             isClear = true;
@@ -50,8 +46,7 @@ public class TestBillBreak : MonoBehaviour
         else if (Input.GetKey(KeyCode.Alpha4))
         {
             break_.Set_BreakFlag(true);
-            break_.Set_Rotation(Quaternion.Euler(0f, 0f, -90f));
-            break_.Set_BreakRotation(Quaternion.Euler(0f, 0f, -90f));
+  
             break_.OutBreak_Smoke();
 
             isClear = true;
@@ -59,8 +54,7 @@ public class TestBillBreak : MonoBehaviour
         else if (Input.GetKey(KeyCode.Alpha2))
         {
             break_.Set_BreakFlag(true);
-            break_.Set_Rotation(Quaternion.Euler(0f, 0f, 90f));
-            break_.Set_BreakRotation(Quaternion.Euler(0f, 0f, 90f));
+        
             break_.OutBreak_Smoke();
 
             isClear = true;

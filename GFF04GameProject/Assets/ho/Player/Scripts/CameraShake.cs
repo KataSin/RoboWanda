@@ -33,7 +33,7 @@ public class CameraShake : MonoBehaviour
     void Start()
     {
         if (m_ShakeTime <= 0.0f) m_ShakeTime = 0.7f;
-        m_CurrentForce = m_Force;
+        m_CurrentForce = 0.0f;
 
         m_EnemyRobot = GameObject.FindGameObjectWithTag("Robot");
     }
@@ -59,9 +59,15 @@ public class CameraShake : MonoBehaviour
         }
         else m_Distance = 1000.0f;
 
-        if (m_LifeTime < 0.0f)
+        if (m_LifeTime <= 0.0f)
         {
+            m_LowRangeX = 0.0f;
+            m_MaxRangeX = 0.0f;
+            m_LowRangeY = 0.0f;
+            m_MaxRangeY = 0.0f;
+
             transform.localPosition = Vector3.zero;
+            m_CurrentForce = 0.0f;
             m_LifeTime = 0.0f;
         }
 
@@ -91,6 +97,8 @@ public class CameraShake : MonoBehaviour
     void Shake()
     {
         m_OriginalPosition = Vector3.zero;
+        m_CurrentForce = m_Force;
+
         m_LowRangeX = m_OriginalPosition.x - m_CurrentForce;
         m_MaxRangeX = m_OriginalPosition.x + m_CurrentForce;
         m_LowRangeY = m_OriginalPosition.y - m_CurrentForce;
@@ -101,11 +109,61 @@ public class CameraShake : MonoBehaviour
     // 振動処理（外部から力を設定）
     public void Shake(float force)
     {
+        /*
         m_OriginalPosition = Vector3.zero;
-        m_LowRangeX = m_OriginalPosition.x - force;
-        m_MaxRangeX = m_OriginalPosition.x + force;
-        m_LowRangeY = m_OriginalPosition.y - force;
-        m_MaxRangeY = m_OriginalPosition.y + force;
-        m_LifeTime = m_ShakeTime;
+
+        // 振動している（振動力が0ではない）なら、振動力と振動時間を加算
+        if (m_LowRangeX != 0.0f && m_MaxRangeX != 0.0f && m_LowRangeY != 0.0f && m_MaxRangeY != 0.0f)
+        {
+            m_LowRangeX -= force;
+            m_MaxRangeX += force;
+            m_LowRangeY -= force;
+            m_MaxRangeY += force;
+
+            m_LifeTime += m_ShakeTime;
+        }
+        // 振動していない（振動力が0）なら、振動力と振動時間を設定
+        else
+        {
+            m_LowRangeX = m_OriginalPosition.x - force;
+            m_MaxRangeX = m_OriginalPosition.x + force;
+            m_LowRangeY = m_OriginalPosition.y - force;
+            m_MaxRangeY = m_OriginalPosition.y + force;
+
+            m_LifeTime = m_ShakeTime;
+        }
+        */
+
+        m_OriginalPosition = Vector3.zero;
+
+        // 与えられた力が現在の振動力より高い場合、高い方の力とその振動時間を適用
+        if (force > m_CurrentForce)
+        {
+            m_LowRangeX = m_OriginalPosition.x - force;
+            m_MaxRangeX = m_OriginalPosition.x + force;
+            m_LowRangeY = m_OriginalPosition.y - force;
+            m_MaxRangeY = m_OriginalPosition.y + force;
+
+            m_CurrentForce = force;
+            m_LifeTime = m_ShakeTime;
+        }
+    }
+
+    // 振動処理（外部から力と振動時間を設定）
+    public void Shake(float force, float time)
+    {
+        m_OriginalPosition = Vector3.zero;
+
+        // 与えられた力が現在の振動力より高い場合、高い方の力とその振動時間を適用
+        if (force > m_CurrentForce)
+        {
+            m_LowRangeX = m_OriginalPosition.x - force;
+            m_MaxRangeX = m_OriginalPosition.x + force;
+            m_LowRangeY = m_OriginalPosition.y - force;
+            m_MaxRangeY = m_OriginalPosition.y + force;
+
+            m_CurrentForce = force;
+            m_LifeTime = time;
+        }
     }
 }

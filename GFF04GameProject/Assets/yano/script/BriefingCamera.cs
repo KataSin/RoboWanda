@@ -24,7 +24,8 @@ public class BriefingCamera : MonoBehaviour
         m_origin_pos = new Vector3(-62.6f, 52.8f, -74.4f);
         m_targetCam_pos = new Vector3(-62.6f, 42f, 36.4f);
         m_topViewCam_pos = new Vector3(-62.6f, 98.7f, 88.3f);
-        m_sideViewCam_pos = new Vector3(-149f, 11.6f, 91.6f);
+        m_sideViewCam_pos = new Vector3(-62.6f, 145.6f, 88.3f);
+        //m_sideViewCam_pos = new Vector3(-149f, 11.6f, 91.6f);
 
         m_origin_rotation = transform.rotation;
 
@@ -59,16 +60,16 @@ public class BriefingCamera : MonoBehaviour
             && !isSideView)
         {
             transform.position = Vector3.Lerp(m_topViewCam_pos, m_sideViewCam_pos, t2 / 2f);
-            transform.rotation =
-                Quaternion.Slerp(Quaternion.Euler(90f, m_origin_rotation.y, m_origin_rotation.z),
-                Quaternion.Euler(m_origin_rotation.x, 90f, m_origin_rotation.z), t2 / 2f);
+            //transform.rotation =
+            //    Quaternion.Slerp(Quaternion.Euler(90f, m_origin_rotation.y, m_origin_rotation.z),
+            //    Quaternion.Euler(m_origin_rotation.x, 90f, m_origin_rotation.z), t2 / 2f);
         }
 
         if (isSideView)
         {
             transform.position = Vector3.Lerp(m_sideViewCam_pos, m_origin_pos, t3 / 2f);
             transform.rotation =
-                Quaternion.Slerp(Quaternion.Euler(m_origin_rotation.x, 90f, m_origin_rotation.z),
+                Quaternion.Slerp(Quaternion.Euler(90f, m_origin_rotation.y, m_origin_rotation.z),
                 m_origin_rotation, t3 / 2f);
         }
     }

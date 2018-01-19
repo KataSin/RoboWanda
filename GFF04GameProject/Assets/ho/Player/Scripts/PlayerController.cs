@@ -15,7 +15,8 @@ enum PlayerState
     Aiming,     // 照準中
     Creeping,   // 匍匐
     Dead,       // 死亡
-    Passing     // 乗り越える
+    Passing,    // 乗り越え
+    Setting     // 爆弾設置
 }
 
 public class PlayerController : MonoBehaviour
@@ -69,6 +70,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float m_PassDistance;                   // 乗り越え距離
 
+    float m_SpeedBeforePassing = 0.0f;              // 乗り越える前の速度
+
     // コンポーネントと他の変数
     CharacterController m_Controller;               // キャラクターコントローラー
     Animator m_Animator;                            // アニメーター
@@ -91,8 +94,11 @@ public class PlayerController : MonoBehaviour
     float t;
     //
 
-    float m_current_speed;
-    float m_passing_time;
+    float m_current_speed;                          // 現在の移動速度
+    float m_passing_time = 0.0f;                    // 乗り越え処理の残り時間
+    float m_setting_time = 0.0f;                     // 爆弾設置の残り時間
+
+    GameObject m_BuildingNear;                      // 近くにある、倒壊したビル
 
     //ボムスポーン(片岡実装)
     private GameObject m_BomSpawn;
@@ -139,6 +145,8 @@ public class PlayerController : MonoBehaviour
         m_isClear = false;
 
         m_current_speed = 0.0f;
+
+        m_BuildingNear = null;
 
         //片岡実装
         m_BomSpawn = GameObject.FindGameObjectWithTag("BomSpawn");
@@ -198,7 +206,7 @@ public class PlayerController : MonoBehaviour
                 break;
             // 乗り越える
             case PlayerState.Passing:
-                Passing();
+                Passing_v2();
                 m_IsAiming = false;
                 m_IsCreeping = false;
                 m_IsDead = false;
@@ -209,6 +217,13 @@ public class PlayerController : MonoBehaviour
                 m_IsAiming = false;
                 m_IsCreeping = false;
                 m_IsDead = true;
+                break;
+            // 爆弾設置
+            case PlayerState.Setting:
+                Setting();
+                m_IsAiming = false;
+                m_IsCreeping = false;
+                m_IsDead = false;
                 break;
             // デフォルト（バグ防止用）
             default:
@@ -248,6 +263,8 @@ public class PlayerController : MonoBehaviour
                 playerSe_[1].Stop();
             }
         }*/
+
+        Debug.Log("現在の状態：" + m_State);
     }
 
     // キャラクターコントローラーの接触判定
@@ -256,46 +273,35 @@ public class PlayerController : MonoBehaviour
         // Debug.Log(hit.gameObject.name);
 
         // 乗り越え中、ガードレールとの接触判定を無視
-        /*
-        if (m_State == PlayerState.Passing && hit.gameObject.tag == "GuardRail")
-        {
-            Physics.IgnoreCollision(m_Controller, hit.collider);
-        }
-        */
-
         if (m_State == PlayerState.Passing)
         {
             Physics.IgnoreLayerCollision(13, 16, true);
         }
+        // エイム中は乗り越えない
         else if (m_State == PlayerState.Aiming)
         {
-            // 乗り越えはしない
+
         }
         else if (hit.gameObject.tag == "GuardRail")
         {
+            // 接触前の速度を保存
+            m_SpeedBeforePassing = m_current_speed;
+
             m_passing_time = 0.5f;
             m_State = PlayerState.Passing;
         }
 
-
-        /*
-        if (m_State != PlayerState.Passing && hit.gameObject.tag == "GuardRail")
+        // 倒壊しているビルと接触している間、Aボタンを押すと、爆弾を設置
+        if (hit.gameObject.tag == "Break_Tower_Can_Break" &&
+            m_State == PlayerState.Normal &&
+            Input.GetButtonDown("BombSet"))
         {
-            m_passing_time = 0.5f;
-            m_State = PlayerState.Passing;
+            m_BuildingNear = hit.gameObject;
+            Debug.Log("爆弾を設置する");
+
+            m_setting_time = 1.0f;
+            m_State = PlayerState.Setting;
         }
-        */
-
-        // ガードレールと接触したら、乗り越える
-        /*
-        if (hit.gameObject.tag == "GuardRail")
-        {
-            m_passing_time = 0.5f;
-            m_State = PlayerState.Passing;
-        }
-        */
-
-
     }
 
     public void OnCollisionEnter(Collision other)
@@ -407,11 +413,35 @@ public class PlayerController : MonoBehaviour
             m_State = PlayerState.Aiming;
         }
 
-        // Bボタンを押すとしゃがむ
+        // Bボタンを押すとしゃがむ（ボツになった）
+        /*
         if (Input.GetButtonDown("Creeping"))
         {
             m_State = PlayerState.Creeping;
         }
+        */
+
+        // Bボタンを押すと、近くに倒れてるビルを探す
+        /*
+        if (Input.GetButtonDown("BombSet"))
+        {
+            Debug.Log("設置ボタンが押された");
+
+            // 最も近かったビルを取得
+            m_BuildingNear = SearchBuilding(gameObject, "");
+
+            if (m_BuildingNear == null) return;
+            else
+            {
+                float distance = Vector3.Distance(transform.position, m_BuildingNear.transform.position);
+                if (distance <= 30.0f)
+                {
+                    m_SettingTime = 1.0f;
+                    m_State = PlayerState.Setting;
+                }
+            }
+        }
+        */
     }
 
     // 通常時の移動
@@ -880,15 +910,6 @@ public class PlayerController : MonoBehaviour
         m_Launcher.SetActive(false);
         // 乗り越えモーションを再生
         m_Animator.Play("Passing");
-        // Debug.Log(m_PassingTime);
-
-        /* if (m_PassingTime <= 0.0f)
-        {
-            // グレネードランチャーを表示
-            m_Launcher.SetActive(true);
-            // 通常状態に戻る
-            m_State = PlayerState.Normal;
-        }*/
 
         // 移動処理
         Vector3 velocity = transform.forward * m_PassDistance;
@@ -910,6 +931,34 @@ public class PlayerController : MonoBehaviour
 
         m_passing_time -= Time.deltaTime;
         // Debug.Log(m_passing_time);
+    }
+
+    // 乗り越え処理（改）
+    void Passing_v2()
+    {
+        // グレネードランチャーの表示を消す
+        m_Launcher.SetActive(false);
+        // 乗り越えモーションを再生
+        m_Animator.Play("Passing");
+
+        // 移動処理
+        Vector3 velocity = transform.forward * m_SpeedBeforePassing;
+        m_Controller.Move(velocity * Time.deltaTime);
+
+        // 乗り越えアニメーションが終了すると、通常状態に戻る
+        AnimatorStateInfo AniInfo;     // アニメーションの状態
+        AniInfo = gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+        if (m_passing_time <= 0 && AniInfo.normalizedTime <= 0.9f)
+        {
+            // グレネードランチャーを表示
+            m_Launcher.SetActive(true);
+            // 通常状態に戻る
+            m_State = PlayerState.Normal;
+            Physics.IgnoreLayerCollision(13, 16, false);
+        }
+
+        m_passing_time -= Time.deltaTime;
     }
 
     // 死亡時の処理
@@ -945,5 +994,29 @@ public class PlayerController : MonoBehaviour
     public bool IsAiming()
     {
         return m_IsAiming;
+    }
+
+    // 爆弾設置の処理
+    void Setting()
+    {
+        if (m_BuildingNear == null)
+            return;
+
+        // ビルに向かって爆弾を設置
+        transform.LookAt(m_BuildingNear.transform);
+        // グレネードランチャーの表示を消す
+        m_Launcher.SetActive(false);
+        // 設置モーションを再生
+
+        // アニメーションが終了すると、通常状態に戻る
+        if (m_setting_time <= 0)
+        {
+            // グレネードランチャーを表示
+            m_Launcher.SetActive(true);
+            // 通常状態に戻る
+            m_State = PlayerState.Normal;
+        }
+
+        m_setting_time -= Time.deltaTime;
     }
 }
