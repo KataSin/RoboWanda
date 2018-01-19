@@ -34,12 +34,14 @@ public class Bombing1 : MonoBehaviour
         if (m_BomPrefab == null) return;
 
         //爆撃
-        m_Time += Time.deltaTime;
+
         if (m_Time >= 0.5f)
         {
             Instantiate(m_BomPrefab, transform.position + new Vector3(0, -3, 0), Quaternion.identity);
             m_Time = 0.0f;
         }
+
+        m_Time += 2.0f * Time.deltaTime;
     }
 
     public void SetStartEnd(Vector3 start, Vector3 end)

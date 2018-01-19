@@ -35,7 +35,7 @@ public class BriefingManager2 : MonoBehaviour
     private float t0, t1, t2;
 
     [SerializeField]
-    private GameObject ch47_;
+    private GameObject tank_;
 
     private bool isCh47;
 
@@ -66,7 +66,6 @@ public class BriefingManager2 : MonoBehaviour
         isTrigger = false;
 
         bomber_.SetActive(false);
-        ch47_.GetComponent<StrategyDropTank>().enabled = false;
         target_ui_.SetActive(false);
 
         t0 = 0f;
@@ -212,7 +211,7 @@ public class BriefingManager2 : MonoBehaviour
         briefing_cam_.GetComponent<BriefingCamera>().SideViewCam();
         if (!isCh47)
         {
-            ch47_.GetComponent<StrategyDropTank>().enabled = true;
+            tank_.GetComponent<BriefingStTank>().Set_SpawnFlag(true);
             isCh47 = true;
         }
         tower_mana_.GetComponent<TowerManager>().TowerBreak();

@@ -131,16 +131,10 @@ public class TowerManager : MonoBehaviour
             BeforeBreakColor4();
             if (t2 >= 6f)
             {
-                for (int i = 0; i < 7; i++)
-                {
-                    bills_[i].GetComponent<Break>().Set_BreakFlag(true);
-                    bills_[i].GetComponent<Break>().OutBreak_Smoke();
-                }
-
                 for (int i = 0; i < 6; i++)
                 {
-                    bills_other_[i].GetComponent<Break>().Set_BreakFlag(true);
-                    bills_other_[i].GetComponent<Break>().OutBreak_Smoke();
+                    bills_other_[i].GetComponent<Break_ST>().Set_BreakFlag(true);
+                    bills_other_[i].GetComponent<Break_ST>().OutBreak_Smoke();
                 }
             }
         }
@@ -185,9 +179,6 @@ public class TowerManager : MonoBehaviour
     {
         if (!isColorClear4)
         {
-            for (int i = 0; i < 7; i++)
-                bills_[i].GetComponent<TowerMKCnt>().BeforeBreakColor();
-
             for (int i = 0; i < 6; i++)
                 bills_other_[i].GetComponent<TowerMKCnt>().BeforeBreakColor();
 
