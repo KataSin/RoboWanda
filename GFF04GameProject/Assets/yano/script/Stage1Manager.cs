@@ -127,9 +127,12 @@ public class Stage1Manager : MonoBehaviour
                 arows_[1].SetActive(false);
 
                 if (Input.GetButtonDown("Submit") && scene_ != null)
+                {
                     StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("lightTest 5"));
+                    isLScene = true;
+                }
 
-                if (Input.GetAxis("Vertical_L") <= -1f)
+                if (Input.GetAxis("Vertical_L") <= -1f && !isLScene)
                     state_ = OverState.TitleTo;
             }
             else if (state_ == OverState.TitleTo)
@@ -140,9 +143,10 @@ public class Stage1Manager : MonoBehaviour
                 if (Input.GetButtonDown("Submit") && scene_ != null)
                 {
                     StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("Title"));
+                    isLScene = true;
                 }
 
-                if (Input.GetAxis("Vertical_L") >= 1f)
+                if (Input.GetAxis("Vertical_L") >= 1f && !isLScene)
                     state_ = OverState.Retry;
             }
         }
@@ -162,7 +166,7 @@ public class Stage1Manager : MonoBehaviour
         //ボスのチェック
         if (robot_.GetComponent<RobotManager>().GetRobotHP() <= 0f)
         {
-            
+
             player_ui_.SetActive(false);
             if (test >= 30.0f)
             {
