@@ -12,6 +12,9 @@ public class Bombing : MonoBehaviour
     private float m_Time;
     //ゴール座標
     private Vector3 m_GoalPos;
+
+
+    public float m_BomSpanwIntervalTime = 0.1f;
     // Use this for initialization
     void Start()
     {
@@ -37,7 +40,7 @@ public class Bombing : MonoBehaviour
 
         //爆撃
         m_Time += Time.deltaTime;
-        if (m_Time >= 0.5f)
+        if (m_Time >= m_BomSpanwIntervalTime)
         {
             Instantiate(m_BomPrefab, transform.position + new Vector3(0, -3, 0), Quaternion.identity);
             m_Time = 0.0f;

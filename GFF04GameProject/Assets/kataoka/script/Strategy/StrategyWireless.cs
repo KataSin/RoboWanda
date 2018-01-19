@@ -13,10 +13,13 @@ public class StrategyWireless : MonoBehaviour
     public bool m_IsLight;
     //時間
     private float m_Time;
+    //オーディオソース
+    private AudioSource m_AudioSource;
     // Use this for initialization
     void Start()
     {
         m_Time = 0.0f;
+        m_AudioSource = GameObject.FindGameObjectWithTag("StrategySound").GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -26,8 +29,9 @@ public class StrategyWireless : MonoBehaviour
         if (m_Time >= m_WirelessTime)
         {
             //無線再生
-            var audio = GetComponent<AudioSource>();
-            audio.PlayOneShot(audio.clip);
+            m_AudioSource.clip = m_WirelessClip;
+            if (m_WirelessClip != null)
+                m_AudioSource.PlayOneShot(m_AudioSource.clip);
             //ヘリを帰らせるかどうか
             GameObject.FindGameObjectWithTag("HeliManager").GetComponent<HelocopterManager>().m_ReturnHeli = m_HeliReturn;
             //ライトを付けるかどうか

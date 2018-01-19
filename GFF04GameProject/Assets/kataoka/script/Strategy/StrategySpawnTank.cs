@@ -8,9 +8,14 @@ public class StrategySpawnTank : MonoBehaviour
     public float m_StrategyTime;
     public GameObject m_TankPrefab;
 
+    public AudioClip m_WirelessClip;
+
     private float m_Time;
 
     private List<GameObject> m_SpawnPoints;
+
+    private AudioSource m_AudioSource;
+    
     // Use this for initialization
     void Start()
     {
@@ -24,6 +29,8 @@ public class StrategySpawnTank : MonoBehaviour
             if (i.name != name)
                 m_SpawnPoints.Add(i.gameObject);
         }
+
+        m_AudioSource = GameObject.FindGameObjectWithTag("StrategySound").GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -36,6 +43,9 @@ public class StrategySpawnTank : MonoBehaviour
             {
                 Instantiate(m_TankPrefab, i.transform.position, Quaternion.identity);
             }
+            m_AudioSource.clip = m_WirelessClip;
+            if (m_WirelessClip != null)
+                m_AudioSource.PlayOneShot(m_AudioSource.clip);
             Destroy(gameObject);
         }
     }
