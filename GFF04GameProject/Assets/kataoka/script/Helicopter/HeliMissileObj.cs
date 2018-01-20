@@ -44,7 +44,7 @@ public class HeliMissileObj : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Helicopter" || other.tag == "SandSmoke") return;
+        if (other.tag == "Helicopter" || other.tag == "SandSmoke" || other.tag == "ExplosionCollision") return;
         Instantiate(m_ExprosionEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }

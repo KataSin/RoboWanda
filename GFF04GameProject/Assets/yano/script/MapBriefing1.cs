@@ -31,7 +31,7 @@ public class MapBriefing1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GetComponent<Image>().material.SetColor("_TintColor", Color.Lerp(m_originColor, new Color(128f / 255f, 200f / 255f, 128f / 255f), t2 / 2f));
+        GetComponent<Image>().material.SetColor("_TintColor", Color.Lerp(m_originColor, new Color(128f / 255f, 220f / 255f, 128f / 255f), t2 / 2f));
 
         if (!isBreath)
         {
