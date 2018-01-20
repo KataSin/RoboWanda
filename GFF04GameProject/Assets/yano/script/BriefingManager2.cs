@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BriefingManager2 : MonoBehaviour
 {
@@ -61,6 +62,15 @@ public class BriefingManager2 : MonoBehaviour
     [SerializeField]
     private GameObject targetUnder_ui_;
 
+    [SerializeField]
+    private GameObject skip_gauge;
+
+    [SerializeField]
+    private GameObject skip_button_ui;
+
+    [SerializeField]
+    private float m_skip_timer;
+
     // Use this for initialization
     void Start()
     {
@@ -75,6 +85,9 @@ public class BriefingManager2 : MonoBehaviour
         t0 = 0f;
         t1 = 0f;
         t2 = 0f;
+
+        m_skip_timer = 0f;
+        skip_button_ui.SetActive(false);
 
         isCh47 = false;
 
@@ -117,6 +130,7 @@ public class BriefingManager2 : MonoBehaviour
                 break;
         }
 
+        m_skip_timer = Mathf.Clamp(m_skip_timer, 0f, 4f);
         text_.GetComponent<TextBriefing>().Set_State(m_textState);
     }
 
@@ -276,10 +290,34 @@ public class BriefingManager2 : MonoBehaviour
 
     private void SkipBriefing()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (m_skip_timer <= 0f)
+        {
+            skip_gauge.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
+            skip_button_ui.SetActive(false);
+        }
+        else if (m_skip_timer > 0f)
+        {
+            skip_gauge.GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
+            skip_button_ui.SetActive(true);
+        }
+
+        skip_gauge.GetComponent<Image>().fillAmount = m_skip_timer / 3f;
+
+        if (m_skip_timer >= 3f)
         {
             ui_.GetComponent<BlackOut_UI>().ResetT();
+            skip_gauge.SetActive(false);
+            skip_button_ui.SetActive(false);
             state_ = State.Finish;
         }
+
+        if (Input.GetKey(KeyCode.P)
+            || Input.GetButton("Submit"))
+        {
+            m_skip_timer += 1.0f * Time.deltaTime;
+            return;
+        }
+
+        m_skip_timer -= 0.4f * Time.deltaTime;
     }
 }
