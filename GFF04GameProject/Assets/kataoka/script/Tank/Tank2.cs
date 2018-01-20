@@ -96,7 +96,7 @@ public class Tank2 : MonoBehaviour
             if (colFlag) m_Time += Time.deltaTime;
             if (m_Time >= 1.0f)
             {
-                m_SpawnBullet.GetComponent<TankGunSpawn>().SpawnBullet();
+                m_SpawnBullet.GetComponent<TankGunSpawn1>().SpawnBullet();
                 m_Time = 0.0f;
             }
         }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TankGun : MonoBehaviour
+public class TankGun1 : MonoBehaviour
 {
     private float m_Time;
     public GameObject m_Exprosion;
@@ -26,7 +26,8 @@ public class TankGun : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
         if (other.name.Substring(0, 3) == "Exp"
-            || other.tag == "ExplosionCollision") return;
+            || other.tag == "ExplosionCollision"
+            || other.tag == "Robot") return;
         Instantiate(m_Exprosion, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }

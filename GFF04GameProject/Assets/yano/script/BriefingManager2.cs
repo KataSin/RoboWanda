@@ -124,7 +124,7 @@ public class BriefingManager2 : MonoBehaviour
     {
         ui_.GetComponent<BlackOut_UI>().FeadIn();
 
-        if (((Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Submit") || t0 >= 3f))
+        if (t0 >= 3f
             && ui_.GetComponent<BlackOut_UI>().Get_Clear())
         {
             t0 = 0f;
@@ -149,8 +149,7 @@ public class BriefingManager2 : MonoBehaviour
             if (targetUnder_ui_.GetComponent<ui_text_underLine>().Get_Clear())
                 target_ui_.SetActive(true);
         }
-        if (((Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Submit"))
-            || t0 >= 4f))
+        if (t0 >= 3f)
         {
             text_.GetComponent<TextBriefing>().TextReset();
             m_textState++;
@@ -176,21 +175,16 @@ public class BriefingManager2 : MonoBehaviour
 
         if (tower_mana_.GetComponent<TowerManager>().Get_Clear())
         {
-            tower_mana_.GetComponent<TowerManager>().BeforeBreakColor1();
-
             if (t0 >= 2f)
             {
                 robot_.GetComponent<BriefingRobot>().Beam();
-                if (t0 >= 7f)
-                    tower_mana_.GetComponent<TowerManager>().BeforeBreakColor2();
             }
             t0 += 1.0f * Time.deltaTime;
         }
 
         if (robot_.GetComponent<BriefingRobot>().Get_MissileFinishFlag())
         {
-            if (((Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Submit")))
-                || t1 >= 5f)
+            if (t1 >= 1.5f)
             {
                 text_.GetComponent<TextBriefing>().TextReset();
                 m_textState++;
@@ -212,9 +206,7 @@ public class BriefingManager2 : MonoBehaviour
 
         if (t0 >= 3f)
         {
-            tower_mana_.GetComponent<TowerManager>().BeforeBreakColor3();
-
-            if (t0 >= 18f)
+            if (t0 >= 12f)
             {
                 text_.GetComponent<TextBriefing>().TextReset();
                 m_textState += 2;
@@ -243,7 +235,7 @@ public class BriefingManager2 : MonoBehaviour
         {
             if (tank_.GetComponent<BriefingStTank>().Get_Clear())
             {
-                if (((Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Submit"))) || t0 >= 2f)
+                if (t0 >= 1.5f)
                 {
                     text_.GetComponent<TextBriefing>().TextReset();
                     m_textState += 2;
@@ -261,7 +253,7 @@ public class BriefingManager2 : MonoBehaviour
 
         if (robot_.GetComponent<BriefingRobot>().GetState() == 3)
         {
-            if (t2 >= 10f)
+            if (t2 >= 8f)
             {
                 text_.GetComponent<TextBriefing>().TextReset();
                 m_textState += 2;
@@ -284,7 +276,7 @@ public class BriefingManager2 : MonoBehaviour
 
     private void SkipBriefing()
     {
-        if(Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.P))
         {
             ui_.GetComponent<BlackOut_UI>().ResetT();
             state_ = State.Finish;
