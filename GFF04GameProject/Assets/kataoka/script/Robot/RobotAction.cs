@@ -61,8 +61,14 @@ public class RobotAction : MonoBehaviour
     private int m_RandomIndex;
     //ゴールポイント
     private GameObject m_GoalPoint;
+
     //ロボットが見る場所
     private Vector3 m_RobotLookAtPosition;
+    //ロボットが見る場所保存
+    private Vector3 m_SeveRobotLokAtPosition;
+    //ロボットが見るフラグ
+    private bool m_RobotLookAtFlag;
+
     //ロボットが見ているかどうか
     private bool m_IsRobotLookAtFlag;
     //ロボットの見る場所の速度
@@ -86,6 +92,11 @@ public class RobotAction : MonoBehaviour
     private bool m_SpawnMissileFlag;
     public GameObject m_RobotEye;
 
+    //首
+    private Vector3 m_StartLookPos;
+    private Vector3 m_EndLookPos;
+    private float m_LookLerpTime;
+
     //ビーム補間用
     private Vector3 m_BeamStartPos;
     private Vector3 m_BeamEndPos;
@@ -95,6 +106,9 @@ public class RobotAction : MonoBehaviour
     float m_Stiffness;
     float m_Friction;
     float m_Mass;
+
+    //IKのウェイト設定
+    private float m_IKWeight;
 
     //矢野実装
     private AudioSource[] boss_se_;
@@ -133,17 +147,29 @@ public class RobotAction : MonoBehaviour
 
         m_BreakBill = m_Bills[0];
         //バネ補間系
-        m_RobotLookAtPosition = Vector3.zero;
+        m_RobotLookAtPosition = m_Player.transform.position;
+        m_RobotLookAtFlag = true;
+        m_SeveRobotLokAtPosition = m_Player.transform.position;
+
+
         m_SpringVelo = Vector3.zero;
         SetSpringParameter(0.05f, 0.5f, 2.0f);
 
         m_SpawnMissileFlag = true;
 
-        m_BeamStartPos = Vector3.zero;
-        m_BeamEndPos = Vector3.zero;
+
+        m_BeamStartPos = m_Player.transform.position;
+        m_BeamEndPos = m_Player.transform.position;
         m_BeamLerpTime = 0.0f;
 
+        m_IKWeight = 0.0f;
         boss_se_ = GetComponents<AudioSource>();
+
+
+        m_StartLookPos = m_Player.transform.position;
+        m_EndLookPos = m_Player.transform.position;
+
+        m_LookLerpTime = 0.0f;
     }
     /// <summary>
     /// ロボットがプレイヤーに向かって動く
@@ -258,48 +284,45 @@ public class RobotAction : MonoBehaviour
     {
         Action robotBeamAttackStart = () =>
         {
-            m_RobotQuaternion = m_Robot.transform.rotation;
+            m_RobotEye.SetActive(true);
+            m_IsIK = true;
+            m_LerpTime = 0.0f;
+
             m_PlayerQuaternion = Quaternion.LookRotation(m_Player.transform.position - m_Robot.transform.position);
+            m_PlayerQuaternion = Quaternion.Euler(0.0f, m_PlayerQuaternion.eulerAngles.y, 0.0f);
+
+            m_RobotQuaternion = transform.rotation;
 
             m_BeamLerpTime = 0.0f;
+            Vector3 vec = m_Player.transform.position - m_Robot.transform.position;
+            vec = vec.normalized * 50.0f;
 
-            m_LerpTime = 0.0f;
-            m_BeamStartPos = transform.position + (transform.forward.normalized * 20.0f) + new Vector3(0.0f, -10.0f, 0.0f);
-            m_BeamEndPos = transform.position + (transform.forward.normalized * 100.0f) + new Vector3(0.0f, 200.0f, 0.0f);
-            m_RobotEye.SetActive(true);
+            m_BeamStartPos = m_Player.transform.position - vec * 1.5f;
+            m_BeamEndPos = m_Player.transform.position + vec;
         };
 
 
         Func<bool> robotBeamAttack = () =>
         {
-            m_IsIK = true;
             m_NavAgent.isStopped = true;
             m_NavAgent.velocity = Vector3.zero;
             bool endAnim = false;
-            //バネ補間
-            SetSpringParameter(0.1f, 0.2f, 2.0f);
 
             m_LerpTime += 0.5f * Time.deltaTime;
-            m_BeamLerpTime += 0.1f * Time.deltaTime;
 
             transform.rotation = Quaternion.Lerp(m_RobotQuaternion, m_PlayerQuaternion, m_LerpTime);
 
-            AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
-            if (clipInfo.clip.name == "Idle")
-            {
-                m_RobotLookAtPosition = Vector3.Lerp(m_BeamStartPos, m_BeamEndPos, m_BeamLerpTime);
 
-                m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(true);
-                if (m_LerpTime >= 6.0f)
-                {
-                    SetSpringParameter(0.1f, 0.2f, 2.0f);
-                    m_RobotLookAtPosition = m_Player.transform.position;
-                    m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(false);
-                }
-                if (m_LerpTime >= 10.0f)
-                {
-                    endAnim = true;
-                }
+            m_LerpTime = Mathf.Clamp(m_LerpTime, 0.0f, 1.0f);
+            AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
+
+            m_BeamLerpTime += 0.1f * Time.deltaTime;
+            m_RobotLookAtPosition = Vector3.Lerp(m_BeamStartPos, m_BeamEndPos, m_BeamLerpTime);
+            m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(true);
+            if (m_BeamLerpTime >= 1.0f)
+            {
+                m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(false);
+                endAnim = true;
             }
 
             m_RobotState = RobotState.ROBOT_BEAM_ATTACK;
@@ -747,10 +770,24 @@ public class RobotAction : MonoBehaviour
     {
         //毎フレーム近いビルを検索
         NearBill();
-        //見ている位置をバネ補間
-        Vector3 lookPosition = m_LookAtObj.transform.position;
-        Spring(m_RobotLookAtPosition, ref lookPosition, ref m_SpringVelo, m_Stiffness, m_Friction, m_Mass);
-        m_LookAtObj.transform.position = lookPosition;
+
+        if (!m_IsIK) m_IKWeight -= Time.deltaTime;
+        else m_IKWeight += Time.deltaTime;
+        m_IKWeight = Mathf.Clamp(m_IKWeight, 0.0f, 1.0f);
+
+
+        if (m_SeveRobotLokAtPosition != m_RobotLookAtPosition)
+        {
+            //変わってまたタイムが0になってまた変わってるけど元のポジションは変わってないため
+            m_StartLookPos = m_LookAtObj.transform.position;
+            m_EndLookPos = m_RobotLookAtPosition;
+            m_LookLerpTime = 0.0f;
+            m_SeveRobotLokAtPosition = m_RobotLookAtPosition;
+        }
+        m_LookLerpTime += 0.7f * Time.deltaTime;
+        m_LookAtObj.transform.position = Vector3.Lerp(m_StartLookPos, m_EndLookPos, m_LookLerpTime);
+
+
 
         //if (m_IsRobotLookAtPlayerFlag)
         //{
@@ -774,9 +811,12 @@ public class RobotAction : MonoBehaviour
     /// <param name="layorIndex"></param>
     void OnAnimatorIK(int layorIndex)
     {
-        if (!m_IsIK) return;
+        m_Animator.SetLookAtWeight(Mathf.Lerp(0.0f, 1.0f, m_IKWeight),
+            Mathf.Lerp(0.0f, 0.4f, m_IKWeight),
+            Mathf.Lerp(0.0f, 0.7f, m_IKWeight),
+            0.0f,
+            Mathf.Lerp(0.0f, 0.5f, m_IKWeight));
 
-        m_Animator.SetLookAtWeight(1.0f, 0.4f, 0.7f, 0.0f, 0.5f);
         m_Animator.SetLookAtPosition(m_LookAtObj.transform.position);
 
 
