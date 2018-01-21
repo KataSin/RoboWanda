@@ -475,7 +475,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4573926507643328}
-  - component: {fileID: 114586886547765056}
+  - component: {fileID: 114789998864236218}
   m_Layer: 17
   m_Name: GunSpan
   m_TagString: Untagged
@@ -1977,7 +1977,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 189.8855, y: 137, z: 418.9815}
   m_Center: {x: 0, y: -26.12, z: 0}
---- !u!114 &114586886547765056
+--- !u!114 &114789998864236218
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1985,12 +1985,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1835214464357770}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93fa8ea1ab34c0e41ba7d184a0769afd, type: 3}
+  m_Script: {fileID: 11500000, guid: 1eaf481dacd975b4d97e6a5c214cb99f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Bullet: {fileID: 1064446041701694, guid: f3a65956822f14d449235054b82ddaba, type: 2}
-  m_Exprosion: {fileID: 1327435583140030, guid: adade0514995ef54dafc9718b3c51f51,
-    type: 2}
+  m_Bullet: {fileID: 1064446041701694, guid: 46fe21558cec4674aaf0288fdb81b8f1, type: 2}
 --- !u!114 &114791239421304538
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -25,7 +25,8 @@ public class TankGun : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.name.Substring(0, 3) == "Exp") return;
+        if (other.name.Substring(0, 3) == "Exp"
+            || other.tag == "ExplosionCollision") return;
         Instantiate(m_Exprosion, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }

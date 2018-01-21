@@ -36,6 +36,9 @@ public class BriefingRobot : MonoBehaviour
 
     private bool isDead;
 
+    [SerializeField]
+    private int m_hp;
+
     // Use this for initialization
     void Start()
     {
@@ -48,11 +51,17 @@ public class BriefingRobot : MonoBehaviour
         t = 0f;
         m_lookoriginPos_ = look_pos_.transform.position;
         isDead = false;
+        m_hp = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (m_hp <= 0)
+        {
+            state_ = State.Dead;
+        }
+
         switch (state_)
         {
             case State.Idle:
@@ -78,12 +87,6 @@ public class BriefingRobot : MonoBehaviour
             animator_.SetLookAtWeight(1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
             animator_.SetLookAtPosition(look_pos_.transform.position);
         }
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-        if (other.GetComponent<TankGun>() != null)
-            state_ = State.Dead;
     }
 
     private void BeamUpdate()
@@ -131,20 +134,9 @@ public class BriefingRobot : MonoBehaviour
         t += 1.0f * Time.deltaTime;
     }
 
-    public void Missile()
-    {
-        if (!isMissile)
-        {
-            missile_.GetComponent<MissileSpawn>().SpawnFlag(true);
-            isMissile = true;
-            state_ = State.Missile;
-        }
-    }
-
     private void DeadUpdate()
     {
         isDead = true;
-        GetComponent<CapsuleCollider>().enabled = false;
     }
 
     public bool Get_MissileFinishFlag()
@@ -155,5 +147,10 @@ public class BriefingRobot : MonoBehaviour
     public int GetState()
     {
         return (int)state_;
+    }
+
+    public void Damage()
+    {
+        m_hp--;
     }
 }

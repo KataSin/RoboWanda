@@ -82,6 +82,8 @@ public class PlayerController : MonoBehaviour
     bool m_IsCreeping;                              // 匍匐しているか
     bool m_IsDead;                                  // 死亡しているか
 
+    bool m_IsInvincible;                            // 無敵状態であるか（デバッグ、デモ用）
+
     //矢野実装
     bool m_IsStartFall;                             //ヘリから降下中か
     bool m_isClear;                                 //Listの中身を消したかどうか
@@ -144,6 +146,8 @@ public class PlayerController : MonoBehaviour
         m_IsAiming = false;
         m_IsCreeping = false;
         m_IsDead = false;
+        m_IsInvincible = false;
+
         m_IsStartFall = true;
         m_isClear = false;
 
@@ -289,6 +293,12 @@ public class PlayerController : MonoBehaviour
             }
         }*/
 
+        // 無敵状態にする（デバッグ、デモ用）
+        if (Input.GetKeyDown("space"))
+        {
+            m_IsInvincible = false ? m_IsInvincible = true : m_IsInvincible = false;
+        }
+
         // Debug.Log("現在の状態：" + m_State);
     }
 
@@ -341,6 +351,8 @@ public class PlayerController : MonoBehaviour
     {
         // Debug.Log(other.gameObject.name);
 
+        if (m_IsInvincible) return;
+
         // 敵ロボットと接触したら死亡
         if (other.GetComponent<RobotDamage>() != null
             ||
@@ -368,9 +380,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnTriggerStay(Collision other)
+    public void OnTriggerStay(Collider other)
     {
-        Debug.Log(other.gameObject.name);
+        // Debug.Log(other.gameObject.name);
+        if (other.gameObject.name == "BreakCanArea" && m_State == PlayerState.Normal && Input.GetButtonDown("BombSet"))
+        {
+            m_BuildingNear = other.gameObject;
+            // Debug.Log("爆発物を設置する");
+
+            m_setting_time = 1.0f;
+            m_State = PlayerState.Setting;
+        }
     }
 
     void Fall()

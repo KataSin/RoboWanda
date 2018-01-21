@@ -110,7 +110,8 @@ public class Break : MonoBehaviour
 
         gareki_bill_.SetActive(false);
 
-        break_se_ = GetComponent<AudioSource>().clip;
+        if (GetComponent<AudioSource>() != null)
+            break_se_ = GetComponent<AudioSource>().clip;
     }
 
     //ビルの大きさによる補正
@@ -264,7 +265,8 @@ public class Break : MonoBehaviour
                 scoreMana_.GetComponent<ScoreManager>().SetBreakCount();
             }
 
-            GetComponent<AudioSource>().PlayOneShot(break_se_);
+            if (GetComponent<AudioSource>() != null)
+                GetComponent<AudioSource>().PlayOneShot(break_se_);
 
             isBreak = true;
             isOutBreak = true;
