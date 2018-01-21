@@ -66,7 +66,7 @@ public class Missile : MonoBehaviour
     void Update()
     {
         m_Time += Time.deltaTime;
-        float speedOne = 0.4f;
+        float speedOne = 0.8f;
         float speedTwo = 1.0f;
         float InitilizeVec = Mathf.Sqrt((m_VertexPos.y - m_SpawnPos.y) * 2.0f * 9.8f);
         float vertexTime = InitilizeVec / 9.8f;

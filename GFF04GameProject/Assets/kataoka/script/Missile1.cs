@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class Missile1 : MonoBehaviour
 {
-
-    [SerializeField, Tooltip("爆発エフェクト")]
-    public GameObject m_Exprosion;
+    [SerializeField]
+    private GameObject explosion_Brie_;
 
     //プレイヤー
     private GameObject m_Player;
@@ -57,7 +56,7 @@ public class Missile1 : MonoBehaviour
     void Update()
     {
         m_Time += Time.deltaTime;
-        float speedOne = 0.4f;
+        float speedOne = 1f;
         float speedTwo = 1.0f;
         float InitilizeVec = Mathf.Sqrt((m_VertexPos.y - m_SpawnPos.y) * 2.0f * 9.8f);
         float vertexTime = InitilizeVec / 9.8f;
@@ -103,9 +102,9 @@ public class Missile1 : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag=="Ground"||other.tag=="TowerCollision"||other.tag=="RigidCollision")
+        if (other.tag == "Ground" || other.tag == "TowerCollision" || other.tag == "RigidCollision")
         {
-            Instantiate(m_Exprosion, transform.position, Quaternion.identity);
+            Instantiate(explosion_Brie_, transform.position, transform.rotation);
             Destroy(gameObject);
         }
 

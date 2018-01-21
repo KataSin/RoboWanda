@@ -128,7 +128,6 @@ public class TowerManager : MonoBehaviour
     {
         if (t2 >= 4f)
         {
-            BeforeBreakColor4();
             if (t2 >= 6f)
             {
                 for (int i = 0; i < 6; i++)

@@ -57,7 +57,8 @@ public class Break_ST : MonoBehaviour
 
         m_origin_Lpos = originBill_obj_.transform.localPosition;
 
-        break_se_ = GetComponent<AudioSource>().clip;
+        if (GetComponent<AudioSource>() != null)
+            break_se_ = GetComponent<AudioSource>().clip;
     }
 
     //ビルの大きさによる補正
@@ -124,7 +125,8 @@ public class Break_ST : MonoBehaviour
                 scoreMana_.GetComponent<ScoreManager>().SetBreakCount();
             }
 
-            GetComponent<AudioSource>().PlayOneShot(break_se_);
+            if (GetComponent<AudioSource>() != null)
+                GetComponent<AudioSource>().PlayOneShot(break_se_);
 
             isOutBreak = true;
         }
