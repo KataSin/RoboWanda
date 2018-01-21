@@ -283,7 +283,7 @@ public class BriefingManager2 : MonoBehaviour
         if (!isLScene && sceneCnt_ != null
             && ui_.GetComponent<BlackOut_UI>().Get_Clear())
         {
-            StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("lightTest 5"));
+            StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("Master 2"));
             isLScene = true;
         }
     }

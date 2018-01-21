@@ -124,6 +124,7 @@ public class Break_v2 : MonoBehaviour
 
             Instantiate(after_bill_, transform);
             after_bill_.transform.localPosition = m_origin_Lpos;
+            after_bill_.transform.rotation = transform.rotation;
             after_bill_.transform.localScale = m_origin_Lscale;
 
             if (GameObject.FindGameObjectWithTag("ScoreManager")

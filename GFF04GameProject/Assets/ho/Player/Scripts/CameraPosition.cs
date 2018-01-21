@@ -267,7 +267,7 @@ public class CameraPosition : MonoBehaviour
 
         else if (m_Player.GetComponent<PlayerController>().GetPlayerState() != 0)
         {
-            transform.localPosition = Vector3.Lerp(m_origin_pos, new Vector3(0f, 0.5f, -5f), t / 1f);
+            transform.localPosition = Vector3.Lerp(m_origin_pos, new Vector3(0f, 1.5f, -5f), t / 1f);
             transform.localRotation = Quaternion.Slerp(m_origin_rotation, Quaternion.identity, t / 1f);
 
             if (t >= 1f)
