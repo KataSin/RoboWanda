@@ -146,7 +146,7 @@ public class Helicopter : MonoBehaviour
             Instantiate(m_HeliBreakPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
-        if (other.gameObject.tag == "Beam")
+        if (other.gameObject.tag == "ExprosionCollision")
         {
             m_IsBreak = true;
         }

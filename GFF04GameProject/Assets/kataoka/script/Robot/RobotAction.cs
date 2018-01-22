@@ -663,7 +663,6 @@ public class RobotAction : MonoBehaviour
         Action robotHeliAttackStart = () =>
         {
             m_BeamLerpTime = 0.0f;
-            m_BeamStartPos = transform.position;
 
 
             Vector3 robotLeft = transform.right.normalized;
@@ -684,38 +683,29 @@ public class RobotAction : MonoBehaviour
                     heli.Add(i);
                 }
             }
-            m_BeamEndPos = heli[UnityEngine.Random.Range(0, heli.Count - 1)].transform.position;
+            if (heli.Count != 0)
+            {
+                m_BeamStartPos = Vector3.zero;
+                return;
+            }
+
+            m_BeamStartPos = heli[UnityEngine.Random.Range(0, heli.Count - 1)].transform.position;
             m_RobotEye.SetActive(true);
         };
 
 
         Func<bool> robotHeliAttack = () =>
         {
-            m_IsIK = true;
             m_NavAgent.isStopped = true;
             m_NavAgent.velocity = Vector3.zero;
             bool endAnim = false;
-            //バネ補間
-            SetSpringParameter(0.1f, 0.2f, 2.0f);
+            m_RobotState = RobotState.ROBOT_BEAM_ATTACK;
 
-            m_BeamLerpTime += 0.1f * Time.deltaTime;
+            if (m_BeamStartPos == Vector3.zero) return true;
 
-            AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
-            if (clipInfo.clip.name == "Idle")
-            {
-                m_RobotLookAtPosition = Vector3.Lerp(m_BeamStartPos, m_BeamEndPos, m_BeamLerpTime);
+            m_BeamLerpTime += Time.deltaTime;
 
-                m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(true);
-                SetSpringParameter(0.1f, 0.2f, 2.0f);
-                m_RobotLookAtPosition = m_Player.transform.position;
 
-                if (m_BeamLerpTime >= 2.5f)
-                {
-                    m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(false);
-                    endAnim = true;
-                }
-            }
-            m_RobotState = RobotState.ROBOT_HELI_ATTACK;
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
             return endAnim;
         };
