@@ -128,7 +128,7 @@ public class TowerManager : MonoBehaviour
     {
         if (t2 >= 4f)
         {
-            if (t2 >= 6f)
+            if (t2 >= 8.5f)
             {
                 for (int i = 0; i < 6; i++)
                 {

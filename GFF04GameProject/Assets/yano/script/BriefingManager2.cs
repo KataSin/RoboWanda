@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class BriefingManager2 : MonoBehaviour
 {
+    private GameObject sceneCnt_;
+
+    private bool isLScene;
+
     private enum State
     {
         None,
@@ -46,10 +50,6 @@ public class BriefingManager2 : MonoBehaviour
     [SerializeField]
     private GameObject ui_;
 
-    private GameObject sceneCnt_;
-
-    private bool isLScene;
-
     [SerializeField]
     private GameObject text_;
 
@@ -68,8 +68,25 @@ public class BriefingManager2 : MonoBehaviour
     [SerializeField]
     private GameObject skip_button_ui;
 
-    [SerializeField]
     private float m_skip_timer;
+
+    [SerializeField]
+    private GameObject cb_base_;
+
+    [SerializeField]
+    private GameObject main_disp_;
+
+    [SerializeField]
+    private GameObject scan_;
+
+    private bool isText2;
+    private bool isText3;
+    private bool isText5;
+    private bool isText6;
+    private bool isText8;
+    private bool isText9;
+    private bool isText11;
+    private bool isText12;
 
     // Use this for initialization
     void Start()
@@ -81,6 +98,7 @@ public class BriefingManager2 : MonoBehaviour
         bomber_.SetActive(false);
         target_ui_.SetActive(false);
         targetUnder_ui_.SetActive(false);
+        scan_.SetActive(false);
 
         t0 = 0f;
         t1 = 0f;
@@ -93,6 +111,15 @@ public class BriefingManager2 : MonoBehaviour
 
         isLScene = false;
 
+        isText2 = false;
+        isText3 = false;
+        isText5 = false;
+        isText6 = false;
+        isText8 = false;
+        isText9 = false;
+        isText11 = false;
+        isText12 = false;
+
         if (GameObject.FindGameObjectWithTag("SceneController"))
             sceneCnt_ = GameObject.FindGameObjectWithTag("SceneController");
     }
@@ -100,6 +127,12 @@ public class BriefingManager2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.C) && text_ != null)
+        {
+            text_.GetComponent<TextBriefing>().TextReset();
+            m_textState++;
+        }
+
         switch (state_)
         {
             case State.None:
@@ -131,26 +164,37 @@ public class BriefingManager2 : MonoBehaviour
         }
 
         m_skip_timer = Mathf.Clamp(m_skip_timer, 0f, 4f);
-        text_.GetComponent<TextBriefing>().Set_State(m_textState);
+        if (text_ != null && !main_disp_.activeInHierarchy)
+            text_.GetComponent<TextBriefing>().Set_State(m_textState);
     }
 
     private void NoneUpdate()
     {
         ui_.GetComponent<BlackOut_UI>().FeadIn();
 
-        if (t0 >= 3f
-            && ui_.GetComponent<BlackOut_UI>().Get_Clear())
+        if (ui_.GetComponent<BlackOut_UI>().Get_Clear())
         {
-            t0 = 0f;
-            state_ = State.One;
-            tower_mana_.GetComponent<TowerManager>().InitBill();
-            ui_.GetComponent<BlackOut_UI>().ResetT();
-
-            text_.GetComponent<TextBriefing>().TextReset();
-            m_textState++;
+            cb_base_.GetComponent<Briefing_CBBase>().FeadOutBase();
+            cb_base_.GetComponent<Briefing_CBBase>().FlashingBase();
         }
 
-        t0 += 1.0f * Time.deltaTime;
+        if (!cb_base_.activeInHierarchy)
+        {
+            main_disp_.GetComponent<BriefingDiapMain>().DisplayOn();
+            if (!main_disp_.activeInHierarchy)
+            {
+                scan_.SetActive(true);
+                if (t0 >= 3f)
+                {
+                    NextText();
+                    t0 = 0f;
+                    state_ = State.One;
+                    tower_mana_.GetComponent<TowerManager>().InitBill();
+                    ui_.GetComponent<BlackOut_UI>().ResetT();
+                }
+                t0 += 1.0f * Time.deltaTime;
+            }
+        }
     }
 
     private void OneUpdate()
@@ -162,21 +206,17 @@ public class BriefingManager2 : MonoBehaviour
 
             if (targetUnder_ui_.GetComponent<ui_text_underLine>().Get_Clear())
                 target_ui_.SetActive(true);
-        }
-        if (t0 >= 3f)
-        {
-            text_.GetComponent<TextBriefing>().TextReset();
-            m_textState++;
-            if (m_textState == 3)
+
+            if (t0 >= 4f)
             {
                 t0 = 0f;
                 state_ = State.Two;
                 target_ui_.SetActive(false);
                 targetUnder_ui_.SetActive(false);
             }
-        }
 
-        t0 += 1.0f * Time.deltaTime;
+            t0 += 1.0f * Time.deltaTime;
+        }
     }
 
     private void TwoUpdate()
@@ -189,10 +229,24 @@ public class BriefingManager2 : MonoBehaviour
 
         if (tower_mana_.GetComponent<TowerManager>().Get_Clear())
         {
+            if (!isText2)
+            {
+                NextText();
+                isText2 = true;
+            }
             if (t0 >= 2f)
             {
                 robot_.GetComponent<BriefingRobot>().Beam();
+                if (t0 >= 7f)
+                {
+                    if (!isText3)
+                    {
+                        NextText();
+                        isText3 = true;
+                    }
+                }
             }
+
             t0 += 1.0f * Time.deltaTime;
         }
 
@@ -200,8 +254,7 @@ public class BriefingManager2 : MonoBehaviour
         {
             if (t1 >= 1.5f)
             {
-                text_.GetComponent<TextBriefing>().TextReset();
-                m_textState++;
+                NextText();
                 state_ = State.Three;
                 t0 = 0f;
                 t1 = 0f;
@@ -218,15 +271,26 @@ public class BriefingManager2 : MonoBehaviour
         tower_mana_.GetComponent<TowerManager>().Tower2Up();
         briefing_cam_.GetComponent<BriefingCamera>().TopViewCam();
 
-        if (t0 >= 3f)
+        if (t0 >= 4f)
         {
-            if (t0 >= 12f)
+            if (!isText5)
             {
-                text_.GetComponent<TextBriefing>().TextReset();
-                m_textState += 2;
-                state_ = State.Four;
-                t0 = 0f;
-                tower_mana_.GetComponent<TowerManager>().TowerCheck2();
+                NextText();
+                isText5 = true;
+            }
+            if (t0 >= 8f)
+            {
+                if (!isText6)
+                {
+                    NextText();
+                    isText6 = true;
+                }
+                if (t0 >= 12f)
+                {
+                    state_ = State.Four;
+                    t0 = 0f;
+                    tower_mana_.GetComponent<TowerManager>().TowerCheck2();
+                }
             }
         }
 
@@ -240,9 +304,29 @@ public class BriefingManager2 : MonoBehaviour
         briefing_cam_.GetComponent<BriefingCamera>().SideViewCam();
         if (!isCh47)
         {
+            NextText();
             tank_.GetComponent<BriefingStTank>().Set_SpawnFlag(true);
             isCh47 = true;
         }
+
+        if (t1 >= 3.5f)
+        {
+            if (!isText8)
+            {
+                NextText();
+                isText8 = true;
+            }
+
+            if (t1 >= 10f)
+            {
+                if (!isText9)
+                {
+                    NextText();
+                    isText9 = true;
+                }
+            }
+        }
+
         tower_mana_.GetComponent<TowerManager>().TowerBreak();
 
         if (GameObject.FindGameObjectWithTag("GameTank"))
@@ -251,13 +335,16 @@ public class BriefingManager2 : MonoBehaviour
             {
                 if (t0 >= 1.5f)
                 {
-                    text_.GetComponent<TextBriefing>().TextReset();
-                    m_textState += 2;
+                    NextText();
+                    t0 = 0f;
+                    t1 = 0f;
                     state_ = State.Five;
                 }
                 t0 += 1.0f * Time.deltaTime;
             }
         }
+
+        t1 += 1.0f * Time.deltaTime;
     }
 
     private void FiveUpdate()
@@ -265,16 +352,34 @@ public class BriefingManager2 : MonoBehaviour
         briefing_cam_.GetComponent<BriefingCamera>().NormalViewCam();
         lightSpawn_.GetComponent<LightBomSpawn>().Spawn();
 
+        if (t0 >= 4f)
+        {
+            if (!isText11)
+            {
+                NextText();
+                isText11 = true;
+            }
+        }
+
         if (robot_.GetComponent<BriefingRobot>().GetState() == 3)
         {
-            if (t2 >= 8f)
+            if (t2 >= 4f)
             {
-                text_.GetComponent<TextBriefing>().TextReset();
-                m_textState += 2;
-                state_ = State.Finish;
+                if (!isText12)
+                {
+                    NextText();
+                    isText12 = true;
+                }
+                if (t2 >= 9f)
+                {
+                    NextText();
+                    state_ = State.Finish;
+                }
             }
             t2 += 1.0f * Time.deltaTime;
         }
+
+        t0 += 1.0f * Time.deltaTime;
     }
 
     private void FinishUpdate()
@@ -319,5 +424,11 @@ public class BriefingManager2 : MonoBehaviour
         }
 
         m_skip_timer -= 0.4f * Time.deltaTime;
+    }
+
+    private void NextText()
+    {
+        text_.GetComponent<TextBriefing>().TextReset();
+        m_textState++;
     }
 }
