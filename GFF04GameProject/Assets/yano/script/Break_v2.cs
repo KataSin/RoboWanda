@@ -50,7 +50,7 @@ public class Break_v2 : MonoBehaviour
     void Start()
     {
         towerType_ = GetComponent<tower_Type>();
-
+        GetComponent<Collider>().enabled = true;
         //ビルの大きさによる補正
         TypeAdaptation();
 
@@ -115,6 +115,7 @@ public class Break_v2 : MonoBehaviour
         if (!isOutBreak)
         {
             Destroy(originBill_obj_);
+            GetComponent<Collider>().enabled = false;
 
             Vector3 ob_pos = transform.position;
             ob_pos.y = 0f;
