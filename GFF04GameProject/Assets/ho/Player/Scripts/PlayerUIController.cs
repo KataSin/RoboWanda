@@ -101,6 +101,7 @@ public class PlayerUIController : MonoBehaviour
         Vector3 new_smoke_scale = new Vector3(0.35f, 0.35f, 0.0f);
 
         // 新しい座標に移動し、アイコンサイズが変化
+        /*
         if (m_PreviousMode == BomSpawn.Bom.LIGHT_BOM)
         {
             // 爆発弾（3 -> 1、快速）
@@ -131,6 +132,39 @@ public class PlayerUIController : MonoBehaviour
             m_SmokeGrenadeImage.transform.localPosition = Vector3.Lerp(m_SmokeGrenadeImage.transform.localPosition, new_smoke_position, m_PositionSpeedHigh * Time.deltaTime);
             m_SmokeGrenadeImage.transform.localScale = Vector3.Lerp(m_SmokeGrenadeImage.transform.localScale, new_smoke_scale, m_ScaleSpeed * Time.deltaTime);
         }
+        */
+        // 昇順（3 -> 1、スモーク弾 -> 爆発弾）
+        if (m_PreviousMode == BomSpawn.Bom.SMOKE_BOM)
+        {
+            // 爆発弾（2 -> 1、低速、表に表示）
+            m_ExplosionImage.transform.SetAsLastSibling();
+            m_ExplosionImage.transform.localPosition = Vector3.Lerp(m_ExplosionImage.transform.localPosition, new_explosion_position, m_PositionSpeedLow * Time.deltaTime);
+            m_ExplosionImage.transform.localScale = Vector3.Lerp(m_ExplosionImage.transform.localScale, new_explosion_scale, m_ScaleSpeed * Time.deltaTime);
+            // 照明弾（3 -> 2、低速、表に表示）
+            m_FlashGrenadeImage.transform.SetAsLastSibling();
+            m_FlashGrenadeImage.transform.localPosition = Vector3.Lerp(m_FlashGrenadeImage.transform.localPosition, new_flash_position, m_PositionSpeedLow * Time.deltaTime);
+            m_FlashGrenadeImage.transform.localScale = Vector3.Lerp(m_FlashGrenadeImage.transform.localScale, new_flash_scale, m_ScaleSpeed * Time.deltaTime);
+            // スモーク弾（1 -> 3、快速、裏に表示）
+            m_SmokeGrenadeImage.transform.SetAsFirstSibling();
+            m_SmokeGrenadeImage.transform.localPosition = Vector3.Lerp(m_SmokeGrenadeImage.transform.localPosition, new_smoke_position, m_PositionSpeedHigh * Time.deltaTime);
+            m_SmokeGrenadeImage.transform.localScale = Vector3.Lerp(m_SmokeGrenadeImage.transform.localScale, new_smoke_scale, m_ScaleSpeed * Time.deltaTime);
+        }
+        // 降順（2 -> 1、照明弾 -> 爆発弾）
+        else
+        {
+            // 爆発弾（3 -> 1、快速、裏に表示）
+            m_ExplosionImage.transform.SetAsFirstSibling();
+            m_ExplosionImage.transform.localPosition = Vector3.Lerp(m_ExplosionImage.transform.localPosition, new_explosion_position, m_PositionSpeedHigh * Time.deltaTime);
+            m_ExplosionImage.transform.localScale = Vector3.Lerp(m_ExplosionImage.transform.localScale, new_explosion_scale, m_ScaleSpeed * Time.deltaTime);
+            // 照明弾（1 -> 2、低速、表に表示）
+            m_FlashGrenadeImage.transform.SetAsLastSibling();
+            m_FlashGrenadeImage.transform.localPosition = Vector3.Lerp(m_FlashGrenadeImage.transform.localPosition, new_flash_position, m_PositionSpeedLow * Time.deltaTime);
+            m_FlashGrenadeImage.transform.localScale = Vector3.Lerp(m_FlashGrenadeImage.transform.localScale, new_flash_scale, m_ScaleSpeed * Time.deltaTime);
+            // スモーク弾（2 -> 3、低速、表に表示）
+            m_SmokeGrenadeImage.transform.SetAsLastSibling();
+            m_SmokeGrenadeImage.transform.localPosition = Vector3.Lerp(m_SmokeGrenadeImage.transform.localPosition, new_smoke_position, m_PositionSpeedLow * Time.deltaTime);
+            m_SmokeGrenadeImage.transform.localScale = Vector3.Lerp(m_SmokeGrenadeImage.transform.localScale, new_smoke_scale, m_ScaleSpeed * Time.deltaTime);
+        }
     }
 
     // 照明弾選択中の処理
@@ -150,6 +184,7 @@ public class PlayerUIController : MonoBehaviour
         Vector3 new_explosion_scale = new Vector3(0.35f, 0.35f, 0.0f);
 
         // 新しい座標に移動し、アイコンサイズが変化
+        /*
         if (m_PreviousMode == BomSpawn.Bom.SMOKE_BOM)
         {
             // 照明弾（3 -> 1、快速）
@@ -180,6 +215,39 @@ public class PlayerUIController : MonoBehaviour
             m_ExplosionImage.transform.localPosition = Vector3.Lerp(m_ExplosionImage.transform.localPosition, new_explosion_position, m_PositionSpeedHigh * Time.deltaTime);
             m_ExplosionImage.transform.localScale = Vector3.Lerp(m_ExplosionImage.transform.localScale, new_explosion_scale, m_ScaleSpeed * Time.deltaTime);
         }
+        */
+        // 昇順（1 -> 2、// 爆発弾 -> 照明弾）
+        if (m_PreviousMode == BomSpawn.Bom.BOM)
+        {
+            // 照明弾（2 -> 1、低速、表に表示）
+            m_FlashGrenadeImage.transform.SetAsLastSibling();
+            m_FlashGrenadeImage.transform.localPosition = Vector3.Lerp(m_FlashGrenadeImage.transform.localPosition, new_flash_position, m_PositionSpeedLow * Time.deltaTime);
+            m_FlashGrenadeImage.transform.localScale = Vector3.Lerp(m_FlashGrenadeImage.transform.localScale, new_flash_scale, m_ScaleSpeed * Time.deltaTime);
+            // スモーク弾（3 -> 2、低速、表に表示）
+            m_SmokeGrenadeImage.transform.SetAsLastSibling();
+            m_SmokeGrenadeImage.transform.localPosition = Vector3.Lerp(m_SmokeGrenadeImage.transform.localPosition, new_smoke_position, m_PositionSpeedLow * Time.deltaTime);
+            m_SmokeGrenadeImage.transform.localScale = Vector3.Lerp(m_SmokeGrenadeImage.transform.localScale, new_smoke_scale, m_ScaleSpeed * Time.deltaTime);
+            // 爆発弾（1 -> 3、快速、裏に表示）
+            m_ExplosionImage.transform.SetAsFirstSibling();
+            m_ExplosionImage.transform.localPosition = Vector3.Lerp(m_ExplosionImage.transform.localPosition, new_explosion_position, m_PositionSpeedHigh * Time.deltaTime);
+            m_ExplosionImage.transform.localScale = Vector3.Lerp(m_ExplosionImage.transform.localScale, new_explosion_scale, m_ScaleSpeed * Time.deltaTime);
+        }
+        // 降順（3 -> 2、スモーク弾 -> 照明弾）
+        else
+        {
+            // 照明弾（3 -> 1、快速、裏に表示）
+            m_FlashGrenadeImage.transform.SetAsFirstSibling();
+            m_FlashGrenadeImage.transform.localPosition = Vector3.Lerp(m_FlashGrenadeImage.transform.localPosition, new_flash_position, m_PositionSpeedHigh * Time.deltaTime);
+            m_FlashGrenadeImage.transform.localScale = Vector3.Lerp(m_FlashGrenadeImage.transform.localScale, new_flash_scale, m_ScaleSpeed * Time.deltaTime);
+            // スモーク弾（1 -> 2、低速、表に表示）
+            m_SmokeGrenadeImage.transform.SetAsLastSibling();
+            m_SmokeGrenadeImage.transform.localPosition = Vector3.Lerp(m_SmokeGrenadeImage.transform.localPosition, new_smoke_position, m_PositionSpeedLow * Time.deltaTime);
+            m_SmokeGrenadeImage.transform.localScale = Vector3.Lerp(m_SmokeGrenadeImage.transform.localScale, new_smoke_scale, m_ScaleSpeed * Time.deltaTime);
+            // 爆発弾（2 -> 3、低速、表に表示）
+            m_ExplosionImage.transform.SetAsLastSibling();
+            m_ExplosionImage.transform.localPosition = Vector3.Lerp(m_ExplosionImage.transform.localPosition, new_explosion_position, m_PositionSpeedLow * Time.deltaTime);
+            m_ExplosionImage.transform.localScale = Vector3.Lerp(m_ExplosionImage.transform.localScale, new_explosion_scale, m_ScaleSpeed * Time.deltaTime);
+        }
     }
 
     // スモーク弾選択中の処理
@@ -199,6 +267,7 @@ public class PlayerUIController : MonoBehaviour
         Vector3 new_flash_scale = new Vector3(0.35f, 0.35f, 0.0f);
 
         // 新しい座標に移動し、アイコンサイズが変化
+        /*
         if (m_PreviousMode == BomSpawn.Bom.BOM)
         {
             // 爆発弾（1 -> 2、普通）
@@ -228,6 +297,39 @@ public class PlayerUIController : MonoBehaviour
             m_SmokeGrenadeImage.transform.SetAsFirstSibling();
             m_SmokeGrenadeImage.transform.localPosition = Vector3.Lerp(m_SmokeGrenadeImage.transform.localPosition, new_smoke_position, m_PositionSpeedLow * Time.deltaTime);
             m_SmokeGrenadeImage.transform.localScale = Vector3.Lerp(m_SmokeGrenadeImage.transform.localScale, new_smoke_scale, m_ScaleSpeed * Time.deltaTime);
+        }
+        */
+        // 昇順（2 -> 3、// 照明弾 -> スモーク弾）
+        if (m_PreviousMode == BomSpawn.Bom.LIGHT_BOM)
+        {
+            // スモーク弾（2 -> 1、低速、表に表示）
+            m_SmokeGrenadeImage.transform.SetAsLastSibling();
+            m_SmokeGrenadeImage.transform.localPosition = Vector3.Lerp(m_SmokeGrenadeImage.transform.localPosition, new_smoke_position, m_PositionSpeedLow * Time.deltaTime);
+            m_SmokeGrenadeImage.transform.localScale = Vector3.Lerp(m_SmokeGrenadeImage.transform.localScale, new_smoke_scale, m_ScaleSpeed * Time.deltaTime);
+            // 爆発弾（3 -> 2、低速、表に表示）
+            m_ExplosionImage.transform.SetAsLastSibling();
+            m_ExplosionImage.transform.localPosition = Vector3.Lerp(m_ExplosionImage.transform.localPosition, new_explosion_position, m_PositionSpeedLow * Time.deltaTime);
+            m_ExplosionImage.transform.localScale = Vector3.Lerp(m_ExplosionImage.transform.localScale, new_explosion_scale, m_ScaleSpeed * Time.deltaTime);
+            // 照明弾（1 -> 3、快速、裏に表示）
+            m_FlashGrenadeImage.transform.SetAsFirstSibling();
+            m_FlashGrenadeImage.transform.localPosition = Vector3.Lerp(m_FlashGrenadeImage.transform.localPosition, new_flash_position, m_PositionSpeedHigh * Time.deltaTime);
+            m_FlashGrenadeImage.transform.localScale = Vector3.Lerp(m_FlashGrenadeImage.transform.localScale, new_flash_scale, m_ScaleSpeed * Time.deltaTime);
+        }
+        // 降順（1 -> 3、爆発弾 -> スモーク弾）
+        else
+        {
+            // スモーク弾（3 -> 1、快速、裏に表示）
+            m_SmokeGrenadeImage.transform.SetAsFirstSibling();
+            m_SmokeGrenadeImage.transform.localPosition = Vector3.Lerp(m_SmokeGrenadeImage.transform.localPosition, new_smoke_position, m_PositionSpeedHigh * Time.deltaTime);
+            m_SmokeGrenadeImage.transform.localScale = Vector3.Lerp(m_SmokeGrenadeImage.transform.localScale, new_smoke_scale, m_ScaleSpeed * Time.deltaTime);
+            // 爆発弾（1 -> 2、低速、表に表示）
+            m_ExplosionImage.transform.SetAsLastSibling();
+            m_ExplosionImage.transform.localPosition = Vector3.Lerp(m_ExplosionImage.transform.localPosition, new_explosion_position, m_PositionSpeedLow * Time.deltaTime);
+            m_ExplosionImage.transform.localScale = Vector3.Lerp(m_ExplosionImage.transform.localScale, new_explosion_scale, m_ScaleSpeed * Time.deltaTime);
+            // 照明弾（2 -> 3、低速、表に表示）
+            m_FlashGrenadeImage.transform.SetAsLastSibling();
+            m_FlashGrenadeImage.transform.localPosition = Vector3.Lerp(m_FlashGrenadeImage.transform.localPosition, new_flash_position, m_PositionSpeedLow * Time.deltaTime);
+            m_FlashGrenadeImage.transform.localScale = Vector3.Lerp(m_FlashGrenadeImage.transform.localScale, new_flash_scale, m_ScaleSpeed * Time.deltaTime);
         }
     }
 }

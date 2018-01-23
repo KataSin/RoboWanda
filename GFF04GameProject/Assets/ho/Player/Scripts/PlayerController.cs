@@ -299,9 +299,10 @@ public class PlayerController : MonoBehaviour
         // 無敵状態にする（デバッグ、デモ用）
         if (Input.GetKeyDown("space"))
         {
-            m_IsInvincible = false ? m_IsInvincible = true : m_IsInvincible = false;
-            if (m_IsInvincible) Debug.Log("無敵モード：On");
-            else Debug.Log("無敵モード：Off");
+            if (m_IsInvincible == false) m_IsInvincible = true;
+            else m_IsInvincible = false;
+
+            Debug.Log("無敵状態：" + m_IsInvincible);
         }
 
         // Debug.Log("現在の状態：" + m_State);
