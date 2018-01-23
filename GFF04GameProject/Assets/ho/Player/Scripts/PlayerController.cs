@@ -171,6 +171,7 @@ public class PlayerController : MonoBehaviour
         if (m_BomSpawn == null)
         {
             Debug.Log("エラー発生したので終了します");
+            Debug.Log("場所：PlayerController.cs");
             Debug.Log("Error Log：擲弾オブジェクトが存在しない");
             Application.Quit();
         }
@@ -178,6 +179,7 @@ public class PlayerController : MonoBehaviour
         if (m_Launcher == null)
         {
             Debug.Log("エラー発生したので終了します");
+            Debug.Log("場所：PlayerController.cs");
             Debug.Log("Error Log：ランチャーのモデルが存在しない");
             Application.Quit();
         }
@@ -185,6 +187,7 @@ public class PlayerController : MonoBehaviour
         if (m_Explosive == null)
         {
             Debug.Log("エラー発生したので終了します");
+            Debug.Log("場所：PlayerController.cs");
             Debug.Log("Error Log：爆発物のプレハブが存在しない");
             Application.Quit();
         }
@@ -297,6 +300,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown("space"))
         {
             m_IsInvincible = false ? m_IsInvincible = true : m_IsInvincible = false;
+            if (m_IsInvincible) Debug.Log("無敵モード：On");
+            else Debug.Log("無敵モード：Off");
         }
 
         // Debug.Log("現在の状態：" + m_State);
