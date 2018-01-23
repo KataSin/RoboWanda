@@ -51,16 +51,14 @@ public class BriefingRobot : MonoBehaviour
         t = 0f;
         m_lookoriginPos_ = look_pos_.transform.position;
         isDead = false;
-        m_hp = 1;
+        m_hp = 3;
     }
 
     // Update is called once per frame
     void Update()
     {
         if (m_hp <= 0)
-        {
             state_ = State.Dead;
-        }
 
         switch (state_)
         {
