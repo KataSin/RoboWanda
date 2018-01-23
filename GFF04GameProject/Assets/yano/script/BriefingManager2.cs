@@ -171,7 +171,7 @@ public class BriefingManager2 : MonoBehaviour
         }
 
         m_skip_timer = Mathf.Clamp(m_skip_timer, 0f, 4f);
-        if (text_ != null && !main_disp_.activeInHierarchy)
+        if (text_.activeInHierarchy && !main_disp_.activeInHierarchy)
             text_.GetComponent<TextBriefing>().Set_State(m_textState);
     }
 
@@ -449,7 +449,10 @@ public class BriefingManager2 : MonoBehaviour
 
     private void NextText()
     {
-        text_.GetComponent<TextBriefing>().TextReset();
-        m_textState++;
+        if (text_.activeInHierarchy)
+        {
+            text_.GetComponent<TextBriefing>().TextReset();
+            m_textState++;
+        }
     }
 }
