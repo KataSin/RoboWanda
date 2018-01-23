@@ -17,7 +17,8 @@ public class Stage1EventUI : MonoBehaviour
 
     private float m_finishTimer;
 
-    private bool EtoNFlag;
+    private bool EtoNFlag1;
+    private bool EtoNFlag2;
 
     // Use this for initialization
     void Start()
@@ -27,7 +28,8 @@ public class Stage1EventUI : MonoBehaviour
 
         isClear = false;
         m_finishTimer = 0f;
-        EtoNFlag = false;
+        EtoNFlag1 = false;
+        EtoNFlag2 = false;
     }
 
     // Update is called once per frame
@@ -36,7 +38,7 @@ public class Stage1EventUI : MonoBehaviour
         if (camera_pos_.GetComponent<CameraPosition>().Get_BlackFlag()
             && !isClear)
         {
-            GetComponent<BlackOut_UI>().JeepOut(1.0f);
+            //GetComponent<BlackOut_UI>().JeepOut(1.0f);
 
             camera_pos_.GetComponent<CameraPosition>().Set_BlackT3(GetComponent<BlackOut_UI>().Get_T3());
 
@@ -106,6 +108,11 @@ public class Stage1EventUI : MonoBehaviour
             //mission_text_[2].SetActive(false);
             //mission_text_[3].SetActive(false);
             //mission_text_[4].SetActive(true);
+            if (!EtoNFlag1)
+            {
+                GetComponent<BlackOut_UI>().ResetT();
+                EtoNFlag1 = true;
+            }
 
             if (camera_pos_.GetComponent<CameraPosition>().Get_EventEnd()
                 && m_finishTimer >= 6f)
@@ -121,13 +128,13 @@ public class Stage1EventUI : MonoBehaviour
             camera_pos_.GetComponent<CameraPosition>().GetEMode() == 0)
         {
             mission_text_[4].SetActive(false);
-            if (!EtoNFlag)
+            if (!EtoNFlag2)
             {
                 GetComponent<BlackOut_UI>().ResetT();
-                EtoNFlag = true;
+                EtoNFlag2 = true;
             }
 
-            else if (EtoNFlag
+            else if (EtoNFlag2
                 && !GetComponent<BlackOut_UI>().Get_Clear())
                 GetComponent<BlackOut_UI>().FeadIn();
         }

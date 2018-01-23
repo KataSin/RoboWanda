@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.22946295, g: 0.2554189, b: 0.32553947, a: 1}
+  m_IndirectSpecularColor: {r: 0.04303838, g: 0.05307253, b: 0.08652737, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -689,6 +689,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   black_curtain_obj_: {fileID: 1747576697}
+  m_lerp_color: {r: 0, g: 0, b: 0, a: 0}
+  t: 0
+  t1: 0
+  t2: 0
+  t3: 0
+  t4: 0
   m_blackFeadTime: 4
   m_blackFeadTime2: 0
   isClear: 0
@@ -1014,7 +1020,7 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 10
+  m_Intensity: 4
   m_Range: 2
   m_SpotAngle: 30
   m_CookieSize: 10

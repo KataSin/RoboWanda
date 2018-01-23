@@ -192,7 +192,7 @@ public class CameraPosition : MonoBehaviour
         else if (GameObject.FindGameObjectWithTag("JeepManager"))
         {
             jeepMana_ = GameObject.FindGameObjectWithTag("JeepManager");
-            m_Mode = PlayerCameraMode.Landing;
+            m_Mode = PlayerCameraMode.Event;
         }
 
         m_test = 0f;
@@ -204,7 +204,7 @@ public class CameraPosition : MonoBehaviour
         isM2 = false;
         isMAllClear = false;
         isBlack = false;
-        isEventEnd = true;
+        isEventEnd = false;
 
         if (m_Prediction != null)
             m_Prediction.transform.localPosition = transform.localPosition;
@@ -604,9 +604,9 @@ public class CameraPosition : MonoBehaviour
             isBlack = true;
         }
 
-        if (jeeps_[jeeps_.Length - 1].transform.position.x <= transform.position.x - 3f
-            &&
-            m_black_t3 >= 1.0f)
+        if (jeeps_[jeeps_.Length - 1].transform.position.x <= transform.position.x - 3f)
+            //&&
+            //m_black_t3 >= 1.0f)
         {
             m_EMode = EventCameraState.LeadJeep;
         }
@@ -614,57 +614,63 @@ public class CameraPosition : MonoBehaviour
 
     private void LJeepMode()
     {
-        if (briefing_.GetComponent<BriefingManager>().Get_TextState() == 11
-            && briefing_ != null)
-        {
-            isEventEnd = true;
+        //if (briefing_ != null)
+        //{
+        //    isEventEnd = true;
 
-            if (m_T4 >= 2f)
-            {
-                m_Mode = PlayerCameraMode.Landing;
-                m_EMode = EventCameraState.None;
+        //    if (m_T4 >= 2f)
+        //    {
+        //        m_Mode = PlayerCameraMode.Landing;
+        //        m_EMode = EventCameraState.None;
 
-                transform.localPosition = m_eventB_pos;
-                transform.localRotation = m_eventB_rotation;
-            }
+        //        transform.localPosition = m_eventB_pos;
+        //        transform.localRotation = m_eventB_rotation;
+        //    }
 
-            m_T4 += 1.0f * Time.deltaTime;
-        }
+        //    m_T4 += 1.0f * Time.deltaTime;
+        //}
 
         if (!isEventEnd)
             transform.position = jeeps_[0].transform.position + (-jeeps_[0].transform.forward * 6f) + (jeeps_[0].transform.up * 4f);
 
         transform.LookAt(jeeps_[0].transform.position + jeeps_[0].transform.forward + (jeeps_[0].transform.up * 2.2f));
 
-        if ((m_test >= 2f || Input.GetKeyDown(KeyCode.U))
-            && !isMAllClear)
-        {
-            isM0 = true;
+        //if ((m_test >= 2f || Input.GetKeyDown(KeyCode.U))
+        //    && !isMAllClear)
+        //{
+        //    isM0 = true;
 
+        //    if (m_test >= 4f)
+        //    {
+        //        //m_EMode = EventCameraState.Bomber;
+        //        //bomber_ = GameObject.FindGameObjectWithTag("Bomber");
+        //        //m_test = 0f;
+        //    }
+
+        //    //EventSkip();
+        //}
+
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            isMAllClear = true;
+        }
+
+        else if (isMAllClear)
+        {
             if (m_test >= 4f)
             {
-                //m_EMode = EventCameraState.Bomber;
-                //bomber_ = GameObject.FindGameObjectWithTag("Bomber");
-                //m_test = 0f;
+                isEventEnd = true;
+                if (m_test >= 12f)
+                {
+                    m_Mode = PlayerCameraMode.Landing;
+                    m_EMode = EventCameraState.None;
+
+                    transform.localPosition = m_eventB_pos;
+                    transform.localRotation = m_eventB_rotation;
+                }
             }
-
-            //EventSkip();
-        }
-
-        else if (isMAllClear && m_test >= 4f)
-        {
-            isEventEnd = true;
-            if (m_test >= 12f)
-            {
-                m_Mode = PlayerCameraMode.Landing;
-                m_EMode = EventCameraState.None;
-
-                transform.localPosition = m_eventB_pos;
-                transform.localRotation = m_eventB_rotation;
-            }
-        }
-
-        m_test += 1.0f * Time.deltaTime;
+            m_test += 1.0f * Time.deltaTime;
+        }        
     }
 
     private void BomberMode()
