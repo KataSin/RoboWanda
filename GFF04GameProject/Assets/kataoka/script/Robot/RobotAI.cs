@@ -54,12 +54,18 @@ public class RobotAI : MonoBehaviour
             manager.SetAction(RobotAction.RobotState.ROBOT_DEAD, false, true);
             return;
         }
+
+
+        //ここから
         beamAttackTime += Time.deltaTime;
-        if (beamAttackTime >= 20.0f)
+        if (beamAttackTime >= 10.0f)
         {
             manager.SetAction(RobotAction.RobotState.ROBOT_HELI_ATTACK, false);
             beamAttackTime = 0.0f;
         }
+        //ここまで
+
+
         ////見えてたら
         //GameObject player;
         //missileAttackTime += Time.deltaTime;
