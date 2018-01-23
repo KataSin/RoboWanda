@@ -14,6 +14,7 @@ enum T_PlayerCameraMode
     Tutorial_2,
     Tutorial_3,
     Normal,     // 通常
+    Aim,
     Dead,
     Event,       // イベント
 }
@@ -119,6 +120,9 @@ public class CameraPosition_Tutorial : MonoBehaviour
     bool m_IsTriggered;                         // 十字キーの操作判定
 
     [SerializeField]
+    private GameObject m_Prediction;             // カメラの予測座標
+
+    [SerializeField]
     private float t;
     private float t1;
     private float m_intervalTimer;
@@ -187,148 +191,6 @@ public class CameraPosition_Tutorial : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*// プレイヤーの状態を取得
-        if (m_Player != null)
-        {
-            m_IsAiming = m_Player.GetComponent<PlayerController>().IsAiming();
-        }
-
-        // 照準状態であれば
-        if (m_IsAiming)
-        {
-            // 照準時の座標まで移動
-            if (current_pos_X < m_AimingPositionX)
-            {
-                current_pos_X += m_SpeedX * Time.deltaTime;
-            }
-            if (current_pos_Y > m_AimingPositionY)
-            {
-                current_pos_Y -= m_SpeedY * Time.deltaTime;
-            }
-            if (current_pos_Z < m_AimingPositionZ)
-            {
-                current_pos_Z += m_SpeedZ * Time.deltaTime;
-            }
-        }
-        else
-        {
-            // 通常時の座標まで移動
-            if (current_pos_X > m_NormalPositionX)
-            {
-                current_pos_X -= m_SpeedX * Time.deltaTime;
-            }
-            if (current_pos_Y < m_NormalPositionY)
-            {
-                current_pos_Y += m_SpeedY * Time.deltaTime;
-            }
-            if (current_pos_Z > m_NormalPositionZ)
-            {
-                current_pos_Z -= m_SpeedZ * Time.deltaTime;
-            }
-        }
-
-        // カメラの座標制限
-        current_pos_X = Mathf.Clamp(current_pos_X, m_NormalPositionX, m_AimingPositionX);
-        current_pos_Y = Mathf.Clamp(current_pos_Y, m_AimingPositionY, m_NormalPositionY);
-        current_pos_Z = Mathf.Clamp(current_pos_Z, m_NormalPositionZ, m_AimingPositionZ);
-
-        // カメラの位置を更新（相対位置を使用）
-        transform.localPosition = new Vector3(current_pos_X, current_pos_Y, current_pos_Z);*/
-
-        // カメラの距離を変更
-        /*switch (m_DistanceSelect)
-        {
-            case 0:
-                m_Distance = CameraDistance.VeryClose;
-                break;
-            case 1:
-                m_Distance = CameraDistance.Close;
-                break;
-            case 2:
-                m_Distance = CameraDistance.Normal;
-                break;
-            case 3:
-                m_Distance = CameraDistance.Far;
-                break;
-            default:
-                m_Distance = CameraDistance.Normal;
-                break;
-        }
-
-        // 十字キーの入力が無い場合、操作判定を解除
-        if (Input.GetAxisRaw("Camera_Distance") == 0)
-        {
-            m_IsTriggered = false;
-        }
-        // 十字キーでカメラの距離を選択
-        if (m_IsTriggered == false)
-        {
-            // 上ボタン
-            if (Input.GetAxisRaw("Camera_Distance") < -0.9)
-            {
-                m_IsTriggered = true;
-                m_DistanceSelect = m_DistanceSelect + 1;
-            }
-            // 下ボタン
-            if (Input.GetAxisRaw("Camera_Distance") > 0.9)
-            {
-                m_IsTriggered = true;
-                m_DistanceSelect = m_DistanceSelect - 1;
-            }
-        }
-        m_DistanceSelect = Mathf.Clamp(m_DistanceSelect, 0, 3);
-
-        // カメラの座標を変更
-        Vector3 new_position;
-        switch (m_Distance)
-        {
-            case CameraDistance.VeryClose:
-                new_position.x = m_VeryClosePositionX;
-                new_position.y = m_VeryClosePositionY;
-                new_position.z = m_VeryClosePositionZ;
-                break;
-            case CameraDistance.Close:
-                new_position.x = m_ClosePositionX;
-                new_position.y = m_ClosePositionY;
-                new_position.z = m_ClosePositionZ;
-                break;
-            case CameraDistance.Normal:
-                new_position.x = m_NormalPositionX;
-                new_position.y = m_NormalPositionY;
-                new_position.z = m_NormalPositionZ;
-                break;
-            case CameraDistance.Far:
-                new_position.x = m_FarPositionX;
-                new_position.y = m_FarPositionY;
-                new_position.z = m_FarPositionZ;
-                break;
-            default:
-                new_position.x = m_NormalPositionX;
-                new_position.y = m_NormalPositionY;
-                new_position.z = m_NormalPositionZ;
-                break;
-        }
-        // カメラの位置を更新（相対座標を使用）
-        transform.localPosition = Vector3.Lerp(transform.localPosition, new_position, m_Speed * Time.deltaTime);
-
-        // カメラがフィールドや障害物に透過しないようにする
-        Ray ray = new Ray(m_Player.transform.position + Vector3.up, transform.position - m_Player.transform.position - Vector3.up);
-        float distance = Vector3.Distance(m_Player.transform.position, transform.position);
-        // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
-        RaycastHit hitInfo;
-
-        if (transform.position.y <= 0.1f)
-        {
-            transform.position = new Vector3(transform.position.x, 0.1f, transform.position.z);
-            return;
-        }
-
-        if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
-        {
-            // Debug.Log("壁に遮られた");
-            transform.position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.1f, hitInfo.point.z);
-        }*/
-
         // カメラの状態に応じて処理を行う
         switch (m_Mode)
         {
@@ -348,6 +210,10 @@ public class CameraPosition_Tutorial : MonoBehaviour
                 isCntActive = true;
                 NormalMode();
                 break;
+            case T_PlayerCameraMode.Aim:
+                isCntActive = true;
+                AimMode();
+                break;
             case T_PlayerCameraMode.Dead:
                 DeadMode();
                 break;
@@ -358,6 +224,9 @@ public class CameraPosition_Tutorial : MonoBehaviour
                 NormalMode();
                 break;
         }
+
+        // 照準状態を更新
+        m_IsAiming = m_Player.GetComponent<PlayerController_Tutorial>().IsAiming();
     }
 
     void Tutorial1Mode()
@@ -485,12 +354,18 @@ public class CameraPosition_Tutorial : MonoBehaviour
             return;
         }
 
-        if (m_Player.GetComponent<PlayerController_Tutorial>().GetPlayerState() == 4)
+        if (m_Player.GetComponent<PlayerController_Tutorial>().GetPlayerState() == 3)
         {
             m_Mode = T_PlayerCameraMode.Dead;
             t = 0f;
             m_deadBefore_pos = transform.position;
             return;
+        }
+
+        // 照準モードに移行
+        if (m_IsAiming)
+        {
+            m_Mode = T_PlayerCameraMode.Aim;
         }
 
         // カメラの距離を変更
@@ -566,25 +441,151 @@ public class CameraPosition_Tutorial : MonoBehaviour
                 new_position.z = m_NormalPositionZ;
                 break;
         }
-        // カメラの位置を更新（相対座標を使用）
-        transform.localPosition = Vector3.Lerp(transform.localPosition, new_position, m_Speed * Time.deltaTime);
+
+        // カメラの予測座標を更新（相対座標を使用）
+        m_Prediction.transform.localPosition = new_position;
 
         // カメラがフィールドや障害物に透過しないようにする
-        Ray ray = new Ray(m_Player.transform.position + Vector3.up, transform.position - m_Player.transform.position - Vector3.up);
-        float distance = Vector3.Distance(m_Player.transform.position, transform.position);
-        // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
+        // カメラの最終座標を計算してから移動させる
+        Ray ray = new Ray(m_Player.transform.position + Vector3.up, m_Prediction.transform.position - m_Player.transform.position - Vector3.up);
+        float distance = Vector3.Distance(m_Player.transform.position, m_Prediction.transform.position);
         RaycastHit hitInfo;
-
-        if (transform.position.y <= 0.1f)
-        {
-            transform.position = new Vector3(transform.position.x, 0.1f, transform.position.z);
-            return;
-        }
 
         if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
         {
             // Debug.Log("壁に遮られた");
-            transform.position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.1f, hitInfo.point.z);
+            Vector3 hit_position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.3f, hitInfo.point.z);
+            transform.position = Vector3.Lerp(transform.position, hit_position, m_Speed * Time.deltaTime);
+        }
+        else
+        {
+            transform.position = Vector3.Lerp(transform.position, m_Prediction.transform.position, m_Speed * Time.deltaTime);
+        }
+    }
+
+    void AimMode()
+    {
+        // 通常モードに移行
+        if (!m_IsAiming)
+        {
+            m_Mode = T_PlayerCameraMode.Normal;
+        }
+
+        // カメラの距離を変更
+        switch (m_DistanceSelect)
+        {
+            case 0:
+                m_Distance = T_CameraDistance.VeryClose;
+                break;
+            case 1:
+                m_Distance = T_CameraDistance.Close;
+                break;
+            case 2:
+                m_Distance = T_CameraDistance.Normal;
+                break;
+            case 3:
+                m_Distance = T_CameraDistance.Far;
+                break;
+            default:
+                m_Distance = T_CameraDistance.Normal;
+                break;
+        }
+
+        // 十字キーの入力が無い場合、操作判定を解除
+        if (Input.GetAxisRaw("Camera_Distance") == 0)
+        {
+            m_IsTriggered = false;
+        }
+        // 十字キーでカメラの距離を選択
+        if (m_IsTriggered == false)
+        {
+            // 上ボタン
+            if (Input.GetAxisRaw("Camera_Distance") < -0.9)
+            {
+                m_IsTriggered = true;
+                m_DistanceSelect = m_DistanceSelect + 1;
+            }
+            // 下ボタン
+            if (Input.GetAxisRaw("Camera_Distance") > 0.9)
+            {
+                m_IsTriggered = true;
+                m_DistanceSelect = m_DistanceSelect - 1;
+            }
+        }
+        m_DistanceSelect = Mathf.Clamp(m_DistanceSelect, 0, 3);
+
+        // カメラが一番遠い座標にあったら
+        if (m_DistanceSelect == 3)
+        {
+            // カメラの座標を変更
+            Vector3 new_position;
+            new_position.x = m_FarPositionX;
+            new_position.y = m_FarPositionY;
+            new_position.z = m_FarPositionZ;
+
+            // カメラの予測座標を更新（相対座標を使用）
+            m_Prediction.transform.localPosition = new_position;
+
+            // カメラがフィールドや障害物に透過しないようにする
+            // カメラの最終座標を計算してから移動させる
+            Ray ray = new Ray(m_Player.transform.position + Vector3.up, m_Prediction.transform.position - m_Player.transform.position - Vector3.up);
+            float distance = Vector3.Distance(m_Player.transform.position, m_Prediction.transform.position);
+            // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
+            RaycastHit hitInfo;
+
+            if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
+            {
+                // Debug.Log("壁に遮られた");
+                Vector3 hit_position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.3f, hitInfo.point.z);
+
+                float distance2 = Vector3.Distance(m_Player.transform.position, hit_position);
+                if (distance2 < 12.0f)
+                {
+                    Vector3 final_position;
+                    final_position.x = m_VeryClosePositionX;
+                    final_position.y = m_VeryClosePositionY;
+                    final_position.z = m_VeryClosePositionZ;
+
+                    transform.localPosition = Vector3.Lerp(transform.localPosition, final_position, m_Speed / 4 * Time.deltaTime);
+                }
+                else
+                {
+                    transform.position = Vector3.Lerp(transform.position, hit_position, m_Speed / 4 * Time.deltaTime);
+                }
+            }
+            else
+            {
+                transform.position = Vector3.Lerp(transform.position, m_Prediction.transform.position, m_Speed / 4 * Time.deltaTime);
+            }
+        }
+        else
+        {
+            // カメラの座標を変更
+            Vector3 new_position;
+            new_position.x = m_VeryClosePositionX;
+            new_position.y = m_VeryClosePositionY;
+            new_position.z = m_VeryClosePositionZ;
+
+            // カメラの予測座標を更新（相対座標を使用）
+            m_Prediction.transform.localPosition = new_position;
+
+            // カメラがフィールドや障害物に透過しないようにする
+            // カメラの最終座標を計算してから移動させる
+            Ray ray = new Ray(m_Player.transform.position + Vector3.up, m_Prediction.transform.position - m_Player.transform.position - Vector3.up);
+            float distance = Vector3.Distance(m_Player.transform.position, m_Prediction.transform.position);
+            // Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
+            RaycastHit hitInfo;
+
+            if (Physics.Raycast(ray, out hitInfo, distance, LayerMask.GetMask("Stage")))
+            {
+                // Debug.Log("壁に遮られた");
+                Vector3 hit_position = new Vector3(hitInfo.point.x, hitInfo.point.y + 0.3f, hitInfo.point.z);
+                transform.position = Vector3.Lerp(transform.position, hit_position, m_Speed * Time.deltaTime);
+            }
+            else
+            {
+                transform.position = Vector3.Lerp(transform.position, m_Prediction.transform.position, m_Speed * Time.deltaTime);
+            }
         }
     }
 
