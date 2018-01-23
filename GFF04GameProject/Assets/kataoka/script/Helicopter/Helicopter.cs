@@ -57,7 +57,7 @@ public class Helicopter : MonoBehaviour
             m_FireEffect.SetActive(true);
             transform.Rotate(new Vector3(0, 1, 0.4f), 10.0f);
             m_Velo.y = -4.0f;
-            transform.position += m_Velo * 10.0f * Time.deltaTime;
+            transform.position += m_Velo * 3.0f * Time.deltaTime;
             return;
         }
 
@@ -74,7 +74,7 @@ public class Helicopter : MonoBehaviour
             returnVec.y = 0.0f;
             m_ResPos += returnVec * Time.deltaTime;
             transform.rotation =
-                    Quaternion.AngleAxis(m_Velo.magnitude * 130.0f, rotateVec)*
+                    Quaternion.AngleAxis(m_Velo.magnitude * 130.0f, rotateVec) *
                     Quaternion.LookRotation(m_RobotToHeliVec);
         }
         //照らしているときの動き
@@ -141,12 +141,12 @@ public class Helicopter : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (m_IsBreak)
+        if (m_IsBreak && other.tag != "ExplosionCollision")
         {
             Instantiate(m_HeliBreakPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
-        if (other.gameObject.tag == "ExprosionCollision")
+        if (other.gameObject.tag == "ExplosionCollision")
         {
             m_IsBreak = true;
         }
