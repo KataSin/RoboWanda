@@ -92,7 +92,7 @@ public class HelicopterMissile : MonoBehaviour
         {
             m_FireEffect.SetActive(true);
             transform.Rotate(new Vector3(0, 1, 0.4f), 10.0f);
-            transform.position += (new Vector3(0.0f, -4.0f, 0.0f)) * 10.0f * Time.deltaTime;
+            transform.position += (new Vector3(0.0f, -4.0f, 0.0f)) * 3.0f * Time.deltaTime;
             return;
         }
 
@@ -109,7 +109,7 @@ public class HelicopterMissile : MonoBehaviour
                 m_LerpSevePos = transform.position;
                 m_LerpSeveRotate = transform.rotation;
             }
-                //帰っていたら
+            //帰っていたら
             Vector3 returnVec = (m_SpawnPos - transform.position).normalized;
             returnVec.y = 0.0f;
             Quaternion rotate = Quaternion.LookRotation(returnVec);
@@ -124,7 +124,7 @@ public class HelicopterMissile : MonoBehaviour
                 m_LerpSevePos = transform.position;
                 m_LerpSeveRotate = transform.rotation;
             }
-                //攻撃するか
+            //攻撃するか
             Vector3 attackVec = (m_Robot.transform.position - transform.position);
             attackVec.y = 0.0f;
             Quaternion rotate = Quaternion.LookRotation(attackVec);
@@ -216,7 +216,7 @@ public class HelicopterMissile : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (m_IsBreak)
+        if (m_IsBreak && other.tag != "ExplosionCollision")
         {
             Instantiate(m_HeliBreakPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
