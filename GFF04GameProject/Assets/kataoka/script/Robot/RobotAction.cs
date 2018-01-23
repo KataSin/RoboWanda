@@ -667,29 +667,25 @@ public class RobotAction : MonoBehaviour
 
             Vector3 robotLeft = transform.right.normalized;
             List<GameObject> heli = new List<GameObject>();
-            GameObject[] objs = GameObject.FindGameObjectsWithTag("Helocopter");
+            GameObject[] objs = GameObject.FindGameObjectsWithTag("Helicopter");
             foreach (var i in objs)
             {
 
-                Vector3 vec = (m_Robot.transform.position - i.transform.position).normalized;
-                float dot =
-                    Vector2Cross(
-                    new Vector2(m_Robot.transform.right.x, m_Robot.transform.right.z)
-                    , new Vector2(vec.x, vec.z));
+                float dis=Vector3.Distance(i.transform.position,m_Robot.transform.position);
 
-                if (dot > 0.0f)
+                if (dis<=70.0f)
                 {
                     //前のいる
                     heli.Add(i);
                 }
             }
-            if (heli.Count != 0)
+            if (heli.Count == 0)
             {
                 m_BeamStartPos = Vector3.zero;
                 return;
             }
 
-            m_BeamStartPos = heli[UnityEngine.Random.Range(0, heli.Count - 1)].transform.position;
+            m_BeamStartPos = heli[UnityEngine.Random.Range(0, heli.Count- 1)].transform.position;
             m_RobotEye.SetActive(true);
         };
 
@@ -704,7 +700,13 @@ public class RobotAction : MonoBehaviour
             if (m_BeamStartPos == Vector3.zero) return true;
 
             m_BeamLerpTime += Time.deltaTime;
-
+            m_RobotLookAtPosition = m_BeamStartPos;
+            if (m_BeamLerpTime >= 5.0f)
+            {
+                m_RobotEye.SetActive(false);
+                endAnim = true;
+                m_BeamLerpTime = 0.0f;
+            }
 
             m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
             return endAnim;

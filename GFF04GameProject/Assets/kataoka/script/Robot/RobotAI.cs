@@ -54,66 +54,71 @@ public class RobotAI : MonoBehaviour
             manager.SetAction(RobotAction.RobotState.ROBOT_DEAD, false, true);
             return;
         }
-
-        //見えてたら
-        GameObject player;
-        missileAttackTime += Time.deltaTime;
         beamAttackTime += Time.deltaTime;
-        legAttackTime += Time.deltaTime;
-        if (PlayerToRobotRay("Player", 0, out player))
+        if (beamAttackTime >= 20.0f)
         {
-            if (Player_Robot_Distance(10.0f))
-            {
-                if (legAttackTime >= 5.0f)
-                {
-                    manager.SetAction(RobotAction.RobotState.ROBOT_LEG_ATTACK, false);
-                    legAttackTime = 0.0f;
-                }
-                else
-                    manager.SetAction(RobotAction.RobotState.ROBOT_IDLE, true);
+            manager.SetAction(RobotAction.RobotState.ROBOT_HELI_ATTACK, false);
+            beamAttackTime = 0.0f;
+        }
+        ////見えてたら
+        //GameObject player;
+        //missileAttackTime += Time.deltaTime;
+        //beamAttackTime += Time.deltaTime;
+        //legAttackTime += Time.deltaTime;
+        //if (PlayerToRobotRay("Player", 0, out player))
+        //{
+        //    if (Player_Robot_Distance(10.0f))
+        //    {
+        //        if (legAttackTime >= 5.0f)
+        //        {
+        //            manager.SetAction(RobotAction.RobotState.ROBOT_LEG_ATTACK, false);
+        //            legAttackTime = 0.0f;
+        //        }
+        //        else
+        //            manager.SetAction(RobotAction.RobotState.ROBOT_IDLE, true);
 
-            }
-            //見えててかつ遠かったらビームアタック
-            else if (!Player_Robot_Distance(30.0f))
-            {
-                if (missileAttackTime >= 6.0f)
-                {
-                    manager.SetAction(RobotAction.RobotState.ROBOT_MISSILE_ATTACK, false);
-                    missileAttackTime = 0.0f;
-                }
-                else
-                    manager.SetAction(RobotAction.RobotState.ROBOT_IDLE, true);
-            }
-            else
-            {
-                manager.SetAction(RobotAction.RobotState.ROBOT_BEAM_ATTACK, false);
-            }
-            m_IsLookFlag = true;
-        }
-        //見えてなかったらビル壊す
-        else if (agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject() != null)
-        {
-            if (m_IsLookFlag)
-            {
-                manager.SetAction(RobotAction.RobotState.ROBOT_BEAM_ATTACK, false);
-                m_IsLookFlag = false;
-            }
+        //    }
+        //    //見えててかつ遠かったらビームアタック
+        //    else if (!Player_Robot_Distance(30.0f))
+        //    {
+        //        if (missileAttackTime >= 6.0f)
+        //        {
+        //            manager.SetAction(RobotAction.RobotState.ROBOT_MISSILE_ATTACK, false);
+        //            missileAttackTime = 0.0f;
+        //        }
+        //        else
+        //            manager.SetAction(RobotAction.RobotState.ROBOT_IDLE, true);
+        //    }
+        //    else
+        //    {
+        //        manager.SetAction(RobotAction.RobotState.ROBOT_BEAM_ATTACK, false);
+        //    }
+        //    m_IsLookFlag = true;
+        //}
+        ////見えてなかったらビル壊す
+        //else if (agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject() != null)
+        //{
+        //    if (m_IsLookFlag)
+        //    {
+        //        manager.SetAction(RobotAction.RobotState.ROBOT_BEAM_ATTACK, false);
+        //        m_IsLookFlag = false;
+        //    }
 
-            if (Vector3.Distance(agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject().transform.position, agent.transform.position) <= 100.0f)
-            {
-                if (billBreakTime >= 10.0f)
-                {
-                    manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
-                    billBreakTime = 0.0f;
-                }
-                return;
-            }
-            manager.SetAction(RobotAction.RobotState.ROBOT_TO_BILL_MOVE, true);
-        }
-        else
-        {
-            manager.SetAction(RobotAction.RobotState.ROBOT_IDLE, true);
-        }
+        //    if (Vector3.Distance(agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject().transform.position, agent.transform.position) <= 100.0f)
+        //    {
+        //        if (billBreakTime >= 10.0f)
+        //        {
+        //            manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
+        //            billBreakTime = 0.0f;
+        //        }
+        //        return;
+        //    }
+        //    manager.SetAction(RobotAction.RobotState.ROBOT_TO_BILL_MOVE, true);
+        //}
+        //else
+        //{
+        //    manager.SetAction(RobotAction.RobotState.ROBOT_IDLE, true);
+        //}
 
 
 
