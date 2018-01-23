@@ -81,6 +81,13 @@ public class Stage1Manager : MonoBehaviour
         //    bezeru_ui_.GetComponent<ui_Bezeru>().SetT(camera_pos_.GetComponent<CameraPosition>().GetT());
         //}
 
+        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 5)
+        {
+            bezeru_ui_.SetActive(false);
+        }
+        else if(camera_pos_.GetComponent<CameraPosition>().GetMode() != 5)
+            bezeru_ui_.SetActive(true);
+
         if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1)
         {
             timer_ui_.SetActive(true);
@@ -88,8 +95,16 @@ public class Stage1Manager : MonoBehaviour
 
         if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 2)
         {
-            if (camera_pos_.GetComponent<CameraPosition>().Get_EventEnd()
-                && GetComponent<BlackOut_UI>().Get_Clear())
+            //if (camera_pos_.GetComponent<CameraPosition>().Get_EventEnd()
+            //    && GetComponent<BlackOut_UI>().Get_Clear())
+            //{
+            //    bezeru_ui_.GetComponent<ui_Bezeru>().FeadOut();
+            //    if (bezeru_ui_.GetComponent<ui_Bezeru>().GetT() >=
+            //        bezeru_ui_.GetComponent<ui_Bezeru>().GetFeadTime())
+            //        player_ui_.SetActive(true);
+            //}
+
+            if(GetComponent<BlackOut_UI>().Get_Clear())
             {
                 bezeru_ui_.GetComponent<ui_Bezeru>().FeadOut();
                 if (bezeru_ui_.GetComponent<ui_Bezeru>().GetT() >=

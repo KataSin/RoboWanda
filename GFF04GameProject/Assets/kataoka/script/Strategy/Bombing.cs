@@ -39,7 +39,7 @@ public class Bombing : MonoBehaviour
         if (m_BomPrefab == null) return;
 
         //爆撃
-        m_Time += Time.deltaTime;
+        m_Time += 2.0f * Time.deltaTime;
         if (m_Time >= m_BomSpanwIntervalTime)
         {
             Instantiate(m_BomPrefab, transform.position + new Vector3(0, -3, 0), Quaternion.identity);
