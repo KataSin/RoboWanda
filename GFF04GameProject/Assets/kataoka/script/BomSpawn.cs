@@ -85,14 +85,14 @@ public class BomSpawn : MonoBehaviour
         if (Input.GetAxisRaw("Bullet_Select") < -0.9
             && !isTrigger)
         {
-            m_Bom = (Bom)((int)m_Bom + 1);
+            m_Bom = (Bom)((int)m_Bom - 1);
             isTrigger = true;
         }
         // 右ボタン
         if (Input.GetAxisRaw("Bullet_Select") > 0.9
             && !isTrigger)
         {
-            m_Bom = (Bom)((int)m_Bom - 1);
+            m_Bom = (Bom)((int)m_Bom + 1);
             isTrigger = true;
         }
 
