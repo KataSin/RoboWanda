@@ -41,11 +41,14 @@ public class CameraShake : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (cameraPos_.GetComponent<CameraPosition>().GetEMode() == 6)
+        if (cameraPos_ != null)
         {
-            transform.localPosition = Vector3.zero;
-            m_LifeTime = 0.0f;
-            return;
+            if (cameraPos_.GetComponent<CameraPosition>().GetEMode() == 6)
+            {
+                transform.localPosition = Vector3.zero;
+                m_LifeTime = 0.0f;
+                return;
+            }
         }
 
         // 敵ロボットが存在する場合

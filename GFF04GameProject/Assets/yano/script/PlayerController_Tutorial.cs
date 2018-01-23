@@ -13,7 +13,8 @@ enum T_PlayerState
     Normal,     // 通常
     Aiming,     // 照準中
     Creeping,   // 匍匐
-    Dead        // 死亡
+    Dead,        // 死亡
+    Passing,    // 乗り越え
 }
 
 public class PlayerController_Tutorial : MonoBehaviour
@@ -73,7 +74,13 @@ public class PlayerController_Tutorial : MonoBehaviour
     bool m_IsCreeping;                              // 匍匐しているか
     bool m_IsDead;                                  // 死亡しているか
 
-    float m_current_speed;
+    [SerializeField]
+    private float m_PassDistance;                   // 乗り越え距離
+
+    float m_SpeedBeforePassing = 0.0f;              // 乗り越える前の速度
+
+    float m_current_speed;                          // 現在の移動速度
+    float m_passing_time = 0.0f;                    // 乗り越え処理の残り時間
 
     //ボムスポーン(片岡実装)
     private GameObject m_BomSpawn;
@@ -86,13 +93,24 @@ public class PlayerController_Tutorial : MonoBehaviour
     private GameObject m_Launcher;
 
     private AudioSource[] player_se_;
+    private AudioClip playerSe_attack_;
+    private AudioClip playerSe_walk_;
+    private AudioClip playerSe_die_;
+
+    private float test;
+
+    private bool isDse;
 
     // Use this for initialization
     void Start()
     {
         m_Controller = GetComponent<CharacterController>();
         m_Animator = GetComponent<Animator>();
+
         player_se_ = GetComponents<AudioSource>();
+        playerSe_attack_ = player_se_[0].clip;
+        playerSe_walk_ = player_se_[1].clip;
+        playerSe_die_ = player_se_[2].clip;
 
         m_State = T_PlayerState.Normal;
         m_CurrentSpeedLimit = m_MaxSpeed;
@@ -106,6 +124,7 @@ public class PlayerController_Tutorial : MonoBehaviour
         m_IsDead = false;
 
         m_current_speed = 0.0f;
+        test = 0f;
 
         //片岡実装
         m_BomSpawn = GameObject.FindGameObjectWithTag("BomSpawn");
@@ -147,6 +166,13 @@ public class PlayerController_Tutorial : MonoBehaviour
                 m_IsCreeping = false;
                 m_IsDead = true;
                 break;
+            // 乗り越える
+            case T_PlayerState.Passing:
+                Passing_v2();
+                m_IsAiming = false;
+                m_IsCreeping = false;
+                m_IsDead = false;
+                break;
             // デフォルト（バグ防止用）
             default:
                 m_IsAiming = false;
@@ -186,14 +212,46 @@ public class PlayerController_Tutorial : MonoBehaviour
         //    }
         //}
     }
+    public void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        // 乗り越え中、ガードレールとの接触判定を無視
+        if (m_State == T_PlayerState.Passing)
+        {
+            Physics.IgnoreLayerCollision(13, 16, true);
+        }
+        // エイム中は乗り越えない
+        else if (m_State == T_PlayerState.Aiming)
+        {
+
+        }
+        else if (hit.gameObject.tag == "GuardRail")
+        {
+            // 接触前の速度を保存
+            m_SpeedBeforePassing = m_current_speed;
+
+            m_passing_time = 0.5f;
+            m_State = T_PlayerState.Passing;
+        }
+    }
 
     // 接触判定
     public void OnTriggerEnter(Collider other)
     {
         // 敵ロボットと接触したら死亡
-        if (other.GetComponent<RobotDamage>() != null)
+        if (other.GetComponent<RobotDamage>() != null
+            ||
+            other.gameObject.tag == "RobotArmAttack"
+            ||
+            other.gameObject.tag == "RobotBeam"
+            ||
+            other.gameObject.tag == "Missile"
+            ||
+            other.gameObject.tag == "ExplosionCollision"
+            ||
+            other.gameObject.tag == "BeamCollide")
         {
             m_State = T_PlayerState.Dead;
+            player_se_[1].Stop();
         }
 
         // 倒壊中のビルと接触したら死亡
@@ -202,6 +260,7 @@ public class PlayerController_Tutorial : MonoBehaviour
             || other.gameObject.name == "DeathCollide")
         {
             m_State = T_PlayerState.Dead;
+            player_se_[1].Stop();
         }
     }
 
@@ -216,18 +275,13 @@ public class PlayerController_Tutorial : MonoBehaviour
             // RTボタンを押すとダッシュ
             m_IsDash = (Input.GetAxis("Dash") > 0.5f) ? true : false;
 
-            // RBボタンを押すと爆弾投げ状態に
-            if (Input.GetButton("Aim"))
+            // RBボタンを押すとボム投げ状態に
+            if (Input.GetButton("Aim")
+                ||
+                Input.GetKey(KeyCode.P))
             {
                 m_State = T_PlayerState.Aiming;
             }
-
-            // Bボタンを押すとしゃがむ
-            if (Input.GetButtonDown("Creeping"))
-            {
-                m_State = T_PlayerState.Creeping;
-            }
-
         }
     }
 
@@ -404,24 +458,20 @@ public class PlayerController_Tutorial : MonoBehaviour
         float axisHorizontal = Input.GetAxisRaw("Horizontal_L");    // x軸（左右）
         float axisVertical = Input.GetAxisRaw("Vertical_L");        // z軸（上下）
 
-
         // 減速する（入力が無い場合）
         if (axisHorizontal == 0 && axisVertical == 0)
         {
             m_Speed = Mathf.Max(m_Speed - m_CurrentBrakePower * Time.deltaTime, 0);
-
-            if (m_Speed == 0)
-                player_se_[1].Stop();
+            player_se_[1].Stop();
         }
 
-        else if (axisHorizontal != 0 || axisVertical != 0 || m_Speed != 0)
+        else if (axisHorizontal != 0 || axisVertical != 0)
         {
             if (!player_se_[1].isPlaying)
             {
-                player_se_[1].Play();
+                player_se_[1].PlayOneShot(playerSe_walk_);
             }
         }
-
 
         // 接地状態であれば加速可能
         if (m_Controller.isGrounded)
@@ -493,23 +543,26 @@ public class PlayerController_Tutorial : MonoBehaviour
     // 照準中の処理
     void Aiming()
     {
-        // 爆弾投げ時の移動処理
+        // ボム投げ時の移動処理
         AimingMove();
 
         var a = m_BomSpawn.GetComponent<BomSpawn>();
         //片岡の実装
-        m_BomSpawn.GetComponent<BomSpawn>().Set(Camera.main.transform.forward, 150.0f,BomSpawn.Bom.LIGHT_BOM);
+        m_BomSpawn.GetComponent<BomSpawn>().Set(Camera.main.transform.forward, 150.0f);
         m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(true);
 
-        if (Input.GetButtonDown("Bomb_Throw"))
+        if (Input.GetButtonDown("Bomb_Throw")
+            ||
+            Input.GetKeyDown(KeyCode.O))
         {
             m_BomSpawn.GetComponent<BomSpawn>().SpawnBom();
-
-            player_se_[0].Play();
+            player_se_[0].PlayOneShot(playerSe_attack_);
         }
 
         // RBボタンを放すと通常状態に戻る
-        if (!Input.GetButton("Aim"))
+        if (!Input.GetButton("Aim")
+            &&
+            !Input.GetKey(KeyCode.P))
         {
             m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(false);
             m_State = T_PlayerState.Normal;
@@ -691,11 +744,49 @@ public class PlayerController_Tutorial : MonoBehaviour
         m_Animator.SetFloat("CreepingSpeed", current_speed);
     }
 
+    void Passing_v2()
+    {
+        // グレネードランチャーの表示を消す
+        m_Launcher.SetActive(false);
+        // 乗り越えモーションを再生
+        m_Animator.Play("Passing");
+
+        // 移動処理
+        Vector3 velocity = transform.forward * m_SpeedBeforePassing;
+        m_Controller.Move(velocity * Time.deltaTime);
+
+        // 乗り越えアニメーションが終了すると、通常状態に戻る
+        AnimatorStateInfo AniInfo;     // アニメーションの状態
+        AniInfo = gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+        if (m_passing_time <= 0 && AniInfo.normalizedTime <= 0.9f)
+        {
+            // グレネードランチャーを表示
+            m_Launcher.SetActive(true);
+            // 通常状態に戻る
+            m_State = T_PlayerState.Normal;
+            Physics.IgnoreLayerCollision(13, 16, false);
+        }
+
+        m_passing_time -= Time.deltaTime;
+    }
+
     // 死亡時の処理
     void Dead()
     {
+        // グレネードランチャーの表示を消す
+        m_Launcher.SetActive(false);
         // 死亡モーションを再生
         m_Animator.Play("Dead");
+
+        //死亡SE
+        if (test >= 0.8f && !isDse)
+        {
+            player_se_[2].PlayOneShot(playerSe_die_);
+            isDse = true;
+        }
+
+        test += 1.0f * Time.deltaTime;
     }
 
     public int GetPlayerState()

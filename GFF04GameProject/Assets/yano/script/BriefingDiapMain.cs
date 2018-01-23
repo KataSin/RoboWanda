@@ -43,7 +43,7 @@ public class BriefingDiapMain : MonoBehaviour
                 gameObject.SetActive(false);
             }
 
-            t1 += 8.0f * Time.deltaTime;
+            t1 += 10.0f * Time.deltaTime;
         }
 
         t0 += 8.0f * Time.deltaTime;

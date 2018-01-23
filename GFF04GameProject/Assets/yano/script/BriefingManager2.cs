@@ -88,6 +88,12 @@ public class BriefingManager2 : MonoBehaviour
     private bool isText11;
     private bool isText12;
 
+    [SerializeField]
+    private GameObject white_disp_;
+
+    [SerializeField]
+    private GameObject black_disp_;
+
     // Use this for initialization
     void Start()
     {
@@ -99,6 +105,7 @@ public class BriefingManager2 : MonoBehaviour
         target_ui_.SetActive(false);
         targetUnder_ui_.SetActive(false);
         scan_.SetActive(false);
+        white_disp_.SetActive(false);
 
         t0 = 0f;
         t1 = 0f;
@@ -373,6 +380,7 @@ public class BriefingManager2 : MonoBehaviour
                 if (t2 >= 9f)
                 {
                     NextText();
+                    t0 = 0f;
                     state_ = State.Finish;
                 }
             }
@@ -384,13 +392,26 @@ public class BriefingManager2 : MonoBehaviour
 
     private void FinishUpdate()
     {
-        ui_.GetComponent<BlackOut_UI>().BlackOut();
-        if (!isLScene && sceneCnt_ != null
-            && ui_.GetComponent<BlackOut_UI>().Get_Clear())
+        if (t0 >= 4f)
         {
-            StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("Master 2"));
-            isLScene = true;
+            white_disp_.SetActive(true);
+            black_disp_.SetActive(true);
+            white_disp_.GetComponent<BriefingDisp_white>().DisplayOff();
+
+            if(!white_disp_.activeInHierarchy)
+            {
+                ui_.GetComponent<BlackOut_UI>().BlackOut();
+
+                if (!isLScene && sceneCnt_ != null
+                    && ui_.GetComponent<BlackOut_UI>().Get_Clear())
+                {
+                    StartCoroutine(sceneCnt_.GetComponent<SceneController>().SceneLoad("Master 2"));
+                    isLScene = true;
+                }
+            }
         }
+
+        t0 += 1.0f * Time.deltaTime;
     }
 
     private void SkipBriefing()
