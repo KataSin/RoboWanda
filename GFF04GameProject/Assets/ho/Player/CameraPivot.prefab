@@ -24,7 +24,8 @@ GameObject:
   - component: {fileID: 92224641567096250}
   - component: {fileID: 81328331933335742}
   - component: {fileID: 114536233480326674}
-  - component: {fileID: 114206475334373814}
+  - component: {fileID: 114272918983443284}
+  - component: {fileID: 114717583383410420}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -99,7 +100,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1660377369132156}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 29.6, y: 0.5, z: -55.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4573419039619944}
@@ -212,7 +213,8 @@ MonoBehaviour:
   m_Mode: 0
   m_Prediction: {fileID: 1688882057673104}
   m_EMode: 0
---- !u!114 &114206475334373814
+  briefing_: {fileID: 0}
+--- !u!114 &114272918983443284
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -220,10 +222,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1239567480333462}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e9cf8c7bccbbca48a16af669b052d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profile: {fileID: 11400000, guid: c21834e9c65bc1b45a7d7b4ec0741492, type: 2}
+  profile: {fileID: 11400000, guid: 6a6c35202b2c6764b97ca99e987814e4, type: 2}
 --- !u!114 &114536233480326674
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -255,6 +257,23 @@ MonoBehaviour:
   m_PitchMin: -40
   mode_: 0
   cameraPos_: {fileID: 1917802577353176}
+--- !u!114 &114717583383410420
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1239567480333462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4975a6e437fc3b149a8cd508ce5bdd69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  threshold: 0.554
+  intensity: 0.88
+  blurSize: 0.55
+  blurIterations: 1
+  blurType: 0
+  fastBloomShader: {fileID: 4800000, guid: 68a00c837b82e4c6d92e7da765dc5f1d, type: 3}
 --- !u!124 &124449146215364946
 Behaviour:
   m_ObjectHideFlags: 1
