@@ -79,7 +79,7 @@ MonoBehaviour:
   motionBlur:
     m_Enabled: 1
     m_Settings:
-      shutterAngle: 201
+      shutterAngle: 120
       sampleCount: 7
       frameBlending: 0
   eyeAdaptation:
@@ -114,17 +114,17 @@ MonoBehaviour:
       tonemapping:
         tonemapper: 2
         neutralBlackIn: 0.037
-        neutralWhiteIn: 10.3
-        neutralBlackOut: 0.004
-        neutralWhiteOut: 9.96
-        neutralWhiteLevel: 3.9
+        neutralWhiteIn: 12.2
+        neutralBlackOut: -0.003
+        neutralWhiteOut: 11.41
+        neutralWhiteLevel: 3
         neutralWhiteClip: 10
       basic:
-        postExposure: 0
-        temperature: 14
+        postExposure: -0.12
+        temperature: 10
         tint: 0
         hueShift: 0
-        saturation: 0.78
+        saturation: 0.82
         contrast: 1.03
       channelMixer:
         red: {x: 0.97, y: 0, z: 0}
