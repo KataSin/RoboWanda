@@ -192,7 +192,7 @@ public class CameraPosition : MonoBehaviour
         else if (GameObject.FindGameObjectWithTag("JeepManager"))
         {
             jeepMana_ = GameObject.FindGameObjectWithTag("JeepManager");
-            m_Mode = PlayerCameraMode.Event;
+            m_Mode = PlayerCameraMode.Landing;
         }
 
         m_test = 0f;

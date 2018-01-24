@@ -173,7 +173,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("エラー発生したので終了します");
             Debug.Log("場所：PlayerController.cs");
             Debug.Log("Error Log：擲弾オブジェクトが存在しない");
-            Application.Quit();
+            //Application.Quit();
         }
 
         if (m_Launcher == null)
@@ -181,7 +181,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("エラー発生したので終了します");
             Debug.Log("場所：PlayerController.cs");
             Debug.Log("Error Log：ランチャーのモデルが存在しない");
-            Application.Quit();
+            //Application.Quit();
         }
 
         if (m_Explosive == null)
@@ -189,7 +189,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("エラー発生したので終了します");
             Debug.Log("場所：PlayerController.cs");
             Debug.Log("Error Log：爆発物のプレハブが存在しない");
-            Application.Quit();
+            //Application.Quit();
         }
     }
 

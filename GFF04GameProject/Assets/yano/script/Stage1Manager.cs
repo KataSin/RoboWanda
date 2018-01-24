@@ -109,7 +109,9 @@ public class Stage1Manager : MonoBehaviour
                 bezeru_ui_.GetComponent<ui_Bezeru>().FeadOut();
                 if (bezeru_ui_.GetComponent<ui_Bezeru>().GetT() >=
                     bezeru_ui_.GetComponent<ui_Bezeru>().GetFeadTime())
+                {
                     player_ui_.SetActive(true);
+                }
             }
 
 
