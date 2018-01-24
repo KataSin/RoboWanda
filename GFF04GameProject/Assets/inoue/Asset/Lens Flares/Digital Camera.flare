@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!121 &12100000
+Flare:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Digital Camera
+  m_FlareTexture: {fileID: 2800000, guid: f6e8a425cb28249b09ad686f25ae8a2b, type: 3}
+  m_TextureLayout: 0
+  m_Elements:
+  - m_ImageIndex: 0
+    m_Position: 0
+    m_Size: 28.5
+    m_Color: {r: 0.18382353, g: 0.18112023, b: 0.18112023, a: 0}
+    m_UseLightColor: 1
+    m_Rotate: 0
+    m_Zoom: 1
+    m_Fade: 1
+  - m_ImageIndex: 0
+    m_Position: 0
+    m_Size: 21.5
+    m_Color: {r: 0.066176474, g: 0.0647167, b: 0.0647167, a: 0}
+    m_UseLightColor: 1
+    m_Rotate: 1
+    m_Zoom: 1
+    m_Fade: 1
+  - m_ImageIndex: 4
+    m_Position: 0
+    m_Size: 37
+    m_Color: {r: 0.051470578, g: 0.04995674, b: 0.04995674, a: 0}
+    m_UseLightColor: 1
+    m_Rotate: 0
+    m_Zoom: 1
+    m_Fade: 1
+  - m_ImageIndex: 4
+    m_Position: 0
+    m_Size: 28
+    m_Color: {r: 0.16923076, g: 0.16923076, b: 0.16923076, a: 0}
+    m_UseLightColor: 1
+    m_Rotate: 0
+    m_Zoom: 1
+    m_Fade: 1
+  - m_ImageIndex: 4
+    m_Position: 0
+    m_Size: 7
+    m_Color: {r: 0.16923076, g: 0.16923076, b: 0.16923076, a: 0}
+    m_UseLightColor: 1
+    m_Rotate: 0
+    m_Zoom: 1
+    m_Fade: 1
+  - m_ImageIndex: 1
+    m_Position: 0
+    m_Size: 8
+    m_Color: {r: 0.35294116, g: 0.35294116, b: 0.35294116, a: 0}
+    m_UseLightColor: 1
+    m_Rotate: 1
+    m_Zoom: 1
+    m_Fade: 1
+  - m_ImageIndex: 3
+    m_Position: 0
+    m_Size: 20
+    m_Color: {r: 0.046153843, g: 0.046153843, b: 0.046153843, a: 0}
+    m_UseLightColor: 1
+    m_Rotate: 1
+    m_Zoom: 1
+    m_Fade: 1
+  m_UseFog: 1
+--- !u!1002 &12100001
+EditorExtensionImpl:
+  serializedVersion: 6
