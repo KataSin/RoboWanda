@@ -31,7 +31,7 @@ public class debugSelect : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.Alpha2)
                 && scene_ != null)
             {
-                StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("Master 2"));
+                StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("Master"));
                 isClear = true;
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3)

@@ -146,7 +146,7 @@ public class Stage1Manager : MonoBehaviour
                 if (Input.GetButtonDown("Submit") && scene_ != null
                     && !isLScene)
                 {
-                    StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("Master 2"));
+                    StartCoroutine(scene_.GetComponent<SceneController>().SceneLoad("Master"));
                     isLScene = true;
                 }
 
