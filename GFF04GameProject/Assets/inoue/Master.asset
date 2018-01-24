@@ -33,7 +33,7 @@ MonoBehaviour:
     m_Settings:
       method: 0
       fxaaSettings:
-        preset: 3
+        preset: 2
       taaSettings:
         jitterSpread: 0.75
         sharpen: 0.3
@@ -42,7 +42,7 @@ MonoBehaviour:
   ambientOcclusion:
     m_Enabled: 1
     m_Settings:
-      intensity: 2.73
+      intensity: 1.09
       radius: 0.3
       sampleCount: 10
       downsampling: 1
@@ -77,10 +77,10 @@ MonoBehaviour:
       useCameraFov: 0
       kernelSize: 1
   motionBlur:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
-      shutterAngle: 270
-      sampleCount: 10
+      shutterAngle: 201
+      sampleCount: 7
       frameBlending: 0
   eyeAdaptation:
     m_Enabled: 0
@@ -113,21 +113,21 @@ MonoBehaviour:
     m_Settings:
       tonemapping:
         tonemapper: 2
-        neutralBlackIn: 0.049
-        neutralWhiteIn: 12.7
+        neutralBlackIn: 0.037
+        neutralWhiteIn: 10.3
         neutralBlackOut: 0.004
-        neutralWhiteOut: 2.12
-        neutralWhiteLevel: 12.7
+        neutralWhiteOut: 9.96
+        neutralWhiteLevel: 3.9
         neutralWhiteClip: 10
       basic:
         postExposure: 0
-        temperature: 0
+        temperature: 14
         tint: 0
         hueShift: 0
-        saturation: 0.93
+        saturation: 0.78
         contrast: 1.03
       channelMixer:
-        red: {x: 0.91, y: 0, z: 0}
+        red: {x: 0.97, y: 0, z: 0}
         green: {x: 0, y: 1, z: 0}
         blue: {x: 0, y: 0, z: 1}
         currentEditingChannel: 0
@@ -289,17 +289,17 @@ MonoBehaviour:
     m_Enabled: 1
     m_Settings:
       colored: 1
-      intensity: 0.05
-      size: 1
+      intensity: 0.4
+      size: 0.64
       luminanceContribution: 0.8
   vignette:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
       mode: 0
       color: {r: 0, g: 0, b: 0, a: 1}
       center: {x: 0.5, y: 0.5}
-      intensity: 0.45
-      smoothness: 0.2
+      intensity: 0.13
+      smoothness: 0.819
       roundness: 1
       mask: {fileID: 0}
       opacity: 1
