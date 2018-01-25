@@ -61,7 +61,9 @@ public class StrategyDrop : MonoBehaviour
             state.spawnFlag = false;
             m_Helis.Add(state);
         }
-        m_TextUi = GameObject.FindGameObjectWithTag("StrategyText").GetComponent<Text>();
+
+        if (GameObject.FindGameObjectWithTag("StrategyText"))
+            m_TextUi = GameObject.FindGameObjectWithTag("StrategyText").GetComponent<Text>();
         m_AudioSource = GameObject.FindGameObjectWithTag("StrategySound").GetComponent<AudioSource>();
         m_Time = 0.0f;
         m_IsSpawn = false;
@@ -102,11 +104,13 @@ public class StrategyDrop : MonoBehaviour
                 m_FirstFlag = false;
             }
             //テキストUI
-            m_TextUi.text = m_Text;
+            if (GameObject.FindGameObjectWithTag("StrategyText"))
+                m_TextUi.text = m_Text;
 
             if (!m_AudioSource.isPlaying)
             {
-                m_TextUi.text = "";
+                if (GameObject.FindGameObjectWithTag("StrategyText"))
+                    m_TextUi.text = "";
                 Destroy(gameObject);
             }
 

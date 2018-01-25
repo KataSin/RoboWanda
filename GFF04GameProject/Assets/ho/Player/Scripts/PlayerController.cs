@@ -402,8 +402,8 @@ public class PlayerController : MonoBehaviour
             m_IsStartFall = false;
 
 
-            t += 1.0f * Time.deltaTime;
-            if (t >= 0.8f)
+            t += 2.0f * Time.deltaTime;
+            if (t >= 1.6f)
             {
                 // グレネードランチャーを表示し、通常状態に移行（Ho実装、2017/12/11）
                 m_Launcher.SetActive(true);
@@ -432,7 +432,7 @@ public class PlayerController : MonoBehaviour
         if (s_Heri != null
             && s_Heri.GetComponent<PlayStartHeri>().Get_StopFlag() == true)
         {
-            if (t <= 0.2f)
+            if (t <= 0.4f)
                 for (int i = 0; i < rope_destibation_.Count; i++)
                     rope_destibation_[i].transform.position -= transform.up / 4f;
 

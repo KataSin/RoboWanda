@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class StrategyBombing : MonoBehaviour
 {
-    
+
 
     //作戦の時間
     public float m_StrategyTime;
@@ -24,7 +24,8 @@ public class StrategyBombing : MonoBehaviour
     void Start()
     {
         m_Time = 0.0f;
-        m_TextUi = GameObject.FindGameObjectWithTag("StrategyText").GetComponent<Text>();
+        if (GameObject.FindGameObjectWithTag("StrategyText"))
+            m_TextUi = GameObject.FindGameObjectWithTag("StrategyText").GetComponent<Text>();
         m_AudioSource = GameObject.FindGameObjectWithTag("StrategySound").GetComponent<AudioSource>();
         m_FirstFlag = true;
     }
@@ -48,11 +49,13 @@ public class StrategyBombing : MonoBehaviour
                 m_FirstFlag = false;
             }
             //テキストUI
-            m_TextUi.text = m_Text;
+            if (GameObject.FindGameObjectWithTag("StrategyText"))
+                m_TextUi.text = m_Text;
 
             if (!m_AudioSource.isPlaying)
             {
-                m_TextUi.text = "";
+                if (GameObject.FindGameObjectWithTag("StrategyText"))
+                    m_TextUi.text = "";
                 Destroy(gameObject);
             }
 

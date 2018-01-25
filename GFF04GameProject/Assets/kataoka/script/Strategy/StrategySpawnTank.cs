@@ -25,16 +25,17 @@ public class StrategySpawnTank : MonoBehaviour
     void Start()
     {
         m_Time = 0.0f;
-        m_FirstFlag =true;
+        m_FirstFlag = true;
         m_SpawnPoints = new List<GameObject>();
 
         var trans = GetComponentsInChildren<Transform>();
-        foreach(var i in trans)
+        foreach (var i in trans)
         {
             if (i.name != name)
                 m_SpawnPoints.Add(i.gameObject);
         }
-        m_TextUi = GameObject.FindGameObjectWithTag("StrategyText").GetComponent<Text>();
+        if (GameObject.FindGameObjectWithTag("StrategyText"))
+            m_TextUi = GameObject.FindGameObjectWithTag("StrategyText").GetComponent<Text>();
         m_AudioSource = GameObject.FindGameObjectWithTag("StrategySound").GetComponent<AudioSource>();
     }
 
@@ -56,11 +57,13 @@ public class StrategySpawnTank : MonoBehaviour
                 m_FirstFlag = false;
             }
             //テキストUI
-            m_TextUi.text = m_Text;
+            if (GameObject.FindGameObjectWithTag("StrategyText"))
+                m_TextUi.text = m_Text;
 
             if (!m_AudioSource.isPlaying)
             {
-                m_TextUi.text = "";
+                if (GameObject.FindGameObjectWithTag("StrategyText"))
+                    m_TextUi.text = "";
                 Destroy(gameObject);
             }
 
