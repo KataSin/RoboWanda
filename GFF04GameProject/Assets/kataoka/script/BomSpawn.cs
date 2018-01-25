@@ -30,6 +30,10 @@ public class BomSpawn : MonoBehaviour
     [SerializeField, Tooltip("強い投げる力")]
     public float m_HighPower = 200.0f;
 
+    [SerializeField, Tooltip("PV用にラインを消すかどうか")]
+    public bool m_PvLineRendererNoDraw;
+
+
     [SerializeField]
     private GameObject player_;
 
@@ -177,8 +181,8 @@ public class BomSpawn : MonoBehaviour
             m_LineRenderer.SetPosition(i, linePoints[i]);
         }
 
-
-
+        //消す
+        if (m_PvLineRendererNoDraw) m_LineRenderer.enabled = false;
 
     }
     /// <summary>
