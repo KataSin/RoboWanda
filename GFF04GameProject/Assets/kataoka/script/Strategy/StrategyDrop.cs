@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class StrategyDrop : MonoBehaviour
 {
     public float m_StrategyTime;
@@ -9,7 +9,11 @@ public class StrategyDrop : MonoBehaviour
 
     public AudioClip m_WirelessClip;
     private AudioSource m_AudioSource;
+    [SerializeField, MultilineAttribute(2)]
+    public string m_Text;
+    private Text m_TextUi;
 
+    private bool m_FirstFlag;
 
     public enum DropItem
     {
@@ -57,10 +61,12 @@ public class StrategyDrop : MonoBehaviour
             state.spawnFlag = false;
             m_Helis.Add(state);
         }
-
+        m_TextUi = GameObject.FindGameObjectWithTag("StrategyText").GetComponent<Text>();
         m_AudioSource = GameObject.FindGameObjectWithTag("StrategySound").GetComponent<AudioSource>();
         m_Time = 0.0f;
         m_IsSpawn = false;
+
+        m_FirstFlag = true;
     }
 
     // Update is called once per frame
@@ -83,15 +89,27 @@ public class StrategyDrop : MonoBehaviour
 
         if (m_Time >= m_StrategyTime)
         {
-            foreach (var i in m_Helis)
+            if (m_FirstFlag)
             {
-                i.heli.GetComponent<HelicopterDrop>().SetDrop(true);
-                i.heli.GetComponent<HelicopterDrop>().DropBox();
+                foreach (var i in m_Helis)
+                {
+                    i.heli.GetComponent<HelicopterDrop>().SetDrop(true);
+                    i.heli.GetComponent<HelicopterDrop>().DropBox();
+                }
+                m_AudioSource.clip = m_WirelessClip;
+                if (m_WirelessClip != null)
+                    m_AudioSource.PlayOneShot(m_AudioSource.clip);
+                m_FirstFlag = false;
             }
-            m_AudioSource.clip = m_WirelessClip;
-            if (m_WirelessClip != null)
-                m_AudioSource.PlayOneShot(m_AudioSource.clip);
-            Destroy(gameObject);
+            //テキストUI
+            m_TextUi.text = m_Text;
+
+            if (!m_AudioSource.isPlaying)
+            {
+                m_TextUi.text = "";
+                Destroy(gameObject);
+            }
+
         }
     }
 }
