@@ -346,11 +346,6 @@ public class PlayerController : MonoBehaviour
         */
     }
 
-    public void OnCollisionEnter(Collision other)
-    {
-        // Debug.Log(other.gameObject.name);
-    }
-
     // Capsule Colliderの接触判定
     public void OnTriggerEnter(Collider other)
     {
@@ -418,6 +413,10 @@ public class PlayerController : MonoBehaviour
                 {
                     if (rope_destibation_.Count != 0)
                     {
+                        Destroy(rope_destibation_[3]);
+                        rope_destibation_.RemoveAt(3);
+                        Destroy(rope_destibation_[2]);
+                        rope_destibation_.RemoveAt(2);
                         Destroy(rope_destibation_[1]);
                         rope_destibation_.RemoveAt(1);
                         Destroy(rope_destibation_[0]);
@@ -431,12 +430,14 @@ public class PlayerController : MonoBehaviour
         }
 
         if (s_Heri != null
-            && s_Heri.GetComponent<PlayStartHeri>().Get_StopFlag() == true
-            && m_IsStartFall)
+            && s_Heri.GetComponent<PlayStartHeri>().Get_StopFlag() == true)
         {
-            for (int i = 0; i < rope_destibation_.Count; i++)
-                rope_destibation_[i].transform.position -= transform.up / 4f;
-            transform.position -= transform.up / 4f;
+            if (t <= 0.2f)
+                for (int i = 0; i < rope_destibation_.Count; i++)
+                    rope_destibation_[i].transform.position -= transform.up / 4f;
+
+            if (m_IsStartFall)
+                transform.position -= transform.up / 4f;
         }
     }
 
@@ -451,7 +452,15 @@ public class PlayerController : MonoBehaviour
             m_Animator.SetIKPosition(AvatarIKGoal.LeftHand, rope_destibation_[0].transform.position);
 
             m_Animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+            m_Animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
             m_Animator.SetIKPosition(AvatarIKGoal.RightHand, rope_destibation_[1].transform.position);
+            m_Animator.SetIKRotation(AvatarIKGoal.RightHand, rope_destibation_[1].transform.rotation);
+
+            m_Animator.SetIKHintPositionWeight(AvatarIKHint.LeftElbow, 1f);
+            m_Animator.SetIKHintPosition(AvatarIKHint.LeftElbow, rope_destibation_[2].transform.position);
+
+            m_Animator.SetIKHintPositionWeight(AvatarIKHint.RightElbow, 1f);
+            m_Animator.SetIKHintPosition(AvatarIKHint.RightElbow, rope_destibation_[3].transform.position);
         }
     }
 
