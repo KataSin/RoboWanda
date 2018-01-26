@@ -170,25 +170,25 @@ public class PlayerController : MonoBehaviour
 
         if (m_BomSpawn == null)
         {
-            Debug.Log("エラー発生したので終了します");
-            Debug.Log("場所：PlayerController.cs");
-            Debug.Log("Error Log：擲弾オブジェクトが存在しない");
+            //Debug.Log("エラー発生したので終了します");
+            //Debug.Log("場所：PlayerController.cs");
+            //Debug.Log("Error Log：擲弾オブジェクトが存在しない");
             //Application.Quit();
         }
 
         if (m_Launcher == null)
         {
-            Debug.Log("エラー発生したので終了します");
-            Debug.Log("場所：PlayerController.cs");
-            Debug.Log("Error Log：ランチャーのモデルが存在しない");
+            //Debug.Log("エラー発生したので終了します");
+            //Debug.Log("場所：PlayerController.cs");
+            //Debug.Log("Error Log：ランチャーのモデルが存在しない");
             //Application.Quit();
         }
 
         if (m_Explosive == null)
         {
-            Debug.Log("エラー発生したので終了します");
-            Debug.Log("場所：PlayerController.cs");
-            Debug.Log("Error Log：爆発物のプレハブが存在しない");
+            //Debug.Log("エラー発生したので終了します");
+            //Debug.Log("場所：PlayerController.cs");
+            //Debug.Log("Error Log：爆発物のプレハブが存在しない");
             //Application.Quit();
         }
     }
