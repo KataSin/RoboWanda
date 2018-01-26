@@ -138,8 +138,10 @@ MonoBehaviour:
   m_ExplosionImage: {fileID: 1690361180989972}
   m_FlashGrenadeImage: {fileID: 1836990637250814}
   m_SmokeGrenadeImage: {fileID: 1237490612538476}
-  m_PositionSpeedHigh: 8
-  m_PositionSpeedLow: 6
+  m_RightTurnSpeedHigh: 9
+  m_RightTurnSpeedLow: 7
+  m_LeftTurnSpeedHigh: 8
+  m_LeftTurnSpeedLow: 6
   m_ScaleSpeed: 5
   m_BomSpawn: {fileID: 0}
 --- !u!114 &114286964796735408
@@ -263,7 +265,7 @@ RectTransform:
   m_GameObject: {fileID: 1237490612538476}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.35, y: 0.35, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_Children: []
   m_Father: {fileID: 224769583323920432}
   m_RootOrder: 2
@@ -320,7 +322,7 @@ RectTransform:
   m_GameObject: {fileID: 1836990637250814}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_Children: []
   m_Father: {fileID: 224769583323920432}
   m_RootOrder: 1
