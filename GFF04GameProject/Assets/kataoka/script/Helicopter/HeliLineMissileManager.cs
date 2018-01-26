@@ -91,16 +91,17 @@ public class HeliLineMissileManager : MonoBehaviour
             int layer = ~(1 << 14);
             if (Physics.Raycast(ray,out hit, 150.0f,layer))
             {
-                i.landingPoint.transform.Find("Particle System").GetComponent<ParticleSystem>().Play();
-                i.landingPoint.SetActive(true);
-                i.landingPoint.transform.position = hit.point+(hit.normal).normalized*1.5f;
-                Quaternion rotate = Quaternion.LookRotation(hit.normal);
-                i.line.GetComponent<LineRenderer>().SetPosition(1, hit.point);
-                i.landingPoint.transform.rotation = rotate*Quaternion.Euler(90,0,0);
-                m_DrawFlag = true;
-                m_GoFlag = true;
-                
-                
+                if (LayerMask.LayerToName(hit.collider.gameObject.layer) == "Robot")
+                {
+                    i.landingPoint.transform.Find("Particle System").GetComponent<ParticleSystem>().Play();
+                    i.landingPoint.SetActive(true);
+                    i.landingPoint.transform.position = hit.point + (hit.normal).normalized * 1.5f;
+                    Quaternion rotate = Quaternion.LookRotation(hit.normal);
+                    i.line.GetComponent<LineRenderer>().SetPosition(1, hit.point);
+                    i.landingPoint.transform.rotation = rotate * Quaternion.Euler(90, 0, 0);
+                    m_DrawFlag = true;
+                    m_GoFlag = true;
+                }
             }
 
         }
