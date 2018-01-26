@@ -107,11 +107,7 @@ public class tower_collide : MonoBehaviour
             ||
             other.gameObject.tag == "bom"
             ||
-            other.gameObject.tag == "RobotArmAttack"
-            ||
             other.gameObject.tag == "RobotBeam"
-            ||
-            other.gameObject.tag == "Missile"
             ||
             other.gameObject.tag == "ExplosionCollision"
             ||

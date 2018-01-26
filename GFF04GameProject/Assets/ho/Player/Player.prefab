@@ -645,6 +645,7 @@ GameObject:
   - component: {fileID: 82554079821818542}
   - component: {fileID: 82039910529936716}
   - component: {fileID: 82760583571129774}
+  - component: {fileID: 114440550624245192}
   m_Layer: 13
   m_Name: Player
   m_TagString: Player
@@ -2616,6 +2617,23 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114440550624245192
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1509400212802182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7b2d5082d1e7984298f2b1d5f157f15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EyesDirection: {fileID: 0}
+  m_Weight: 1
+  m_EyesWeight: 1
+  m_HeadWeight: 3
+  m_BodyWeight: 1
+  m_ClampWeight: 1
 --- !u!114 &114881641353461562
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2671,6 +2689,7 @@ MonoBehaviour:
   m_Point: {fileID: 1878176742274818, guid: 48804f3a4e577224da4a0e50e2d072fc, type: 2}
   m_Power: 100
   m_HighPower: 200
+  m_PvLineRendererNoDraw: 0
   player_: {fileID: 1509400212802182}
   m_Bom: 0
 --- !u!120 &120718968720183324
