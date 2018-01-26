@@ -168,15 +168,13 @@ public class Break_v2 : MonoBehaviour
             ||
             other.gameObject.tag == "bom"
             ||
-            other.gameObject.tag == "RobotArmAttack"
-            ||
             other.gameObject.tag == "RobotBeam"
-            ||
-            other.gameObject.tag == "Missile"
             ||
             other.gameObject.tag == "ExplosionCollision"
             ||
             other.gameObject.tag == "BeamCollide")
+        {
             isBreak = true;
+        }
     }
 }
