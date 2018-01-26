@@ -278,6 +278,16 @@ public class PlayerController : MonoBehaviour
 
         m_current_speed = m_Controller.velocity.magnitude;
 
+        // 視点制御スクリプトの制御
+        if (m_State == PlayerState.Normal)
+        {
+            gameObject.GetComponent<PlayerLookAt>().enabled = true;
+        }
+        else
+        {
+            gameObject.GetComponent<PlayerLookAt>().enabled = false;
+        }
+
         // 振動テスト
         /*if (Input.GetKeyDown("space"))
         {
