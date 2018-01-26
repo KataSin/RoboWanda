@@ -29,7 +29,7 @@ public class LightBullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(m_VertexPoint, transform.position) <= 1.0f)
+        if (Vector3.Distance(m_VertexPoint, transform.position) <= 3.0f)
         {
             m_IsExprosion = true;
         }
@@ -48,6 +48,8 @@ public class LightBullet : MonoBehaviour
                 m_RightVec = transform.right;
                 //親子関係を変更
                 m_Parasol.transform.parent = null;
+                m_Light.transform.parent = null;
+                m_Light.transform.parent = m_Parasol.transform;
                 transform.parent = m_Parasol.transform;
             }
             float numSin = (Mathf.Sin(m_Time * Mathf.Deg2Rad) + 1.0f) / 2.0f;
@@ -61,10 +63,20 @@ public class LightBullet : MonoBehaviour
     public void SetVertex(Vector3 vertexPoint)
     {
         m_VertexPoint = vertexPoint;
+        //頂点が決められなかった場合は即座に爆破
+        if (m_VertexPoint == Vector3.zero)
+            m_IsExprosion = true;
     }
 
-    public void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-
+        if (other.tag == "LightCollision") return;
+        if (m_IsExprosion)
+        {
+            Destroy(transform.parent.gameObject);
+        }
     }
+
+
+
 }
