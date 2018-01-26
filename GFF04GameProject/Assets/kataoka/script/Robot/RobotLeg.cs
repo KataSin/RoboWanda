@@ -33,7 +33,7 @@ public class RobotLeg : MonoBehaviour
             m_IsLeg = true;
             m_IkPoint = other.transform.parent.Find("IKPoint").transform.position;
 
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
         }
 
     }
