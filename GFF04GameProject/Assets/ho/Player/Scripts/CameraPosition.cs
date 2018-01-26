@@ -657,7 +657,7 @@ public class CameraPosition : MonoBehaviour
 
         else if (isMAllClear)
         {
-            if (m_test >= 4f)
+            if (m_test >= 2f)
             {
                 isEventEnd = true;
                 if (m_test >= 12f)
