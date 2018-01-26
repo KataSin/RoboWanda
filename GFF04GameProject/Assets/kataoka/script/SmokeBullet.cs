@@ -33,7 +33,7 @@ public class SmokeBullet : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if ((other.tag == "Ground" || other.tag == "TowerCollision" || other.tag == "Tower") && !m_IsExprosion)
+        if ((other.tag == "Ground" || other.tag == "TowerCollision" || other.tag == "Tower"||(other.GetComponent<RobotDamage>()!=null)) && !m_IsExprosion)
         {
             //ベクトルを取る
             List<Vector3> vecs = new List<Vector3>();

@@ -65,7 +65,7 @@ public class BomSpawn : MonoBehaviour
 
         m_IsLineDraw = false;
         //軌道ポイント生成
-        for (int time = 0; time <= 200; time++)
+        for (int time = 0; time <= 80; time++)
         {
             GameObject point = Instantiate(m_Point);
             points.Add(point);
@@ -106,34 +106,39 @@ public class BomSpawn : MonoBehaviour
         //表示しないならアクティブをfalseにしてリターン
         if (!m_IsLineDraw)
         {
-            //foreach (var i in points)
-            //{
-            //    i.SetActive(false);
-            //}
-            m_LineRenderer.enabled = false;
+            foreach (var i in points)
+            {
+                i.SetActive(false);
+            }
+            //m_LineRenderer.enabled = false;
             m_LandingPoint.SetActive(false);
             return;
         }
-        m_LineRenderer.enabled = true;
+        //m_LineRenderer.enabled = true;
         float power = m_Power;
         if (m_Bom == Bom.LIGHT_BOM)
             power = m_HighPower;
         m_Vec = m_Vec * power;
         //ポジション設定
-        for (int time = 0; time <= 200; time++)
+        for (int time = 0; time <= 80; time++)
         {
-            Vector3 pos = Force(transform.position, m_Vec, 0.1f, Physics.gravity, 1, time * 0.1f);
+            Vector3 pos = Force(transform.position, m_Vec, 0.1f, Physics.gravity, 1, time * 0.05f);
             points[time].transform.position = pos;
         }
         int colNum = 0;
         //反映するポイント
         List<Vector3> linePoints = new List<Vector3>();
-
+        m_VertexPos = Vector3.zero;
         //線設定
         for (int i = 0; i <= points.Count - 1; i++)
         {
-
             Vector3 start = points[i].transform.position;
+            points[i].SetActive(true);
+
+            //オブジェクトの回転
+            if (i + 1 < points.Count)
+                points[i].transform.LookAt(points[i + 1].transform.position);
+
 
             if (points.Count - 1 < i + 1) break;
             Vector3 end = points[i + 1].transform.position;
@@ -152,37 +157,48 @@ public class BomSpawn : MonoBehaviour
                     m_LandingPoint.transform.eulerAngles.z);
 
                 m_LandingPoint.SetActive(true);
-                //for (int j = i + 1; j <= 200; j++)
-                //{
-                //    points[i].SetActive(false);
-                //}
+                for (int j = i + 1; j <= points.Count - 1; j++)
+                {
+                    points[i].SetActive(false);
+                }
                 break;
             }
             else
             {
                 linePoints.Add(points[i].transform.position);
+
+                //if (m_VertexPos.y <= points[i].transform.position.y)
+                //{
+                //    m_VertexPos = points[i].transform.position;
+                //}
+
             }
             //着地地点表示するか
 
-            if (i == 200)
+            if (i == 80)
             {
                 m_LandingPoint.SetActive(false);
             }
             colNum++;
         }
-        m_LineRenderer.positionCount = linePoints.Count;
-        if (m_Bom == BomSpawn.Bom.LIGHT_BOM)
-        {
-            m_LineRenderer.positionCount = colNum / 2;
-            m_VertexPos = linePoints[m_LineRenderer.positionCount];
-        }
-        for (int i = 0; i < m_LineRenderer.positionCount; i++)
-        {
-            m_LineRenderer.SetPosition(i, linePoints[i]);
-        }
+        if (linePoints.Count >= 2)
+            m_VertexPos = linePoints[linePoints.Count / 2];
+        //一個目は消す
+        points[0].SetActive(false);
+        //m_LineRenderer.positionCount = linePoints.Count;
 
-        //消す
-        if (m_PvLineRendererNoDraw) m_LineRenderer.enabled = false;
+        //if (m_Bom == BomSpawn.Bom.LIGHT_BOM)
+        //{
+        //    m_LineRenderer.positionCount = colNum / 2;
+
+        //}
+        //for (int i = 0; i < m_LineRenderer.positionCount; i++)
+        //{
+        //    m_LineRenderer.SetPosition(i, linePoints[i]);
+        //}
+
+        ////消す
+        //if (m_PvLineRendererNoDraw) m_LineRenderer.enabled = false;
 
     }
     /// <summary>
@@ -210,7 +226,11 @@ public class BomSpawn : MonoBehaviour
                 }
 
         }
+
+
+
         GameObject bom = Instantiate(prefab, transform.position, Quaternion.identity);
+        if (m_VertexPos.y <= transform.position.y) m_VertexPos = Vector3.zero;
         if (m_Bom == Bom.LIGHT_BOM) bom.GetComponent<LightBullet>().SetVertex(m_VertexPos);
         else if (m_Bom == Bom.BOM) bom.GetComponent<Bomb_v2>().m_Bullet = Bom.BOM;
         bom.transform.rotation = Quaternion.Euler(90f, 0f, -(player_.transform.rotation.y * 180f / Mathf.PI) * 2f);
@@ -219,6 +239,9 @@ public class BomSpawn : MonoBehaviour
         if (m_Bom == Bom.LIGHT_BOM)
             power = m_HighPower;
         m_Vec = m_Vec * power;
+
+
+
         bom.GetComponent<Rigidbody>().AddForce(m_Vec);
     }
 
