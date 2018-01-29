@@ -19,13 +19,12 @@ public class BeamExplosion : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        m_Timer += Time.deltaTime;
+    {       
         if (m_ExprosionFlag)
         {
             Instantiate(m_Exprosion, transform.position, Quaternion.identity);
-            gameObject.AddComponent<SphereCollider>();
-            gameObject.GetComponent<SphereCollider>().isTrigger = true; ;
+            //gameObject.AddComponent<SphereCollider>();
+            //gameObject.GetComponent<SphereCollider>().isTrigger = true;
             m_ExprosionFlag = false;
         }
 
@@ -34,7 +33,6 @@ public class BeamExplosion : MonoBehaviour
             Destroy(gameObject);
         }
 
-
-
+        m_Timer += Time.deltaTime;
     }
 }

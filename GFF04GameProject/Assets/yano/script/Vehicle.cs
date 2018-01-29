@@ -26,7 +26,7 @@ public class Vehicle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_correction_valueDelta = m_correction_value * 0.5f * Time.deltaTime;
+        m_correction_valueDelta = m_correction_value * 0.7f * Time.deltaTime;
 
         if (camera_pos_.GetComponent<CameraPosition>().GetEMode() != 0)
             transform.position += (transform.forward / m_correction_valueDelta) * Time.deltaTime;

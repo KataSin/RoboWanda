@@ -67,7 +67,8 @@ public class RobotManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(m_RobotState);
+        //Debug.Log(m_RobotState);
+        Debug.Log(m_RobotHp);
         //ロボット仮HPUI
         if (GameObject.FindGameObjectWithTag("RobotHp") != null)
         {

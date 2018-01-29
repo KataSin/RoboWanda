@@ -37,6 +37,11 @@ public class RobotDamage : MonoBehaviour
             if (scoreMana_ != null)
                 scoreMana_.GetComponent<ScoreManager>().SetAtackScore(10);
         }
+
+        if (other.tag == "ExplosionCollision")
+        {
+            m_Manager.Damage(1);
+        }
         //if (other.tag == "TowerCollision")
         //{
         //    if (other.transform.parent.GetComponent<tower_collide_manager>().Get_HitOther() == 1 &&
@@ -46,10 +51,7 @@ public class RobotDamage : MonoBehaviour
         //        m_Manager.Damage(40);
         //    }
         //}
-        if (other.tag == "ExplosionCollision")
-        {
-            m_Manager.Damage(1);
-        }
+
     }
 
 }
