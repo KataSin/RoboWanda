@@ -16,7 +16,8 @@ enum PlayerState
     Creeping,   // 匍匐
     Dead,       // 死亡
     Passing,    // 乗り越え
-    Setting     // 爆発物設置
+    Setting,    // 爆発物設置
+    BlewUp      // 飛ばされる
 }
 
 public class PlayerController : MonoBehaviour
@@ -253,6 +254,13 @@ public class PlayerController : MonoBehaviour
             // 爆発物設置
             case PlayerState.Setting:
                 Setting();
+                m_IsAiming = false;
+                m_IsCreeping = false;
+                m_IsDead = false;
+                break;
+            // 飛ばされる
+            case PlayerState.BlewUp:
+                BlewUp();
                 m_IsAiming = false;
                 m_IsCreeping = false;
                 m_IsDead = false;
@@ -498,6 +506,30 @@ public class PlayerController : MonoBehaviour
             m_State = PlayerState.Creeping;
         }
         */
+
+        // Bキーを押すと飛ばされる（デバッグ用）
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            // プレイヤーモデルの全てのRigidbodyを取得
+            List<Rigidbody> rigids = new List<Rigidbody>();
+            foreach (var i in gameObject.GetComponentsInChildren<Rigidbody>())
+            {
+                if (i != null)
+                {
+                    rigids.Add(i.GetComponent<Rigidbody>());
+                }
+            }
+
+            m_Animator.enabled = false;     // アニメーターを無効化
+            // 全てのRigidbodyに力を与える
+            foreach (var i in rigids)
+            {
+                // i.GetComponent<Rigidbody>().AddExplosionForce(50.0f, i.transform.position, 50.0f);
+                i.GetComponent<Rigidbody>().AddForce(i.transform.up * 25.0f, ForceMode.Impulse);
+            }
+
+            m_State = PlayerState.BlewUp;   // 飛ばされる状態に移行
+        }
     }
 
     // 通常時の移動
@@ -1083,5 +1115,16 @@ public class PlayerController : MonoBehaviour
         }
 
         m_setting_time -= Time.deltaTime;
+    }
+
+    // 飛ばされる処理
+    void BlewUp()
+    {
+        // 通常状態に戻る（デバッグ用）
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            m_Animator.enabled = true;
+            m_State = PlayerState.Normal;
+        }
     }
 }
