@@ -93,16 +93,16 @@ public class PlayerUIController : MonoBehaviour
     {
         // 弾表示の新しい座標とスケール
         // 爆発弾（表示順：1）
-        Vector3 new_explosion_position = new Vector3(416.0f, -290.0f, 0.0f);
-        Vector3 new_explosion_scale = new Vector3(0.5f, 0.5f, 1.0f);
+        Vector3 new_explosion_position = new Vector3(460.0f, -300.0f, 0.0f);
+        Vector3 new_explosion_scale = new Vector3(0.4f, 0.4f, 1.0f);
 
         // 照明弾（表示順：2）
-        Vector3 new_flash_position = new Vector3(467.0f, -210.0f, 0.0f);
-        Vector3 new_flash_scale = new Vector3(0.3f, 0.3f, 0.0f);
+        Vector3 new_flash_position = new Vector3(510.0f, -240.0f, 0.0f);
+        Vector3 new_flash_scale = new Vector3(0.25f, 0.25f, 0.0f);
 
         // スモーク弾（表示順：3）
-        Vector3 new_smoke_position = new Vector3(510.0f, -140.0f, 0.0f);
-        Vector3 new_smoke_scale = new Vector3(0.4f, 0.4f, 0.0f);
+        Vector3 new_smoke_position = new Vector3(530.0f, -180.0f, 0.0f);
+        Vector3 new_smoke_scale = new Vector3(0.3f, 0.3f, 0.0f);
 
         // 新しい座標に移動し、アイコンサイズが変化
         // 昇順（3 -> 1、スモーク弾 -> 爆発弾）
@@ -144,16 +144,16 @@ public class PlayerUIController : MonoBehaviour
     {
         // 弾表示の新しい座標とスケール
         // 照明弾（表示順：1）
-        Vector3 new_flash_position = new Vector3(416.0f, -290.0f, 0.0f);
-        Vector3 new_flash_scale = new Vector3(0.5f, 0.5f, 1.0f);
+        Vector3 new_flash_position = new Vector3(460.0f, -300.0f, 0.0f);
+        Vector3 new_flash_scale = new Vector3(0.4f, 0.4f, 1.0f);
 
         // スモーク弾（表示順：2）
-        Vector3 new_smoke_position = new Vector3(467.0f, -210.0f, 0.0f);
-        Vector3 new_smoke_scale = new Vector3(0.3f, 0.3f, 0.0f);
+        Vector3 new_smoke_position = new Vector3(510.0f, -240.0f, 0.0f);
+        Vector3 new_smoke_scale = new Vector3(0.25f, 0.25f, 0.0f);
 
         // 爆発弾（表示順：3）
-        Vector3 new_explosion_position = new Vector3(510.0f, -140.0f, 0.0f);
-        Vector3 new_explosion_scale = new Vector3(0.4f, 0.4f, 0.0f);
+        Vector3 new_explosion_position = new Vector3(530.0f, -180.0f, 0.0f);
+        Vector3 new_explosion_scale = new Vector3(0.3f, 0.3f, 0.0f);
 
         // 新しい座標に移動し、アイコンサイズが変化
         // 昇順（1 -> 2、// 爆発弾 -> 照明弾）
@@ -195,16 +195,16 @@ public class PlayerUIController : MonoBehaviour
     {
         // 弾表示の新しい座標とスケール
         // スモーク弾（表示順：1）
-        Vector3 new_smoke_position = new Vector3(416.0f, -290.0f, 0.0f);
-        Vector3 new_smoke_scale = new Vector3(0.5f, 0.5f, 1.0f);
+        Vector3 new_smoke_position = new Vector3(460.0f, -300.0f, 0.0f);
+        Vector3 new_smoke_scale = new Vector3(0.4f, 0.4f, 1.0f);
 
         // 爆発弾（表示順：2）
-        Vector3 new_explosion_position = new Vector3(467.0f, -210.0f, 0.0f);
-        Vector3 new_explosion_scale = new Vector3(0.3f, 0.3f, 0.0f);
+        Vector3 new_explosion_position = new Vector3(510.0f, -240.0f, 0.0f);
+        Vector3 new_explosion_scale = new Vector3(0.25f, 0.25f, 0.0f);
 
         // 照明弾（表示順：3）
-        Vector3 new_flash_position = new Vector3(510.0f, -140.0f, 0.0f);
-        Vector3 new_flash_scale = new Vector3(0.4f, 0.4f, 0.0f);
+        Vector3 new_flash_position = new Vector3(530.0f, -180.0f, 0.0f);
+        Vector3 new_flash_scale = new Vector3(0.3f, 0.3f, 0.0f);
 
         // 新しい座標に移動し、アイコンサイズが変化
         // 昇順（2 -> 3、// 照明弾 -> スモーク弾）
