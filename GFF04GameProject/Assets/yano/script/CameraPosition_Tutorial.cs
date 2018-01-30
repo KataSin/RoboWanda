@@ -13,6 +13,8 @@ enum T_PlayerCameraMode
     Tutorial_1,
     Tutorial_2,
     Tutorial_3,
+    Tutorial_4,
+    Tutorial_5,
     Normal,     // 通常
     Aim,
     Dead,
@@ -136,9 +138,14 @@ public class CameraPosition_Tutorial : MonoBehaviour
     private bool t_CameraFead1;
     private bool t_CameraFead2;
     private bool t_CameraFead3;
+    private bool t_CameraFead4;
+    private bool t_CameraFead5;
 
     [SerializeField]
     private List<GameObject> clear_point;
+
+    [SerializeField]
+    private List<GameObject> camera_points_;
 
     [SerializeField]
     private GameObject tutorialMana_;
@@ -205,6 +212,14 @@ public class CameraPosition_Tutorial : MonoBehaviour
             case T_PlayerCameraMode.Tutorial_3:
                 isCntActive = false;
                 Tutorial3Mode();
+                break;
+            case T_PlayerCameraMode.Tutorial_4:
+                isCntActive = false;
+                Tutorial4Mode();
+                break;
+            case T_PlayerCameraMode.Tutorial_5:
+                isCntActive = false;
+                Tutorial5Mode();
                 break;
             case T_PlayerCameraMode.Normal:
                 isCntActive = true;
@@ -322,6 +337,66 @@ public class CameraPosition_Tutorial : MonoBehaviour
         t = Mathf.Clamp(t, 0f, 2f);
     }
 
+    void Tutorial4Mode()
+    {
+        if (!t_CameraFead4)
+            t += 1.0f * Time.deltaTime;
+        else
+        {
+            t -= 1.0f * Time.deltaTime;
+            if (t < 0f)
+                m_Mode = T_PlayerCameraMode.Normal;
+        }
+
+        //transform.LookAt(clear_point[2].transform.position);
+
+        transform.position =
+            Vector3.Lerp(m_origin_pos, camera_points_[0].transform.position, t / 2f);
+        transform.rotation =
+            Quaternion.Slerp(m_origin_rotation, Quaternion.identity, t / 2f);
+
+        if (t >= 2f)
+        {
+            m_intervalTimer += 1.0f * Time.deltaTime;
+
+            if (Input.GetKeyDown(KeyCode.Space)
+                || m_intervalTimer >= 3f)
+                t_CameraFead4 = true;
+        }
+
+        t = Mathf.Clamp(t, 0f, 2f);
+    }
+
+    void Tutorial5Mode()
+    {
+        if (!t_CameraFead5)
+            t += 1.0f * Time.deltaTime;
+        else
+        {
+            t -= 1.0f * Time.deltaTime;
+            if (t < 0f)
+                m_Mode = T_PlayerCameraMode.Normal;
+        }
+
+        //transform.LookAt(clear_point[2].transform.position);
+
+        transform.position =
+            Vector3.Lerp(m_origin_pos, camera_points_[1].transform.position, t / 2f);
+        transform.rotation =
+            Quaternion.Slerp(m_origin_rotation, Quaternion.identity, t / 2f);
+
+        if (t >= 2f)
+        {
+            m_intervalTimer += 1.0f * Time.deltaTime;
+
+            if (Input.GetKeyDown(KeyCode.Space)
+                || m_intervalTimer >= 3f)
+                t_CameraFead5 = true;
+        }
+
+        t = Mathf.Clamp(t, 0f, 2f);
+    }
+
     // 通常時の挙動
     void NormalMode()
     {
@@ -349,6 +424,24 @@ public class CameraPosition_Tutorial : MonoBehaviour
             && !t_CameraFead3)
         {
             m_Mode = T_PlayerCameraMode.Tutorial_3;
+            t = 0f;
+            m_intervalTimer = 0f;
+            return;
+        }
+
+        if (tutorialMana_.GetComponent<TutorialManager>().GetTutorialState() == 5
+            && !t_CameraFead4)
+        {
+            m_Mode = T_PlayerCameraMode.Tutorial_4;
+            t = 0f;
+            m_intervalTimer = 0f;
+            return;
+        }
+
+        if (tutorialMana_.GetComponent<TutorialManager>().GetTutorialState() == 6
+            && !t_CameraFead5)
+        {
+            m_Mode = T_PlayerCameraMode.Tutorial_5;
             t = 0f;
             m_intervalTimer = 0f;
             return;
