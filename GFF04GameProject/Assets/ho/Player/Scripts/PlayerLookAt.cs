@@ -11,6 +11,7 @@ public class PlayerLookAt : MonoBehaviour
 {
     [SerializeField]
     private GameObject m_EyesDirection;      // 注視点
+
     [SerializeField]
     private float m_Weight = 1.0f;
     [SerializeField]
@@ -46,7 +47,48 @@ public class PlayerLookAt : MonoBehaviour
 
     void OnAnimatorIK()
     {
+        /*
+        Vector3 camera_forward = Camera.main.transform.forward;     // カメラの前方座標を取得
+        Vector3 direction = camera_forward - transform.forward;
+        Vector3 i = transform.InverseTransformDirection(direction);
+        i.Normalize();
+
+        Debug.Log(i);
+        */
+        /*
+        if (i.x < -0.5f || i.x > 0.5f)
+        {
+            m_Animator.SetLookAtWeight(m_Weight, m_BodyWeight, m_HeadWeight, m_EyesWeight, m_ClampWeight);
+
+            Vector3 target_position = m_EyesDirection.transform.position;
+            m_Animator.SetLookAtPosition(target_position);
+        }
+        */
+        /*
+        // カメラがプレイヤーの背後にある場合
+        if (i.x < -0.5f || i.x > 0.5f)
+        {
+            m_Animator.SetLookAtWeight(m_Weight, m_BodyWeight, m_HeadWeight, m_EyesWeight, m_ClampWeight);
+
+            Vector3 target_position = m_EyesDirection.transform.position;
+            target_position.y = 1.65f;
+            m_Animator.SetLookAtPosition(target_position);
+        }
+        // カメラがプレイヤーの正面にある場合
+        else
+        {
+            m_Animator.SetLookAtWeight(m_Weight, m_BodyWeight, 0.5f, m_EyesWeight, m_ClampWeight);
+
+            Vector3 target_position = m_EyesDirection.transform.position;
+            target_position.y = 1.65f;
+            m_Animator.SetLookAtPosition(target_position);
+        }
+        */
+
         m_Animator.SetLookAtWeight(m_Weight, m_BodyWeight, m_HeadWeight, m_EyesWeight, m_ClampWeight);
-        m_Animator.SetLookAtPosition(m_EyesDirection.transform.position);
+
+        Vector3 target_position = m_EyesDirection.transform.position;
+        target_position.y = 1.65f;
+        m_Animator.SetLookAtPosition(target_position);
     }
 }
