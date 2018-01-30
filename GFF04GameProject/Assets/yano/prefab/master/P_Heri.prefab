@@ -396,6 +396,7 @@ GameObject:
   - component: {fileID: 82079069625272586}
   - component: {fileID: 82760801002154338}
   - component: {fileID: 82935436807172562}
+  - component: {fileID: 114210093857953402}
   m_Layer: 13
   m_Name: Player
   m_TagString: Player
@@ -5097,6 +5098,44 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &114210093857953402
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1158747146339274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4fa562d67034868a9aafbe4b663012, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rootNode: {fileID: 0}
+  segments:
+  - firstTransform: {fileID: 4983509723821476}
+    lastTransform: {fileID: 4149145758009464}
+    thresholdAngleDifference: 100
+    bendingMultiplier: 0.7
+    maxAngleDifference: 40
+    maxBendingAngle: 30
+    responsiveness: 1
+  - firstTransform: {fileID: 4177267327927678}
+    lastTransform: {fileID: 4348282661475702}
+    thresholdAngleDifference: 100
+    bendingMultiplier: 0.7
+    maxAngleDifference: 30
+    maxBendingAngle: 100
+    responsiveness: 1
+  nonAffectedJoints:
+  - joint: {fileID: 4805002079879820}
+    effect: 0
+  - joint: {fileID: 4225282311529552}
+    effect: 0
+  headLookVector: {x: 0, y: 0, z: 1}
+  headUpVector: {x: 0, y: 1, z: 0}
+  target: {x: 0, y: 0, z: 0}
+  targetObject: {fileID: 0}
+  effect: 1
+  overrideAnimation: 1
 --- !u!114 &114228057218770994
 MonoBehaviour:
   m_ObjectHideFlags: 1

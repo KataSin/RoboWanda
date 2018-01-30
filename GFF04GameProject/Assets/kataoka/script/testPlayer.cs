@@ -4,36 +4,31 @@ using UnityEngine;
 
 public class testPlayer : MonoBehaviour
 {
+    private Vector3 sevePos;
 
-    private Rigidbody rb;
+    private Vector3 velo;
     // Use this for initialization
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        sevePos = transform.localPosition;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.W))
-        {
-            Vector3 vec = Camera.main.transform.forward * 30.0f;
-            vec.y = 0.0f;
-            rb.AddForce(vec);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            Vector3 vec = -Camera.main.transform.forward * 30.0f;
-            vec.y = 0.0f;
-            rb.AddForce(vec);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            rb.AddForce(Camera.main.transform.right * 30.0f);
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            rb.AddForce(-Camera.main.transform.right * 30.0f);
-        }
+
     }
+
+    private void LateUpdate()
+    {
+        velo = sevePos - transform.localPosition;
+        sevePos = transform.localPosition;
+    }
+
+    public Vector3 GetVelo()
+    {
+        return velo;
+    }
+
+
 }
