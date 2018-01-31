@@ -278,15 +278,15 @@ public class PlayerController : MonoBehaviour
 
         m_current_speed = m_Controller.velocity.magnitude;
 
-        // 視点制御スクリプトの制御
-        if (m_State == PlayerState.Normal)
-        {
-            gameObject.GetComponent<PlayerLookAt>().enabled = true;
-        }
-        else
-        {
-            gameObject.GetComponent<PlayerLookAt>().enabled = false;
-        }
+        //// 視点制御スクリプトの制御
+        //if (m_State == PlayerState.Normal)
+        //{
+        //    gameObject.GetComponent<PlayerLookAt>().enabled = true;
+        //}
+        //else
+        //{
+        //    gameObject.GetComponent<PlayerLookAt>().enabled = false;
+        //}
 
         // 振動テスト
         /*if (Input.GetKeyDown("space"))
@@ -806,7 +806,8 @@ public class PlayerController : MonoBehaviour
             {
                 m_SpeedX = Mathf.Max(m_SpeedX - m_BrakePower * Time.deltaTime, 0);
             }
-            else {
+            else
+            {
                 m_SpeedX = Mathf.Min(m_SpeedX + m_BrakePower * Time.deltaTime, 0);
             }
         }
@@ -817,7 +818,8 @@ public class PlayerController : MonoBehaviour
             {
                 m_SpeedZ = Mathf.Max(m_SpeedZ - m_BrakePower * Time.deltaTime, 0);
             }
-            else {
+            else
+            {
                 m_SpeedZ = Mathf.Min(m_SpeedZ + m_BrakePower * Time.deltaTime, 0);
             }
         }
@@ -899,7 +901,8 @@ public class PlayerController : MonoBehaviour
             {
                 m_SpeedX = Mathf.Max(m_SpeedX - m_BrakePower * Time.deltaTime, 0);
             }
-            else {
+            else
+            {
                 m_SpeedX = Mathf.Min(m_SpeedX + m_BrakePower * Time.deltaTime, 0);
             }
         }
@@ -910,7 +913,8 @@ public class PlayerController : MonoBehaviour
             {
                 m_SpeedZ = Mathf.Max(m_SpeedZ - m_BrakePower * Time.deltaTime, 0);
             }
-            else {
+            else
+            {
                 m_SpeedZ = Mathf.Min(m_SpeedZ + m_BrakePower * Time.deltaTime, 0);
             }
         }
