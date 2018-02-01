@@ -5,13 +5,13 @@ using UnityEngine.AI;
 
 public class Tank : MonoBehaviour
 {
-    //切り離されたかどうか
-    private bool m_IsFree;
-
+    public GameObject m_BreakTank;
     public GameObject m_GunRotateY;
     public GameObject m_GunRotateX;
 
     public GameObject m_SpawnBullet;
+
+    public bool m_IsBreak;
 
     private GameObject m_Robot;
 
@@ -30,6 +30,11 @@ public class Tank : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (m_IsBreak)
+        {
+            Instantiate(m_BreakTank, transform.position, transform.rotation);
+            Destroy(gameObject);
+        }
         //gunの動き
         Vector3 vec = (m_Robot.transform.position + new Vector3(0, 30, 0)) - transform.position;
         Quaternion lookY = Quaternion.LookRotation(vec);
@@ -57,6 +62,14 @@ public class Tank : MonoBehaviour
 
 
 
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.tag== "ExplosionCollision")
+        {
+            m_IsBreak = true;
+        }
     }
 
     public void SetGoTankPos(Vector3 pos)

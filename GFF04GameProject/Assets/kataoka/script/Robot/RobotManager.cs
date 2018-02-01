@@ -18,6 +18,11 @@ public class RobotManager : MonoBehaviour
         //アクションアップデート
         public Func<bool> actionUpdate;
     }
+    public enum RobotBehavior
+    {
+        ROBOT_ONE,
+        ROBOT_TWO
+    }
     //アクションたち
     private Dictionary<RobotAction.RobotState, ActionFunc> m_Actions;
     //アニメーション
@@ -34,6 +39,8 @@ public class RobotManager : MonoBehaviour
     private bool m_IsLoop;
     //ロボットが死んだかどうか
     private bool m_IsDead;
+    //ロボットの行動番号
+    private RobotBehavior m_BehaviorNum;
     // Use this for initialization
     void Start()
     {
@@ -57,18 +64,20 @@ public class RobotManager : MonoBehaviour
         AddAction(RobotAction.RobotState.ROBOT_MISSILE_ATTACK, m_RobotAction.RobotMissileAttack());
         AddAction(RobotAction.RobotState.ROBOT_DEAD, m_RobotAction.RobotDead());
         AddAction(RobotAction.RobotState.ROBOT_HELI_ATTACK, m_RobotAction.RobotHeliAttack());
-
+        AddAction(RobotAction.RobotState.ROBOT_BOMBING_ATTACK, m_RobotAction.RobotBombingAttack());
+        AddAction(RobotAction.RobotState.ROBOT_MISSILE_BEAM_ATTACK, m_RobotAction.RobotBeamAndMissileAttack());
 
         m_IsLoop = true;
 
         m_IsDead = false;
+        m_BehaviorNum = RobotBehavior.ROBOT_ONE;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(m_RobotState);
-        Debug.Log(m_RobotHp);
+        Debug.Log(m_RobotState);
+        //Debug.Log(m_RobotHp);
         //ロボット仮HPUI
         if (GameObject.FindGameObjectWithTag("RobotHp") != null)
         {
@@ -165,5 +174,15 @@ public class RobotManager : MonoBehaviour
     public void Dead()
     {
 
+    }
+
+
+    public void SetBehavior(RobotBehavior behavior)
+    {
+        m_BehaviorNum = behavior;
+    }
+    public RobotBehavior GetBehavior()
+    {
+        return m_BehaviorNum;
     }
 }

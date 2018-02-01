@@ -21,15 +21,18 @@ public class Bombing : MonoBehaviour
     private GameObject m_FireEffect;
     public float m_BomSpanwIntervalTime = 0.1f;
 
-
+    private int m_SpawnCount;
     public GameObject m_Exprosion;
     private bool m_IsStop;
     //壊れた時の線形保管
     private float m_BreakLerpTime;
+
+    private float m_StopTime;
     // Use this for initialization
     void Start()
     {
-
+        m_SpawnCount = 0;
+        m_StopTime = 0.0f;
         m_Time = 0.0f;
         m_BreakLerpTime = 0.0f;
         m_BreakFlag = false;
@@ -41,7 +44,11 @@ public class Bombing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_IsStop) return;
+        if (m_IsStop)
+        {
+            m_StopTime += Time.deltaTime;
+        }
+        if (m_StopTime >= 0.5f) return;
         if (m_BreakFlag)
         {
             m_FireEffect.SetActive(true);
@@ -57,6 +64,8 @@ public class Bombing : MonoBehaviour
         if (Vector3.Distance(transform.position, m_GoalPos) <= 5.0f)
         {
             GameObject.FindGameObjectWithTag("RobotLightManager").GetComponent<StrategyRobotLightManager>().m_IsLight = false;
+            //ロボットの行動変更
+            GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>().SetBehavior(RobotManager.RobotBehavior.ROBOT_ONE);
             Destroy(gameObject);
         }
 
@@ -86,10 +95,21 @@ public class Bombing : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!m_IsStop) return;
+        if (m_IsStop) return;
 
-        Instantiate(m_Exprosion, transform.position, Quaternion.identity);
-        if (other.tag == "Ground")
+        if(other.tag== "ExplosionCollision")
+        {
+            m_BreakFlag = true;
+            //壊れたら行動を変更する
+            GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>().SetBehavior(RobotManager.RobotBehavior.ROBOT_ONE);
+        }
+
+        m_SpawnCount++;
+        if (m_SpawnCount % 2 == 0)
+        {
+            Instantiate(m_Exprosion, transform.position, Quaternion.identity);
+        }
+        if (other.tag == "GroundCollisionRigid")
         {
             gameObject.GetComponent<BoxCollider>().isTrigger = false;
             m_IsStop = true;

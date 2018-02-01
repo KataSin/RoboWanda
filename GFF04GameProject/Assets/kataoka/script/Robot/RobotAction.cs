@@ -25,7 +25,9 @@ public class RobotAction : MonoBehaviour
         ROBOT_FALL_DOWN,
         ROBOT_MISSILE_ATTACK,
         ROBOT_HELI_ATTACK,
-        ROBOT_DEAD
+        ROBOT_DEAD,
+        ROBOT_BOMBING_ATTACK,
+        ROBOT_MISSILE_BEAM_ATTACK
     }
 
     [SerializeField, Tooltip("ロボットのスピード"), HeaderAttribute("ロボット移動関係")]
@@ -110,6 +112,8 @@ public class RobotAction : MonoBehaviour
     //IKのウェイト設定
     private float m_IKWeight;
 
+    private Vector3 m_BombingBeamPoint;
+
     //矢野実装
     private AudioSource[] boss_se_;
 
@@ -170,6 +174,8 @@ public class RobotAction : MonoBehaviour
         m_EndLookPos = m_Player.transform.position;
 
         m_LookLerpTime = 0.0f;
+
+        m_BombingBeamPoint = Vector3.zero;
     }
     /// <summary>
     /// ロボットがプレイヤーに向かって動く
@@ -671,9 +677,9 @@ public class RobotAction : MonoBehaviour
             foreach (var i in objs)
             {
 
-                float dis=Vector3.Distance(i.transform.position,m_Robot.transform.position);
+                float dis = Vector3.Distance(i.transform.position, m_Robot.transform.position);
 
-                if (dis<=70.0f)
+                if (dis <= 70.0f)
                 {
                     //前のいる
                     heli.Add(i);
@@ -685,7 +691,7 @@ public class RobotAction : MonoBehaviour
                 return;
             }
 
-            m_BeamStartPos = heli[UnityEngine.Random.Range(0, heli.Count- 1)].transform.position;
+            m_BeamStartPos = heli[UnityEngine.Random.Range(0, heli.Count - 1)].transform.position;
             m_RobotEye.SetActive(true);
         };
 
@@ -717,6 +723,56 @@ public class RobotAction : MonoBehaviour
 
         return func;
     }
+    public RobotManager.ActionFunc RobotBombingAttack()
+    {
+        Action robotBombingAttackStart = () =>
+        {
+            m_RobotEye.SetActive(true);
+            m_IsIK = true;
+            m_LerpTime = 0.0f;
+            GameObject bomber = GameObject.FindGameObjectWithTag("BombingBeamPoint");
+            m_RobotLookAtPosition = bomber.transform.position;
+            m_PlayerQuaternion = Quaternion.LookRotation(bomber.transform.position - m_Robot.transform.position);
+            m_PlayerQuaternion = Quaternion.Euler(0.0f, m_PlayerQuaternion.eulerAngles.y, 0.0f);
+
+            m_RobotQuaternion = transform.rotation;
+        };
+
+
+        Func<bool> robotBombingAttack = () =>
+        {
+            m_LerpTime += 0.2f * Time.deltaTime;
+            transform.rotation = Quaternion.Lerp(m_RobotQuaternion, m_PlayerQuaternion, m_LerpTime);
+            if (GameObject.FindGameObjectWithTag("Bomber") == null) return false;
+
+            m_NavAgent.isStopped = true;
+            m_NavAgent.velocity = Vector3.zero;
+            bool endAnim = false;
+
+
+            m_LerpTime = Mathf.Clamp(m_LerpTime, 0.0f, 1.0f);
+            AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
+
+            m_BeamLerpTime += 0.1f * Time.deltaTime;
+            m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(true);
+            if (m_BeamLerpTime >= 2.0f)
+            {
+                m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(false);
+                endAnim = true;
+            }
+
+            m_RobotState = RobotState.ROBOT_BEAM_ATTACK;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+            return endAnim;
+        };
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = robotBombingAttackStart;
+        func.actionUpdate = robotBombingAttack;
+
+        return func;
+    }
+
+
 
     public void OnTriggerEnter(Collider other)
     {
@@ -739,6 +795,7 @@ public class RobotAction : MonoBehaviour
             m_IsIK = false;
             m_NavAgent.isStopped = true;
             m_NavAgent.velocity = Vector3.zero;
+
             bool endAnim = false;
 
             //死んだらもう何も移行しない
@@ -754,6 +811,114 @@ public class RobotAction : MonoBehaviour
         func.actionUpdate = robotDead;
         return func;
     }
+    //ビームミサイル攻撃
+    public RobotManager.ActionFunc RobotBeamAndMissileAttack()
+    {
+        Action robotBeamAttackStart = () =>
+        {
+            m_RobotEye.SetActive(true);
+            m_IsIK = true;
+            m_LerpTime = 0.0f;
+
+            m_PlayerQuaternion = Quaternion.LookRotation(m_Player.transform.position - m_Robot.transform.position);
+            m_PlayerQuaternion = Quaternion.Euler(0.0f, m_PlayerQuaternion.eulerAngles.y, 0.0f);
+
+            m_RobotQuaternion = transform.rotation;
+
+            m_BeamLerpTime = 0.0f;
+            Vector3 vec = m_Player.transform.position - m_Robot.transform.position;
+            vec = vec.normalized * 50.0f;
+
+            m_BeamStartPos = m_Player.transform.position - vec * 1.5f;
+            m_BeamEndPos = m_Player.transform.position + vec;
+
+            m_SpawnMissileFlag = true;
+        };
+
+
+        Func<bool> robotBeamAttack = () =>
+        {
+            m_NavAgent.isStopped = true;
+            m_NavAgent.velocity = Vector3.zero;
+            bool endAnim = false;
+
+            //ミサイル攻撃
+            if (m_SpawnMissileFlag)
+            {
+                m_MissileSpawn.GetComponent<MissileSpawn>().SpawnFlag(true);
+                m_SpawnMissileFlag = false;
+            }
+
+
+
+            m_LerpTime += 0.5f * Time.deltaTime;
+
+            transform.rotation = Quaternion.Lerp(m_RobotQuaternion, m_PlayerQuaternion, m_LerpTime);
+
+
+            m_LerpTime = Mathf.Clamp(m_LerpTime, 0.0f, 1.0f);
+            AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
+
+            m_BeamLerpTime += 0.1f * Time.deltaTime;
+            m_RobotLookAtPosition = Vector3.Lerp(m_BeamStartPos, m_BeamEndPos, m_BeamLerpTime);
+            m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(true);
+            if (m_BeamLerpTime >= 1.0f)
+            {
+                m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(false);
+                endAnim = true;
+            }
+
+            m_RobotState = RobotState.ROBOT_BEAM_ATTACK;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+            return endAnim;
+        };
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = robotBeamAttackStart;
+        func.actionUpdate = robotBeamAttack;
+
+        return func;
+    }
+
+    //ビームミサイル攻撃
+    public RobotManager.ActionFunc RobotLookBombingSpawn()
+    {
+        Action robotLookBombingSpawnStart = () =>
+        {
+            m_RobotEye.SetActive(true);
+            m_IsIK = true;
+            m_LerpTime = 0.0f;
+
+        };
+
+
+        Func<bool> robotLookBombingSpawn = () =>
+        {
+            m_NavAgent.isStopped = true;
+            m_NavAgent.velocity = Vector3.zero;
+            bool endAnim = false;
+
+            m_LerpTime += 0.3f * Time.deltaTime;
+
+            transform.rotation = Quaternion.Lerp(m_RobotQuaternion, m_PlayerQuaternion, m_LerpTime);
+
+            if (m_BeamLerpTime >= 1.0f)
+            {
+                m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(false);
+                endAnim = true;
+            }
+
+            m_RobotState = RobotState.ROBOT_BEAM_ATTACK;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+            return endAnim;
+        };
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = robotLookBombingSpawnStart;
+        func.actionUpdate = robotLookBombingSpawn;
+
+        return func;
+    }
+
+
 
     /// <summary>
     /// プレイヤーを見るアップデート

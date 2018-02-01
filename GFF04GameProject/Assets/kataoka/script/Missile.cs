@@ -110,7 +110,7 @@ public class Missile : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(m_PreVec);
         m_PreVec = transform.position;
 
-        if (m_Time >= 20.0f) Destroy(gameObject);
+        if (m_Time >= 15.0f) Destroy(gameObject);
     }
 
     public void OnTriggerEnter(Collider other)
