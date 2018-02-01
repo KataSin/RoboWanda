@@ -47,6 +47,7 @@ public class StrategySpawnTank : MonoBehaviour
         {
             if (m_FirstFlag)
             {
+                GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>().SetBehavior(RobotManager.RobotBehavior.ROBOT_THREE);
                 foreach (var i in m_SpawnPoints)
                 {
                     Instantiate(m_TankPrefab, i.transform.position, Quaternion.identity);

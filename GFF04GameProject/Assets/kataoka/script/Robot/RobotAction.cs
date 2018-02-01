@@ -27,7 +27,8 @@ public class RobotAction : MonoBehaviour
         ROBOT_HELI_ATTACK,
         ROBOT_DEAD,
         ROBOT_BOMBING_ATTACK,
-        ROBOT_MISSILE_BEAM_ATTACK
+        ROBOT_MISSILE_BEAM_ATTACK,
+        ROBOT_TANK_ATTACK
     }
 
     [SerializeField, Tooltip("ロボットのスピード"), HeaderAttribute("ロボット移動関係")]
@@ -114,6 +115,8 @@ public class RobotAction : MonoBehaviour
 
     private Vector3 m_BombingBeamPoint;
 
+    private bool m_FirstTankFlag;
+    private GameObject m_LookTank;
     //矢野実装
     private AudioSource[] boss_se_;
 
@@ -176,6 +179,8 @@ public class RobotAction : MonoBehaviour
         m_LookLerpTime = 0.0f;
 
         m_BombingBeamPoint = Vector3.zero;
+
+        m_FirstTankFlag = true;
     }
     /// <summary>
     /// ロボットがプレイヤーに向かって動く
@@ -879,7 +884,7 @@ public class RobotAction : MonoBehaviour
         return func;
     }
 
-    //ビームミサイル攻撃
+    //スポーンポイントを見る
     public RobotManager.ActionFunc RobotLookBombingSpawn()
     {
         Action robotLookBombingSpawnStart = () =>
@@ -918,6 +923,76 @@ public class RobotAction : MonoBehaviour
         return func;
     }
 
+    //Tankを攻撃
+    public RobotManager.ActionFunc RobotTankAttack()
+    {
+        Action robotTankAttackStart = () =>
+        {
+            m_RobotEye.SetActive(true);
+            m_IsIK = true;
+            m_LerpTime = 0.0f;
+            m_BeamLerpTime = 0.0f;
+            m_FirstTankFlag = true;
+        };
+
+
+        Func<bool> robotTankAttack = () =>
+        {
+            m_NavAgent.isStopped = true;
+            m_NavAgent.velocity = Vector3.zero;
+            bool endAnim = false;
+            m_RobotState = RobotState.ROBOT_BEAM_ATTACK;
+            m_Animator.SetInteger("RobotAnimNum", (int)m_RobotState);
+
+            if (m_FirstTankFlag)
+            {
+                List<GameObject> lookTank = new List<GameObject>();
+                var tanks = GameObject.FindGameObjectsWithTag("GameTank");
+                //タンクがいなかったら終わる
+                if (tanks.Length <= 0)
+                {
+                    return true;
+                }
+                foreach (var i in tanks)
+                {
+                    Vector3 vec = i.transform.position - m_RobotEye.transform.position;
+                    Ray ray = new Ray(m_RobotEye.transform.position, vec);
+                    RaycastHit tank;
+                    if (Physics.Raycast(ray, out tank, 20000))
+                    {
+                        if (tank.collider.tag == "GameTank")
+                        {
+                            lookTank.Add(i.gameObject);
+                        }
+                    }
+                }
+                //見えてなかったら終わる
+                if (lookTank.Count <= 0) return true;
+
+                m_LookTank = lookTank[UnityEngine.Random.Range(0, lookTank.Count - 1)];
+                m_FirstTankFlag = false;
+            }
+            m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(true);
+            m_RobotLookAtPosition = m_LookTank.transform.position;
+            m_LerpTime += 0.3f * Time.deltaTime;
+            m_BeamLerpTime += 0.5f * Time.deltaTime;
+            transform.rotation = Quaternion.Lerp(m_RobotQuaternion, m_PlayerQuaternion, m_LerpTime);
+
+            if (m_BeamLerpTime >= 3.0f)
+            {
+                m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(false);
+                endAnim = true;
+            }
+
+
+            return endAnim;
+        };
+        RobotManager.ActionFunc func = new RobotManager.ActionFunc();
+        func.actionStart = robotTankAttackStart;
+        func.actionUpdate = robotTankAttack;
+
+        return func;
+    }
 
 
     /// <summary>

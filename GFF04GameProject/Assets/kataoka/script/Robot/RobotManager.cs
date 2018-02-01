@@ -21,7 +21,8 @@ public class RobotManager : MonoBehaviour
     public enum RobotBehavior
     {
         ROBOT_ONE,
-        ROBOT_TWO
+        ROBOT_TWO,
+        ROBOT_THREE
     }
     //アクションたち
     private Dictionary<RobotAction.RobotState, ActionFunc> m_Actions;
@@ -66,6 +67,7 @@ public class RobotManager : MonoBehaviour
         AddAction(RobotAction.RobotState.ROBOT_HELI_ATTACK, m_RobotAction.RobotHeliAttack());
         AddAction(RobotAction.RobotState.ROBOT_BOMBING_ATTACK, m_RobotAction.RobotBombingAttack());
         AddAction(RobotAction.RobotState.ROBOT_MISSILE_BEAM_ATTACK, m_RobotAction.RobotBeamAndMissileAttack());
+        AddAction(RobotAction.RobotState.ROBOT_TANK_ATTACK, m_RobotAction.RobotTankAttack());
 
         m_IsLoop = true;
 
