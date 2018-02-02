@@ -319,7 +319,7 @@ public class RobotAction : MonoBehaviour
             m_NavAgent.velocity = Vector3.zero;
             bool endAnim = false;
 
-            m_LerpTime += 0.5f * Time.deltaTime;
+            m_LerpTime += 0.2f * Time.deltaTime;
 
             transform.rotation = Quaternion.Lerp(m_RobotQuaternion, m_PlayerQuaternion, m_LerpTime);
 
@@ -856,7 +856,7 @@ public class RobotAction : MonoBehaviour
 
 
 
-            m_LerpTime += 0.5f * Time.deltaTime;
+            m_LerpTime += 0.1f * Time.deltaTime;
 
             transform.rotation = Quaternion.Lerp(m_RobotQuaternion, m_PlayerQuaternion, m_LerpTime);
 
@@ -864,7 +864,7 @@ public class RobotAction : MonoBehaviour
             m_LerpTime = Mathf.Clamp(m_LerpTime, 0.0f, 1.0f);
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
 
-            m_BeamLerpTime += 0.1f * Time.deltaTime;
+            m_BeamLerpTime += 0.07f * Time.deltaTime;
             m_RobotLookAtPosition = Vector3.Lerp(m_BeamStartPos, m_BeamEndPos, m_BeamLerpTime);
             m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(true);
             if (m_BeamLerpTime >= 1.0f)
@@ -1016,7 +1016,7 @@ public class RobotAction : MonoBehaviour
             m_LookLerpTime = 0.0f;
             m_SeveRobotLokAtPosition = m_RobotLookAtPosition;
         }
-        m_LookLerpTime += 0.7f * Time.deltaTime;
+        m_LookLerpTime += 0.3f * Time.deltaTime;
         m_LookAtObj.transform.position = Vector3.Lerp(m_StartLookPos, m_EndLookPos, m_LookLerpTime);
 
 
