@@ -9,7 +9,7 @@ public class RobotManager : MonoBehaviour
     [SerializeField, Tooltip("ロボットのHP")]
     public int m_RobotHp;
 
-
+    public Material m_Material;
     //アクションたち
     public struct ActionFunc
     {
@@ -18,6 +18,8 @@ public class RobotManager : MonoBehaviour
         //アクションアップデート
         public Func<bool> actionUpdate;
     }
+    public GameObject m_Light1;
+    public GameObject m_Light2;
     public enum RobotBehavior
     {
         ROBOT_ONE,
@@ -79,6 +81,15 @@ public class RobotManager : MonoBehaviour
     void Update()
     {
         Debug.Log(m_RobotState);
+        Color startColor = new Color(0.1f, 0.7f, 0.8f);
+        Color endClor = new Color(1.0f, 0.2f, 0.2f);
+        m_RobotHp = Mathf.Clamp(m_RobotHp, 0, 10000);
+
+        Color robotColor = Color.Lerp(endClor, startColor, (float)m_RobotHp / 10000.0f);
+        m_Material.SetColor("_EmissionColor",robotColor );
+        m_Light1.GetComponent<Light>().color = robotColor;
+        m_Light2.GetComponent<Light>().color = robotColor;
+
         //Debug.Log(m_RobotHp);
         //ロボット仮HPUI
         if (GameObject.FindGameObjectWithTag("RobotHp") != null)
@@ -90,7 +101,7 @@ public class RobotManager : MonoBehaviour
 
         if (Input.GetKey(KeyCode.N))
         {
-            m_RobotHp = 0;
+            m_RobotHp -= 100;
         }
 
         //アクションのスタート
