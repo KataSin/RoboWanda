@@ -17,7 +17,18 @@ public class TutorialManager : MonoBehaviour
         End,
     }
 
+    private enum Tutorial_OtherState
+    {
+        None,
+        Part1,
+        Part2,
+        Part3,
+        Part4,
+        Part5,
+    }
+
     private TutorialState m_state;
+    private Tutorial_OtherState m_otherState;
 
     private GameObject sceneCnt_;
 
@@ -46,6 +57,12 @@ public class TutorialManager : MonoBehaviour
     private GameObject mission3_ui_;
 
     [SerializeField]
+    private GameObject mission4_ui_1_;
+
+    [SerializeField]
+    private GameObject mission5_ui_1_;
+
+    [SerializeField]
     private GameObject camera_pos_;
 
     [SerializeField]
@@ -58,8 +75,13 @@ public class TutorialManager : MonoBehaviour
     private GameObject door3_;
 
     [SerializeField]
+    private GameObject door3Check_;
+
+    [SerializeField]
     private GameObject door4_;
 
+    [SerializeField]
+    private List<GameObject> turrets_;
 
     //[SerializeField]
     //private GameObject controller_ico_;
@@ -73,6 +95,8 @@ public class TutorialManager : MonoBehaviour
 
     private bool isLScene;
 
+    private bool isClear;
+
     // Use this for initialization
     void Start()
     {
@@ -84,6 +108,8 @@ public class TutorialManager : MonoBehaviour
         mission1_ui_.SetActive(false);
         mission2_ui_.SetActive(false);
         mission3_ui_.SetActive(false);
+        mission4_ui_1_.SetActive(false);
+        mission5_ui_1_.SetActive(false);
 
         //controller_ico_.SetActive(false);
 
@@ -91,11 +117,13 @@ public class TutorialManager : MonoBehaviour
         m_startInterval = 0f;
 
         m_state = TutorialState.Fead;
+        m_otherState = Tutorial_OtherState.None;
 
         if (GameObject.FindGameObjectWithTag("SceneController"))
             sceneCnt_ = GameObject.FindGameObjectWithTag("SceneController");
 
         isLScene = false;
+        isClear = false;
     }
 
     // Update is called once per frame
@@ -160,7 +188,7 @@ public class TutorialManager : MonoBehaviour
     {
         m_startInterval += 1.0f * Time.deltaTime;
 
-        if (m_startInterval >= 2f)
+        if (m_startInterval >= 1.5f)
             m_state = TutorialState.Mission1;
     }
 
@@ -170,13 +198,13 @@ public class TutorialManager : MonoBehaviour
             && camera_pos_.GetComponent<CameraPosition_Tutorial>().Get_T() >= 2f
             && !clear_pod_[0].GetComponent<ClearPoint>().GetClear())
         {
-            mission_bar_.GetComponent<ui_imageScale>().ScaleChange();
-
-            if (mission_bar_.GetComponent<ui_imageScale>().GetClear())
-            {
-                mission1_ui_.SetActive(true);
-                //controller_ico_.SetActive(true);
-            }
+            //mission_bar_.GetComponent<ui_imageScale>().ScaleChange();
+            mission1_ui_.SetActive(true);
+            //if (mission_bar_.GetComponent<ui_imageScale>().GetClear())
+            //{
+                
+            //    //controller_ico_.SetActive(true);
+            //}
         }
 
 
@@ -186,7 +214,7 @@ public class TutorialManager : MonoBehaviour
             missionC_ui_.enabled = true;
             mission1_ui_.SetActive(false);
             //controller_ico_.SetActive(false);
-            mission_bar_.GetComponent<ui_imageScale>().ScaleBack();
+            //mission_bar_.GetComponent<ui_imageScale>().ScaleBack();
 
             m_intervalTime += 1.0f * Time.deltaTime;
 
@@ -209,11 +237,11 @@ public class TutorialManager : MonoBehaviour
             && camera_pos_.GetComponent<CameraPosition_Tutorial>().Get_T() >= 2f
             && !clear_pod_[1].GetComponent<ClearPoint>().GetClear())
         {
-            mission_bar_.GetComponent<ui_imageScale>().ScaleChange();
-
+            //mission_bar_.GetComponent<ui_imageScale>().ScaleChange();
+            mission2_ui_.SetActive(true);
             if (mission_bar_.GetComponent<ui_imageScale>().GetClear())
             {
-                mission2_ui_.SetActive(true);
+                
                 //controller_ico_.SetActive(true);
             }
         }
@@ -223,7 +251,7 @@ public class TutorialManager : MonoBehaviour
             missionC_ui_.enabled = true;
             mission2_ui_.SetActive(false);
             //controller_ico_.SetActive(false);
-            mission_bar_.GetComponent<ui_imageScale>().ScaleBack();
+            //mission_bar_.GetComponent<ui_imageScale>().ScaleBack();
 
             m_intervalTime += 1.0f * Time.deltaTime;
 
@@ -246,23 +274,23 @@ public class TutorialManager : MonoBehaviour
            && camera_pos_.GetComponent<CameraPosition_Tutorial>().Get_T() >= 2f
            && !bill_.GetComponent<Break>().Get_BreakFlag())
         {
-            mission_bar_.GetComponent<ui_imageScale>().ScaleChange();
-
+            //mission_bar_.GetComponent<ui_imageScale>().ScaleChange();
+            mission3_ui_.SetActive(true);
             if (mission_bar_.GetComponent<ui_imageScale>().GetClear())
             {
-                mission3_ui_.SetActive(true);
+                
                 //controller_ico_.SetActive(true);
             }
         }
 
         if (bill_.GetComponent<Break>().Get_BreakFlag())
         {
-            
+
             if (m_intervalTime < 5f)
                 missionC_ui_.enabled = true;
             mission3_ui_.SetActive(false);
             //controller_ico_.SetActive(false);
-            mission_bar_.GetComponent<ui_imageScale>().ScaleBack();
+            //mission_bar_.GetComponent<ui_imageScale>().ScaleBack();
 
             m_intervalTime += 1.0f * Time.deltaTime;
 
@@ -284,34 +312,79 @@ public class TutorialManager : MonoBehaviour
         if (camera_pos_.GetComponent<CameraPosition_Tutorial>().GetMode() == 3
            && camera_pos_.GetComponent<CameraPosition_Tutorial>().Get_T() >= 2f)
         {
-            mission_bar_.GetComponent<ui_imageScale>().ScaleChange();
-
+            //mission_bar_.GetComponent<ui_imageScale>().ScaleChange();
+            mission4_ui_1_.SetActive(true);
             if (mission_bar_.GetComponent<ui_imageScale>().GetClear())
             {
-                mission3_ui_.SetActive(true);
+                
                 //controller_ico_.SetActive(true);
             }
         }
 
-        if (clear_pod_[2].GetComponent<ClearPoint>().GetClear())
+        if (!clear_pod_[2].GetComponent<ClearPoint>().GetClear())
         {
+            if (door3Check_.GetComponent<DoorCheck>().Get_CheckFlag())
+            {
+                OtherMission4Update();
+            }
+
+            if (turrets_[0].GetComponent<TutorialTurret>().Get_State() == 2
+                && turrets_[1].GetComponent<TutorialTurret>().Get_State() == 2)
+            {
+                clear_pod_[2].SetActive(true);
+            }
+            else if (turrets_[0].GetComponent<TutorialTurret>().Get_State() == 1
+               && turrets_[1].GetComponent<TutorialTurret>().Get_State() == 1)
+            {
+                clear_pod_[2].SetActive(false);
+            }
+        }
+
+        else if (clear_pod_[2].GetComponent<ClearPoint>().GetClear())
+        {
+            turrets_[0].GetComponent<TutorialTurret>().Off();
+            turrets_[1].GetComponent<TutorialTurret>().Off();
             missionC_ui_.enabled = true;
-            mission3_ui_.SetActive(false);
+            mission4_ui_1_.SetActive(false);
             //controller_ico_.SetActive(false);
-            mission_bar_.GetComponent<ui_imageScale>().ScaleBack();
+            //mission_bar_.GetComponent<ui_imageScale>().ScaleBack();
 
             m_intervalTime += 1.0f * Time.deltaTime;
 
             if (m_intervalTime > 2f)
-                door4_.GetComponent<DoorOpen>().Open();           
+                door4_.GetComponent<DoorOpen>().Open();
+
+            if (door4_.GetComponent<DoorOpen>().GetClear())
+            {
+                clear_pod_[2].SetActive(false);
+                missionC_ui_.enabled = false;
+                m_state = TutorialState.Mission5;
+                m_intervalTime = 0f;
+            }
+        }
+    }
+
+    private void OtherMission4Update()
+    {
+        if (!isClear)
+        {
+            turrets_[0].GetComponent<TutorialTurret>().Boot();
+            turrets_[1].GetComponent<TutorialTurret>().Boot();
+            isClear = true;
         }
 
-        if (door4_.GetComponent<DoorOpen>().GetClear())
+        switch (m_otherState)
         {
-            clear_pod_[2].SetActive(false);
-            missionC_ui_.enabled = false;
-            m_state = TutorialState.Mission5;
-            m_intervalTime = 0f;
+            case Tutorial_OtherState.None:
+                m_otherState = Tutorial_OtherState.Part1;
+                break;
+            case Tutorial_OtherState.Part1:
+                m_otherState = Tutorial_OtherState.Part2;
+                break;
+            case Tutorial_OtherState.Part2:
+                break;
+            case Tutorial_OtherState.Part3:
+                break;
         }
     }
 
@@ -320,11 +393,11 @@ public class TutorialManager : MonoBehaviour
         if (camera_pos_.GetComponent<CameraPosition_Tutorial>().GetMode() == 4
            && camera_pos_.GetComponent<CameraPosition_Tutorial>().Get_T() >= 2f)
         {
-            mission_bar_.GetComponent<ui_imageScale>().ScaleChange();
-
+            //mission_bar_.GetComponent<ui_imageScale>().ScaleChange();
+            mission5_ui_1_.SetActive(true);
             if (mission_bar_.GetComponent<ui_imageScale>().GetClear())
             {
-                mission3_ui_.SetActive(true);
+                
                 //controller_ico_.SetActive(true);
             }
         }
@@ -374,5 +447,10 @@ public class TutorialManager : MonoBehaviour
     public int GetTutorialState()
     {
         return (int)m_state;
+    }
+
+    public int GetOtherTutorialState()
+    {
+        return (int)m_otherState;
     }
 }
