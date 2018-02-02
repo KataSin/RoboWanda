@@ -736,7 +736,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1569519910134744}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -39.984497, y: 7.9, z: 93.23554}
+  m_LocalPosition: {x: -90.33079, y: 5.06, z: -29.697828}
   m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
   m_Children:
   - {fileID: 4688153086692836}
@@ -1973,9 +1973,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbe630754a343c04ba4fa58e37e31157, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_BreakTank: {fileID: 1394275370643722, guid: f17e424644be33d46b6c4e339c1cde3b,
+    type: 2}
   m_GunRotateY: {fileID: 1041615883201332}
   m_GunRotateX: {fileID: 1336708867121380}
   m_SpawnBullet: {fileID: 1217952492637244}
+  m_IsBreak: 0
 --- !u!114 &114980360084282670
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1998,7 +2001,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1569519910134744}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 387.35
+  m_Radius: 600
   m_Speed: 2
   m_Acceleration: 1.5
   avoidancePriority: 50

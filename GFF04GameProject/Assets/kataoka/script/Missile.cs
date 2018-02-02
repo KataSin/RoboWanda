@@ -65,6 +65,8 @@ public class Missile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (m_Time >= 5.0f) Destroy(gameObject);
+
         m_Time += Time.deltaTime;
         float speedOne = 0.8f;
         float speedTwo = 1.0f;
@@ -110,12 +112,31 @@ public class Missile : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(m_PreVec);
         m_PreVec = transform.position;
 
-        if (m_Time >= 20.0f) Destroy(gameObject);
     }
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag=="Ground"||other.tag=="TowerCollision"||other.tag=="RigidCollision")
+        if (other.tag=="Ground"||other.tag=="TowerCollision"||other.tag== "GroundCollisionRigid")
+        {
+            Instantiate(m_Exprosion, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
+
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.collider.tag == "Ground" || collision.collider.tag == "TowerCollision" || collision.collider.tag == "GroundCollisionRigid")
+        {
+            Instantiate(m_Exprosion, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
+
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Ground" || other.tag == "TowerCollision" || other.tag == "GroundCollisionRigid")
         {
             Instantiate(m_Exprosion, transform.position, Quaternion.identity);
             Destroy(gameObject);
