@@ -22,6 +22,8 @@ public class Bomb_v2 : MonoBehaviour
 
     public BomSpawn.Bom m_Bullet;
 
+    private Vector3 m_scale;
+
 
     // Use this for initialization
     void Start()
@@ -29,14 +31,16 @@ public class Bomb_v2 : MonoBehaviour
         m_RigidBody = GetComponent<Rigidbody>();
 
         isLanding = false;
+        m_scale = new Vector3(0.4f, 0.4f, 0.4f);
+        transform.localScale = m_scale;
     }
     // Update is called once per frame
     void Update()
     {
 
         // RBボタンが押されてない間に、LBボタンを押すと起爆
-        if ((!Input.GetButton("Aim") && !Input.GetKey(KeyCode.P)) 
-            && (Input.GetButtonDown("Bomb_Throw")||Input.GetKeyDown(KeyCode.O)))
+        if ((!Input.GetButton("Aim") && !Input.GetKey(KeyCode.P))
+            && (Input.GetButtonDown("Bomb_Throw") || Input.GetKeyDown(KeyCode.O)))
         {
             Destroy(gameObject);
             // 爆発の当たり判定を発生
@@ -63,16 +67,17 @@ public class Bomb_v2 : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
         // 他の爆弾とプレイヤーとの接触判定は発生しない
-        if (other.tag == "Bomb" || other.tag == "Player" || other.tag == "SandSmoke"||other.tag=="LightCollision") return;
+        if (other.tag == "Bomb" || other.tag == "Player" || other.tag == "SandSmoke" || other.tag == "LightCollision") return;
 
 
         //矢野追加10270231
         if (!isLanding)
         {
-            m_currentRotation = transform.rotation;
-            transform.parent = other.transform;
             m_RigidBody.velocity = Vector3.zero;
             m_RigidBody.isKinematic = true;
+            m_currentRotation = transform.rotation;
+            transform.parent = other.transform.parent;
+
 
             isLanding = true;
         }

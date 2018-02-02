@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DoorCheck : MonoBehaviour
 {
+    [SerializeField]
     private bool isCheck;
 
     // Use this for initialization
