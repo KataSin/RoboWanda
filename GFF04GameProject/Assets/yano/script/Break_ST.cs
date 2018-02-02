@@ -86,7 +86,7 @@ public class Break_ST : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
         //倒壊挙動制御
         Collapse();
     }
@@ -152,19 +152,7 @@ public class Break_ST : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<RobotDamage>() != null
-            ||
-            other.gameObject.tag == "bom"
-            ||
-            other.gameObject.tag == "RobotArmAttack"
-            ||
-            other.gameObject.tag == "RobotBeam"
-            ||
-            other.gameObject.tag == "Missile"
-            ||
-            other.gameObject.tag == "ExplosionCollision"
-            ||
-            other.gameObject.tag == "BeamCollide")
+        if (other.gameObject.tag == "Phase2Explosive")
             isBreak = true;
     }
 }
