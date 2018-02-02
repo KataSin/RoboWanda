@@ -88,7 +88,6 @@ GameObject:
   - component: {fileID: 114684744467147440}
   - component: {fileID: 136695966013085586}
   - component: {fileID: 82345741586229036}
-  - component: {fileID: 54921002154325726}
   m_Layer: 0
   m_Name: Missile
   m_TagString: Missile
@@ -430,7 +429,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1249839709393644}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -149.3, y: 27.7, z: 85.99537}
+  m_LocalPosition: {x: -1.2725412, y: 43.09, z: 117.8302}
   m_LocalScale: {x: 0.9375948, y: 0.9375948, z: 0.9375948}
   m_Children:
   - {fileID: 4523568355909254}
@@ -503,7 +502,7 @@ Transform:
   m_GameObject: {fileID: 1369557662316396}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -2.135}
-  m_LocalScale: {x: 0.31484294, y: 0.31484282, z: -1.2163143}
+  m_LocalScale: {x: 0.31484294, y: 0.15403071, z: -0.2679701}
   m_Children: []
   m_Father: {fileID: 4442942410201560}
   m_RootOrder: 1
@@ -902,21 +901,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1092766699727256}
   m_Mesh: {fileID: 4300004, guid: 73c8e3c085595524ba3ce46eb202c6ad, type: 3}
---- !u!54 &54921002154325726
-Rigidbody:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1249839709393644}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 1
 --- !u!82 &82345741586229036
 AudioSource:
   m_ObjectHideFlags: 1
@@ -10520,7 +10504,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -663257337
+  randomSeed: -636057621
   InitialModule:
     serializedVersion: 3
     enabled: 1
