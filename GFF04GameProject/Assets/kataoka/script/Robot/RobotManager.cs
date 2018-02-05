@@ -44,9 +44,18 @@ public class RobotManager : MonoBehaviour
     private bool m_IsDead;
     //ロボットの行動番号
     private RobotBehavior m_BehaviorNum;
+    //ロボットの煙
+    private List<GameObject> m_SparkEffect;
+    private int m_SparkNum;
     // Use this for initialization
     void Start()
     {
+        m_SparkEffect = new List<GameObject>();
+        foreach (var i in GameObject.FindGameObjectsWithTag("Spark"))
+        {
+            m_SparkEffect.Add(i);
+            i.SetActive(false);
+        }
         m_Actions = new Dictionary<RobotAction.RobotState, ActionFunc>();
         m_RobotAction = GetComponent<RobotAction>();
         m_IsAction = true;
@@ -75,6 +84,8 @@ public class RobotManager : MonoBehaviour
 
         m_IsDead = false;
         m_BehaviorNum = RobotBehavior.ROBOT_ONE;
+
+        m_SparkNum = 1;
     }
 
     // Update is called once per frame
@@ -86,7 +97,7 @@ public class RobotManager : MonoBehaviour
         m_RobotHp = Mathf.Clamp(m_RobotHp, 0, 10000);
 
         Color robotColor = Color.Lerp(endClor, startColor, (float)m_RobotHp / 10000.0f);
-        m_Material.SetColor("_EmissionColor",robotColor );
+        m_Material.SetColor("_EmissionColor", robotColor);
         m_Light1.GetComponent<Light>().color = robotColor;
         m_Light2.GetComponent<Light>().color = robotColor;
 
@@ -97,6 +108,15 @@ public class RobotManager : MonoBehaviour
             Text image = GameObject.FindGameObjectWithTag("RobotHp").GetComponent<Text>();
             image.text = m_RobotHp.ToString();
 
+        }
+        float sparkNum = 10000.0f / m_SparkEffect.Count;
+        int count = 0;
+        //火花のエフェクト
+        foreach (var i in m_SparkEffect)
+        {
+            if (sparkNum * count >= 10000.0f - m_RobotHp) break;    
+            i.SetActive(true);
+            count++;
         }
 
         if (Input.GetKey(KeyCode.N))
