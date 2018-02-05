@@ -16,7 +16,9 @@ enum PlayerState
     Creeping,   // 匍匐
     Dead,       // 死亡
     Passing,    // 乗り越え
-    Setting     // 爆発物設置
+    Setting,    // 爆発物設置
+    BlewUp,     // 飛ばされる
+    BlewUpDead  // 飛ばされて死亡
 }
 
 public class PlayerController : MonoBehaviour
@@ -257,6 +259,20 @@ public class PlayerController : MonoBehaviour
                 m_IsCreeping = false;
                 m_IsDead = false;
                 break;
+            // 飛ばされる
+            case PlayerState.BlewUp:
+                BlewUp();
+                m_IsAiming = false;
+                m_IsCreeping = false;
+                m_IsDead = false;
+                break;
+            // 飛ばされて死亡
+            case PlayerState.BlewUpDead:
+                BlewUpDead();
+                m_IsAiming = false;
+                m_IsCreeping = false;
+                m_IsDead = true;
+                break;
             // デフォルト（バグ防止用）
             default:
                 m_IsAiming = false;
@@ -314,7 +330,13 @@ public class PlayerController : MonoBehaviour
             Debug.Log("無敵状態：" + m_IsInvincible);
         }
 
-        // Debug.Log("現在の状態：" + m_State);
+        // 飛ばすテスト
+        if (Input.GetKeyDown("b"))
+        {
+            // 
+        }
+
+        Debug.Log("現在の状態：" + m_State + "、IsAiming = " + m_IsAiming);
     }
 
     // キャラクターコントローラーの接触判定
@@ -392,6 +414,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerStay(Collider other)
     {
+        // 倒壊しているビルと隣接している間、Aボタンを押すと、爆発物を設置
         // Debug.Log(other.gameObject.name);
         if (other.gameObject.name == "BreakCanArea" && m_State == PlayerState.Normal && Input.GetButtonDown("BombSet"))
         {
@@ -484,9 +507,7 @@ public class PlayerController : MonoBehaviour
         m_IsDash = (Input.GetAxis("Dash") > 0.5f) ? true : false;
 
         // RBボタンを押すとボム投げ状態に
-        if (Input.GetButton("Aim")
-            ||
-            Input.GetKey(KeyCode.P))
+        if (Input.GetButton("Aim"))
         {
             m_State = PlayerState.Aiming;
         }
@@ -498,170 +519,19 @@ public class PlayerController : MonoBehaviour
             m_State = PlayerState.Creeping;
         }
         */
+
+        // 爆発物設置座標テスト
+        /*
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Instantiate(m_Explosive, transform.position, transform.rotation);
+        }
+        */
     }
 
     // 通常時の移動
     void NormalMove()
     {
-        /*// カメラの正面向きのベクトルを取得
-        Vector3 forward = Camera.main.transform.forward;
-        // y成分を無視する
-        forward.y = 0;
-        // 正規化する
-        forward.Normalize();
-
-        // 方向入力を取得
-        float axisHorizontal = Input.GetAxisRaw("Horizontal_L");    // x軸（左右）
-        float axisVertical = Input.GetAxisRaw("Vertical_L");        // z軸（上下）
-
-        // 減速する（入力が無い場合 or 進行方向と逆に入力がある場合）
-        // X軸（左右キー）
-        if ((axisHorizontal == 0) || (m_SpeedX * axisHorizontal < 0))
-        {
-            if (m_SpeedX > 0)
-            {
-                m_SpeedX = Mathf.Max(m_SpeedX - m_CurrentBrakePower * Time.deltaTime, 0);
-            }
-            else {
-                m_SpeedX = Mathf.Min(m_SpeedX + m_CurrentBrakePower * Time.deltaTime, 0);
-            }
-        }
-        // Z軸（上下キー）
-        if ((axisVertical == 0) || (m_SpeedZ * axisVertical < 0))
-        {
-            if (m_SpeedZ > 0)
-            {
-                m_SpeedZ = Mathf.Max(m_SpeedZ - m_CurrentBrakePower * Time.deltaTime, 0);
-            }
-            else {
-                m_SpeedZ = Mathf.Min(m_SpeedZ + m_CurrentBrakePower * Time.deltaTime, 0);
-            }
-        }
-
-        // 接地状態であれば加速可能
-        if (m_Controller.isGrounded)
-        {
-            // 加速する
-            float accel;
-            accel = (m_IsDash) ? accel = m_AccelPowerDash : accel = m_AccelPower;
-            // 左右キーで加速
-            m_SpeedX +=
-                accel
-                * axisHorizontal
-                * Time.deltaTime;
-            // 上下キーで加速
-            m_SpeedZ +=
-                accel
-                * axisVertical
-                * Time.deltaTime;
-
-            // 速度制限、ブレーキ速度、および回転速度の変更
-            if (m_IsDash)
-            {
-                m_CurrentSpeedLimit = m_MaxSpeedDash;
-                m_CurrentBrakePower = m_BrakePowerDash;
-                m_CurrentRotateSpeed = m_RotateSpeedDash;
-            }
-            else
-            {
-                if (m_CurrentSpeedLimit > m_MaxSpeed)
-                {
-                    m_CurrentSpeedLimit -= 0.1f;
-                }
-                m_CurrentBrakePower = m_BrakePower;
-                if (m_CurrentRotateSpeed > m_RotateSpeed)
-                {
-                    m_CurrentRotateSpeed -= 0.1f;
-                }
-            }
-            // 速度を制限する
-            m_SpeedX = Mathf.Clamp(m_SpeedX, -m_CurrentSpeedLimit, m_CurrentSpeedLimit);
-            m_SpeedZ = Mathf.Clamp(m_SpeedZ, -m_CurrentSpeedLimit, m_CurrentSpeedLimit);
-        }
-
-        // 移動処理
-        Vector3 velocity = forward * m_SpeedZ + Camera.main.transform.right * m_SpeedX;
-        // 重力加速度を加算
-        m_VelocityY -= m_Gravity * Time.deltaTime;
-        // y軸方向の移動量を加味する
-        velocity.y = m_VelocityY;
-        // キャラクターコントローラーに命令して移動する
-        m_Controller.Move(velocity * Time.deltaTime);
-
-        // 移動方向に向ける
-        Vector3 direction = transform.position - m_PrevPosition;
-        if (direction.sqrMagnitude > 0)
-        {
-            Vector3 orientiation = Vector3.Slerp(transform.forward,
-                new Vector3(direction.x, 0.0f, direction.z),
-                m_CurrentRotateSpeed * Time.deltaTime / Vector3.Angle(transform.forward, direction));
-            transform.LookAt(transform.position + orientiation);
-            m_PrevPosition = transform.position;
-        }
-
-        // アニメーターに命令して、アニメーションを再生する
-        // プレイヤー現在の移動量を取得
-        float current_speed;
-        current_speed = m_Controller.velocity.magnitude;
-        if (current_speed > m_CurrentSpeedLimit) current_speed = m_CurrentSpeedLimit;
-        m_Animator.SetFloat("NormalSpeed", current_speed);*/
-
-        /*// カメラの正面向きのベクトルを取得
-        Vector3 forward = Camera.main.transform.forward;
-        // y成分を無視する
-        forward.y = 0;
-        // 正規化する
-        forward.Normalize();
-
-        // 方向入力を取得
-        float axisHorizontal = Input.GetAxisRaw("Horizontal_L");    // x軸（左右）
-        float axisVertical = Input.GetAxisRaw("Vertical_L");        // z軸（上下）
-
-        // 移動速度、および回転速度の変更
-        if (m_IsDash)
-        {
-            if (m_CurrentSpeedLimit < m_MaxSpeedDash)
-                m_CurrentSpeedLimit += 0.4f;
-            m_CurrentRotateSpeed = m_RotateSpeedDash;
-        }
-        else
-        {
-            if (m_CurrentSpeedLimit > m_MaxSpeed)
-                m_CurrentSpeedLimit -= 0.2f;
-            if (m_CurrentRotateSpeed > m_RotateSpeed)
-                m_CurrentRotateSpeed -= 0.1f;
-        }
-
-        Vector3 velocity = Vector3.zero;
-        velocity = forward * axisVertical * m_CurrentSpeedLimit + Camera.main.transform.right * axisHorizontal * m_CurrentSpeedLimit;
-
-        // 重力加速度を加算
-        m_VelocityY -= m_Gravity * Time.deltaTime;
-        // y軸方向の移動量を加味する
-        velocity.y = m_VelocityY;
-        // キャラクターコントローラーに命令して移動する
-        m_Controller.Move(velocity * Time.deltaTime);
-
-        // 移動方向に向ける
-        Vector3 direction = transform.position - m_PrevPosition;
-        if (direction.sqrMagnitude > 0)
-        {
-            Vector3 orientiation = Vector3.Slerp(transform.forward,
-                new Vector3(direction.x, 0.0f, direction.z),
-                m_CurrentRotateSpeed * Time.deltaTime / Vector3.Angle(transform.forward, direction));
-            transform.LookAt(transform.position + orientiation);
-            m_PrevPosition = transform.position;
-        }
-
-        // アニメーターに命令して、アニメーションを再生する
-        // プレイヤー現在の移動量を取得
-        float current_speed;
-        current_speed = m_Controller.velocity.magnitude;
-        if (current_speed > m_CurrentSpeedLimit) current_speed = m_CurrentSpeedLimit;
-        m_Animator.SetFloat("NormalSpeed", current_speed);
-
-        Debug.Log(m_CurrentSpeedLimit);*/
-
         // カメラの正面向きのベクトルを取得
         Vector3 forward = Camera.main.transform.forward;
         // y成分を無視する
@@ -761,25 +631,24 @@ public class PlayerController : MonoBehaviour
         // ボム投げ時の移動処理
         AimingMove();
 
+        // BomSpawnにバグ発生、一時コメントアウトする（2018-02-02）
+        /*
         var a = m_BomSpawn.GetComponent<BomSpawn>();
         //片岡の実装
         m_BomSpawn.GetComponent<BomSpawn>().Set(Camera.main.transform.forward, 150.0f);
         m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(true);
 
-        if (Input.GetButtonDown("Bomb_Throw")
-            ||
-            Input.GetKeyDown(KeyCode.O))
+        if (Input.GetButtonDown("Bomb_Throw"))
         {
             m_BomSpawn.GetComponent<BomSpawn>().SpawnBom();
             playerSe_[0].PlayOneShot(playerSe_attack_);
         }
+        */
 
         // RBボタンを放すと通常状態に戻る
-        if (!Input.GetButton("Aim")
-            &&
-            !Input.GetKey(KeyCode.P))
+        if (!Input.GetButton("Aim"))
         {
-            m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(false);
+            // m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(false);
             m_State = PlayerState.Normal;
         }
     }
@@ -1087,5 +956,17 @@ public class PlayerController : MonoBehaviour
         }
 
         m_setting_time -= Time.deltaTime;
+    }
+
+    // 飛ばされている間の処理
+    void BlewUp()
+    {
+
+    }
+
+    // 飛ばされて死亡の処理
+    void BlewUpDead()
+    {
+
     }
 }
