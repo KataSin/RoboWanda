@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 65681031502846072}
   - component: {fileID: 23275429710356550}
   - component: {fileID: 114560270864828986}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Explosive
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,4 +105,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1579867deffa78847a0464f02bb52888, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Explosion: {fileID: 0}
+  m_DetonationTime: 180
+  m_Explosion: {fileID: 1821808024560098, guid: ab80f59ef0611914dade9199a89cd3da,
+    type: 2}

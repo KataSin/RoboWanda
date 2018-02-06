@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114432392804765418}
   m_Layer: 0
   m_Name: Phase2_Explosion
-  m_TagString: Untagged
+  m_TagString: Phase2Explosive
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,7 +52,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7915ccdf46efc5b45b5a8db3a047278d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ExplosionEffect: {fileID: 0}
+  m_ExplosionEffect: {fileID: 1821808024560098, guid: ab80f59ef0611914dade9199a89cd3da,
+    type: 2}
 --- !u!135 &135939735826164784
 SphereCollider:
   m_ObjectHideFlags: 1
