@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 65432742450252902}
   m_Layer: 0
   m_Name: Collision
-  m_TagString: Untagged
+  m_TagString: AmmoBox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,7 +125,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1107965135134564}
   m_LocalRotation: {x: 0.000000021855694, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -84.84, y: 30.25785, z: 116.433014}
+  m_LocalPosition: {x: 22.5, y: 5.53, z: 96}
   m_LocalScale: {x: 0.003089147, y: 0.003089147, z: 0.0030891465}
   m_Children:
   - {fileID: 4065596507225680}
@@ -262,4 +262,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebe1cf3ad4e905948b5bd35125d8f7d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Item: 0
+  m_Item: 2
