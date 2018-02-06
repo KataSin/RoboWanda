@@ -94,13 +94,15 @@ public class TutorialTurret : MonoBehaviour
             if (LayerMask.LayerToName(hit.collider.gameObject.layer) == "Player")
             {
                 muzzle_.GetComponent<Renderer>().material.SetColor("_TintColor", new Color(1f, 54f / 255f, 54f / 255f));
+                t = 0f;
                 state_ = State.On;
             }
             else
             {
                 muzzle_.GetComponent<Renderer>().material.SetColor("_TintColor", new Color(54f / 255f, 106f / 255f, 1f));
+                if (state_ == State.On)
+                    m_prevLRotate = transform.localRotation;
                 state_ = State.Lost;
-                m_prevLRotate = transform.localRotation;
             }
         }
         else

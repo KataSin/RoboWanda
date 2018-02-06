@@ -249,6 +249,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4683782727669158}
   - component: {fileID: 137477313541755756}
+  - component: {fileID: 64688054169303126}
   m_Layer: 0
   m_Name: 2015ax
   m_TagString: Untagged
@@ -363,7 +364,7 @@ Transform:
   m_GameObject: {fileID: 1743028913250274}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 19.505, y: 12.87, z: 18.600002}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
   m_Children:
   - {fileID: 4793859985411038}
   - {fileID: 4409786388751182}
@@ -568,6 +569,20 @@ Transform:
   m_Father: {fileID: 4785117457811858}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &64688054169303126
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1751596887312334}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 1
+  m_InflateMesh: 0
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: f604baa512301bc459ac98bff0cb9e42, type: 3}
 --- !u!95 &95701692589959090
 Animator:
   serializedVersion: 3

@@ -241,6 +241,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4970129754028880}
   - component: {fileID: 95680220874943916}
+  - component: {fileID: 65848697090053710}
+  - component: {fileID: 65508771019658206}
   m_Layer: 0
   m_Name: CarType6
   m_TagString: Untagged
@@ -2161,6 +2163,30 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1275046498669228}
   m_Mesh: {fileID: 4300112, guid: df7495afdce80f54694ff3d2fae828ac, type: 3}
+--- !u!65 &65508771019658206
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1423541289344066}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.6, y: 1, z: 4.6}
+  m_Center: {x: 0, y: 0.14, z: 0}
+--- !u!65 &65848697090053710
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1423541289344066}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.6, y: 0.4, z: 2.4}
+  m_Center: {x: 0, y: 0.7, z: -0.5}
 --- !u!95 &95680220874943916
 Animator:
   serializedVersion: 3

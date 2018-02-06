@@ -17,6 +17,9 @@ public class TutorialTank : MonoBehaviour
     [SerializeField]
     private GameObject bullet_;
 
+    [SerializeField]
+    private GameObject fire_effect_;
+
     private float m_interValTime;
 
     private float t0, t1;
@@ -27,7 +30,7 @@ public class TutorialTank : MonoBehaviour
         m_gunYorigin_rotation = gunY_.transform.rotation;
         t0 = 0f;
         t1 = 0f;
-        m_interValTime = 4f;
+        m_interValTime = 2.5f;
     }
 
     // Update is called once per frame
@@ -62,13 +65,14 @@ public class TutorialTank : MonoBehaviour
 
     private void TankGunAttack()
     {
-        if (t1 >= 2f && !bill_.GetComponent<Break>().Get_BreakFlag())
+        if (t1 >= 2f && !bill_.GetComponent<Break_v2Tutorial>().Get_BreakFlag())
         {
             if (m_interValTime <= 0f)
             {
                 GameObject l_gun = Instantiate(bullet_, gunX_.transform.position, Quaternion.identity);
+                Instantiate(fire_effect_, gunX_.transform.position + gunX_.transform.forward * 9f, Quaternion.identity);
                 l_gun.transform.rotation = gunX_.transform.rotation;
-                m_interValTime = 4f;
+                m_interValTime = 2.5f;
             }
             m_interValTime -= 1.0f * Time.deltaTime;
         }

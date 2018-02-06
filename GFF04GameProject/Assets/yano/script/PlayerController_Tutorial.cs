@@ -92,6 +92,9 @@ public class PlayerController_Tutorial : MonoBehaviour
     [SerializeField]
     private GameObject m_Launcher;
 
+    [SerializeField]
+    private GameObject manager_;
+
     private AudioSource[] player_se_;
     private AudioClip playerSe_attack_;
     private AudioClip playerSe_walk_;
@@ -194,23 +197,6 @@ public class PlayerController_Tutorial : MonoBehaviour
         m_Animator.SetBool("IsDead", m_IsDead);
 
         m_current_speed = m_Controller.velocity.magnitude;
-
-        // 振動テスト
-        /*if (Input.GetKeyDown("space"))
-        {
-            GameObject Camera = GameObject.FindGameObjectWithTag("MainCamera");
-            Camera.GetComponent<CameraShake>().Shake(3.0f);
-            // Debug.Log("外部からカメラに振動命令");
-        }*/
-
-        // 死亡テスト
-        //if (Input.GetKeyDown("space"))
-        //{
-        //    if (m_State != T_PlayerState.Dead)
-        //    {
-        //        m_State = T_PlayerState.Dead;
-        //    }
-        //}
     }
     public void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -237,216 +223,62 @@ public class PlayerController_Tutorial : MonoBehaviour
     // 接触判定
     public void OnTriggerEnter(Collider other)
     {
-        // 敵ロボットと接触したら死亡
-        if (other.GetComponent<RobotDamage>() != null
-            ||
-            other.gameObject.tag == "RobotArmAttack"
-            ||
-            other.gameObject.tag == "RobotBeam"
-            ||
-            other.gameObject.tag == "Missile"
-            ||
-            other.gameObject.tag == "ExplosionCollision"
-            ||
-            other.gameObject.tag == "BeamCollide")
-        {
-            m_State = T_PlayerState.Dead;
-            player_se_[1].Stop();
-        }
+        //// 敵ロボットと接触したら死亡
+        //if (other.GetComponent<RobotDamage>() != null
+        //    ||
+        //    other.gameObject.tag == "RobotArmAttack"
+        //    ||
+        //    other.gameObject.tag == "RobotBeam"
+        //    ||
+        //    other.gameObject.tag == "Missile"
+        //    ||
+        //    other.gameObject.tag == "ExplosionCollision"
+        //    ||
+        //    other.gameObject.tag == "BeamCollide")
+        //{
+        //    m_State = T_PlayerState.Dead;
+        //    player_se_[1].Stop();
+        //}
 
-        // 倒壊中のビルと接触したら死亡
-        if ((other.tag == "TowerCollision" && other.GetComponent<tower_collide>().Get_CollideFlag())
-            || (other.tag == "DebrisCollision" && !other.GetComponent<DebrisGround>().Hit_Ground())
-            || other.gameObject.name == "DeathCollide")
-        {
-            m_State = T_PlayerState.Dead;
-            player_se_[1].Stop();
-        }
+        //// 倒壊中のビルと接触したら死亡
+        //if ((other.tag == "TowerCollision" && other.GetComponent<tower_collide>().Get_CollideFlag())
+        //    || (other.tag == "DebrisCollision" && !other.GetComponent<DebrisGround>().Hit_Ground())
+        //    || other.gameObject.name == "DeathCollide")
+        //{
+        //    m_State = T_PlayerState.Dead;
+        //    player_se_[1].Stop();
+        //}
     }
 
     // 通常時の処理
     void Normal()
     {
-        if (camera_pos_.GetComponent<CameraPosition_Tutorial>().Get_CntActive())
+        // 通常時の移動処理
+        NormalMove();
+
+        if (!manager_.GetComponent<TutorialManager>().GetPlayerCntrlFlag())
         {
-            // 通常時の移動処理
-            NormalMove();
-
-            // RTボタンを押すとダッシュ
-            m_IsDash = (Input.GetAxis("Dash") > 0.5f) ? true : false;
-
-            // RBボタンを押すとボム投げ状態に
-            if (Input.GetButton("Aim")
-                ||
-                Input.GetKey(KeyCode.P))
-            {
-                m_State = T_PlayerState.Aiming;
-            }
+            m_IsDash = false;
+            return;
         }
+
+        // RTボタンを押すとダッシュ
+        m_IsDash = (Input.GetAxis("Dash") > 0.5f) ? true : false;
+
+
+        // RBボタンを押すとボム投げ状態に
+        if (Input.GetButton("Aim")
+        ||
+        Input.GetKey(KeyCode.P))
+        {
+            m_State = T_PlayerState.Aiming;
+        }
+
     }
 
     // 通常時の移動
     void NormalMove()
     {
-        /*// カメラの正面向きのベクトルを取得
-        Vector3 forward = Camera.main.transform.forward;
-        // y成分を無視する
-        forward.y = 0;
-        // 正規化する
-        forward.Normalize();
-
-        // 方向入力を取得
-        float axisHorizontal = Input.GetAxisRaw("Horizontal_L");    // x軸（左右）
-        float axisVertical = Input.GetAxisRaw("Vertical_L");        // z軸（上下）
-
-        // 減速する（入力が無い場合 or 進行方向と逆に入力がある場合）
-        // X軸（左右キー）
-        if ((axisHorizontal == 0) || (m_SpeedX * axisHorizontal < 0))
-        {
-            if (m_SpeedX > 0)
-            {
-                m_SpeedX = Mathf.Max(m_SpeedX - m_CurrentBrakePower * Time.deltaTime, 0);
-            }
-            else {
-                m_SpeedX = Mathf.Min(m_SpeedX + m_CurrentBrakePower * Time.deltaTime, 0);
-            }
-        }
-        // Z軸（上下キー）
-        if ((axisVertical == 0) || (m_SpeedZ * axisVertical < 0))
-        {
-            if (m_SpeedZ > 0)
-            {
-                m_SpeedZ = Mathf.Max(m_SpeedZ - m_CurrentBrakePower * Time.deltaTime, 0);
-            }
-            else {
-                m_SpeedZ = Mathf.Min(m_SpeedZ + m_CurrentBrakePower * Time.deltaTime, 0);
-            }
-        }
-
-        // 接地状態であれば加速可能
-        if (m_Controller.isGrounded)
-        {
-            // 加速する
-            float accel;
-            accel = (m_IsDash) ? accel = m_AccelPowerDash : accel = m_AccelPower;
-            // 左右キーで加速
-            m_SpeedX +=
-                accel
-                * axisHorizontal
-                * Time.deltaTime;
-            // 上下キーで加速
-            m_SpeedZ +=
-                accel
-                * axisVertical
-                * Time.deltaTime;
-
-            // 速度制限、ブレーキ速度、および回転速度の変更
-            if (m_IsDash)
-            {
-                m_CurrentSpeedLimit = m_MaxSpeedDash;
-                m_CurrentBrakePower = m_BrakePowerDash;
-                m_CurrentRotateSpeed = m_RotateSpeedDash;
-            }
-            else
-            {
-                if (m_CurrentSpeedLimit > m_MaxSpeed)
-                {
-                    m_CurrentSpeedLimit -= 0.1f;
-                }
-                m_CurrentBrakePower = m_BrakePower;
-                if (m_CurrentRotateSpeed > m_RotateSpeed)
-                {
-                    m_CurrentRotateSpeed -= 0.1f;
-                }
-            }
-            // 速度を制限する
-            m_SpeedX = Mathf.Clamp(m_SpeedX, -m_CurrentSpeedLimit, m_CurrentSpeedLimit);
-            m_SpeedZ = Mathf.Clamp(m_SpeedZ, -m_CurrentSpeedLimit, m_CurrentSpeedLimit);
-        }
-
-        // 移動処理
-        Vector3 velocity = forward * m_SpeedZ + Camera.main.transform.right * m_SpeedX;
-        // 重力加速度を加算
-        m_VelocityY -= m_Gravity * Time.deltaTime;
-        // y軸方向の移動量を加味する
-        velocity.y = m_VelocityY;
-        // キャラクターコントローラーに命令して移動する
-        m_Controller.Move(velocity * Time.deltaTime);
-
-        // 移動方向に向ける
-        Vector3 direction = transform.position - m_PrevPosition;
-        if (direction.sqrMagnitude > 0)
-        {
-            Vector3 orientiation = Vector3.Slerp(transform.forward,
-                new Vector3(direction.x, 0.0f, direction.z),
-                m_CurrentRotateSpeed * Time.deltaTime / Vector3.Angle(transform.forward, direction));
-            transform.LookAt(transform.position + orientiation);
-            m_PrevPosition = transform.position;
-        }
-
-        // アニメーターに命令して、アニメーションを再生する
-        // プレイヤー現在の移動量を取得
-        float current_speed;
-        current_speed = m_Controller.velocity.magnitude;
-        if (current_speed > m_CurrentSpeedLimit) current_speed = m_CurrentSpeedLimit;
-        m_Animator.SetFloat("NormalSpeed", current_speed);*/
-
-        /*// カメラの正面向きのベクトルを取得
-        Vector3 forward = Camera.main.transform.forward;
-        // y成分を無視する
-        forward.y = 0;
-        // 正規化する
-        forward.Normalize();
-
-        // 方向入力を取得
-        float axisHorizontal = Input.GetAxisRaw("Horizontal_L");    // x軸（左右）
-        float axisVertical = Input.GetAxisRaw("Vertical_L");        // z軸（上下）
-
-        // 移動速度、および回転速度の変更
-        if (m_IsDash)
-        {
-            if (m_CurrentSpeedLimit < m_MaxSpeedDash)
-                m_CurrentSpeedLimit += 0.4f;
-            m_CurrentRotateSpeed = m_RotateSpeedDash;
-        }
-        else
-        {
-            if (m_CurrentSpeedLimit > m_MaxSpeed)
-                m_CurrentSpeedLimit -= 0.2f;
-            if (m_CurrentRotateSpeed > m_RotateSpeed)
-                m_CurrentRotateSpeed -= 0.1f;
-        }
-
-        Vector3 velocity = Vector3.zero;
-        velocity = forward * axisVertical * m_CurrentSpeedLimit + Camera.main.transform.right * axisHorizontal * m_CurrentSpeedLimit;
-
-        // 重力加速度を加算
-        m_VelocityY -= m_Gravity * Time.deltaTime;
-        // y軸方向の移動量を加味する
-        velocity.y = m_VelocityY;
-        // キャラクターコントローラーに命令して移動する
-        m_Controller.Move(velocity * Time.deltaTime);
-
-        // 移動方向に向ける
-        Vector3 direction = transform.position - m_PrevPosition;
-        if (direction.sqrMagnitude > 0)
-        {
-            Vector3 orientiation = Vector3.Slerp(transform.forward,
-                new Vector3(direction.x, 0.0f, direction.z),
-                m_CurrentRotateSpeed * Time.deltaTime / Vector3.Angle(transform.forward, direction));
-            transform.LookAt(transform.position + orientiation);
-            m_PrevPosition = transform.position;
-        }
-
-        // アニメーターに命令して、アニメーションを再生する
-        // プレイヤー現在の移動量を取得
-        float current_speed;
-        current_speed = m_Controller.velocity.magnitude;
-        if (current_speed > m_CurrentSpeedLimit) current_speed = m_CurrentSpeedLimit;
-        m_Animator.SetFloat("NormalSpeed", current_speed);
-
-        Debug.Log(m_CurrentSpeedLimit);*/
-
         // カメラの正面向きのベクトルを取得
         Vector3 forward = Camera.main.transform.forward;
         // y成分を無視する
@@ -455,13 +287,22 @@ public class PlayerController_Tutorial : MonoBehaviour
         forward.Normalize();
 
         // 方向入力を取得
-        float axisHorizontal = Input.GetAxisRaw("Horizontal_L");    // x軸（左右）
-        float axisVertical = Input.GetAxisRaw("Vertical_L");        // z軸（上下）
+        float axisHorizontal =
+            Input.GetAxisRaw("Horizontal_L");    // x軸（左右）
+        float axisVertical =
+            Input.GetAxisRaw("Vertical_L");        // z軸（上下）
+
 
         // 減速する（入力が無い場合）
-        if (axisHorizontal == 0 && axisVertical == 0)
+        if ((axisHorizontal == 0 && axisVertical == 0)
+            || !manager_.GetComponent<TutorialManager>().GetPlayerCntrlFlag()
+            || !camera_pos_.GetComponent<CameraPosition_Tutorial>().Get_CntActive())
         {
-            m_Speed = Mathf.Max(m_Speed - m_CurrentBrakePower * Time.deltaTime, 0);
+            if (manager_.GetComponent<TutorialManager>().GetPlayerCntrlFlag())
+                m_Speed = Mathf.Max(m_Speed - m_CurrentBrakePower * Time.deltaTime, 0);
+            else
+                m_Speed = Mathf.Max(m_Speed - m_CurrentBrakePower * Time.deltaTime * 4f, 0);
+
             player_se_[1].Stop();
         }
 
@@ -473,13 +314,16 @@ public class PlayerController_Tutorial : MonoBehaviour
             }
         }
 
+
         // 接地状態であれば加速可能
         if (m_Controller.isGrounded)
         {
             // 加速する
             float accel;
             accel = (m_IsDash) ? accel = m_AccelPowerDash : accel = m_AccelPower;
-            m_Speed += accel * Time.deltaTime;
+
+            if (manager_.GetComponent<TutorialManager>().GetPlayerCntrlFlag())
+                m_Speed += accel * Time.deltaTime;
 
             // 速度制限、ブレーキ速度、および回転速度の変更
             if (m_IsDash)
@@ -515,9 +359,14 @@ public class PlayerController_Tutorial : MonoBehaviour
         // キャラクターコントローラーに命令して移動する
         m_Controller.Move(velocity * Time.deltaTime);
 
+
+
         // 移動方向に向ける
         Vector3 direction = transform.position - m_PrevPosition;
-        if (direction.sqrMagnitude > 0)
+        if (direction.sqrMagnitude > 0
+            &&
+            (manager_.GetComponent<TutorialManager>().GetPlayerCntrlFlag()
+            && camera_pos_.GetComponent<CameraPosition_Tutorial>().Get_CntActive()))
         {
             Vector3 orientiation = Vector3.Slerp(
                 transform.forward,
