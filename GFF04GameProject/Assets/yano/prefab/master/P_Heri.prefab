@@ -397,6 +397,7 @@ GameObject:
   - component: {fileID: 82760801002154338}
   - component: {fileID: 82935436807172562}
   - component: {fileID: 114210093857953402}
+  - component: {fileID: 114830886660104634}
   m_Layer: 13
   m_Name: Player
   m_TagString: Player
@@ -5160,6 +5161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0263b985fd6c6fc458af326be9cc77df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_UseBom: 
   m_BomPrefab: {fileID: 1864201436001362, guid: 183c4dbc0ab404c40b6c3d9ca44bdd9a,
     type: 2}
   m_LightBomPrefab: {fileID: 1744724172229138, guid: f6e420b7f7db8ec4292419b714cada45,
@@ -5325,6 +5327,17 @@ MonoBehaviour:
   - {fileID: 1338815694803562}
   - {fileID: 1573737023650806}
   - {fileID: 1935950192913684}
+--- !u!114 &114830886660104634
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1158747146339274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4635483ef0d17d24d86cdff6cc173dc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!120 &120490049018210618
 LineRenderer:
   m_ObjectHideFlags: 1

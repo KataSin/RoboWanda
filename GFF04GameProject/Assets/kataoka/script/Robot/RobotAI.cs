@@ -105,7 +105,7 @@ public class RobotAI : MonoBehaviour
                         if (billObj != null)
                         {
                             if ((Vector3.Distance(billObj.transform.position, agent.transform.position) <= 100.0f) &&
-                                m_BillBreakCoolTime >= 10.0f)
+                                m_BillBreakCoolTime >= 5.0f)
                             {
                                 manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
                                 m_BillBreakCoolTime = 0.0f;

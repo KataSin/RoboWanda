@@ -4,12 +4,8 @@ using UnityEngine;
 
 public class ItemBox : MonoBehaviour
 {
-    public enum Item
-    {
-        SMOKE_BULLET,
-        LIGHT_BULLET
-    }
-    public Item m_Item;
+
+    public BomSpawn.Bom m_Item;
     private Rigidbody m_Rb;
     // Use this for initialization
     void Start()
@@ -29,7 +25,7 @@ public class ItemBox : MonoBehaviour
     /// <summary>
     /// アイテムの種類を取得
     /// </summary>
-    public Item GetItemState()
+    public BomSpawn.Bom GetItemState()
     {
         return m_Item;
     }

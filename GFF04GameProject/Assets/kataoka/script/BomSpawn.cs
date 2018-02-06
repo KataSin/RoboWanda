@@ -7,10 +7,11 @@ public class BomSpawn : MonoBehaviour
     public enum Bom
     {
         BOM,
-        LIGHT_BOM,
-        SMOKE_BOM
-    }
+        SMOKE_BOM,
+        LIGHT_BOM
 
+    }
+    public List<Bom> m_UseBom;
 
     [SerializeField, Tooltip("爆弾プレハブ")]
     public GameObject m_BomPrefab;
@@ -46,6 +47,7 @@ public class BomSpawn : MonoBehaviour
     private Vector3 m_Vec;
     //投げるボムの種類
     public Bom m_Bom;
+    private int m_IndexBom;
     //ラインレンダラー
     private LineRenderer m_LineRenderer;
     private List<GameObject> points;
@@ -73,6 +75,11 @@ public class BomSpawn : MonoBehaviour
         }
 
         isTrigger = false;
+        m_UseBom = new List<Bom>();
+        m_UseBom.Add(Bom.BOM);
+        //m_UseBom.Add(Bom.LIGHT_BOM);
+        //m_UseBom.Add(Bom.SMOKE_BOM);
+        m_IndexBom = 0;
     }
 
     // Update is called once per frame
@@ -89,19 +96,21 @@ public class BomSpawn : MonoBehaviour
         if (Input.GetAxisRaw("Bullet_Select") < -0.9
             && !isTrigger)
         {
-            m_Bom = (Bom)((int)m_Bom - 1);
+            m_IndexBom++;
             isTrigger = true;
         }
         // 右ボタン
         if (Input.GetAxisRaw("Bullet_Select") > 0.9
             && !isTrigger)
         {
-            m_Bom = (Bom)((int)m_Bom + 1);
+            m_IndexBom--;
             isTrigger = true;
         }
 
-        if ((int)m_Bom < 0) m_Bom = (Bom)2;
-        if ((int)m_Bom > 2) m_Bom = (Bom)0;
+        if ((int)m_IndexBom < 0) m_IndexBom = m_UseBom.Count - 1;
+        if ((int)m_IndexBom > m_UseBom.Count - 1) m_IndexBom = 0;
+
+        m_Bom = m_UseBom[m_IndexBom];
 
         //表示しないならアクティブをfalseにしてリターン
         if (!m_IsLineDraw)
@@ -201,6 +210,12 @@ public class BomSpawn : MonoBehaviour
         //if (m_PvLineRendererNoDraw) m_LineRenderer.enabled = false;
 
     }
+    //使用できるボムを追加する
+    public void AddBom(Bom bom)
+    {
+        m_UseBom.Add(bom);
+    }
+
     /// <summary>
     /// ボムを投げる
     /// </summary>
@@ -303,6 +318,11 @@ public class BomSpawn : MonoBehaviour
     public float Vector2Cross(Vector2 lhs, Vector2 rhs)
     {
         return lhs.x * rhs.y - rhs.x * lhs.y;
+    }
+    //使えるボムを取得
+    public List<Bom> GetUseBom()
+    {
+        return m_UseBom;
     }
 
     // Ho追加（2017/12/27）
