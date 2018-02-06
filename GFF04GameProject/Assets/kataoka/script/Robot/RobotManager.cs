@@ -9,7 +9,7 @@ public class RobotManager : MonoBehaviour
     [SerializeField, Tooltip("ロボットのHP")]
     public int m_RobotHp;
 
-
+    public Material m_Material;
     //アクションたち
     public struct ActionFunc
     {
@@ -18,10 +18,13 @@ public class RobotManager : MonoBehaviour
         //アクションアップデート
         public Func<bool> actionUpdate;
     }
+    public GameObject m_Light1;
+    public GameObject m_Light2;
     public enum RobotBehavior
     {
         ROBOT_ONE,
-        ROBOT_TWO
+        ROBOT_TWO,
+        ROBOT_THREE
     }
     //アクションたち
     private Dictionary<RobotAction.RobotState, ActionFunc> m_Actions;
@@ -41,9 +44,18 @@ public class RobotManager : MonoBehaviour
     private bool m_IsDead;
     //ロボットの行動番号
     private RobotBehavior m_BehaviorNum;
+    //ロボットの煙
+    private List<GameObject> m_SparkEffect;
+    private int m_SparkNum;
     // Use this for initialization
     void Start()
     {
+        m_SparkEffect = new List<GameObject>();
+        foreach (var i in GameObject.FindGameObjectsWithTag("Spark"))
+        {
+            m_SparkEffect.Add(i);
+            i.SetActive(false);
+        }
         m_Actions = new Dictionary<RobotAction.RobotState, ActionFunc>();
         m_RobotAction = GetComponent<RobotAction>();
         m_IsAction = true;
@@ -66,17 +78,29 @@ public class RobotManager : MonoBehaviour
         AddAction(RobotAction.RobotState.ROBOT_HELI_ATTACK, m_RobotAction.RobotHeliAttack());
         AddAction(RobotAction.RobotState.ROBOT_BOMBING_ATTACK, m_RobotAction.RobotBombingAttack());
         AddAction(RobotAction.RobotState.ROBOT_MISSILE_BEAM_ATTACK, m_RobotAction.RobotBeamAndMissileAttack());
+        AddAction(RobotAction.RobotState.ROBOT_TANK_ATTACK, m_RobotAction.RobotTankAttack());
 
         m_IsLoop = true;
 
         m_IsDead = false;
         m_BehaviorNum = RobotBehavior.ROBOT_ONE;
+
+        m_SparkNum = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
         Debug.Log(m_RobotState);
+        Color startColor = new Color(0.1f, 0.7f, 0.8f);
+        Color endClor = new Color(1.0f, 0.2f, 0.2f);
+        m_RobotHp = Mathf.Clamp(m_RobotHp, 0, 10000);
+
+        Color robotColor = Color.Lerp(endClor, startColor, (float)m_RobotHp / 10000.0f);
+        m_Material.SetColor("_EmissionColor", robotColor);
+        m_Light1.GetComponent<Light>().color = robotColor;
+        m_Light2.GetComponent<Light>().color = robotColor;
+
         //Debug.Log(m_RobotHp);
         //ロボット仮HPUI
         if (GameObject.FindGameObjectWithTag("RobotHp") != null)
@@ -85,10 +109,19 @@ public class RobotManager : MonoBehaviour
             image.text = m_RobotHp.ToString();
 
         }
+        float sparkNum = 10000.0f / m_SparkEffect.Count;
+        int count = 0;
+        //火花のエフェクト
+        foreach (var i in m_SparkEffect)
+        {
+            if (sparkNum * count >= 10000.0f - m_RobotHp) break;    
+            i.SetActive(true);
+            count++;
+        }
 
         if (Input.GetKey(KeyCode.N))
         {
-            m_RobotHp = 0;
+            m_RobotHp -= 100;
         }
 
         //アクションのスタート

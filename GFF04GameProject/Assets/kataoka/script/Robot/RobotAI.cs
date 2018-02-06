@@ -22,7 +22,8 @@ public class RobotAI : MonoBehaviour
     private float m_HeliAttackCoolTime;
     //ビル破壊クールタイム
     private float m_BillBreakCoolTime;
-
+    //戦車破壊のクールタイム
+    private float m_TankBreakCoolTime;
 
     //[SerializeField, Tooltip("ビルコリジョン")]
     //public GameObject m_BillCollision;
@@ -45,7 +46,7 @@ public class RobotAI : MonoBehaviour
 
         m_BillBreakCoolTime = 20.0f;
         m_HeliAttackCoolTime = 0.0f;
-
+        m_TankBreakCoolTime = 0.0f;
         m_IsLookFlag = false;
     }
 
@@ -70,14 +71,15 @@ public class RobotAI : MonoBehaviour
         ////ここまで
         m_HeliAttackCoolTime += Time.deltaTime;
         m_BillBreakCoolTime += Time.deltaTime;
-
+        m_TankBreakCoolTime += Time.deltaTime;
         switch (manager.GetBehavior())
         {
             case RobotManager.RobotBehavior.ROBOT_ONE:
                 {
                     GameObject player;
+
                     //プレイヤーが見えていたら
-                    if (PlayerToRobotRay("Player", 0, out player) ||
+                    if (PlayerToRobotRay("Player",0, out player) ||
                         Player_Robot_Distance() <= 20.0f)
                     {
                         float dis = Player_Robot_Distance();
@@ -104,8 +106,8 @@ public class RobotAI : MonoBehaviour
                         GameObject billObj = agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject();
                         if (billObj != null)
                         {
-                            if ((Vector3.Distance(billObj.transform.position, agent.transform.position) <= 100.0f) &&
-                                m_BillBreakCoolTime >= 5.0f)
+                            if ((Vector3.Distance(billObj.transform.position, agent.transform.position) <= 30.0f) &&
+                                m_BillBreakCoolTime >= 10.0f)
                             {
                                 manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
                                 m_BillBreakCoolTime = 0.0f;
@@ -144,14 +146,54 @@ public class RobotAI : MonoBehaviour
                     }
                     break;
                 }
-            //case 2:
-            //    {
-            //        break;
-            //    }
-            //case 3:
-            //    {
-            //        break;
-            //    }
+            case RobotManager.RobotBehavior.ROBOT_THREE:
+                {
+                    GameObject player;
+
+                    //プレイヤーが見えていたら
+                    if (PlayerToRobotRay("Player", 0, out player) ||
+                        Player_Robot_Distance() <= 20.0f)
+                    {
+                        float dis = Player_Robot_Distance();
+                        if (dis <= 20.0f)
+                        {
+                            manager.SetAction(RobotAction.RobotState.ROBOT_MISSILE_BEAM_ATTACK, false);
+                        }
+                        else if (dis < 50.0f)
+                        {
+                            manager.SetAction(RobotAction.RobotState.ROBOT_MISSILE_ATTACK, false);
+                        }
+                        else if (dis < 75.0f)
+                        {
+                            manager.SetAction(RobotAction.RobotState.ROBOT_BEAM_ATTACK, false);
+                        }
+                    }
+                    else if (RobotToTankRay()&&m_TankBreakCoolTime>=20.0f)
+                    {
+                        manager.SetAction(RobotAction.RobotState.ROBOT_TANK_ATTACK, false);
+                        m_TankBreakCoolTime = 0.0f;
+                    }
+                    else
+                    {
+                        GameObject billObj = agent.gameObject.GetComponent<RobotAction>().GetBillBreakObject();
+                        if (billObj != null)
+                        {
+                            if ((Vector3.Distance(billObj.transform.position, agent.transform.position) <= 30.0f) &&
+                                m_BillBreakCoolTime >= 10.0f)
+                            {
+                                manager.SetAction(RobotAction.RobotState.ROBOT_BILL_BREAK, false);
+                                m_BillBreakCoolTime = 0.0f;
+                                return;
+                            }
+                            manager.SetAction(RobotAction.RobotState.ROBOT_TO_BILL_MOVE, true);
+                        }
+                    }
+                    break;
+                }
+                //case 3:
+                //    {
+                //        break;
+                //    }
         }
 
 
@@ -219,6 +261,27 @@ public class RobotAI : MonoBehaviour
 
     }
 
+
+    private bool RobotToTankRay()
+    {
+        var tanks = GameObject.FindGameObjectsWithTag("GameTank");
+        foreach(var i in tanks)
+        {
+            Vector3 vec = (i.transform.position - robotEye.transform.position).normalized * 2000.0f;
+            Vector3 start = robotEye.transform.position;
+            RaycastHit hit;
+
+            if (Physics.Raycast(start, vec, out hit, 20000.0f))
+            {
+                string name = hit.collider.tag;
+                if (name == "GameTank")
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     /// <summary>
     /// 特定のオブジェクトとロボットが当たっているかどうか
