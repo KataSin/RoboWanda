@@ -22,13 +22,11 @@ public class Helicopter : MonoBehaviour
     //撤退しているか
     public bool m_ReturnFlag;
 
-
     private Vector3 m_RobotToHeliVec;
 
     private Vector3 m_ResPos;
     private Vector3 m_Pos;
     private Vector3 m_SpringVelo;
-
 
     // Use this for initialization
     void Start()
@@ -47,6 +45,8 @@ public class Helicopter : MonoBehaviour
 
         m_ReturnFlag = false;
         m_IsBreak = false;
+
+        GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
     }
 
     // Update is called once per frame

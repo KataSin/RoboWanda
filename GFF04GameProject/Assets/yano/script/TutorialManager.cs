@@ -146,6 +146,9 @@ public class TutorialManager : MonoBehaviour
     private bool isText18;
     private bool isTextOther2;
 
+    [SerializeField]
+    private GameObject bombSpawn_;
+
     // Use this for initialization
     void Start()
     {

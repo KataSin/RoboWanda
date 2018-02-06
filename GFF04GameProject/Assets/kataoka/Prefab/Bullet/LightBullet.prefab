@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4769989583845522}
-  m_Layer: 12
+  m_Layer: 1
   m_Name: Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 108389761442625010}
   - component: {fileID: 114121392478814118}
   - component: {fileID: 135354732969975234}
-  m_Layer: 12
+  m_Layer: 1
   m_Name: Light
   m_TagString: LightCollision
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 54605756819133180}
   - component: {fileID: 65401798261263732}
   - component: {fileID: 114044423896410578}
-  m_Layer: 12
+  m_Layer: 1
   m_Name: LightBullet
   m_TagString: bom
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 4634885308301966}
   - component: {fileID: 33422992163122364}
   - component: {fileID: 23251285681822994}
-  m_Layer: 12
+  m_Layer: 1
   m_Name: Parasol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -267,7 +267,7 @@ Light:
     m_NearPlane: 0.2
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
-  m_Flare: {fileID: 12100000, guid: bc8d761cacc3740fbab1c96eb12fe12f, type: 2}
+  m_Flare: {fileID: 12100000, guid: e3b847ecca53fcb4a81430e46d769ec3, type: 2}
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2

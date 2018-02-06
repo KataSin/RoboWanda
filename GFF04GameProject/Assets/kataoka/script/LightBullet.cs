@@ -18,12 +18,12 @@ public class LightBullet : MonoBehaviour
     private Rigidbody mRigid;
 
     private Vector3 m_VertexPoint;
-
     // Use this for initialization
     void Start()
     {
         //m_IsExprosion = false;
         mRigid = GetComponent<Rigidbody>();
+
     }
 
     // Update is called once per frame
@@ -33,7 +33,6 @@ public class LightBullet : MonoBehaviour
         {
             m_IsExprosion = true;
         }
-
 
 
         if (m_IsExprosion)
@@ -70,7 +69,7 @@ public class LightBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "LightCollision") return;
+        if (other.tag == "LightCollision" || other.tag == "SandSmoke") return;
         if (m_IsExprosion)
         {
             Destroy(transform.parent.gameObject);

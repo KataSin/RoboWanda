@@ -632,7 +632,6 @@ public class PlayerController : MonoBehaviour
         AimingMove();
 
         // BomSpawnにバグ発生、一時コメントアウトする（2018-02-02）
-        /*
         var a = m_BomSpawn.GetComponent<BomSpawn>();
         //片岡の実装
         m_BomSpawn.GetComponent<BomSpawn>().Set(Camera.main.transform.forward, 150.0f);
@@ -643,7 +642,7 @@ public class PlayerController : MonoBehaviour
             m_BomSpawn.GetComponent<BomSpawn>().SpawnBom();
             playerSe_[0].PlayOneShot(playerSe_attack_);
         }
-        */
+
 
         // RBボタンを放すと通常状態に戻る
         if (!Input.GetButton("Aim"))

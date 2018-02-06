@@ -198,7 +198,7 @@ public class TextTutorial : MonoBehaviour
         m_text_char[1] = 'ず';
         m_text_char[2] = 'は';
         m_text_char[3] = '炸';
-        m_text_char[4] = '烈';
+        m_text_char[4] = '裂';
         m_text_char[5] = '弾';
         m_text_char[6] = 'の';
         m_text_char[7] = '訓';
@@ -255,7 +255,7 @@ public class TextTutorial : MonoBehaviour
         if (isClear) return;
 
         m_text_char[0] = '炸';
-        m_text_char[1] = '烈';
+        m_text_char[1] = '裂';
         m_text_char[2] = '弾';
         m_text_char[3] = 'は';
         m_text_char[4] = '発';
@@ -289,7 +289,7 @@ public class TextTutorial : MonoBehaviour
         if (isClear) return;
 
         m_text_char[0] = '炸';
-        m_text_char[1] = '烈';
+        m_text_char[1] = '裂';
         m_text_char[2] = '弾';
         m_text_char[3] = 'で';
         m_text_char[4] = '建';
