@@ -60,6 +60,8 @@ public class Missile : MonoBehaviour
         m_InitializeFlag = true;
 
         m_LifeTime = 0.0f;
+
+        GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
     }
 
     // Update is called once per frame
@@ -116,7 +118,7 @@ public class Missile : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag=="Ground"||other.tag=="TowerCollision"||other.tag== "GroundCollisionRigid")
+        if (other.tag == "Ground" || other.tag == "TowerCollision" || other.tag == "GroundCollisionRigid")
         {
             Instantiate(m_Exprosion, transform.position, Quaternion.identity);
             Destroy(gameObject);

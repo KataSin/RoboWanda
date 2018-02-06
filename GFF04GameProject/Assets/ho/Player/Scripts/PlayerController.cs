@@ -638,7 +638,7 @@ public class PlayerController : MonoBehaviour
         // RBボタンを放すと通常状態に戻る
         if (!Input.GetButton("Aim"))
         {
-            // m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(false);
+            m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(false);
             m_State = PlayerState.Normal;
         }
     }
