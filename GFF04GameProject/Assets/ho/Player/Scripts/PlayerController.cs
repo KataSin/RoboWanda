@@ -329,14 +329,6 @@ public class PlayerController : MonoBehaviour
 
             Debug.Log("無敵状態：" + m_IsInvincible);
         }
-
-        // 飛ばすテスト
-        if (Input.GetKeyDown("b"))
-        {
-            // 
-        }
-
-        Debug.Log("現在の状態：" + m_State + "、IsAiming = " + m_IsAiming);
     }
 
     // キャラクターコントローラーの接触判定
@@ -416,10 +408,10 @@ public class PlayerController : MonoBehaviour
     {
         // 倒壊しているビルと隣接している間、Aボタンを押すと、爆発物を設置
         // Debug.Log(other.gameObject.name);
-        if (other.gameObject.name == "BreakCanArea" && m_State == PlayerState.Normal && Input.GetButtonDown("BombSet"))
+        if (other.gameObject.tag == "Break_Tower_Can_Break" && m_State == PlayerState.Normal && Input.GetButtonDown("BombSet"))
         {
             m_BuildingNear = other.gameObject;
-            // Debug.Log("爆発物を設置する");
+            Debug.Log("爆発物を設置する");
 
             m_setting_time = 1.0f;
             m_State = PlayerState.Setting;
@@ -642,7 +634,6 @@ public class PlayerController : MonoBehaviour
             m_BomSpawn.GetComponent<BomSpawn>().SpawnBom();
             playerSe_[0].PlayOneShot(playerSe_attack_);
         }
-
 
         // RBボタンを放すと通常状態に戻る
         if (!Input.GetButton("Aim"))
@@ -939,8 +930,7 @@ public class PlayerController : MonoBehaviour
         // 爆発物を生成
         if (m_setting_time <= 0.5f && m_explosive_set == false)
         {
-            Vector3 explosive_position = new Vector3(transform.position.x + 0.1f, 0.5f, transform.position.z + 0.1f);
-            Instantiate(m_Explosive, explosive_position, Quaternion.identity);
+            Instantiate(m_Explosive, transform.position, transform.rotation);
             m_explosive_set = true;
         }
 

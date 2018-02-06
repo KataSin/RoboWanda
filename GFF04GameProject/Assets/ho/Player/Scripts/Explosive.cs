@@ -9,9 +9,12 @@ using UnityEngine;
 
 public class Explosive : MonoBehaviour
 {
-    private GameObject m_Timer;     // ゲーム進行タイマー
+    private GameObject m_Timer;             // ゲーム進行タイマー
     [SerializeField]
-    private GameObject m_Explosion; // 爆発判定
+    [Header("起爆時間（秒）")]
+    private int m_DetonationTime = 180;     // 起爆時間
+    [SerializeField]
+    private GameObject m_Explosion;         // 爆発判定
 
     // Use this for initialization
     void Start()
@@ -24,8 +27,21 @@ public class Explosive : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // 爆破時間になると爆発する
+        // Debug.Log(m_Timer);
 
+        float time = m_Timer.GetComponent<Timer>().Get_ElapsedTimer();
+        // Debug.Log("経過時間：" + time);
+
+        if (time >= m_DetonationTime)
+        {
+            Explosion();
+        }
+
+        // mキーを押すと起爆（動作確認用）
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Explosion();
+        }
     }
 
     // 爆破処理（ゲーム進行タイマーによって起爆）
