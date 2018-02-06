@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 97637a2a763b7f24b8da4e139e4144ca, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -227,7 +227,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -3540,7 +3540,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &369515181
 Light:
   m_ObjectHideFlags: 0
@@ -4938,7 +4938,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6309,7 +6309,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -7982,6 +7982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0263b985fd6c6fc458af326be9cc77df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_UseBom: 
   m_BomPrefab: {fileID: 1864201436001362, guid: 183c4dbc0ab404c40b6c3d9ca44bdd9a,
     type: 2}
   m_LightBomPrefab: {fileID: 1744724172229138, guid: f6e420b7f7db8ec4292419b714cada45,
@@ -7991,7 +7992,7 @@ MonoBehaviour:
   m_LandingPoint: {fileID: 1492196718808080, guid: 19314fdbe7ce4a34185f04605bfcacc0,
     type: 2}
   m_VertexPoint: {fileID: 0}
-  m_Point: {fileID: 1878176742274818, guid: 48804f3a4e577224da4a0e50e2d072fc, type: 2}
+  m_Point: {fileID: 1203606589735834, guid: 29ad441811426d8408c910bf0b9773cf, type: 2}
   m_Power: 100
   m_HighPower: 200
   m_PvLineRendererNoDraw: 0
@@ -8967,6 +8968,7 @@ MonoBehaviour:
   cntrlUI_ico_4: {fileID: 1658159582}
   cntrlUI_ico_5: {fileID: 368589239}
   cb_base_: {fileID: 148285709}
+  bombSpawn_: {fileID: 1081305157}
 --- !u!4 &1200761877
 Transform:
   m_ObjectHideFlags: 0
