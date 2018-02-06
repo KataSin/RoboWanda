@@ -18,22 +18,30 @@ public class LightBullet : MonoBehaviour
     private Rigidbody mRigid;
 
     private Vector3 m_VertexPoint;
+
+    public GameObject m_Collision;
+
     // Use this for initialization
     void Start()
     {
         //m_IsExprosion = false;
         mRigid = GetComponent<Rigidbody>();
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(m_VertexPoint, transform.position) <= 3.0f)
-        {
-            m_IsExprosion = true;
-        }
+        //if (Vector3.Distance(m_VertexPoint, transform.position) <= 3.0f)
+        //{
+        //    m_IsExprosion = true;
+        //}
+        m_IsExprosion = m_Collision.GetComponent<CollisionCheck>().GetFlag();
 
+        if (!m_IsExprosion)
+        {
+            transform.rotation =
+                Quaternion.LookRotation(mRigid.velocity);
+        }
 
         if (m_IsExprosion)
         {
@@ -69,10 +77,10 @@ public class LightBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "LightCollision" || other.tag == "SandSmoke") return;
+        if (other.tag == "LightCollision") return;
         if (m_IsExprosion)
         {
-            Destroy(transform.parent.gameObject);
+            Destroy(m_Parasol);
         }
     }
 
