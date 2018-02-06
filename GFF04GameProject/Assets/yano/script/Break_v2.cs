@@ -93,7 +93,7 @@ public class Break_v2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
         //倒壊挙動制御
         Collapse();
     }
@@ -174,7 +174,8 @@ public class Break_v2 : MonoBehaviour
             ||
             other.gameObject.tag == "BeamCollide")
         {
-            isBreak = true;
+            if (other.GetComponent<LightBullet>() == null)
+                isBreak = true;
         }
     }
 }
