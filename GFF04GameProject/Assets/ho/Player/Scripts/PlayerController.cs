@@ -654,7 +654,7 @@ public class PlayerController : MonoBehaviour
         // if (!Input.GetButton("Aim"))
         if (!(Input.GetAxis("Aim") > 0.5f))
         {
-            // m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(false);
+            m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(false);
             m_State = PlayerState.Normal;
         }
     }

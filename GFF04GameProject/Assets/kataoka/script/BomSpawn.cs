@@ -77,8 +77,8 @@ public class BomSpawn : MonoBehaviour
         isTrigger = false;
         m_UseBom = new List<Bom>();
         m_UseBom.Add(Bom.BOM);
-        //m_UseBom.Add(Bom.LIGHT_BOM);
-        //m_UseBom.Add(Bom.SMOKE_BOM);
+        m_UseBom.Add(Bom.LIGHT_BOM);
+        m_UseBom.Add(Bom.SMOKE_BOM);
         m_IndexBom = 0;
     }
 
@@ -154,7 +154,7 @@ public class BomSpawn : MonoBehaviour
 
             Ray ray = new Ray(start, end - start);
             RaycastHit hit;
-            int layer = ~(1 << 11 | 1 << 12 | 1 << 13 | 1 << 15);
+            int layer = ~(1 << 1 | 1 << 11 | 1 << 12 | 1 << 13 | 1 << 15);
             if (Physics.Raycast(ray, out hit, Vector3.Distance(start, end), layer))
             {
                 //着地地点の座標と回転を設定
@@ -244,11 +244,11 @@ public class BomSpawn : MonoBehaviour
 
 
 
-        GameObject bom = Instantiate(prefab, transform.position, Quaternion.identity);
+        GameObject bom = Instantiate(prefab, transform.position, Quaternion.LookRotation(m_Vec));
         if (m_VertexPos.y <= transform.position.y) m_VertexPos = Vector3.zero;
         if (m_Bom == Bom.LIGHT_BOM) bom.GetComponent<LightBullet>().SetVertex(m_VertexPos);
         else if (m_Bom == Bom.BOM) bom.GetComponent<Bomb_v2>().m_Bullet = Bom.BOM;
-        bom.transform.rotation = Quaternion.Euler(90f, 0f, -(player_.transform.rotation.y * 180f / Mathf.PI) * 2f);
+        //bom.transform.rotation = Quaternion.Euler(90f, 0f, -(player_.transform.rotation.y * 180f / Mathf.PI) * 2f);
 
         float power = m_Power;
         if (m_Bom == Bom.LIGHT_BOM)
