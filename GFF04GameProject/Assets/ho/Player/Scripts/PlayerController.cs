@@ -85,6 +85,7 @@ public class PlayerController : MonoBehaviour
     bool m_IsDead;                                  // 死亡しているか
 
     bool m_IsInvincible;                            // 無敵状態であるか（デバッグ、デモ用）
+    bool m_IsShot;                                  // 弾を発射したか
 
     //矢野実装
     bool m_IsStartFall;                             //ヘリから降下中か
@@ -103,6 +104,8 @@ public class PlayerController : MonoBehaviour
     float m_setting_time = 0.0f;                    // 爆発物設置の残り時間
 
     GameObject m_BuildingNear;                      // 近くにある、倒壊したビル
+    [SerializeField]
+    private GameObject m_ExplosivePoint;            // 爆発物の設置ポイント
     [SerializeField]
     private GameObject m_Explosive;                 // 爆発物のプレハブ
     bool m_explosive_set;                           // 爆発物を設置したか
@@ -149,6 +152,7 @@ public class PlayerController : MonoBehaviour
         m_IsCreeping = false;
         m_IsDead = false;
         m_IsInvincible = false;
+        m_IsShot = false;
 
         m_IsStartFall = true;
         m_isClear = false;
@@ -321,6 +325,12 @@ public class PlayerController : MonoBehaviour
                 playerSe_[1].Stop();
             }
         }*/
+
+        // RTボタンを放すと発射判定を解除（連射の防止）
+        if (!(Input.GetAxis("Bomb_Throw") > 0.5f))
+        {
+            m_IsShot = false;
+        }
 
         // 無敵状態にする（デバッグ、デモ用）
         if (Input.GetKeyDown("space"))
@@ -495,11 +505,13 @@ public class PlayerController : MonoBehaviour
         // 通常時の移動処理
         NormalMove();
 
-        // RTボタンを押すとダッシュ
-        m_IsDash = (Input.GetAxis("Dash") > 0.5f) ? true : false;
+        // RBボタンを押すとダッシュ
+        // m_IsDash = (Input.GetAxis("Dash") > 0.5f) ? true : false;
+        m_IsDash = (Input.GetButton("Dash")) ? true : false;
 
-        // RBボタンを押すとボム投げ状態に
-        if (Input.GetButton("Aim"))
+        // LTボタンを押すとボム投げ状態に
+        // if (Input.GetButton("Aim"))
+        if (Input.GetAxis("Aim") > 0.5f)
         {
             m_State = PlayerState.Aiming;
         }
@@ -514,9 +526,9 @@ public class PlayerController : MonoBehaviour
 
         // 爆発物設置座標テスト
         /*
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetButtonDown("BombSet"))
         {
-            Instantiate(m_Explosive, transform.position, transform.rotation);
+            Instantiate(m_Explosive, m_ExplosivePoint.transform.position, transform.rotation);
         }
         */
     }
@@ -629,14 +641,18 @@ public class PlayerController : MonoBehaviour
         m_BomSpawn.GetComponent<BomSpawn>().Set(Camera.main.transform.forward, 150.0f);
         m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(true);
 
-        if (Input.GetButtonDown("Bomb_Throw"))
+        // LTボタンが押されてる間、RTボタンを押すと、弾を発射
+        // if (Input.GetButtonDown("Bomb_Throw"))
+        if (Input.GetAxis("Bomb_Throw") > 0.5f && !m_IsShot)
         {
+            m_IsShot = true;
             m_BomSpawn.GetComponent<BomSpawn>().SpawnBom();
             playerSe_[0].PlayOneShot(playerSe_attack_);
         }
 
-        // RBボタンを放すと通常状態に戻る
-        if (!Input.GetButton("Aim"))
+        // LTボタンを放すと通常状態に戻る
+        // if (!Input.GetButton("Aim"))
+        if (!(Input.GetAxis("Aim") > 0.5f))
         {
             // m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(false);
             m_State = PlayerState.Normal;
@@ -926,11 +942,12 @@ public class PlayerController : MonoBehaviour
         // グレネードランチャーの表示を消す
         m_Launcher.SetActive(false);
         // 設置モーションを再生
+        m_Animator.Play("ExplosiveSet");
 
         // 爆発物を生成
         if (m_setting_time <= 0.5f && m_explosive_set == false)
         {
-            Instantiate(m_Explosive, transform.position, transform.rotation);
+            Instantiate(m_Explosive, m_ExplosivePoint.transform.position, transform.rotation);
             m_explosive_set = true;
         }
 

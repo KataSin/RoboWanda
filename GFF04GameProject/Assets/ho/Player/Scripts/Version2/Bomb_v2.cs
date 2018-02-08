@@ -39,8 +39,9 @@ public class Bomb_v2 : MonoBehaviour
     {
 
         // RBボタンが押されてない間に、LBボタンを押すと起爆
-        if ((!Input.GetButton("Aim") && !Input.GetKey(KeyCode.P))
-            && (Input.GetButtonDown("Bomb_Throw") || Input.GetKeyDown(KeyCode.O)))
+        /*if ((!Input.GetButton("Aim") && !Input.GetKey(KeyCode.P))
+            && (Input.GetButtonDown("Bomb_Throw") || Input.GetKeyDown(KeyCode.O)))*/
+        if (!(Input.GetAxis("Aim") > 0.5f) && Input.GetAxis("Bomb_Throw") > 0.5f)
         {
             Destroy(gameObject);
             // 爆発の当たり判定を発生

@@ -27,18 +27,19 @@ public class Explosive : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // mキーを押すと起爆（動作確認用）
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Explosion();
+        }
+
+        if (m_Timer == null) return;
         // Debug.Log(m_Timer);
 
         float time = m_Timer.GetComponent<Timer>().Get_ElapsedTimer();
         // Debug.Log("経過時間：" + time);
 
         if (time >= m_DetonationTime)
-        {
-            Explosion();
-        }
-
-        // mキーを押すと起爆（動作確認用）
-        if (Input.GetKeyDown(KeyCode.M))
         {
             Explosion();
         }
