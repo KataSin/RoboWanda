@@ -19,6 +19,7 @@ public class LightBullet : MonoBehaviour
 
     private Vector3 m_VertexPoint;
 
+    public GameObject m_CollisionObj;
     // Use this for initialization
     void Start()
     {
@@ -29,7 +30,7 @@ public class LightBullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(m_VertexPoint, transform.position) <= 3.0f)
+        if (m_CollisionObj.GetComponent<CollisionCheck>().GetFlag())
         {
             m_IsExprosion = true;
         }
@@ -57,6 +58,10 @@ public class LightBullet : MonoBehaviour
             m_Time += 50.0f * Time.deltaTime;
             m_Parasol.transform.position -= new Vector3(0, 0.4f, 0) * Time.deltaTime;
             m_Parasol.transform.rotation = Quaternion.AngleAxis(Mathf.Lerp(-40, 40, numSin), m_RightVec);
+        }
+        else
+        {
+            transform.rotation = Quaternion.LookRotation(mRigid.velocity);
         }
     }
 
