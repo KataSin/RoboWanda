@@ -47,6 +47,8 @@ public class Helicopter : MonoBehaviour
 
         m_ReturnFlag = false;
         m_IsBreak = false;
+
+        GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
     }
 
     // Update is called once per frame

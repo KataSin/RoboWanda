@@ -265,8 +265,8 @@ public class Break : MonoBehaviour
                 scoreMana_.GetComponent<ScoreManager>().SetBreakCount();
             }
 
-            if (GetComponent<AudioSource>() != null)
-                GetComponent<AudioSource>().PlayOneShot(break_se_);
+            //if (GetComponent<AudioSource>() != null)
+            //    GetComponent<AudioSource>().PlayOneShot(break_se_);
 
             isBreak = true;
             isOutBreak = true;

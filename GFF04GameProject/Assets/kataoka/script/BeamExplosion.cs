@@ -19,7 +19,7 @@ public class BeamExplosion : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {       
+    {
         if (m_ExprosionFlag)
         {
             Instantiate(m_Exprosion, transform.position, Quaternion.identity);

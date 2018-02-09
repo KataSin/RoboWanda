@@ -137,8 +137,8 @@ public class Break_v2 : MonoBehaviour
 
             gareki_.SetActive(true);
 
-            if (GetComponent<AudioSource>() != null)
-                GetComponent<AudioSource>().PlayOneShot(break_se_);
+            //if (GetComponent<AudioSource>() != null)
+            //    GetComponent<AudioSource>().PlayOneShot(break_se_);
 
             isOutBreak = true;
         }
