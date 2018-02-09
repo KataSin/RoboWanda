@@ -154,14 +154,14 @@ public class BomSpawn : MonoBehaviour
 
             Ray ray = new Ray(start, end - start);
             RaycastHit hit;
-            int layer = ~(1 << 1 | 1 << 11 | 1 << 12 | 1 << 13 | 1 << 15);
+            int layer = 1 << 8 | 1 << 9 | 1 << 17;
             if (Physics.Raycast(ray, out hit, Vector3.Distance(start, end), layer))
             {
                 //着地地点の座標と回転を設定
                 m_LandingPoint.transform.position = hit.point;
                 m_LandingPoint.transform.LookAt(m_LandingPoint.transform.position + hit.normal * 5.0f);
                 m_LandingPoint.transform.rotation =
-                    Quaternion.Euler(m_LandingPoint.transform.eulerAngles.x + 90,
+                    Quaternion.Euler(m_LandingPoint.transform.eulerAngles.x+90,
                     m_LandingPoint.transform.eulerAngles.y,
                     m_LandingPoint.transform.eulerAngles.z);
 

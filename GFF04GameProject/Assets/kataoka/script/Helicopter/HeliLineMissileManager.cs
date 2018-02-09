@@ -88,7 +88,7 @@ public class HeliLineMissileManager : MonoBehaviour
             Ray ray = new Ray(transform.position, endPos - transform.position);
             RaycastHit hit;
             m_DrawFlag = false;
-            int layer = ~(1 << 14);
+            int layer = 1 << 8 | 1 << 9;
             if (Physics.Raycast(ray,out hit, 150.0f,layer))
             {
                 if (LayerMask.LayerToName(hit.collider.gameObject.layer) == "Robot")

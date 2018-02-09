@@ -19,7 +19,10 @@ public class AllBreakWall : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "GroundCollisionRigid") return;
+        if (other.tag == "GroundCollisionRigid"
+            || other.name == "DestroyCollision"
+            || other.tag == "DebrisCollision"
+            || other.tag == "SandSmoke") return;
 
         Destroy(other.gameObject);
     }
