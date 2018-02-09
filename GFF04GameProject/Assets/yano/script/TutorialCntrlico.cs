@@ -28,7 +28,6 @@ public class TutorialCntrlico : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ICO_Change();
     }
 
     public void ICO_Change()
