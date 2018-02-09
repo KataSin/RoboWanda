@@ -10,7 +10,7 @@ public class BeamExplosion2 : MonoBehaviour
     void Start()
     {
         explosion_se_ = GetComponent<AudioSource>().clip;
-        //GetComponent<AudioSource>().PlayOneShot(explosion_se_);
+        GetComponent<AudioSource>().PlayOneShot(explosion_se_);
     }
 
     // Update is called once per frame
