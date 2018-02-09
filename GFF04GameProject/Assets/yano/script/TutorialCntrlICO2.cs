@@ -34,7 +34,7 @@ public class TutorialCntrlICO2 : MonoBehaviour
         switch (manager_.GetComponent<TutorialManager>().GetTutorialState())
         {
             case 5:
-                if (bombSpawn_.GetComponent<BomSpawn>().GetMode() == 2)
+                if (bombSpawn_.GetComponent<BomSpawn>().GetMode() == 1)
                     ICO5_Active();
                 else
                     ICO4_Active();
@@ -48,7 +48,7 @@ public class TutorialCntrlICO2 : MonoBehaviour
                     isCheck = true;
                 }
 
-                if (bombSpawn_.GetComponent<BomSpawn>().GetMode() == 1)
+                if (bombSpawn_.GetComponent<BomSpawn>().GetMode() == 2)
                     ICO5_Active();
                 else
                     ICO4_Active();
