@@ -1363,6 +1363,7 @@ GameObject:
   - component: {fileID: 4427282928393042}
   - component: {fileID: 114537310077133744}
   - component: {fileID: 82977269739034554}
+  - component: {fileID: 65524161141962880}
   m_Layer: 0
   m_Name: P_Heri
   m_TagString: StartHeri
@@ -4635,6 +4636,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &65524161141962880
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1754343654886510}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3, y: 1, z: 1}
+  m_Center: {x: -1.7, y: 0, z: -3}
 --- !u!65 &65528347052481320
 BoxCollider:
   m_ObjectHideFlags: 1
