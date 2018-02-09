@@ -73,6 +73,7 @@ public class PlayerController_Tutorial : MonoBehaviour
     bool m_IsAiming;                                // 照準中であるか
     bool m_IsCreeping;                              // 匍匐しているか
     bool m_IsDead;                                  // 死亡しているか
+    bool m_IsShot;                                  // 弾を発射したか
 
     [SerializeField]
     private float m_PassDistance;                   // 乗り越え距離
@@ -197,6 +198,12 @@ public class PlayerController_Tutorial : MonoBehaviour
         m_Animator.SetBool("IsDead", m_IsDead);
 
         m_current_speed = m_Controller.velocity.magnitude;
+
+        // RTボタンを放すと発射判定を解除（連射の防止）
+        if (!(Input.GetAxis("Bomb_Throw") > 0.5f))
+        {
+            m_IsShot = false;
+        }
     }
     public void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -263,17 +270,14 @@ public class PlayerController_Tutorial : MonoBehaviour
         }
 
         // RTボタンを押すとダッシュ
-        m_IsDash = (Input.GetAxis("Dash") > 0.5f) ? true : false;
+        m_IsDash = (Input.GetButton("Dash")) ? true : false;
 
-
-        // RBボタンを押すとボム投げ状態に
-        if (Input.GetButton("Aim")
-        ||
-        Input.GetKey(KeyCode.P))
+        // LTボタンを押すとボム投げ状態に
+        // if (Input.GetButton("Aim"))
+        if (Input.GetAxis("Aim") > 0.5f)
         {
-            m_State = T_PlayerState.Aiming;
+            m_State =T_PlayerState.Aiming;
         }
-
     }
 
     // 通常時の移動
@@ -400,18 +404,18 @@ public class PlayerController_Tutorial : MonoBehaviour
         m_BomSpawn.GetComponent<BomSpawn>().Set(Camera.main.transform.forward, 150.0f);
         m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(true);
 
-        if (Input.GetButtonDown("Bomb_Throw")
-            ||
-            Input.GetKeyDown(KeyCode.O))
+        // LTボタンが押されてる間、RTボタンを押すと、弾を発射
+        // if (Input.GetButtonDown("Bomb_Throw"))
+        if (Input.GetAxis("Bomb_Throw") > 0.5f && !m_IsShot)
         {
+            m_IsShot = true;
             m_BomSpawn.GetComponent<BomSpawn>().SpawnBom();
             player_se_[0].PlayOneShot(playerSe_attack_);
         }
 
-        // RBボタンを放すと通常状態に戻る
-        if (!Input.GetButton("Aim")
-            &&
-            !Input.GetKey(KeyCode.P))
+        // LTボタンを放すと通常状態に戻る
+        // if (!Input.GetButton("Aim"))
+        if (!(Input.GetAxis("Aim") > 0.5f))
         {
             m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(false);
             m_State = T_PlayerState.Normal;

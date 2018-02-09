@@ -6,6 +6,12 @@ using UnityEngine.UI;
 public class TutorialCntrlico : MonoBehaviour
 {
     [SerializeField]
+    private GameObject ico_3_0_;
+
+    [SerializeField]
+    private GameObject ico_3_1_;
+
+    [SerializeField]
     private GameObject ico_3_2_;
 
     [SerializeField]
@@ -14,7 +20,9 @@ public class TutorialCntrlico : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2f);
+        ico_3_0_.GetComponent<Image>().enabled = false;
+        ico_3_1_.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2f);
+        ico_3_2_.SetActive(false);
     }
 
     // Update is called once per frame
@@ -28,23 +36,35 @@ public class TutorialCntrlico : MonoBehaviour
         switch(player_.GetComponent<PlayerController_Tutorial>().GetPlayerState())
         {
             case 1:
-                ico_3_2_.SetActive(false);
-            GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
-            break;
+                if (GameObject.FindGameObjectWithTag("Bomb"))
+                {
+                    ico_3_2_.SetActive(true);
+                    ico_3_1_.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
+                    ico_3_0_.GetComponent<Image>().enabled = false;
+                }
+                else
+                {
+                    ico_3_2_.SetActive(false);
+                    ico_3_1_.GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
+                    ico_3_0_.GetComponent<Image>().enabled = true;
+                }
+                break;
 
             default:
                 if (GameObject.FindGameObjectWithTag("Bomb"))
-            {
-                ico_3_2_.SetActive(true);
-                GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
-            }
-            else
-            {
-                ico_3_2_.SetActive(false);
-                GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2f);
-            }
+                {
+                    ico_3_2_.SetActive(true);
+                    ico_3_1_.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
+                    ico_3_0_.GetComponent<Image>().enabled = false;
+                }
+                else
+                {
+                    ico_3_2_.SetActive(false);
+                    ico_3_1_.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.2f);
+                    ico_3_0_.GetComponent<Image>().enabled = true;
+                }
 
-            break;
+                break;
         }
     }
 }

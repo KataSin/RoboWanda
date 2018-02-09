@@ -99,13 +99,12 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private GameObject cntrlUI_ico_3;
     [SerializeField]
-    private GameObject cntrlUI_ico_3_1;
-    [SerializeField]
-    private GameObject cntrlUI_ico_3_2;
-    [SerializeField]
     private GameObject cntrlUI_ico_4;
     [SerializeField]
     private GameObject cntrlUI_ico_5;
+
+    [SerializeField]
+    private GameObject player_ui_;
 
     [SerializeField]
     private GameObject cb_base_;
@@ -159,10 +158,9 @@ public class TutorialManager : MonoBehaviour
         cntrlUI_ico_1.SetActive(false);
         cntrlUI_ico_2.SetActive(false);
         cntrlUI_ico_3.SetActive(false);
-        cntrlUI_ico_3_1.SetActive(false);
-        cntrlUI_ico_3_2.SetActive(false);
         cntrlUI_ico_4.SetActive(false);
         cntrlUI_ico_5.SetActive(false);
+        player_ui_.SetActive(false);
 
         //イベントカメラ
         cameraM4_.SetActive(false);
@@ -472,11 +470,17 @@ public class TutorialManager : MonoBehaviour
         }
 
         if (p_cntrlFlag
-            && camera_pos_.GetComponent<CameraPosition_Tutorial>().GetMode() == 5
             && !bill1_.GetComponent<Break>().Get_BreakFlag())
         {
-            cntrlUI_ico_3.SetActive(true);
-            cntrlUI_ico_3_1.SetActive(true);
+            if (camera_pos_.GetComponent<CameraPosition_Tutorial>().GetMode() == 5
+                && !isClear)
+            {
+                cntrlUI_ico_3.SetActive(true);
+                player_ui_.SetActive(true);
+                isClear = true;
+            }
+
+            cntrlUI_ico_3.GetComponent<TutorialCntrlico>().ICO_Change();
         }
 
         if (bill1_.GetComponent<Break>().Get_BreakFlag())
@@ -484,8 +488,6 @@ public class TutorialManager : MonoBehaviour
             p_cntrlFlag = false;
 
             cntrlUI_ico_3.SetActive(false);
-            cntrlUI_ico_3_1.SetActive(false);
-            cntrlUI_ico_3_2.SetActive(false);
 
             if (m_intervalTime < 2f)
                 mission_text_.SetActive(false);
@@ -502,6 +504,7 @@ public class TutorialManager : MonoBehaviour
                     missionC_ui_.enabled = false;
                     m_intervalTime = 0f;
                     cameraM4_.SetActive(true);
+                    isClear = false;
                 }
             }
             m_intervalTime += 1.0f * Time.deltaTime;
