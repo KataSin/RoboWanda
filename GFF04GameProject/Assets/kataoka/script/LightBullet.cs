@@ -30,10 +30,12 @@ public class LightBullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_CollisionObj.GetComponent<CollisionCheck>().GetFlag())
-        {
-            m_IsExprosion = true;
-        }
+        if (m_CollisionObj != null)
+            if (m_CollisionObj.GetComponent<CollisionCheck>().GetFlag())
+            {
+                m_IsExprosion = true;
+                Destroy(m_CollisionObj);
+            }
 
 
 
@@ -73,12 +75,13 @@ public class LightBullet : MonoBehaviour
             m_IsExprosion = true;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "LightCollision") return;
+        if (other.tag == "LightCollision" || other.name == "Collision") return;
         if (m_IsExprosion)
         {
-            Destroy(transform.parent.gameObject);
+            if (transform.parent != null)
+                Destroy(transform.parent.gameObject);
         }
     }
 

@@ -19,7 +19,7 @@ public class CollisionCheck : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "TowerCollision" || other.tag == "GroundCollisionRigid")
+        if (other.tag == "TowerCollision" || other.tag == "Tower" || other.tag == "GroundCollisionRigid")
         {
             m_Collision = true;
         }
