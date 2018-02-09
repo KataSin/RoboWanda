@@ -467,14 +467,26 @@ public class TutorialManager : MonoBehaviour
                 isText9 = true;
                 p_cntrlFlag = true;
             }
-        }       
+        }
 
         if (p_cntrlFlag
-            && bill1_.GetComponent<Break>().Get_BreakFlag())
+            && !bill1_.GetComponent<Break>().Get_BreakFlag())
         {
-            p_cntrlFlag = false;
+            if (camera_pos_.GetComponent<CameraPosition_Tutorial>().GetMode() == 5
+                && !isClear)
+            {
+                cntrlUI_ico_3.SetActive(true);
+                player_ui_.SetActive(true);
+                isClear = true;
+            }
 
+            cntrlUI_ico_3.GetComponent<TutorialCntrlico>().ICO_Change();
+        }
+
+        else if (bill1_.GetComponent<Break>().Get_BreakFlag())
+        {
             cntrlUI_ico_3.SetActive(false);
+            p_cntrlFlag = false;          
 
             if (m_intervalTime < 2f)
                 mission_text_.SetActive(false);
@@ -497,19 +509,7 @@ public class TutorialManager : MonoBehaviour
             m_intervalTime += 1.0f * Time.deltaTime;
         }
 
-        else if (p_cntrlFlag
-            && !bill1_.GetComponent<Break>().Get_BreakFlag())
-        {
-            if (camera_pos_.GetComponent<CameraPosition_Tutorial>().GetMode() == 5
-                && !isClear)
-            {
-                cntrlUI_ico_3.SetActive(true);
-                player_ui_.SetActive(true);
-                isClear = true;
-            }
-
-            cntrlUI_ico_3.GetComponent<TutorialCntrlico>().ICO_Change();
-        }
+        
 
     }
 
