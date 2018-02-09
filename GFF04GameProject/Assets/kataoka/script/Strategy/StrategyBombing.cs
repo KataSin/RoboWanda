@@ -35,7 +35,7 @@ public class StrategyBombing : MonoBehaviour
     {
         m_Time += Time.deltaTime;
         //ロボットは早めに行動を変える
-        if(m_Time>=m_StrategyTime-30.0f)
+        if(m_Time>=m_StrategyTime-5.0f)
             GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>().SetBehavior(RobotManager.RobotBehavior.ROBOT_TWO);
 
         if (m_Time >= m_StrategyTime)

@@ -748,6 +748,7 @@ public class RobotAction : MonoBehaviour
         {
             m_LerpTime += 0.2f * Time.deltaTime;
             transform.rotation = Quaternion.Lerp(m_RobotQuaternion, m_PlayerQuaternion, m_LerpTime);
+            m_LerpTime = Mathf.Clamp(m_LerpTime, 0.0f, 1.0f);
             if (GameObject.FindGameObjectWithTag("Bomber") == null) return false;
 
             m_NavAgent.isStopped = true;
@@ -755,12 +756,12 @@ public class RobotAction : MonoBehaviour
             bool endAnim = false;
 
 
-            m_LerpTime = Mathf.Clamp(m_LerpTime, 0.0f, 1.0f);
+ 
             AnimatorClipInfo clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0)[0];
 
-            m_BeamLerpTime += 0.1f * Time.deltaTime;
+            m_BeamLerpTime += Time.deltaTime;
             m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(true);
-            if (m_BeamLerpTime >= 2.0f)
+            if (m_BeamLerpTime >= 5.0f)
             {
                 m_RobotEye.GetComponent<RobotBeam>().SetBeamFlag(false);
                 endAnim = true;
