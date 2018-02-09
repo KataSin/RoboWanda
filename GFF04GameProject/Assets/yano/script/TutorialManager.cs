@@ -486,7 +486,7 @@ public class TutorialManager : MonoBehaviour
         else if (bill1_.GetComponent<Break>().Get_BreakFlag())
         {
             cntrlUI_ico_3.SetActive(false);
-            p_cntrlFlag = false;          
+            p_cntrlFlag = false;
 
             if (m_intervalTime < 2f)
                 mission_text_.SetActive(false);
@@ -509,7 +509,7 @@ public class TutorialManager : MonoBehaviour
             m_intervalTime += 1.0f * Time.deltaTime;
         }
 
-        
+
 
     }
 
@@ -621,7 +621,7 @@ public class TutorialManager : MonoBehaviour
 
     private void OtherMission4Update()
     {
-        if (!isClear)
+        if (!isClear && isText12)
         {
             turrets_[0].GetComponent<TutorialTurret>().Boot();
             turrets_[1].GetComponent<TutorialTurret>().Boot();

@@ -94,6 +94,9 @@ public class PlayerController_Tutorial : MonoBehaviour
     private GameObject m_Launcher;
 
     [SerializeField]
+    private GameObject launcher_IK_;
+
+    [SerializeField]
     private GameObject manager_;
 
     private AudioSource[] player_se_;
@@ -257,6 +260,14 @@ public class PlayerController_Tutorial : MonoBehaviour
         //}
     }
 
+    public void OnAnimatorIK()
+    {
+        m_Animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+        m_Animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
+        m_Animator.SetIKPosition(AvatarIKGoal.LeftHand, launcher_IK_.transform.position);
+        m_Animator.SetIKRotation(AvatarIKGoal.LeftHand, launcher_IK_.transform.rotation);
+    }
+
     // 通常時の処理
     void Normal()
     {
@@ -276,7 +287,7 @@ public class PlayerController_Tutorial : MonoBehaviour
         // if (Input.GetButton("Aim"))
         if (Input.GetAxis("Aim") > 0.5f)
         {
-            m_State =T_PlayerState.Aiming;
+            m_State = T_PlayerState.Aiming;
         }
     }
 
