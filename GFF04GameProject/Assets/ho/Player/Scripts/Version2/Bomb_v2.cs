@@ -72,7 +72,9 @@ public class Bomb_v2 : MonoBehaviour
             || other.tag == "Player"
             || other.tag == "SandSmoke"
             || other.tag == "LightCollision"
-            || other.tag == "ExplosionCollision") return;
+            || other.tag == "ExplosionCollision"
+            || other.tag == "ClearPoint"
+            || other.tag == "DoorCheck") return;
 
 
         //矢野追加10270231
