@@ -14,7 +14,7 @@ public class testScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(1, 1, 1, 1));
+        XInputDotNetPure.GamePad.SetVibration(0, 20, 20);
     }
 
     public float Vector2Cross(Vector3 lhs, Vector3 rhs)

@@ -77,7 +77,7 @@ public class LightBullet : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "LightCollision" || other.name == "Collision") return;
+        if (other.tag == "LightCollision" || other.name == "Collision"||other.tag=="Player") return;
         if (m_IsExprosion)
         {
             if (transform.parent != null)
