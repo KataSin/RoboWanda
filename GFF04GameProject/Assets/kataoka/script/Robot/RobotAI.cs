@@ -142,7 +142,7 @@ public class RobotAI : MonoBehaviour
                     //見えてなかったら爆撃機攻撃
                     else
                     {
-                        manager.SetAction(RobotAction.RobotState.ROBOT_BOMBING_ATTACK, false);
+                        manager.SetAction(RobotAction.RobotState.ROBOT_BOMBING_ATTACK, true);
                     }
                     break;
                 }
