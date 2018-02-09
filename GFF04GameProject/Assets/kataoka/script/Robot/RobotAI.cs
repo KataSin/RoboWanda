@@ -25,6 +25,7 @@ public class RobotAI : MonoBehaviour
     //戦車破壊のクールタイム
     private float m_TankBreakCoolTime;
 
+    private float m_MissileCoolTime;
     //[SerializeField, Tooltip("ビルコリジョン")]
     //public GameObject m_BillCollision;
 
@@ -47,6 +48,8 @@ public class RobotAI : MonoBehaviour
         m_BillBreakCoolTime = 20.0f;
         m_HeliAttackCoolTime = 0.0f;
         m_TankBreakCoolTime = 0.0f;
+
+        m_MissileCoolTime = 10.0f;
         m_IsLookFlag = false;
     }
 
@@ -72,6 +75,7 @@ public class RobotAI : MonoBehaviour
         m_HeliAttackCoolTime += Time.deltaTime;
         m_BillBreakCoolTime += Time.deltaTime;
         m_TankBreakCoolTime += Time.deltaTime;
+
         switch (manager.GetBehavior())
         {
             case RobotManager.RobotBehavior.ROBOT_ONE:
@@ -90,6 +94,7 @@ public class RobotAI : MonoBehaviour
                         else if (dis < 50.0f)
                         {
                             manager.SetAction(RobotAction.RobotState.ROBOT_MISSILE_ATTACK, false);
+                            m_MissileCoolTime = 0.0f;
                         }
                         else if (dis < 75.0f)
                         {

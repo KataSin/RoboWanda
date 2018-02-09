@@ -13,29 +13,36 @@ public class MissileSpawn : MonoBehaviour
     //ミサイル発射
     [SerializeField]
     private bool m_MissileSpawnFlag;
+
+    private bool m_IsSpawn;
     // Use this for initialization
     void Start()
     {
         m_MissileTime = 0.0f;
         m_MissileSpawnFlag = false;
+        m_IsSpawn = false;
         m_MissileSpawnNum = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (m_MissileSpawnFlag)
+
+        m_MissileTime += Time.deltaTime;
+        if (m_MissileTime >= 5.0f)
         {
-            for (int i = 0; i <= m_MissileNum;i++)
+            m_IsSpawn = true;
+        }
+
+        if (m_MissileSpawnFlag && m_IsSpawn)
+        {
+            for (int i = 0; i <= m_MissileNum; i++)
             {
                 Instantiate(m_Missile, transform.position, Quaternion.identity);
             }
             m_MissileSpawnFlag = false;
-        }
-        else
-        {
+            m_IsSpawn = false;
             m_MissileTime = 0.0f;
-            m_MissileSpawnNum = 0;
         }
     }
     /// <summary>
