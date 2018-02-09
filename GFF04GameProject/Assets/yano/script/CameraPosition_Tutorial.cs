@@ -243,7 +243,6 @@ public class CameraPosition_Tutorial : MonoBehaviour
             case T_PlayerCameraMode.Tutorial_4:
                 isCntActive = false;
                 Tutorial4Mode();
-
                 break;
             case T_PlayerCameraMode.Tutorial_5:
                 isCntActive = false;
@@ -317,12 +316,10 @@ public class CameraPosition_Tutorial : MonoBehaviour
             }
         }
 
-        transform.LookAt(clear_point[0].transform.position);
-
         transform.position =
-            Vector3.Lerp(m_origin_pos, new Vector3(3.91f, 4.1425f, 9.35f), t / 2f);
+            Vector3.Lerp(m_origin_pos, new Vector3(3.9f, 4.1f, 9.35f), t / 2f);
         transform.rotation =
-            Quaternion.Slerp(m_origin_rotation, Quaternion.Euler(1.9f, -36.469f, 0f), t / 2f);
+            Quaternion.Slerp(m_origin_rotation, Quaternion.Euler(1.9f, -36.4f, 0f), t / 2f);
 
         if (t >= 2f)
         {
@@ -332,6 +329,8 @@ public class CameraPosition_Tutorial : MonoBehaviour
                 || m_intervalTimer >= 3f)
                 t_CameraFead1 = true;
         }
+
+        
 
         t = Mathf.Clamp(t, 0f, 2f);
     }
@@ -346,8 +345,6 @@ public class CameraPosition_Tutorial : MonoBehaviour
             if (t < 0f)
                 m_Mode = T_PlayerCameraMode.Normal;
         }
-
-        transform.LookAt(clear_point[1].transform.position);
 
         transform.position =
             Vector3.Lerp(m_origin_pos, new Vector3(3.62f, 4.11f, 48.97f), t / 2f);
@@ -610,24 +607,27 @@ public class CameraPosition_Tutorial : MonoBehaviour
         {
             m_Mode = T_PlayerCameraMode.Tutorial_1;
             m_intervalTimer = 0f;
+            isCntActive = false;
             return;
         }
 
-        if (tutorialMana_.GetComponent<TutorialManager>().GetTutorialState() == 3
+        else if (tutorialMana_.GetComponent<TutorialManager>().GetTutorialState() == 3
             && !t_CameraFead2)
         {
             m_Mode = T_PlayerCameraMode.Tutorial_2;
             t = 0f;
             m_intervalTimer = 0f;
+            isCntActive = false;
             return;
         }
 
-        if (tutorialMana_.GetComponent<TutorialManager>().GetTutorialState() == 4
+        else if (tutorialMana_.GetComponent<TutorialManager>().GetTutorialState() == 4
             && !t_CameraFead3)
         {
             m_Mode = T_PlayerCameraMode.Tutorial_3;
             t = 0f;
             m_intervalTimer = 0f;
+            isCntActive = false;
             return;
         }
 
@@ -637,6 +637,7 @@ public class CameraPosition_Tutorial : MonoBehaviour
             m_Mode = T_PlayerCameraMode.Tutorial_4;
             t = 0f;
             m_intervalTimer = 0f;
+            isCntActive = false;
             return;
         }
 
@@ -648,6 +649,7 @@ public class CameraPosition_Tutorial : MonoBehaviour
             m_OtherMode = T_PlayerOtherCameraMode.Tutorial_Other_1;
             t = 0f;
             m_intervalTimer = 0f;
+            isCntActive = false;
             return;
         }
 
@@ -657,6 +659,7 @@ public class CameraPosition_Tutorial : MonoBehaviour
             m_Mode = T_PlayerCameraMode.Tutorial_5;
             t = 0f;
             m_intervalTimer = 0f;
+            isCntActive = false;
             return;
         }
 
@@ -668,16 +671,17 @@ public class CameraPosition_Tutorial : MonoBehaviour
             m_OtherMode = T_PlayerOtherCameraMode.Tutorial_Other_1;
             t = 0f;
             m_intervalTimer = 0f;
+            isCntActive = false;
             return;
         }
 
-        if (m_Player.GetComponent<PlayerController_Tutorial>().GetPlayerState() == 3)
-        {
-            m_Mode = T_PlayerCameraMode.Dead;
-            t = 0f;
-            m_deadBefore_pos = transform.position;
-            return;
-        }
+        //if (m_Player.GetComponent<PlayerController_Tutorial>().GetPlayerState() == 3)
+        //{
+        //    m_Mode = T_PlayerCameraMode.Dead;
+        //    t = 0f;
+        //    m_deadBefore_pos = transform.position;
+        //    return;
+        //}
 
         // 照準モードに移行
         if (m_IsAiming)
