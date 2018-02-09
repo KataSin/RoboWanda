@@ -20,6 +20,8 @@ public class BombExplosion : MonoBehaviour
 
         // 出現後0.5秒、消滅
         Destroy(gameObject, 0.5f);
+
+        GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
     }
 
     // Update is called once per frame

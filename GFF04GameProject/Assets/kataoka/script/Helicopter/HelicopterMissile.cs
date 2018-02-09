@@ -50,6 +50,9 @@ public class HelicopterMissile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!GetComponent<AudioSource>().isPlaying)
+            GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
+
         if (m_IsBreak)
         {
             m_FireEffect.SetActive(true);
