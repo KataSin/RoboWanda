@@ -69,10 +69,25 @@ public class PlayerController : MonoBehaviour
     float m_CurrentRotateSpeed;                     // 現在の回転速度
     Vector3 m_PrevPosition;                         // 前回の位置（回転処理用）
 
+    // 乗り越え処理関連変数
     [SerializeField]
     private float m_PassDistance;                   // 乗り越え距離
 
-    float m_SpeedBeforePassing = 0.0f;              // 乗り越える前の速度
+    [SerializeField]
+    [Header("ジャンプ力")]
+    private float m_JumpPower;                      // ジャンプ力
+    float m_SpeedBeforePass = 0.0f;                 // 乗り越える前の速度
+    bool m_IsPassed = false;                        // 障害物を乗り越えたか
+    [SerializeField]
+    [Header("距離探知レイキャスト座標")]
+    private Transform m_RayPoint;      	            // 障害物探知用のレイキャスト座標（キャラクター下部、距離探知用）
+    [SerializeField]
+    [Header("探知有効距離（歩行）")]
+    private float m_RayDistance_walk;               // 障害物探知の有効距離（歩行）
+    [SerializeField]
+    [Header("探知有効距離（ダッシュ）")]
+    private float m_RayDistance_dash;               // 障害物探知の有効距離（ダッシュ）
+    float m_CurrentRayDistance = 1.0f;              // 現在の探知距離
 
     // コンポーネントと他の変数
     CharacterController m_Controller;               // キャラクターコントローラー
@@ -244,7 +259,7 @@ public class PlayerController : MonoBehaviour
                 break;
             // 乗り越える
             case PlayerState.Passing:
-                Passing_v2();
+                Passing();
                 m_IsAiming = false;
                 m_IsCreeping = false;
                 m_IsDead = false;
@@ -298,34 +313,6 @@ public class PlayerController : MonoBehaviour
 
         m_current_speed = m_Controller.velocity.magnitude;
 
-        //// 視点制御スクリプトの制御
-        //if (m_State == PlayerState.Normal)
-        //{
-        //    gameObject.GetComponent<PlayerLookAt>().enabled = true;
-        //}
-        //else
-        //{
-        //    gameObject.GetComponent<PlayerLookAt>().enabled = false;
-        //}
-
-        // 振動テスト
-        /*if (Input.GetKeyDown("space"))
-        {
-            GameObject Camera = GameObject.FindGameObjectWithTag("MainCamera");
-            Camera.GetComponent<CameraShake>().Shake(3.0f);
-            // Debug.Log("外部からカメラに振動命令");
-        }*/
-
-        // 死亡テスト
-        /* if (Input.GetKeyDown("space"))
-        {
-            if (m_State != PlayerState.Dead)
-            {
-                m_State = PlayerState.Dead;
-                playerSe_[1].Stop();
-            }
-        }*/
-
         // RTボタンを放すと発射判定を解除（連射の防止）
         if (!(Input.GetAxis("Bomb_Throw") > 0.5f))
         {
@@ -339,45 +326,6 @@ public class PlayerController : MonoBehaviour
 
             Debug.Log("無敵状態：" + m_IsInvincible);
         }
-    }
-
-    // キャラクターコントローラーの接触判定
-    public void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        // Debug.Log(hit.gameObject.name);
-
-        // 乗り越え中、ガードレールとの接触判定を無視
-        if (m_State == PlayerState.Passing)
-        {
-            Physics.IgnoreLayerCollision(13, 16, true);
-        }
-        // エイム中は乗り越えない
-        else if (m_State == PlayerState.Aiming)
-        {
-
-        }
-        else if (hit.gameObject.tag == "GuardRail")
-        {
-            // 接触前の速度を保存
-            m_SpeedBeforePassing = m_current_speed;
-
-            m_passing_time = 0.5f;
-            m_State = PlayerState.Passing;
-        }
-
-        // 倒壊しているビルと接触している間、Aボタンを押すと、爆発物を設置
-        /*
-        if (hit.gameObject.tag == "Break_Tower_Can_Break" &&
-            m_State == PlayerState.Normal &&
-            Input.GetButtonDown("BombSet"))
-        {
-            m_BuildingNear = hit.gameObject;
-            Debug.Log("爆発物を設置する");
-
-            m_setting_time = 1.0f;
-            m_State = PlayerState.Setting;
-        }
-        */
     }
 
     // Capsule Colliderの接触判定
@@ -515,22 +463,6 @@ public class PlayerController : MonoBehaviour
         {
             m_State = PlayerState.Aiming;
         }
-
-        // Bボタンを押すとしゃがむ（ボツになった）
-        /*
-        if (Input.GetButtonDown("Creeping"))
-        {
-            m_State = PlayerState.Creeping;
-        }
-        */
-
-        // 爆発物設置座標テスト
-        /*
-        if (Input.GetButtonDown("BombSet"))
-        {
-            Instantiate(m_Explosive, m_ExplosivePoint.transform.position, transform.rotation);
-        }
-        */
     }
 
     // 通常時の移動
@@ -547,13 +479,40 @@ public class PlayerController : MonoBehaviour
         float axisHorizontal = Input.GetAxisRaw("Horizontal_L");    // x軸（左右）
         float axisVertical = Input.GetAxisRaw("Vertical_L");        // z軸（上下）
 
+        // 加速度、速度制限、ブレーキ速度、回転速度、および障害物探知距離の変更
+        // 加速度
+        float accel;
+        accel = (m_IsDash) ? accel = m_AccelPowerDash : accel = m_AccelPower;
+        // 速度制限、ブレーキ速度と回転速度
+        if (m_IsDash)
+        {
+            playerSe_[1].pitch = 2.4f;
+            m_CurrentSpeedLimit = m_MaxSpeedDash;
+            m_CurrentBrakePower = m_BrakePowerDash;
+            m_CurrentRotateSpeed = m_RotateSpeedDash;
+            m_CurrentRayDistance = m_RayDistance_dash;
+        }
+        else
+        {
+            playerSe_[1].pitch = 1.2f;
+            if (m_CurrentSpeedLimit > m_MaxSpeed)
+            {
+                m_CurrentSpeedLimit -= 0.2f;
+            }
+            m_CurrentBrakePower = m_BrakePower;
+            if (m_CurrentRotateSpeed > m_RotateSpeed)
+            {
+                m_CurrentRotateSpeed -= 0.1f;
+            }
+            m_CurrentRayDistance = m_RayDistance_walk;
+        }
+
         // 減速する（入力が無い場合）
         if (axisHorizontal == 0 && axisVertical == 0)
         {
             m_Speed = Mathf.Max(m_Speed - m_CurrentBrakePower * Time.deltaTime, 0);
             playerSe_[1].Stop();
         }
-
         else if (axisHorizontal != 0 || axisVertical != 0)
         {
             if (!playerSe_[1].isPlaying)
@@ -566,33 +525,27 @@ public class PlayerController : MonoBehaviour
         if (m_Controller.isGrounded)
         {
             // 加速する
-            float accel;
-            accel = (m_IsDash) ? accel = m_AccelPowerDash : accel = m_AccelPower;
             m_Speed += accel * Time.deltaTime;
 
-            // 速度制限、ブレーキ速度、および回転速度の変更
-            if (m_IsDash)
-            {
-                playerSe_[1].pitch = 2.4f;
-                m_CurrentSpeedLimit = m_MaxSpeedDash;
-                m_CurrentBrakePower = m_BrakePowerDash;
-                m_CurrentRotateSpeed = m_RotateSpeedDash;
-            }
-            else
-            {
-                playerSe_[1].pitch = 1.2f;
-                if (m_CurrentSpeedLimit > m_MaxSpeed)
-                {
-                    m_CurrentSpeedLimit -= 0.2f;
-                }
-                m_CurrentBrakePower = m_BrakePower;
-                if (m_CurrentRotateSpeed > m_RotateSpeed)
-                {
-                    m_CurrentRotateSpeed -= 0.1f;
-                }
-            }
             // 速度を制限する
             m_Speed = Mathf.Clamp(m_Speed, 0.0f, m_CurrentSpeedLimit);
+        }
+
+        // 入力がある場合
+        Vector2 input = new Vector2(axisHorizontal, axisVertical);
+        if (!(input.magnitude < 0.1))
+        {
+            // プレイヤーは入力した方向に向ける
+            Vector3 new_direction = (forward * Input.GetAxis("Vertical_L") + Camera.main.transform.right * Input.GetAxis("Horizontal_L"));
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new_direction), m_CurrentRotateSpeed * Time.deltaTime);
+
+            // 乗り越えられる障害物がある場合、乗り越え処理を行う
+            if (CanPass())
+            {
+                // 乗り越える前の速度を記憶
+                m_SpeedBeforePass = m_Controller.velocity.magnitude;
+                m_State = PlayerState.Passing;
+            }
         }
 
         // 移動処理
@@ -604,24 +557,8 @@ public class PlayerController : MonoBehaviour
         // キャラクターコントローラーに命令して移動する
         m_Controller.Move(velocity * Time.deltaTime);
 
-        // 移動方向に向ける
-        Vector3 direction = transform.position - m_PrevPosition;
-        if (direction.sqrMagnitude > 0)
-        {
-            Vector3 orientiation = Vector3.Slerp(
-                transform.forward,
-                new Vector3(direction.x, 0.0f, direction.z),
-                m_CurrentRotateSpeed * Time.deltaTime / Vector3.Angle(transform.forward, direction));
-            transform.LookAt(transform.position + orientiation);
-            m_PrevPosition = transform.position;
-        }
-
         // アニメーターに命令して、アニメーションを再生する
         // プレイヤー現在の移動量を取得
-        /*float current_speed;
-        current_speed = m_Controller.velocity.magnitude;
-        if (current_speed > m_CurrentSpeedLimit) current_speed = m_CurrentSpeedLimit;
-        m_Animator.SetFloat("NormalSpeed", current_speed);*/
         float animation_speed;
         animation_speed = m_current_speed;
 
@@ -846,26 +783,98 @@ public class PlayerController : MonoBehaviour
         // 乗り越えモーションを再生
         m_Animator.Play("Passing");
 
+        // 1回ジャンプする
+        if (!m_IsPassed)
+        {
+            m_VelocityY = m_JumpPower;
+            m_IsPassed = true;
+        }
+
         // 移動処理
-        Vector3 velocity = transform.forward * m_PassDistance;
+        Vector3 velocity = transform.forward * m_SpeedBeforePass;
+        // 重力加速度を加算
+        m_VelocityY -= m_Gravity * Time.deltaTime;
+        // y軸方向の移動量を加味する
+        velocity.y = m_VelocityY;
         m_Controller.Move(velocity * Time.deltaTime);
 
-        // 乗り越えアニメーションが終了すると、通常状態に戻る
+        // 着地するか、アニメーションが終了すると、通常状態に戻る
         AnimatorStateInfo AniInfo;     // アニメーションの状態
         AniInfo = gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
 
-        // if (AniInfo.normalizedTime <= 0.9f)
-        if (m_passing_time <= 0 && AniInfo.normalizedTime <= 0.9f)
+        if (m_Controller.isGrounded || AniInfo.normalizedTime <= 0.9f)
         {
             // グレネードランチャーを表示
             m_Launcher.SetActive(true);
-            // 通常状態に戻る
             m_State = PlayerState.Normal;
-            Physics.IgnoreLayerCollision(13, 16, false);
+            m_IsPassed = false;
+        }
+    }
+
+    // プレイヤー前方の障害物を探知
+    bool IsObjectInDistance()
+    {
+        Ray ray = new Ray(m_RayPoint.position, transform.forward);
+        RaycastHit hit;
+
+        return (Physics.Raycast(ray, out hit, m_CurrentRayDistance));
+    }
+
+    // 乗り越えられる障害物であるか
+    bool IsObjectCanPass()
+    {
+        Ray ray = new Ray(m_RayPoint.position, transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, m_CurrentRayDistance))
+        {
+            if (hit.collider.gameObject.tag == "GuardRail") return true;
         }
 
-        m_passing_time -= Time.deltaTime;
-        // Debug.Log(m_passing_time);
+        return false;
+    }
+
+    // 障害物からのプレイヤーの方向
+    Vector3 ObjectNormal()
+    {
+        Ray ray1 = new Ray(m_RayPoint.position, transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray1, out hit, m_CurrentRayDistance))
+        {
+            return hit.normal;
+        }
+
+        return Vector3.zero;
+    }
+
+    // プレイヤーと障害物の角度を取得
+    Vector3 CollisionAngle()
+    {
+        Ray ray = new Ray(m_RayPoint.position, transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, m_CurrentRayDistance))
+        {
+            return Quaternion.FromToRotation(transform.forward, hit.normal).eulerAngles;
+        }
+
+        return Vector3.zero;
+    }
+
+    // 障害物を乗り越えるかどうを判定
+    bool CanPass()
+    {
+        // 障害物は近くにあるか
+        if (!IsObjectInDistance()) return false;
+        // 障害物は乗り越えられるものなのか
+        if (!IsObjectCanPass()) return false;
+        // プレイヤーは障害物の正面か背面にいるか
+        if (ObjectNormal().z != 0.0f) return false;
+        // プレイヤーは障害物の真正面にいるか
+        if (CollisionAngle().y > 200.0f || CollisionAngle().y < 160.0f) return false;
+
+        return true;
     }
 
     // 乗り越え処理（改）
@@ -877,7 +886,7 @@ public class PlayerController : MonoBehaviour
         m_Animator.Play("Passing");
 
         // 移動処理
-        Vector3 velocity = transform.forward * m_SpeedBeforePassing;
+        Vector3 velocity = transform.forward * m_SpeedBeforePass;
         m_Controller.Move(velocity * Time.deltaTime);
 
         // 乗り越えアニメーションが終了すると、通常状態に戻る
