@@ -870,7 +870,7 @@ public class PlayerController : MonoBehaviour
         // 障害物は乗り越えられるものなのか
         if (!IsObjectCanPass()) return false;
         // プレイヤーは障害物の正面か背面にいるか
-        if (ObjectNormal().z != 0.0f) return false;
+        if (ObjectNormal().x != 0.0f) return false;
         // プレイヤーは障害物の真正面にいるか
         if (CollisionAngle().y > 200.0f || CollisionAngle().y < 160.0f) return false;
 
