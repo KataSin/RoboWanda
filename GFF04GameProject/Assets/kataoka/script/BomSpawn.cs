@@ -158,7 +158,7 @@ public class BomSpawn : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Vector3.Distance(start, end), layer))
             {
                 //着地地点の座標と回転を設定
-                m_LandingPoint.transform.position = hit.point+(hit.normal.normalized*1.1f);
+                m_LandingPoint.transform.position = hit.point;
                 m_LandingPoint.transform.LookAt(m_LandingPoint.transform.position + hit.normal * 5.0f);
                 m_LandingPoint.transform.rotation =
                     Quaternion.Euler(m_LandingPoint.transform.eulerAngles.x+90,

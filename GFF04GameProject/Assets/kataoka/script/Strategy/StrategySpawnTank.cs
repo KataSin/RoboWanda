@@ -21,10 +21,6 @@ public class StrategySpawnTank : MonoBehaviour
     private AudioSource m_AudioSource;
 
     private bool m_FirstFlag;
-
-    private float m_VibrationTime;
-    private int m_VibrationCount;
-
     // Use this for initialization
     void Start()
     {
@@ -35,42 +31,18 @@ public class StrategySpawnTank : MonoBehaviour
         var trans = GetComponentsInChildren<Transform>();
         foreach (var i in trans)
         {
-            if (i.name =="TankSpawn")
+            if (i.name != name)
                 m_SpawnPoints.Add(i.gameObject);
         }
         if (GameObject.FindGameObjectWithTag("StrategyText"))
             m_TextUi = GameObject.FindGameObjectWithTag("StrategyText").GetComponent<Text>();
         m_AudioSource = GameObject.FindGameObjectWithTag("StrategySound").GetComponent<AudioSource>();
-
-        m_VibrationTime = 0.0f;
-        m_VibrationCount = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
         m_Time += Time.deltaTime;
-
-        //振動系
-        if (m_Time >= m_StrategyTime - 1.5f && m_VibrationCount <= 2 && m_WirelessClip != null)
-        {
-            m_VibrationTime += Time.deltaTime;
-            if (m_VibrationTime <= 0.2f)
-            {
-                XInputDotNetPure.GamePad.SetVibration(0, 0.0f, 20.0f);
-            }
-            else if (m_VibrationTime <= 0.4f)
-            {
-                XInputDotNetPure.GamePad.SetVibration(0, 0.0f, 0.0f);
-            }
-            else
-            {
-                m_VibrationTime = 0.0f;
-                m_VibrationCount++;
-            }
-        }
-
-
         if (m_Time >= m_StrategyTime)
         {
             if (m_FirstFlag)
@@ -89,7 +61,7 @@ public class StrategySpawnTank : MonoBehaviour
             if (GameObject.FindGameObjectWithTag("StrategyText"))
                 m_TextUi.text = m_Text;
 
-            if (!m_AudioSource.isPlaying||m_WirelessClip==null)
+            if (!m_AudioSource.isPlaying)
             {
                 if (GameObject.FindGameObjectWithTag("StrategyText"))
                     m_TextUi.text = "";

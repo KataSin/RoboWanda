@@ -326,6 +326,13 @@ public class PlayerController : MonoBehaviour
 
             Debug.Log("無敵状態：" + m_IsInvincible);
         }
+        /*
+        Debug.Log("前方に障害物があるか：" + IsObjectInDistance());
+        Debug.Log("乗り越えられる障害物であるか：" + IsObjectCanPass());
+        Debug.Log("障害物がある方向：" + ObjectAngle());
+        Debug.Log("障害物に向く角度：" + CollisionAngle());
+        Debug.Log("乗り越えるのか：" + CanPass());
+        */
     }
 
     // Capsule Colliderの接触判定
@@ -369,7 +376,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "Break_Tower_Can_Break" && m_State == PlayerState.Normal && Input.GetButtonDown("BombSet"))
         {
             m_BuildingNear = other.gameObject;
-            Debug.Log("爆発物を設置する");
+            // Debug.Log("爆発物を設置する");
 
             m_setting_time = 1.0f;
             m_State = PlayerState.Setting;
@@ -538,7 +545,7 @@ public class PlayerController : MonoBehaviour
             // プレイヤーは入力した方向に向ける
             Vector3 new_direction = (forward * Input.GetAxis("Vertical_L") + Camera.main.transform.right * Input.GetAxis("Horizontal_L"));
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new_direction), m_CurrentRotateSpeed * Time.deltaTime);
-
+            
             // 乗り越えられる障害物がある場合、乗り越え処理を行う
             if (CanPass())
             {
@@ -842,10 +849,24 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(ray1, out hit, m_CurrentRayDistance))
         {
+            Debug.Log(Vector3.Angle(hit.transform.forward, hit.normal));
             return hit.normal;
         }
 
         return Vector3.zero;
+    }
+
+    float ObjectAngle()
+    {
+        Ray ray1 = new Ray(m_RayPoint.position, transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray1, out hit, m_CurrentRayDistance))
+        {
+            return Vector3.Angle(hit.transform.forward, hit.normal);
+        }
+
+        return 90.0f;
     }
 
     // プレイヤーと障害物の角度を取得
@@ -870,7 +891,8 @@ public class PlayerController : MonoBehaviour
         // 障害物は乗り越えられるものなのか
         if (!IsObjectCanPass()) return false;
         // プレイヤーは障害物の正面か背面にいるか
-        if (ObjectNormal().x != 0.0f) return false;
+        // if (ObjectNormal().z != 0.0f) return false;
+        if (ObjectAngle() != 0.0f && ObjectAngle() != 180.0f) return false;
         // プレイヤーは障害物の真正面にいるか
         if (CollisionAngle().y > 200.0f || CollisionAngle().y < 160.0f) return false;
 
