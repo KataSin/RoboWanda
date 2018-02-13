@@ -31,7 +31,7 @@ public class HelicopterBreakBillSpot : MonoBehaviour
         if (m_ToPoint == null) return;
 
         float dis = Vector3.Distance(new Vector3(transform.position.x, 0.0f, transform.position.z), new Vector3(m_ToPoint.transform.position.x, 0.0f, m_ToPoint.transform.position.z));
-        if (dis <= 40.0f) return;
+        if (dis <= 2.0f) return;
 
         transform.position += transform.forward * 5.0f * Time.deltaTime;
 
@@ -54,9 +54,5 @@ public class HelicopterBreakBillSpot : MonoBehaviour
 
 
         m_Light.transform.LookAt(m_ToPoint.transform);
-
-
-
-        Debug.Log(m_Velo.magnitude);
     }
 }
