@@ -18,6 +18,8 @@ public class StrategyBombing : MonoBehaviour
     //爆撃機プレハブ
     public GameObject m_BomberPrefab;
 
+    public GameObject m_FailureObj;
+
     private bool m_FirstFlag;
     private AudioSource m_AudioSource;
 
@@ -73,6 +75,7 @@ public class StrategyBombing : MonoBehaviour
                 Vector3 goalPos = transform.Find("BomBingPointEnd").position;
                 GameObject bomber = Instantiate(m_BomberPrefab, spawnPos, Quaternion.identity);
                 bomber.GetComponent<Bombing>().SetStartEnd(spawnPos, goalPos);
+                bomber.GetComponent<Bombing>().m_FailureObj = m_FailureObj;
                 //音声を流す
                 m_AudioSource.clip = m_WirelessClip;
                 if (m_WirelessClip != null)

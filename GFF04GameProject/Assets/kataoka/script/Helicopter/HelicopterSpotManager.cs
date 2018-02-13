@@ -64,6 +64,7 @@ public class HelicopterSpotManager : MonoBehaviour
         {
             if (i.gameObject == null) return;
             i.GetComponent<HelicopterBreakBillSpot>().m_ToPoint = disObject.m_GoPoints[count];
+            i.GetComponent<HelicopterBreakBillSpot>().m_Light.transform.LookAt(disObject.m_Point.transform);
             count++;
         }
 
