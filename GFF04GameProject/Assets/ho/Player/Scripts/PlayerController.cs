@@ -74,8 +74,12 @@ public class PlayerController : MonoBehaviour
     private float m_PassDistance;                   // 乗り越え距離
 
     [SerializeField]
-    [Header("ジャンプ力")]
-    private float m_JumpPower;                      // ジャンプ力
+    [Header("歩行時のジャンプ力")]
+    private float m_JumpPower_walk;                 // 歩行時のジャンプ力
+    [SerializeField]
+    [Header("ダッシュ時のジャンプ力")]
+    private float m_JumpPower_dash;                 // ダッシュ時のジャンプ力
+    float m_CurrentJumpPower;                       // 現在のジャンプ力
     float m_SpeedBeforePass = 0.0f;                 // 乗り越える前の速度
     bool m_IsPassed = false;                        // 障害物を乗り越えたか
     [SerializeField]
@@ -173,6 +177,7 @@ public class PlayerController : MonoBehaviour
         m_isClear = false;
 
         m_current_speed = 0.0f;
+        m_CurrentJumpPower = m_JumpPower_walk;
 
         m_BuildingNear = null;
         m_explosive_set = false;
@@ -486,17 +491,18 @@ public class PlayerController : MonoBehaviour
         float axisHorizontal = Input.GetAxisRaw("Horizontal_L");    // x軸（左右）
         float axisVertical = Input.GetAxisRaw("Vertical_L");        // z軸（上下）
 
-        // 加速度、速度制限、ブレーキ速度、回転速度、および障害物探知距離の変更
+        // 加速度、速度制限、ブレーキ速度、回転速度、ジャンプ力、および障害物探知距離の変更
         // 加速度
         float accel;
         accel = (m_IsDash) ? accel = m_AccelPowerDash : accel = m_AccelPower;
-        // 速度制限、ブレーキ速度と回転速度
+        // 速度制限、ブレーキ速度、回転速度、ジャンプ力、および障害物探知距離
         if (m_IsDash)
         {
             playerSe_[1].pitch = 2.4f;
             m_CurrentSpeedLimit = m_MaxSpeedDash;
             m_CurrentBrakePower = m_BrakePowerDash;
             m_CurrentRotateSpeed = m_RotateSpeedDash;
+            m_CurrentJumpPower = m_JumpPower_dash;
             m_CurrentRayDistance = m_RayDistance_dash;
         }
         else
@@ -511,6 +517,7 @@ public class PlayerController : MonoBehaviour
             {
                 m_CurrentRotateSpeed -= 0.1f;
             }
+            m_CurrentJumpPower = m_JumpPower_walk;
             m_CurrentRayDistance = m_RayDistance_walk;
         }
 
@@ -545,7 +552,7 @@ public class PlayerController : MonoBehaviour
             // プレイヤーは入力した方向に向ける
             Vector3 new_direction = (forward * Input.GetAxis("Vertical_L") + Camera.main.transform.right * Input.GetAxis("Horizontal_L"));
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new_direction), m_CurrentRotateSpeed * Time.deltaTime);
-            
+
             // 乗り越えられる障害物がある場合、乗り越え処理を行う
             if (CanPass())
             {
@@ -793,7 +800,7 @@ public class PlayerController : MonoBehaviour
         // 1回ジャンプする
         if (!m_IsPassed)
         {
-            m_VelocityY = m_JumpPower;
+            m_VelocityY = m_CurrentJumpPower;
             m_IsPassed = true;
         }
 
