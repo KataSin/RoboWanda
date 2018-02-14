@@ -20,6 +20,7 @@ public class RobotBeam : MonoBehaviour
     private int m_Frame;
 
     //撃っているか
+    [SerializeField]
     private bool m_IsBeamFlag;
     //距離
     private float m_BeamLen;
@@ -65,7 +66,6 @@ public class RobotBeam : MonoBehaviour
                 m_BeamLength = 0.0f;
                 m_IsBeamFlag = true;
                 gameObject.SetActive(false);
-
             }
         }
         //ビームのあたり判定

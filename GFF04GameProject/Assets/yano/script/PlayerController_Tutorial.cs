@@ -284,10 +284,10 @@ public class PlayerController_Tutorial : MonoBehaviour
         m_IsDash = (Input.GetButton("Dash")) ? true : false;
 
         // LTボタンを押すとボム投げ状態に
-        // if (Input.GetButton("Aim"))
-        if (Input.GetAxis("Aim") > 0.5f)
+        if (manager_.GetComponent<TutorialManager>().GetTutorialState() >= 4)
         {
-            m_State = T_PlayerState.Aiming;
+            if (Input.GetAxis("Aim") > 0.5f)
+                m_State = T_PlayerState.Aiming;
         }
     }
 
@@ -416,7 +416,6 @@ public class PlayerController_Tutorial : MonoBehaviour
         m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(true);
 
         // LTボタンが押されてる間、RTボタンを押すと、弾を発射
-        // if (Input.GetButtonDown("Bomb_Throw"))
         if (Input.GetAxis("Bomb_Throw") > 0.5f && !m_IsShot)
         {
             m_IsShot = true;
@@ -425,7 +424,6 @@ public class PlayerController_Tutorial : MonoBehaviour
         }
 
         // LTボタンを放すと通常状態に戻る
-        // if (!Input.GetButton("Aim"))
         if (!(Input.GetAxis("Aim") > 0.5f))
         {
             m_BomSpawn.GetComponent<BomSpawn>().SetDrawLine(false);

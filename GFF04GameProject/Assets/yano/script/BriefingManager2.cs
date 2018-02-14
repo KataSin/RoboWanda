@@ -88,6 +88,8 @@ public class BriefingManager2 : MonoBehaviour
     private bool isText11;
     private bool isText12;
 
+    private bool isSpawn;
+
     [SerializeField]
     private GameObject white_disp_;
 
@@ -126,6 +128,8 @@ public class BriefingManager2 : MonoBehaviour
         isText9 = false;
         isText11 = false;
         isText12 = false;
+
+        isSpawn = false;
 
         if (GameObject.FindGameObjectWithTag("SceneController"))
             sceneCnt_ = GameObject.FindGameObjectWithTag("SceneController");
@@ -266,6 +270,7 @@ public class BriefingManager2 : MonoBehaviour
                 t0 = 0f;
                 t1 = 0f;
                 bomber_.SetActive(true);
+                bomber_.GetComponent<StrategyBombing1>().SpawnBomber();
                 tower_mana_.GetComponent<TowerManager>().TowerCheck();
             }
 
@@ -276,39 +281,94 @@ public class BriefingManager2 : MonoBehaviour
     private void ThreeUpdate()
     {
         tower_mana_.GetComponent<TowerManager>().Tower2Up();
-        briefing_cam_.GetComponent<BriefingCamera>().TopViewCam();
 
-        if (t0 >= 4f)
+        if (!briefing_cam_.GetComponent<BriefingCamera>().Get_Bombing())
+            briefing_cam_.GetComponent<BriefingCamera>().BombingViewCam();
+
+        else
         {
-            if (!isText5)
+            if (t0 >= 4f)
             {
-                NextText();
-                isText5 = true;
-            }
-            if (t0 >= 8f)
-            {
-                if (!isText6)
+                if (!briefing_cam_.GetComponent<BriefingCamera>().Get_Top())
+                    briefing_cam_.GetComponent<BriefingCamera>().TopViewCam();
+                else
+                    robot_.GetComponent<BriefingRobot>().BeamBombing();
+
+                if (t0 >= 10f)
                 {
-                    NextText();
-                    isText6 = true;
-                }
-                if (t0 >= 12f)
-                {
-                    state_ = State.Four;
-                    t0 = 0f;
-                    tower_mana_.GetComponent<TowerManager>().TowerCheck2();
+                    if (!isText5)
+                    {
+                        NextText();
+                        isText5 = true;
+                    }
+
+                    if (!briefing_cam_.GetComponent<BriefingCamera>().Get_Bombing2())
+                        briefing_cam_.GetComponent<BriefingCamera>().BombingViewCam2();
+
+                    if (briefing_cam_.GetComponent<BriefingCamera>().Get_Bombing2())
+                    {
+                        if (!isSpawn)
+                        {
+                            bomber_.GetComponent<StrategyBombing1>().SpawnBomber();
+                            isSpawn = true;
+                        }
+
+                        if (!isText6)
+                        {
+                            NextText();
+                            isText6 = true;
+                        }
+
+                        if (GameObject.FindGameObjectWithTag("Bomber"))
+                            GameObject.FindGameObjectWithTag("Bomber").GetComponent<Bombing1>().SetMoveFlag(true);
+                    }
+
+                    if (t0 >= 22f)
+                    {
+                        state_ = State.Four;
+                        t0 = 0f;
+                        tower_mana_.GetComponent<TowerManager>().TowerCheck2();
+                    }
                 }
             }
+
+            t0 += 1.0f * Time.deltaTime;
         }
 
-        t0 += 1.0f * Time.deltaTime;
+        //if (t0 >= 4f)
+        //{
+        //    if (!isText5)
+        //    {
+        //        NextText();
+        //        isText5 = true;
+        //    }
+        //    if (t0 >= 8f)
+        //    {
+        //        if (!isText6)
+        //        {
+        //            NextText();
+        //            isText6 = true;
+        //        }
+        //        if (t0 >= 12f)
+        //        {
+        //            state_ = State.Four;
+        //            t0 = 0f;
+        //            tower_mana_.GetComponent<TowerManager>().TowerCheck2();
+        //        }
+        //    }
+        //}
+
+
     }
 
     private void FourUpdate()
     {
         tower_mana_.GetComponent<TowerManager>().Tower3Up();
         tower_mana_.GetComponent<TowerManager>().Tower4Up();
-        briefing_cam_.GetComponent<BriefingCamera>().SideViewCam();
+
+        if (!briefing_cam_.GetComponent<BriefingCamera>().Get_Side())
+            briefing_cam_.GetComponent<BriefingCamera>().SideViewCam();
+
         if (!isCh47)
         {
             NextText();
@@ -318,6 +378,12 @@ public class BriefingManager2 : MonoBehaviour
 
         if (t1 >= 3.5f)
         {
+            if (!briefing_cam_.GetComponent<BriefingCamera>().Get_TankBomb())
+                briefing_cam_.GetComponent<BriefingCamera>().TankBombViewCam();
+
+            if (t1 >= 6f)
+                tower_mana_.GetComponent<TowerManager>().TowerBreak();
+
             if (!isText8)
             {
                 NextText();
@@ -334,7 +400,7 @@ public class BriefingManager2 : MonoBehaviour
             }
         }
 
-        tower_mana_.GetComponent<TowerManager>().TowerBreak();
+
 
         if (GameObject.FindGameObjectWithTag("GameTank"))
         {
@@ -398,7 +464,7 @@ public class BriefingManager2 : MonoBehaviour
             black_disp_.SetActive(true);
             white_disp_.GetComponent<BriefingDisp_white>().DisplayOff();
 
-            if(!white_disp_.activeInHierarchy)
+            if (!white_disp_.activeInHierarchy)
             {
                 ui_.GetComponent<BlackOut_UI>().BlackOut();
 
