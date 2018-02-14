@@ -28,6 +28,8 @@ public class Bombing : MonoBehaviour
     private float m_BreakLerpTime;
 
     private float m_StopTime;
+
+    public GameObject m_FailureObj;
     // Use this for initialization
     void Start()
     {
@@ -55,7 +57,12 @@ public class Bombing : MonoBehaviour
             m_BreakLerpTime += 0.5f * Time.deltaTime;
             transform.rotation = Quaternion.Lerp(m_FirstRotate, m_EndRotate, m_BreakLerpTime);
             transform.position += transform.forward.normalized * 30.0f * Time.deltaTime;
+            //失敗作戦を実行
+            if (m_FailureObj != null)
+                m_FailureObj.GetComponent<StrategyBombingFailure>().StartFailure();
+
             return;
+
         }
 
         //移動
@@ -97,7 +104,7 @@ public class Bombing : MonoBehaviour
     {
         if (m_IsStop) return;
 
-        if(other.tag== "ExplosionCollision")
+        if (other.tag == "ExplosionCollision")
         {
             m_BreakFlag = true;
             //壊れたら行動を変更する

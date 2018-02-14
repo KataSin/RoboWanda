@@ -72,7 +72,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1411709713936834
 GameObject:
   m_ObjectHideFlags: 0
@@ -88,7 +88,23 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
+--- !u!1 &1489913838991082
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4264091004333698}
+  - component: {fileID: 114243226293867932}
+  m_Layer: 0
+  m_Name: StrategyWireless
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
 --- !u!1 &1609754095295750
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,7 +120,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1627979909686752
 GameObject:
   m_ObjectHideFlags: 1
@@ -117,6 +133,22 @@ GameObject:
   m_Name: BomBingPointEnd
   m_TagString: Untagged
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1759372914414072
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4943172955215176}
+  - component: {fileID: 114170295567296668}
+  m_Layer: 0
+  m_Name: StrategyBombingFailure
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -150,7 +182,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4041083732714672
 Transform:
   m_ObjectHideFlags: 1
@@ -158,7 +190,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1862080686122980}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -43, y: 196, z: 239}
+  m_LocalPosition: {x: -18.7, y: 196, z: 239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4673320905786318}
@@ -177,6 +209,19 @@ Transform:
   m_Father: {fileID: 4673320905786318}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4264091004333698
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1489913838991082}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4322160490197616}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4279487482779072
 Transform:
   m_ObjectHideFlags: 1
@@ -188,7 +233,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4322160490197616}
-  m_RootOrder: 2
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4322160490197616
 Transform:
@@ -200,11 +245,13 @@ Transform:
   m_LocalPosition: {x: -236.5357, y: -118.88439, z: -142.56468}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4517566843970320}
   - {fileID: 4677356320789300}
-  - {fileID: 4279487482779072}
-  - {fileID: 4673320905786318}
+  - {fileID: 4264091004333698}
+  - {fileID: 4517566843970320}
   - {fileID: 4462313302585070}
+  - {fileID: 4673320905786318}
+  - {fileID: 4943172955215176}
+  - {fileID: 4279487482779072}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -219,7 +266,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4322160490197616}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4517566843970320
 Transform:
@@ -232,7 +279,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4322160490197616}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4673320905786318
 Transform:
@@ -248,7 +295,7 @@ Transform:
   - {fileID: 4260616777467678}
   - {fileID: 4929282710307716}
   m_Father: {fileID: 4322160490197616}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4677356320789300
 Transform:
@@ -261,7 +308,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4322160490197616}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4929282710307716
 Transform:
@@ -276,6 +323,32 @@ Transform:
   m_Father: {fileID: 4673320905786318}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4943172955215176
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1759372914414072}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4322160490197616}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114170295567296668
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1759372914414072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 264833486f213a9468d705f948217e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_WirelessClip: {fileID: 0}
+  m_Text: "\u5931\u6557\u3057\u305F\u3088"
 --- !u!114 &114202487455476938
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -287,11 +360,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 074b4591323bca144aa5231a633c26c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_WirelessTime: 60
-  m_WirelessClip: {fileID: 8300000, guid: 97a084ea9c6abc94b895085098cfe9b6, type: 3}
-  m_Text: "\u30C6\u30B9\u30C8\u30C6\u30AD\u30B9\u30C81"
+  m_WirelessTime: 90
+  m_WirelessClip: {fileID: 8300000, guid: f72dd0b7b00d9ac4095e32faa8f6ba75, type: 3}
+  m_Text: "\u7206\u6483\u4F5C\u6226\u958B\u59CB\uFF01"
   m_HeliReturn: 0
   m_IsLight: 0
+--- !u!114 &114243226293867932
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1489913838991082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 074b4591323bca144aa5231a633c26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_WirelessTime: 10
+  m_WirelessClip: {fileID: 8300000, guid: cfef12e88a7b81241a91a24d5bce8e22, type: 3}
+  m_Text: "\u7206\u6483\u4F5C\u6226\u306F\u4F5C\u6226\u6642\u523B0400\u306B\u884C\u308F\u308C\u308B\u3001\u305D\u308C\u307E\u3067\u6575\u306E\u6CE8\u610F\u3092\u5F15\u3044\u3066\u304A\u3051\uFF01"
+  m_HeliReturn: 1
+  m_IsLight: 1
 --- !u!114 &114521466959559138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -303,11 +392,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d6a22952ddf23940aa82a45e5a53200, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_StrategyTime: 90
+  m_StrategyTime: 10
   m_WirelessClip: {fileID: 0}
   m_Text: 
   m_BomberPrefab: {fileID: 1167586190437810, guid: 3598dd37de5d3454987f6e42c3877c89,
     type: 2}
+  m_FailureObj: {fileID: 1759372914414072}
 --- !u!114 &114537006218293108
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -319,9 +409,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 074b4591323bca144aa5231a633c26c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_WirelessTime: 95
-  m_WirelessClip: {fileID: 8300000, guid: 0574b52b3e025594c81d418e1eac578e, type: 3}
-  m_Text: "\u30AF\u30EA\u30A2\u30FC\u3057\u305F\u305E"
+  m_WirelessTime: 100
+  m_WirelessClip: {fileID: 8300000, guid: 5f145ddb1648c3d4e9238d13e534b322, type: 3}
+  m_Text: "\u4F5C\u6226\u9042\u884C\u3092\u78BA\u8A8D\u3001\u7B2C\u4E8C\u4F5C\u6226\u306B\u79FB\u884C\u3059\u308B\uFF01\n"
   m_HeliReturn: 0
   m_IsLight: 0
 --- !u!114 &114685445342749276
@@ -335,9 +425,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 074b4591323bca144aa5231a633c26c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_WirelessTime: 75
-  m_WirelessClip: {fileID: 0}
-  m_Text: 
+  m_WirelessTime: 0
+  m_WirelessClip: {fileID: 8300000, guid: 2ac6c11ffec603644999e25e330780de, type: 3}
+  m_Text: "\u3053\u308C\u3088\u308A\u4F5C\u6226\u3092\u958B\u59CB\u3059\u308B\u3001\u5404\u54E1\u4F5C\u6226\u306B\u6CBF\u3063\u3066\u884C\u52D5\u3057\u308D\uFF01"
   m_HeliReturn: 1
   m_IsLight: 1
 --- !u!114 &114956757395163376

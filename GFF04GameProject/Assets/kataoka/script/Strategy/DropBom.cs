@@ -25,7 +25,7 @@ public class DropBom : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        //if (other.tag == "ExplosionCollision") return;
+        if (other.tag == "ExplosionCollision") return;
 
         Instantiate(m_Exprosion, transform.position, Quaternion.identity);
         Destroy(gameObject);
