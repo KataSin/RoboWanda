@@ -56,6 +56,13 @@ public class RobotAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        GameObject playera;
+        if (PlayerToRobotRay("Player", 0, out playera)){
+            Debug.Log("プレイヤーを見てる");
+        }
+        else{
+            Debug.Log("プレイヤーを見ていない");
+        }
 
         if (manager.GetRobotHP() <= 0)
         {

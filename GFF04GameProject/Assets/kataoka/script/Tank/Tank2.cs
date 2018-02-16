@@ -101,7 +101,7 @@ public class Tank2 : MonoBehaviour
             }
         }
 
-        if (t0 >= 5f)
+        if (t0 >= 10.5f)
             PointMoveRotation(lookY.eulerAngles.y);
 
         MoveClearCheck();
