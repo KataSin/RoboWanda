@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 
 // カメラモード
-enum PlayerCameraMode
+public enum PlayerCameraMode
 {
     None,
     Landing,    // 着地
@@ -18,7 +18,7 @@ enum PlayerCameraMode
     Event,      // イベント
 }
 
-enum EventCameraState
+public enum EventCameraState
 {
     None,
     Jeep,
@@ -27,6 +27,11 @@ enum EventCameraState
     Tank,
     Tank2,
     BossDead,
+    BossLook,
+    BombingBreak,
+    LightHeliLook,
+    BreakBillLook,
+    PlayerLook
 }
 
 // カメラ距離
@@ -154,6 +159,27 @@ public class CameraPosition : MonoBehaviour
 
     private float m_T4;
 
+
+    private bool m_BossLookFlag;
+    private bool m_BomingLookFalg;
+    private bool m_BreakBillLookFlag;
+    private bool m_LightHeliLookFlag;
+    private bool m_PlayerLookFlag;
+
+
+    private Vector3 m_PosLerpStart;
+    private Vector3 m_PosLerpEnde;
+    private Quaternion m_RotateLerpStart;
+    private Quaternion m_RotateLerpEnd;
+
+    private GameObject m_RobotLookPoint;
+    private GameObject m_LightHeliLookPoint;
+    private GameObject m_BombingLookPoint;
+
+    private GameObject m_Robot;
+
+    private float m_LerpTime;
+
     // Use this for initialization
     void Start()
     {
@@ -213,6 +239,28 @@ public class CameraPosition : MonoBehaviour
             boss_ = GameObject.FindGameObjectWithTag("Robot");
         if (GameObject.FindGameObjectWithTag("RobotCameraP"))
             bossPivot_ = GameObject.FindGameObjectWithTag("RobotCameraP");
+
+
+        m_BossLookFlag = true;
+        m_BomingLookFalg = true;
+        m_BreakBillLookFlag = true;
+        m_LightHeliLookFlag = true;
+        m_PlayerLookFlag = true;
+
+
+        m_PosLerpStart = transform.position;
+        m_PosLerpEnde = transform.position;
+
+        m_RotateLerpStart = transform.rotation;
+        m_RotateLerpEnd = transform.rotation;
+
+        m_Robot = GameObject.FindGameObjectWithTag("Robot");
+        m_RobotLookPoint = GameObject.FindGameObjectWithTag("RobotLookPoint");
+        m_LightHeliLookPoint = GameObject.FindGameObjectWithTag("HeliLookPoint");
+        m_BombingLookPoint = GameObject.FindGameObjectWithTag("BombingLookPoint");
+            
+
+        m_LerpTime = 0.0f;
     }
 
     // Update is called once per frame
@@ -532,12 +580,12 @@ public class CameraPosition : MonoBehaviour
 
         if (m_intervalTimer >= 2f)
         {
-           transform.position =
-                Vector3.Lerp(
-                    m_deadBefore_pos,
-                    m_Player.transform.position + m_Player.transform.forward + new Vector3(0f, 3f, 0f),
-                    t / 3f
-                    );
+            transform.position =
+                 Vector3.Lerp(
+                     m_deadBefore_pos,
+                     m_Player.transform.position + m_Player.transform.forward + new Vector3(0f, 3f, 0f),
+                     t / 3f
+                     );
 
             if (t >= 3f)
                 isDeadFinish = true;
@@ -577,6 +625,19 @@ public class CameraPosition : MonoBehaviour
             case EventCameraState.BossDead:
                 BossDeadMode();
                 break;
+            case EventCameraState.BossLook:
+                BossLookMode();
+                break;
+            case EventCameraState.BombingBreak:
+                BomingBreakLook();
+                break;
+            case EventCameraState.BreakBillLook:
+                BomingBreakLook();
+                break;
+            case EventCameraState.PlayerLook:
+                PlayerLook();
+                break;
+
         }
 
 
@@ -585,6 +646,103 @@ public class CameraPosition : MonoBehaviour
         //// カメラの位置を更新
         //transform.position = Vector3.Lerp(transform.position, new_position, m_EventSpeed * Time.deltaTime);
     }
+
+    public void BossLookMode()
+    {
+        //各フラグ初期化
+        m_LightHeliLookFlag = true;
+        m_BomingLookFalg = true;
+        m_BreakBillLookFlag = true;
+        m_PlayerLookFlag = true;
+        //ここに初期化処理
+        if (m_BossLookFlag)
+        {
+            m_PosLerpStart = transform.position;
+            m_RotateLerpStart = transform.rotation;
+
+            m_LerpTime = 0.0f;
+            m_BossLookFlag = false;
+        }
+        m_PosLerpEnde = m_RobotLookPoint.transform.position;
+        m_RotateLerpEnd = Quaternion.LookRotation(m_Robot.transform.position - m_PosLerpEnde);
+
+        transform.position = Vector3.Lerp(m_PosLerpStart, m_PosLerpEnde, m_LerpTime);
+        transform.rotation = Quaternion.Lerp(m_RotateLerpStart, m_RotateLerpEnd, m_LerpTime);
+        m_LerpTime += Time.deltaTime;
+
+    }
+    public void LightHeliLook()
+    {
+        //各フラグ初期化
+        m_BomingLookFalg = true;
+        m_BreakBillLookFlag = true;
+        m_BossLookFlag = true;
+        m_PlayerLookFlag = true;
+        if(m_LightHeliLookFlag)
+        {
+            m_LightHeliLookFlag = false;
+        }
+    }
+    public void BomingBreakLook()
+    {
+        //各フラグ初期化
+        m_LightHeliLookFlag = true;
+        m_BreakBillLookFlag = true;
+        m_BossLookFlag = true;
+        m_PlayerLookFlag = true;
+        if (m_BomingLookFalg)
+        {
+            m_BossLookFlag = false;
+        }
+
+    }
+    public void BreakBillLook()
+    {
+        m_LightHeliLookFlag = true;
+        m_BomingLookFalg = true;
+        m_BossLookFlag = true;
+        m_PlayerLookFlag = true;
+        if (m_BreakBillLookFlag)
+        {
+            m_BreakBillLookFlag = false;
+        }
+    }
+
+    public void PlayerLook()
+    {
+        m_LightHeliLookFlag = true;
+        m_BreakBillLookFlag = true;
+        m_BossLookFlag = true;
+        m_BomingLookFalg = true;
+        if (m_PlayerLookFlag)
+        {
+            m_PosLerpStart = transform.position;
+            m_RotateLerpStart = transform.rotation;
+
+            m_PosLerpEnde = m_eventB_pos;
+            m_RotateLerpEnd = m_eventB_rotation;
+
+            m_LerpTime = 0.0f;
+
+            m_PlayerLookFlag = false;
+        }
+        transform.position = Vector3.Lerp(m_PosLerpStart, m_PosLerpEnde, m_LerpTime);
+        transform.rotation = Quaternion.Lerp(m_RotateLerpStart, m_RotateLerpEnd, m_LerpTime);
+        m_LerpTime += Time.deltaTime;
+
+        if (m_LerpTime >= 1.1f)
+        {
+            transform.localEulerAngles = Vector3.zero;
+            m_Mode = PlayerCameraMode.Normal;
+            m_EMode = EventCameraState.None;
+        }
+    }
+
+
+
+
+
+
 
     private void EventStartMode()
     {
@@ -605,8 +763,8 @@ public class CameraPosition : MonoBehaviour
         }
 
         if (jeeps_[jeeps_.Length - 1].transform.position.x <= transform.position.x - 3f)
-            //&&
-            //m_black_t3 >= 1.0f)
+        //&&
+        //m_black_t3 >= 1.0f)
         {
             m_EMode = EventCameraState.LeadJeep;
         }
@@ -650,7 +808,7 @@ public class CameraPosition : MonoBehaviour
         //    //EventSkip();
         //}
 
-        if(Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
             isMAllClear = true;
         }
@@ -670,7 +828,7 @@ public class CameraPosition : MonoBehaviour
                 }
             }
             m_test += 1.0f * Time.deltaTime;
-        }        
+        }
     }
 
     private void BomberMode()
@@ -884,5 +1042,16 @@ public class CameraPosition : MonoBehaviour
     public void Set_BlackT3(float l_t3)
     {
         m_black_t3 = l_t3;
+    }
+
+    public void SetEventState(PlayerCameraMode mode,EventCameraState state)
+    {
+        if (m_Mode != PlayerCameraMode.Event)
+        {
+            m_eventB_pos = transform.position;
+            m_eventB_rotation = transform.rotation;
+        }
+        m_Mode = mode;
+        m_EMode = state;
     }
 }

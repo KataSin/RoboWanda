@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 
 // プレイヤーの状態
-enum PlayerState
+public enum PlayerState
 {
     StartFall,
     Normal,     // 通常
@@ -18,7 +18,8 @@ enum PlayerState
     Passing,    // 乗り越え
     Setting,    // 爆発物設置
     BlewUp,     // 飛ばされる
-    BlewUpDead  // 飛ばされて死亡
+    BlewUpDead,  // 飛ばされて死亡
+    NoInput
 }
 
 public class PlayerController : MonoBehaviour
@@ -132,6 +133,8 @@ public class PlayerController : MonoBehaviour
     //ボムスポーン(片岡実装)
     private GameObject m_BomSpawn;
 
+    private GameObject m_CameraPosition;
+
     // グレネードランチャーのモデル
     [SerializeField]
     private GameObject m_Launcher;
@@ -217,6 +220,8 @@ public class PlayerController : MonoBehaviour
             //Debug.Log("Error Log：爆発物のプレハブが存在しない");
             //Application.Quit();
         }
+
+        m_CameraPosition = GameObject.FindGameObjectWithTag("CameraPosition");
     }
 
     // Update is called once per frame
@@ -229,6 +234,10 @@ public class PlayerController : MonoBehaviour
         {
             if (timer_.GetComponent<Timer>().GetTimer() <= 0f)
                 return;
+        }
+        if (m_CameraPosition.GetComponent<CameraPosition>().GetMode() == 5)
+        {
+            m_State = PlayerState.NoInput;
         }
 
         // プレイヤーの状態に応じて処理を行う
@@ -297,6 +306,12 @@ public class PlayerController : MonoBehaviour
                 m_IsCreeping = false;
                 m_IsDead = true;
                 break;
+            case PlayerState.NoInput:
+                m_IsAiming = false;
+                m_IsCreeping = false;
+                m_IsDead = false;
+                NoInput();
+                break;
             // デフォルト（バグ防止用）
             default:
                 m_IsAiming = false;
@@ -331,6 +346,10 @@ public class PlayerController : MonoBehaviour
 
             Debug.Log("無敵状態：" + m_IsInvincible);
         }
+
+
+
+
         /*
         Debug.Log("前方に障害物があるか：" + IsObjectInDistance());
         Debug.Log("乗り越えられる障害物であるか：" + IsObjectCanPass());
@@ -387,6 +406,15 @@ public class PlayerController : MonoBehaviour
             m_State = PlayerState.Setting;
         }
     }
+
+    private void NoInput()
+    {
+        if(m_CameraPosition.GetComponent<CameraPosition>().GetMode() != 5)
+        {
+            m_State = PlayerState.Normal;
+        }
+    }
+
 
     void Fall()
     {
@@ -955,6 +983,10 @@ public class PlayerController : MonoBehaviour
     public int GetPlayerState()
     {
         return (int)m_State;
+    }
+    public void SetPlayerState(PlayerState state)
+    {
+        m_State = state;
     }
 
     // 死亡しているか
