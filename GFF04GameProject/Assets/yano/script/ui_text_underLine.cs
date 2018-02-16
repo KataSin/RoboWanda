@@ -11,11 +11,17 @@ public class ui_text_underLine : MonoBehaviour
 
     private bool isClear;
 
+    [SerializeField]
+    private Vector3 m_before_scale;
+
+    [SerializeField]
+    private Vector3 m_after_scale;
+
     // Use this for initialization
     void Start()
     {
         rect_ = GetComponent<RectTransform>();
-        rect_.localScale = new Vector3(0f, 0.2f, 1f);
+        rect_.localScale = m_before_scale;
         t = 0f;
         isClear = false;
     }
@@ -23,7 +29,7 @@ public class ui_text_underLine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rect_.localScale = Vector3.Lerp(new Vector3(0f, 0.2f, 1f), new Vector3(0.45f, 0.2f, 1f), t / 1f);
+        rect_.localScale = Vector3.Lerp(m_before_scale, m_after_scale, t / 1f);
         LineUpdate();
     }
 

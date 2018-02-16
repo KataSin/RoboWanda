@@ -63,6 +63,24 @@ public class BriefingManager2 : MonoBehaviour
     private GameObject targetUnder_ui_;
 
     [SerializeField]
+    private GameObject bomber_ui_;
+
+    [SerializeField]
+    private GameObject bomberUnder_ui_;
+
+    [SerializeField]
+    private GameObject Sbomb_ui_;
+
+    [SerializeField]
+    private GameObject SbombUnder_ui_;
+
+    [SerializeField]
+    private GameObject lightBomb_ui_;
+
+    [SerializeField]
+    private GameObject lightBombUnder_ui_;
+
+    [SerializeField]
     private GameObject skip_gauge;
 
     [SerializeField]
@@ -104,9 +122,21 @@ public class BriefingManager2 : MonoBehaviour
         isTrigger = false;
 
         bomber_.SetActive(false);
+
         target_ui_.SetActive(false);
         targetUnder_ui_.SetActive(false);
+
+        bomber_ui_.SetActive(false);
+        bomberUnder_ui_.SetActive(false);
+
+        Sbomb_ui_.SetActive(false);
+        SbombUnder_ui_.SetActive(false);
+
+        lightBomb_ui_.SetActive(false);
+        lightBombUnder_ui_.SetActive(false);
+
         scan_.SetActive(false);
+
         white_disp_.SetActive(false);
 
         t0 = 0f;
@@ -287,12 +317,24 @@ public class BriefingManager2 : MonoBehaviour
 
         else
         {
-            if (t0 >= 4f)
+            if (t0 < 4f)
+            {
+                bomber_ui_.SetActive(true);
+                bomberUnder_ui_.SetActive(true);
+            }
+
+            else if (t0 >= 4f)
             {
                 if (!briefing_cam_.GetComponent<BriefingCamera>().Get_Top())
+                {
+                    bomber_ui_.SetActive(false);
+                    bomberUnder_ui_.SetActive(false);
                     briefing_cam_.GetComponent<BriefingCamera>().TopViewCam();
+                }
                 else
+                {
                     robot_.GetComponent<BriefingRobot>().BeamBombing();
+                }
 
                 if (t0 >= 10f)
                 {
@@ -381,10 +423,23 @@ public class BriefingManager2 : MonoBehaviour
             if (!briefing_cam_.GetComponent<BriefingCamera>().Get_TankBomb())
                 briefing_cam_.GetComponent<BriefingCamera>().TankBombViewCam();
 
-            else if (briefing_cam_.GetComponent<BriefingCamera>().Get_TankBomb()
-                    && !briefing_cam_.GetComponent<BriefingCamera>().Get_TankBomb2()
+            else if (briefing_cam_.GetComponent<BriefingCamera>().Get_TankBomb())
+            {
+                if (t0 < 8f)
+                {
+                    Sbomb_ui_.SetActive(true);
+                    SbombUnder_ui_.SetActive(true);
+                }
+
+                if (!briefing_cam_.GetComponent<BriefingCamera>().Get_TankBomb2()
                     && t0 >= 8f)
-                briefing_cam_.GetComponent<BriefingCamera>().TankBombViewCam2();
+                {
+                    briefing_cam_.GetComponent<BriefingCamera>().TankBombViewCam2();
+                    Sbomb_ui_.SetActive(false);
+                    SbombUnder_ui_.SetActive(false);
+                }
+
+            }
 
             if (briefing_cam_.GetComponent<BriefingCamera>().Get_TankBomb2()
                 && t0 >= 10f)
@@ -431,17 +486,33 @@ public class BriefingManager2 : MonoBehaviour
         if (!briefing_cam_.GetComponent<BriefingCamera>().Get_LightBomb())
             briefing_cam_.GetComponent<BriefingCamera>().LightBombViewCam();
 
-        lightSpawn_.GetComponent<LightBomSpawn>().Spawn();
+        else
+        {
+            lightSpawn_.GetComponent<LightBomSpawn>().Spawn();
+        }
 
         if (t0 >= 4f)
         {
-            if (!briefing_cam_.GetComponent<BriefingCamera>().Get_LightBomb2())
-                briefing_cam_.GetComponent<BriefingCamera>().LightBombViewCam2();
+            //if (!briefing_cam_.GetComponent<BriefingCamera>().Get_LightBomb2())
+            //    briefing_cam_.GetComponent<BriefingCamera>().LightBombViewCam2();
 
-            if (t0 >= 9f)
+            //if (briefing_cam_.GetComponent<BriefingCamera>().Get_LightBomb2()
+            //    && !briefing_cam_.GetComponent<BriefingCamera>().Get_LightBomb3())
+            if (!briefing_cam_.GetComponent<BriefingCamera>().Get_LightBomb2())
             {
-                if (briefing_cam_.GetComponent<BriefingCamera>().Get_LightBomb2())
-                    briefing_cam_.GetComponent<BriefingCamera>().LightBombViewCam3();
+                if (t0 < 9f)
+                {
+                    lightBomb_ui_.SetActive(true);
+                    lightBombUnder_ui_.SetActive(true);
+                }
+
+                else if (t0 >= 9f)
+                {
+                    lightBomb_ui_.SetActive(false);
+                    lightBombUnder_ui_.SetActive(false);
+                    //briefing_cam_.GetComponent<BriefingCamera>().LightBombViewCam3();
+                    briefing_cam_.GetComponent<BriefingCamera>().LightBombViewCam2();
+                }
             }
 
             if (!isText11)

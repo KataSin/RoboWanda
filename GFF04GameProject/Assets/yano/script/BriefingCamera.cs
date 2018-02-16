@@ -30,6 +30,7 @@ public class BriefingCamera : MonoBehaviour
 
     private bool isLightBombView;
     private bool isLightBombView2;
+    private bool isLightBombView3;
 
     // Use this for initialization
     void Start()
@@ -61,6 +62,7 @@ public class BriefingCamera : MonoBehaviour
 
         isLightBombView = false;
         isLightBombView2 = false;
+        isLightBombView3 = false;
     }
 
     // Update is called once per frame
@@ -139,18 +141,32 @@ public class BriefingCamera : MonoBehaviour
                 Quaternion.Euler(90f, m_origin_rotation.y, m_origin_rotation.z), t / 2f);
         }
 
+        //if (isTankBombView2
+        //    && !isLightBombView)
+        //{
+        //    transform.position = Vector3.Lerp(m_sideViewCam_pos, m_origin_pos, t / 2f);
+        //    transform.rotation =
+        //        Quaternion.Slerp(Quaternion.Euler(90f, m_origin_rotation.y, m_origin_rotation.z),
+        //        m_origin_rotation, t / 2f);
+        //}
+
         if (isTankBombView2
             && !isLightBombView)
         {
-            transform.position = Vector3.Lerp(m_sideViewCam_pos, m_origin_pos, t / 2f);
+            transform.position = Vector3.Lerp(m_sideViewCam_pos, m_lightBombViewCam_pos, t / 2f);
             transform.rotation =
                 Quaternion.Slerp(Quaternion.Euler(90f, m_origin_rotation.y, m_origin_rotation.z),
                 m_origin_rotation, t / 2f);
         }
 
-        if(isLightBombView || isLightBombView2)
+        //if (isLightBombView || isLightBombView2)
+        //{
+        //    transform.position = Vector3.Lerp(m_origin_pos, m_lightBombViewCam_pos, t / 2f);
+        //}
+
+        if (isLightBombView || isLightBombView2)
         {
-            transform.position = Vector3.Lerp(m_origin_pos, m_lightBombViewCam_pos, t / 2f);
+            transform.position = Vector3.Lerp(m_lightBombViewCam_pos, m_origin_pos, t / 2f);
         }
     }
 
@@ -267,6 +283,9 @@ public class BriefingCamera : MonoBehaviour
     public void LightBombViewCam3()
     {
         t -= 1.0f * Time.deltaTime;
+
+        if (t <= 0f)
+            isLightBombView3 = true;
     }
 
     public bool Get_Clear()
@@ -317,5 +336,10 @@ public class BriefingCamera : MonoBehaviour
     public bool Get_LightBomb2()
     {
         return isLightBombView2;
+    }
+
+    public bool Get_LightBomb3()
+    {
+        return isLightBombView3;
     }
 }
