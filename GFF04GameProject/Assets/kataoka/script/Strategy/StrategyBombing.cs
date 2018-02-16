@@ -64,7 +64,7 @@ public class StrategyBombing : MonoBehaviour
 
 
         //ロボットは早めに行動を変える
-        if (m_Time>=m_StrategyTime-5.0f)
+        if (m_Time >= m_StrategyTime - 5.0f)
             GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>().SetBehavior(RobotManager.RobotBehavior.ROBOT_TWO);
 
         if (m_Time >= m_StrategyTime)
@@ -90,6 +90,7 @@ public class StrategyBombing : MonoBehaviour
             {
                 if (GameObject.FindGameObjectWithTag("StrategyText"))
                     m_TextUi.text = "";
+                transform.Find("BombingBeamPoint").parent = null;
                 Destroy(gameObject);
             }
 
