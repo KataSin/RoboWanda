@@ -376,12 +376,18 @@ public class BriefingManager2 : MonoBehaviour
             isCh47 = true;
         }
 
-        if (t1 >= 3.5f)
+        if (t0 >= 3.5f)
         {
             if (!briefing_cam_.GetComponent<BriefingCamera>().Get_TankBomb())
                 briefing_cam_.GetComponent<BriefingCamera>().TankBombViewCam();
 
-            if (t1 >= 6f)
+            else if (briefing_cam_.GetComponent<BriefingCamera>().Get_TankBomb()
+                    && !briefing_cam_.GetComponent<BriefingCamera>().Get_TankBomb2()
+                    && t0 >= 8f)
+                briefing_cam_.GetComponent<BriefingCamera>().TankBombViewCam2();
+
+            if (briefing_cam_.GetComponent<BriefingCamera>().Get_TankBomb2()
+                && t0 >= 10f)
                 tower_mana_.GetComponent<TowerManager>().TowerBreak();
 
             if (!isText8)
@@ -390,7 +396,7 @@ public class BriefingManager2 : MonoBehaviour
                 isText8 = true;
             }
 
-            if (t1 >= 10f)
+            if (t0 >= 12f)
             {
                 if (!isText9)
                 {
@@ -406,27 +412,38 @@ public class BriefingManager2 : MonoBehaviour
         {
             if (tank_.GetComponent<BriefingStTank>().Get_Clear())
             {
-                if (t0 >= 1.5f)
+                if (t1 >= 1.5f)
                 {
                     NextText();
                     t0 = 0f;
                     t1 = 0f;
                     state_ = State.Five;
                 }
-                t0 += 1.0f * Time.deltaTime;
+                t1 += 1.0f * Time.deltaTime;
             }
         }
 
-        t1 += 1.0f * Time.deltaTime;
+        t0 += 1.0f * Time.deltaTime;
     }
 
     private void FiveUpdate()
     {
-        briefing_cam_.GetComponent<BriefingCamera>().NormalViewCam();
+        if (!briefing_cam_.GetComponent<BriefingCamera>().Get_LightBomb())
+            briefing_cam_.GetComponent<BriefingCamera>().LightBombViewCam();
+
         lightSpawn_.GetComponent<LightBomSpawn>().Spawn();
 
         if (t0 >= 4f)
         {
+            if (!briefing_cam_.GetComponent<BriefingCamera>().Get_LightBomb2())
+                briefing_cam_.GetComponent<BriefingCamera>().LightBombViewCam2();
+
+            if (t0 >= 9f)
+            {
+                if (briefing_cam_.GetComponent<BriefingCamera>().Get_LightBomb2())
+                    briefing_cam_.GetComponent<BriefingCamera>().LightBombViewCam3();
+            }
+
             if (!isText11)
             {
                 NextText();
