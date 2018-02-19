@@ -75,6 +75,7 @@ public class StrategySpawnTank : MonoBehaviour
         {
             if (m_FirstFlag)
             {
+                GameObject.FindGameObjectWithTag("CameraPosition").GetComponent<CameraPosition>().SetEventState(PlayerCameraMode.Event, EventCameraState.LightHeliLook);
                 GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>().SetBehavior(RobotManager.RobotBehavior.ROBOT_THREE);
                 foreach (var i in m_SpawnPoints)
                 {

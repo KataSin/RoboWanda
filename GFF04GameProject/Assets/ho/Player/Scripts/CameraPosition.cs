@@ -176,6 +176,9 @@ public class CameraPosition : MonoBehaviour
     private GameObject m_LightHeliLookPoint;
     private GameObject m_BombingLookPoint;
 
+    private GameObject m_BombingBeamPoint;
+
+
     private GameObject m_Robot;
 
     private float m_LerpTime;
@@ -258,7 +261,7 @@ public class CameraPosition : MonoBehaviour
         m_RobotLookPoint = GameObject.FindGameObjectWithTag("RobotLookPoint");
         m_LightHeliLookPoint = GameObject.FindGameObjectWithTag("HeliLookPoint");
         m_BombingLookPoint = GameObject.FindGameObjectWithTag("BombingLookPoint");
-            
+        m_BombingBeamPoint = GameObject.FindGameObjectWithTag("BombingBeamPoint");
 
         m_LerpTime = 0.0f;
     }
@@ -632,10 +635,13 @@ public class CameraPosition : MonoBehaviour
                 BomingBreakLook();
                 break;
             case EventCameraState.BreakBillLook:
-                BomingBreakLook();
+                BreakBillLook();
                 break;
             case EventCameraState.PlayerLook:
                 PlayerLook();
+                break;
+            case EventCameraState.LightHeliLook:
+                LightHeliLook();
                 break;
 
         }
@@ -659,7 +665,7 @@ public class CameraPosition : MonoBehaviour
         {
             m_PosLerpStart = transform.position;
             m_RotateLerpStart = transform.rotation;
-
+            m_Robot.GetComponent<RobotManager>().ColorChange();
             m_LerpTime = 0.0f;
             m_BossLookFlag = false;
         }
@@ -669,6 +675,10 @@ public class CameraPosition : MonoBehaviour
         transform.position = Vector3.Lerp(m_PosLerpStart, m_PosLerpEnde, m_LerpTime);
         transform.rotation = Quaternion.Lerp(m_RotateLerpStart, m_RotateLerpEnd, m_LerpTime);
         m_LerpTime += Time.deltaTime;
+        if (m_LerpTime >= 4.0f)
+        {
+            m_EMode = EventCameraState.PlayerLook;
+        }
 
     }
     public void LightHeliLook()
@@ -680,8 +690,23 @@ public class CameraPosition : MonoBehaviour
         m_PlayerLookFlag = true;
         if(m_LightHeliLookFlag)
         {
+            m_PosLerpStart = transform.position;
+            m_RotateLerpStart = transform.rotation;
+
+            m_LerpTime = 0.0f;
             m_LightHeliLookFlag = false;
         }
+        m_PosLerpEnde = m_LightHeliLookPoint.transform.position;
+        m_RotateLerpEnd = Quaternion.LookRotation(m_LightHeliLookPoint.transform.parent.position - m_PosLerpEnde);
+        transform.position = Vector3.Lerp(m_PosLerpStart, m_PosLerpEnde, m_LerpTime);
+        transform.rotation = Quaternion.Lerp(m_RotateLerpStart, m_RotateLerpEnd, m_LerpTime);
+        m_LerpTime += Time.deltaTime;
+
+        if (m_LerpTime >= 4.0f)
+        {
+            m_EMode = EventCameraState.BossLook;
+        }
+
     }
     public void BomingBreakLook()
     {
@@ -692,7 +717,22 @@ public class CameraPosition : MonoBehaviour
         m_PlayerLookFlag = true;
         if (m_BomingLookFalg)
         {
-            m_BossLookFlag = false;
+            m_PosLerpStart = transform.position;
+            m_RotateLerpStart = transform.rotation;
+
+            m_LerpTime = 0.0f;
+            m_BomingLookFalg = false;
+        }
+
+        m_PosLerpEnde = m_BombingLookPoint.transform.position;
+        m_RotateLerpEnd = Quaternion.LookRotation(m_BombingBeamPoint.transform.position - m_PosLerpEnde);
+        transform.position = Vector3.Lerp(m_PosLerpStart, m_PosLerpEnde, m_LerpTime);
+        transform.rotation = Quaternion.Lerp(m_RotateLerpStart, m_RotateLerpEnd, m_LerpTime);
+        m_LerpTime += Time.deltaTime;
+
+        if (m_LerpTime >= 4.0f)
+        {
+            m_EMode = EventCameraState.BossLook;
         }
 
     }
@@ -737,12 +777,6 @@ public class CameraPosition : MonoBehaviour
             m_EMode = EventCameraState.None;
         }
     }
-
-
-
-
-
-
 
     private void EventStartMode()
     {

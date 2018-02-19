@@ -19,6 +19,7 @@ public class StrategyBombing : MonoBehaviour
     public GameObject m_BomberPrefab;
 
     public GameObject m_FailureObj;
+    public GameObject m_WinObj;
 
     private bool m_FirstFlag;
     private AudioSource m_AudioSource;

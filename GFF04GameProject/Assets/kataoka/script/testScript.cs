@@ -18,20 +18,9 @@ public class testScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L)&&!mFlag)
+        if (Input.GetKeyDown(KeyCode.L))
         {
-            mFlag = true;
-        }
-        if (mFlag)
-        {
-            mTime += Time.deltaTime;
-            GameObject.FindGameObjectWithTag("CameraPosition").GetComponent<CameraPosition>().SetEventState(PlayerCameraMode.Event,EventCameraState.BossLook);
-            if (mTime >= 3.0f)
-            {
-                GameObject.FindGameObjectWithTag("CameraPosition").GetComponent<CameraPosition>().SetEventState(PlayerCameraMode.Event, EventCameraState.PlayerLook);
-                mFlag = false;
-                mTime = 0.0f;
-            }
+            GameObject.FindGameObjectWithTag("CameraPosition").GetComponent<CameraPosition>().SetEventState(PlayerCameraMode.Event, EventCameraState.BombingBreak);
         }
     }
 

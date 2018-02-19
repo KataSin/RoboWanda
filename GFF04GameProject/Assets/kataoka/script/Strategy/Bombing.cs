@@ -30,6 +30,7 @@ public class Bombing : MonoBehaviour
     private float m_StopTime;
 
     public GameObject m_FailureObj;
+    public GameObject m_WinObj;
     // Use this for initialization
     void Start()
     {
@@ -73,6 +74,9 @@ public class Bombing : MonoBehaviour
             GameObject.FindGameObjectWithTag("RobotLightManager").GetComponent<StrategyRobotLightManager>().m_IsLight = false;
             //ロボットの行動変更
             GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>().SetBehavior(RobotManager.RobotBehavior.ROBOT_ONE);
+
+            m_WinObj.GetComponent<StrategyBombingWin>().StartWin();
+
             Destroy(gameObject);
         }
 

@@ -47,6 +47,8 @@ public class RobotManager : MonoBehaviour
     //ロボットの煙
     private List<GameObject> m_SparkEffect;
     private int m_SparkNum;
+    //ロボットの色ナンバー
+    private int m_ColorNumber;
     // Use this for initialization
     void Start()
     {
@@ -86,6 +88,7 @@ public class RobotManager : MonoBehaviour
         m_BehaviorNum = RobotBehavior.ROBOT_ONE;
 
         m_SparkNum = 1;
+        m_ColorNumber = 0;
     }
 
     // Update is called once per frame
@@ -96,7 +99,7 @@ public class RobotManager : MonoBehaviour
         Color endClor = new Color(1.0f, 0.2f, 0.2f);
         m_RobotHp = Mathf.Clamp(m_RobotHp, 0, 10000);
 
-        Color robotColor = Color.Lerp(endClor, startColor, (float)m_RobotHp / 10000.0f);
+        Color robotColor = Color.Lerp(startColor,endClor, m_ColorNumber / 3.0f);
         m_Material.SetColor("_EmissionColor", robotColor);
         m_Light1.GetComponent<Light>().color = robotColor;
         m_Light2.GetComponent<Light>().color = robotColor;
@@ -207,6 +210,10 @@ public class RobotManager : MonoBehaviour
     public void Dead()
     {
 
+    }
+    public void ColorChange()
+    {
+        m_ColorNumber++;
     }
 
 

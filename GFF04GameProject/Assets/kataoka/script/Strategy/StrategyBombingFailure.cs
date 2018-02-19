@@ -44,7 +44,8 @@ public class StrategyBombingFailure : MonoBehaviour
         if (!m_IsFailure) return;
 
         m_Time += Time.deltaTime;
-
+        var cameraPosScript = GameObject.FindGameObjectWithTag("CameraPosition").GetComponent<CameraPosition>();
+        cameraPosScript.SetEventState(PlayerCameraMode.Event, EventCameraState.BombingBreak);
         //振動系
         if (m_VibrationCount <= 2 && m_WirelessClip != null)
         {
@@ -71,6 +72,7 @@ public class StrategyBombingFailure : MonoBehaviour
                 m_AudioSource.clip = m_WirelessClip;
                 if (m_WirelessClip != null)
                     m_AudioSource.PlayOneShot(m_AudioSource.clip);
+                GameObject.FindGameObjectWithTag("CameraPosition").GetComponent<CameraPosition>().SetEventState(PlayerCameraMode.Event, EventCameraState.BombingBreak);
                 m_FirstFlag = false;
             }
             //テキストUI
@@ -81,6 +83,7 @@ public class StrategyBombingFailure : MonoBehaviour
             {
                 if (GameObject.FindGameObjectWithTag("StrategyText"))
                     m_TextUi.text = "";
+                
                 Destroy(gameObject);
             }
 
