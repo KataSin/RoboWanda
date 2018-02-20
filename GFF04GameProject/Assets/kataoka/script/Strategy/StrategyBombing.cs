@@ -77,6 +77,8 @@ public class StrategyBombing : MonoBehaviour
                 GameObject bomber = Instantiate(m_BomberPrefab, spawnPos, Quaternion.identity);
                 bomber.GetComponent<Bombing>().SetStartEnd(spawnPos, goalPos);
                 bomber.GetComponent<Bombing>().m_FailureObj = m_FailureObj;
+                bomber.GetComponent<Bombing>().m_WinObj=m_WinObj ;
+
                 //音声を流す
                 m_AudioSource.clip = m_WirelessClip;
                 if (m_WirelessClip != null)
