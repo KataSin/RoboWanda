@@ -31,7 +31,8 @@ public enum EventCameraState
     BombingBreak,
     LightHeliLook,
     BreakBillLook,
-    PlayerLook
+    PlayerLook,
+    BombingRobotLook
 }
 
 // カメラ距離
@@ -183,9 +184,11 @@ public class CameraPosition : MonoBehaviour
 
     private float m_LerpTime;
 
+    private bool m_BombingFlag;
     // Use this for initialization
     void Start()
     {
+
         m_Player = GameObject.FindGameObjectWithTag("Player");
         if (m_Player != null)
         {
@@ -264,6 +267,7 @@ public class CameraPosition : MonoBehaviour
         m_BombingBeamPoint = GameObject.FindGameObjectWithTag("BombingBeamPoint");
 
         m_LerpTime = 0.0f;
+        m_BombingFlag = false;
     }
 
     // Update is called once per frame
@@ -643,6 +647,9 @@ public class CameraPosition : MonoBehaviour
             case EventCameraState.LightHeliLook:
                 LightHeliLook();
                 break;
+            case EventCameraState.BombingRobotLook:
+                BossLookMode2();
+                break;
 
         }
 
@@ -652,6 +659,37 @@ public class CameraPosition : MonoBehaviour
         //// カメラの位置を更新
         //transform.position = Vector3.Lerp(transform.position, new_position, m_EventSpeed * Time.deltaTime);
     }
+
+    public void BossLookMode2()
+    {
+        //各フラグ初期化
+        m_LightHeliLookFlag = true;
+        m_BomingLookFalg = true;
+        m_BreakBillLookFlag = true;
+        m_PlayerLookFlag = true;
+        //ここに初期化処理
+        if (m_BossLookFlag)
+        {
+            m_PosLerpStart = transform.position;
+            m_RotateLerpStart = transform.rotation;
+            m_Robot.GetComponent<RobotManager>().ColorChange();
+            m_LerpTime = 0.0f;
+            m_BossLookFlag = false;
+        }
+        m_PosLerpEnde = m_RobotLookPoint.transform.position;
+        m_RotateLerpEnd = Quaternion.LookRotation(m_Robot.transform.position - m_PosLerpEnde);
+
+        transform.position = Vector3.Lerp(m_PosLerpStart, m_PosLerpEnde, m_LerpTime);
+        transform.rotation = Quaternion.Lerp(m_RotateLerpStart, m_RotateLerpEnd, m_LerpTime);
+        m_LerpTime += Time.deltaTime;
+        if (m_LerpTime >= 4.0f)
+        {
+            m_EMode = EventCameraState.LightHeliLook;
+            m_BombingFlag = true;
+        }
+
+    }
+
 
     public void BossLookMode()
     {
@@ -678,6 +716,10 @@ public class CameraPosition : MonoBehaviour
         if (m_LerpTime >= 4.0f)
         {
             m_EMode = EventCameraState.PlayerLook;
+            if (m_BombingFlag)
+            {
+                m_EMode = EventCameraState.LightHeliLook;
+            }
         }
 
     }
@@ -705,6 +747,11 @@ public class CameraPosition : MonoBehaviour
         if (m_LerpTime >= 4.0f)
         {
             m_EMode = EventCameraState.BossLook;
+            if (m_BombingFlag)
+            {
+                m_EMode = EventCameraState.PlayerLook;
+                m_BombingFlag = false;
+            }
         }
 
     }
@@ -721,6 +768,7 @@ public class CameraPosition : MonoBehaviour
             m_RotateLerpStart = transform.rotation;
 
             m_LerpTime = 0.0f;
+            m_BombingFlag = true;
             m_BomingLookFalg = false;
         }
 
