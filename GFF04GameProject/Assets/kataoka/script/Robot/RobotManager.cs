@@ -49,9 +49,24 @@ public class RobotManager : MonoBehaviour
     private int m_SparkNum;
     //ロボットの色ナンバー
     private int m_ColorNumber;
+
+    private Color m_StartColor;
+    private Color m_EndColor;
+    private Color m_Color;
+    private List<Color> m_Colors;
+
+
+    private float m_ColorTime;
     // Use this for initialization
     void Start()
     {
+        m_Colors = new List<Color>();
+        m_Colors.Add(new Color(0.2f, 0.2f, 0.8f));
+        m_Colors.Add(Color.yellow);
+        m_Colors.Add(new Color(0.8f,0.2f,0.2f));
+
+       
+
         m_SparkEffect = new List<GameObject>();
         foreach (var i in GameObject.FindGameObjectsWithTag("Spark"))
         {
@@ -89,20 +104,27 @@ public class RobotManager : MonoBehaviour
 
         m_SparkNum = 1;
         m_ColorNumber = 0;
+
+        m_StartColor = new Color(0.2f, 0.2f, 0.8f);
+        m_EndColor = new Color(0.2f, 0.2f, 0.8f);
+        m_Color = m_StartColor;
+        m_ColorTime = 0.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
         Debug.Log(m_RobotState);
-        Color startColor = new Color(0.1f, 0.7f, 0.8f);
-        Color endClor = new Color(1.0f, 0.2f, 0.2f);
+
+
+        m_ColorTime += Time.deltaTime;
+
         m_RobotHp = Mathf.Clamp(m_RobotHp, 0, 10000);
 
-        Color robotColor = Color.Lerp(startColor,endClor, m_ColorNumber / 3.0f);
-        m_Material.SetColor("_EmissionColor", robotColor);
-        m_Light1.GetComponent<Light>().color = robotColor;
-        m_Light2.GetComponent<Light>().color = robotColor;
+        m_Color = Color.Lerp(m_StartColor,m_EndColor,m_ColorTime);
+        m_Material.SetColor("_EmissionColor", m_Color);
+        m_Light1.GetComponent<Light>().color = m_Color;
+        m_Light2.GetComponent<Light>().color = m_Color;
 
         //Debug.Log(m_RobotHp);
         //ロボット仮HPUI
@@ -214,6 +236,9 @@ public class RobotManager : MonoBehaviour
     public void ColorChange()
     {
         m_ColorNumber++;
+        m_StartColor = m_Color;
+        m_EndColor = m_Colors[m_ColorNumber];
+        m_ColorTime = 0.0f;
     }
 
 

@@ -69,7 +69,7 @@ public class StrategyBombingWin : MonoBehaviour {
                 if (m_WirelessClip != null)
                     m_AudioSource.PlayOneShot(m_AudioSource.clip);
                 var cameraPosScript = GameObject.FindGameObjectWithTag("CameraPosition").GetComponent<CameraPosition>();
-                cameraPosScript.SetEventState(PlayerCameraMode.Event, EventCameraState.BossLook);
+                cameraPosScript.SetEventState(PlayerCameraMode.Event, EventCameraState.BombingRobotLook);
                 m_FirstFlag = false;
             }
             //テキストUI
