@@ -119,8 +119,10 @@ public class Stage1Manager : MonoBehaviour
             //boss_ui_[1].GetComponent<Image>().enabled = true;            
         }
 
-        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1
-            || camera_pos_.GetComponent<CameraPosition>().GetMode() == 2)
+        if (camera_pos_.GetComponent<CameraPosition>().GetMode()==1
+            || camera_pos_.GetComponent<CameraPosition>().GetMode() == 2
+            || camera_pos_.GetComponent<CameraPosition>().GetMode() == 3
+            || camera_pos_.GetComponent<CameraPosition>().GetMode() == 5)
         {
             if (robot_.GetComponent<RobotManager>().GetRobotHP() > 0f)
                 timer_ui_.GetComponent<Timer>().TimerUpdate();

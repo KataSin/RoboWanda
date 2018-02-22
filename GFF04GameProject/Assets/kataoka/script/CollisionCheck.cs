@@ -19,7 +19,9 @@ public class CollisionCheck : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "TowerCollision" || other.tag == "Tower" || other.tag == "GroundCollisionRigid")
+        if (other.tag == "TowerCollision" || other.tag == "Tower" || other.tag == "GroundCollisionRigid"
+            || other.tag == "Ground"
+            || LayerMask.LayerToName(other.gameObject.layer) == "Robot")
         {
             m_Collision = true;
         }
