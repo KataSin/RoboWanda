@@ -72,6 +72,9 @@ public class TutorialTank : MonoBehaviour
                 GameObject l_gun = Instantiate(bullet_, gunX_.transform.position, Quaternion.identity);
                 Instantiate(fire_effect_, gunX_.transform.position + gunX_.transform.forward * 9f, Quaternion.identity);
                 l_gun.transform.rotation = gunX_.transform.rotation;
+
+                GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
+
                 m_interValTime = 2.5f;
             }
             m_interValTime -= 1.0f * Time.deltaTime;

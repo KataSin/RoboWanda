@@ -255,31 +255,34 @@ public class TextTutorial : MonoBehaviour
         if (isClear) return;
 
         m_text_char[0] = '炸';
-        m_text_char[1] = '烈';
+        m_text_char[1] = '裂';
         m_text_char[2] = '弾';
         m_text_char[3] = 'は';
-        m_text_char[4] = '発';
-        m_text_char[5] = '射';
-        m_text_char[6] = '後';
-        m_text_char[7] = '照';
-        m_text_char[8] = '準';
-        m_text_char[9] = 'せ';
-        m_text_char[10] = 'ず';
-        m_text_char[11] = 'に';
-        m_text_char[12] = 'L';
-        m_text_char[13] = 'B';
-        m_text_char[14] = 'を';
-        m_text_char[15] = '押';
-        m_text_char[16] = 'す';
-        m_text_char[17] = 'こ';
-        m_text_char[18] = 'と';
-        m_text_char[19] = 'で';
-        m_text_char[20] = '起';
-        m_text_char[21] = '爆';
-        m_text_char[22] = 'で';
-        m_text_char[23] = 'き';
-        m_text_char[24] = 'る';
-        m_text_char[25] = '。';
+        m_text_char[4] = '建';
+        m_text_char[5] = '物';
+        m_text_char[6] = 'を';
+        m_text_char[7] = '破';
+        m_text_char[8] = '壊';
+        m_text_char[9] = 'し';
+        m_text_char[10] = 'た';
+        m_text_char[11] = 'り';
+        m_text_char[12] = '敵';
+        m_text_char[13] = 'に';
+        m_text_char[14] = 'ダ';
+        m_text_char[15] = 'メ';
+        m_text_char[16] = 'ー';
+        m_text_char[17] = 'ジ';
+        m_text_char[18] = 'を';
+        m_text_char[19] = '与';
+        m_text_char[20] = 'え';
+        m_text_char[21] = 'る';
+        m_text_char[22] = 'こ';
+        m_text_char[23] = 'と';
+        m_text_char[24] = 'が';
+        m_text_char[25] = '出';
+        m_text_char[26] = '来';
+        m_text_char[27] = 'る';
+        m_text_char[28] = '。';
 
         isClear = true;
     }
@@ -289,17 +292,20 @@ public class TextTutorial : MonoBehaviour
         if (isClear) return;
 
         m_text_char[0] = '炸';
-        m_text_char[1] = '烈';
+        m_text_char[1] = '裂';
         m_text_char[2] = '弾';
-        m_text_char[3] = 'で';
-        m_text_char[4] = '建';
-        m_text_char[5] = '物';
-        m_text_char[6] = 'を';
-        m_text_char[7] = '破';
-        m_text_char[8] = '壊';
-        m_text_char[9] = 'し';
-        m_text_char[10] = 'ろ';
-        m_text_char[11] = '。';
+        m_text_char[3] = 'を';
+        m_text_char[4] = '使';
+        m_text_char[5] = 'っ';
+        m_text_char[6] = 'て';
+        m_text_char[7] = '建';
+        m_text_char[8] = '物';
+        m_text_char[9] = 'を';
+        m_text_char[10] = '破';
+        m_text_char[11] = '壊';
+        m_text_char[12] = 'し';
+        m_text_char[13] = 'ろ';
+        m_text_char[14] = '。';
 
         isClear = true;
     }
@@ -362,25 +368,27 @@ public class TextTutorial : MonoBehaviour
         m_text_char[1] = 'モ';
         m_text_char[2] = 'ー';
         m_text_char[3] = 'ク';
-        m_text_char[4] = 'に';
-        m_text_char[5] = '入';
-        m_text_char[6] = 'っ';
-        m_text_char[7] = 'て';
-        m_text_char[8] = 'い';
-        m_text_char[9] = 'る';
-        m_text_char[10] = '間';
-        m_text_char[11] = 'は';
-        m_text_char[12] = '標';
-        m_text_char[13] = '的';
-        m_text_char[14] = 'か';
-        m_text_char[15] = 'ら';
-        m_text_char[16] = '見';
-        m_text_char[17] = 'つ';
-        m_text_char[18] = 'か';
-        m_text_char[19] = 'ら';
-        m_text_char[20] = 'な';
-        m_text_char[21] = 'い';
-        m_text_char[22] = '。';
+        m_text_char[4] = 'の';
+        m_text_char[5] = '中';
+        m_text_char[6] = 'に';
+        m_text_char[7] = '入';
+        m_text_char[8] = 'っ';
+        m_text_char[9] = 'て';
+        m_text_char[10] = 'い';
+        m_text_char[11] = 'る';
+        m_text_char[12] = '間';
+        m_text_char[13] = 'は';
+        m_text_char[14] = '標';
+        m_text_char[15] = '的';
+        m_text_char[16] = 'か';
+        m_text_char[17] = 'ら';
+        m_text_char[18] = '見';
+        m_text_char[19] = 'つ';
+        m_text_char[20] = 'か';
+        m_text_char[21] = 'ら';
+        m_text_char[22] = 'な';
+        m_text_char[23] = 'い';
+        m_text_char[24] = '。';
 
         isClear = true;
     }
@@ -389,31 +397,23 @@ public class TextTutorial : MonoBehaviour
     {
         if (isClear) return;
 
-        m_text_char[0] = 'タ';
-        m_text_char[1] = 'レ';
-        m_text_char[2] = 'ッ';
-        m_text_char[3] = 'ト';
-        m_text_char[4] = 'か';
-        m_text_char[5] = 'ら';
-        m_text_char[6] = '見';
-        m_text_char[7] = 'つ';
-        m_text_char[8] = 'か';
-        m_text_char[9] = 'ら';
-        m_text_char[10] = 'な';
-        m_text_char[11] = 'い';
-        m_text_char[12] = 'よ';
-        m_text_char[13] = 'う';
-        m_text_char[14] = 'に';
-        m_text_char[15] = '目';
-        m_text_char[16] = '的';
-        m_text_char[17] = '地';
-        m_text_char[18] = 'ま';
-        m_text_char[19] = 'で';
-        m_text_char[20] = '移';
-        m_text_char[21] = '動';
-        m_text_char[22] = 'し';
-        m_text_char[23] = 'ろ';
-        m_text_char[24] = '。';
+        m_text_char[0] = 'ス';
+        m_text_char[1] = 'モ';
+        m_text_char[2] = 'ー';
+        m_text_char[3] = 'ク';
+        m_text_char[4] = 'の';
+        m_text_char[5] = '中';
+        m_text_char[6] = 'に';
+        m_text_char[7] = '入';
+        m_text_char[8] = 'り';
+        m_text_char[9] = '標';
+        m_text_char[10] = '的';
+        m_text_char[11] = 'か';
+        m_text_char[12] = 'ら';
+        m_text_char[13] = '隠';
+        m_text_char[14] = 'れ';
+        m_text_char[15] = 'ろ';
+        m_text_char[16] = '。';
 
         isClear = true;
     }
@@ -612,12 +612,12 @@ public class TextTutorial : MonoBehaviour
                 P7TextUpdate();
                 break;
             case TextState.P8:
-                rect_.localPosition = new Vector3(-282f, -290f, 0f);
+                rect_.localPosition = new Vector3(-307f, -290f, 0f);
                 p8Char_Init();
                 P8TextUpdate();
                 break;
             case TextState.P9:
-                rect_.localPosition = new Vector3(-86f, -290f, 0f);
+                rect_.localPosition = new Vector3(-117f, -290f, 0f);
                 p9Char_Init();
                 P9TextUpdate();
                 break;
@@ -632,12 +632,12 @@ public class TextTutorial : MonoBehaviour
                 P11TextUpdate();
                 break;
             case TextState.P12:
-                rect_.localPosition = new Vector3(-230f, -290f, 0f);
+                rect_.localPosition = new Vector3(-294f, -290f, 0f);
                 p12Char_Init();
                 P12TextUpdate();
                 break;
             case TextState.P13:
-                rect_.localPosition = new Vector3(-263f, -290f, 0f);
+                rect_.localPosition = new Vector3(-143f, -290f, 0f);
                 p13Char_Init();
                 P13TextUpdate();
                 break;
@@ -790,7 +790,7 @@ public class TextTutorial : MonoBehaviour
     {
         if (m_interval <= 0f
             &&
-            m_charNum <= 25)
+            m_charNum <= 28)
         {
             text_.text += m_text_char[m_charNum];
             m_charNum++;
@@ -803,7 +803,7 @@ public class TextTutorial : MonoBehaviour
     {
         if (m_interval <= 0f
             &&
-            m_charNum <= 11)
+            m_charNum <= 14)
         {
             text_.text += m_text_char[m_charNum];
             m_charNum++;
@@ -842,7 +842,7 @@ public class TextTutorial : MonoBehaviour
     {
         if (m_interval <= 0f
             &&
-            m_charNum <= 22)
+            m_charNum <= 24)
         {
             text_.text += m_text_char[m_charNum];
             m_charNum++;
@@ -855,7 +855,7 @@ public class TextTutorial : MonoBehaviour
     {
         if (m_interval <= 0f
             &&
-            m_charNum <= 24)
+            m_charNum <= 16)
         {
             text_.text += m_text_char[m_charNum];
             m_charNum++;

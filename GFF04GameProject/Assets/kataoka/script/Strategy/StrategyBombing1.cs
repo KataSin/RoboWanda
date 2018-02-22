@@ -43,5 +43,15 @@ public class StrategyBombing1 : MonoBehaviour
         Vector3 goalPos = transform.Find("BomBingPointEnd").position;
         GameObject bomber = Instantiate(m_BomberPrefab, spawnPos, Quaternion.identity);
         bomber.GetComponent<Bombing1>().SetStartEnd(spawnPos, goalPos);
+        bomber.GetComponent<Bombing1>().SetType(Bombing1.BrieBomberType.Normal);
+    }
+
+    public void SpawnBomberBreak()
+    {
+        Vector3 spawnPos = transform.Find("BomBingPointStart").position;
+        Vector3 goalPos = transform.Find("BomBingPointEnd").position;
+        GameObject bomber = Instantiate(m_BomberPrefab, spawnPos, Quaternion.identity);
+        bomber.GetComponent<Bombing1>().SetStartEnd(spawnPos, goalPos);
+        bomber.GetComponent<Bombing1>().SetType(Bombing1.BrieBomberType.Break);
     }
 }

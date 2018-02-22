@@ -37,7 +37,8 @@ public class BriefingCamera : MonoBehaviour
     {
         m_origin_pos = new Vector3(-62.6f, 52.8f, -74.4f);
         m_targetCam_pos = new Vector3(-62.6f, 42f, 36.4f);
-        m_topViewCam_pos = new Vector3(-62.6f, 98.7f, 88.3f);
+        //m_topViewCam_pos = new Vector3(-62.6f, 98.7f, 88.3f);
+        m_topViewCam_pos = new Vector3(-29.4f, 37.4f, 33.7f);
         m_sideViewCam_pos = new Vector3(-62.6f, 145.6f, 88.3f);
         //m_sideViewCam_pos = new Vector3(-149f, 11.6f, 91.6f);
         m_bombingViewCam_pos = new Vector3(-154f, 60f, 65f);
@@ -85,9 +86,12 @@ public class BriefingCamera : MonoBehaviour
             && !isTopView)
         {
             transform.position = Vector3.Lerp(m_bombingViewCam_pos, m_topViewCam_pos, t / 2f);
+            //transform.rotation =
+            //    Quaternion.Slerp(Quaternion.Euler(15.8f, -45.2f, 0f),
+            //    Quaternion.Euler(90f, m_origin_rotation.y, m_origin_rotation.z), t / 2f);
             transform.rotation =
                 Quaternion.Slerp(Quaternion.Euler(15.8f, -45.2f, 0f),
-                Quaternion.Euler(90f, m_origin_rotation.y, m_origin_rotation.z), t / 2f);
+                Quaternion.Euler(15f, -39f, 0f), t / 2f);
         }
 
         //if (isBombingView
@@ -102,8 +106,12 @@ public class BriefingCamera : MonoBehaviour
             && !isBombingView2)
         {
             transform.position = Vector3.Lerp(m_topViewCam_pos, m_bombingViewCam_pos2, t / 2f);
+            //transform.rotation =
+            //    Quaternion.Slerp(Quaternion.Euler(90f, m_origin_rotation.y, m_origin_rotation.z),
+            //    Quaternion.Euler(-5f, -30f, 0f), t / 2f);
             transform.rotation =
-                Quaternion.Slerp(Quaternion.Euler(90f, m_origin_rotation.y, m_origin_rotation.z), Quaternion.Euler(-5f, -30f, 0f), t / 2f);
+                Quaternion.Slerp(Quaternion.Euler(15f, -39f, 0f),
+                Quaternion.Euler(-5f, -30f, 0f), t / 2f);
         }
 
         if (isBombingView2

@@ -300,7 +300,7 @@ public class BriefingManager2 : MonoBehaviour
                 t0 = 0f;
                 t1 = 0f;
                 bomber_.SetActive(true);
-                bomber_.GetComponent<StrategyBombing1>().SpawnBomber();
+                bomber_.GetComponent<StrategyBombing1>().SpawnBomberBreak();
                 tower_mana_.GetComponent<TowerManager>().TowerCheck();
             }
 
@@ -325,18 +325,27 @@ public class BriefingManager2 : MonoBehaviour
 
             else if (t0 >= 4f)
             {
-                if (!briefing_cam_.GetComponent<BriefingCamera>().Get_Top())
+                if (t0 < 10f)
                 {
-                    bomber_ui_.SetActive(false);
-                    bomberUnder_ui_.SetActive(false);
-                    briefing_cam_.GetComponent<BriefingCamera>().TopViewCam();
-                }
-                else
-                {
-                    robot_.GetComponent<BriefingRobot>().BeamBombing();
+                    if (!briefing_cam_.GetComponent<BriefingCamera>().Get_Top())
+                    {
+                        bomber_ui_.SetActive(false);
+                        bomberUnder_ui_.SetActive(false);
+                        briefing_cam_.GetComponent<BriefingCamera>().TopViewCam();
+                    }
+                    else
+                    {
+                        if (t1 >= 1f)
+                            robot_.GetComponent<BriefingRobot>().BeamBombing();
+
+                        if (GameObject.FindGameObjectWithTag("Bomber"))
+                            GameObject.FindGameObjectWithTag("Bomber").GetComponent<Bombing1>().SetMoveFlag(true);
+
+                        t1 += 3.0f * Time.deltaTime;
+                    }
                 }
 
-                if (t0 >= 10f)
+                else if (t0 >= 10f)
                 {
                     if (!isText5)
                     {
@@ -369,6 +378,7 @@ public class BriefingManager2 : MonoBehaviour
                     {
                         state_ = State.Four;
                         t0 = 0f;
+                        t1 = 0f;
                         tower_mana_.GetComponent<TowerManager>().TowerCheck2();
                     }
                 }
