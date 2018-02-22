@@ -528,7 +528,11 @@ public class TutorialManager : MonoBehaviour
             }
         }
 
-        if (!clear_pod_[2].GetComponent<ClearPoint>().GetClear())
+        if((turrets_[0].GetComponent<TutorialTurret>().Get_State() != 3
+           && turrets_[1].GetComponent<TutorialTurret>().Get_State() != 3)
+           &&
+           (turrets_[0].GetComponent<TutorialTurret>().Get_State() != 4
+           && turrets_[1].GetComponent<TutorialTurret>().Get_State() != 4))
         {
             if (door3Check_.GetComponent<DoorCheck>().Get_CheckFlag())
             {
@@ -576,20 +580,12 @@ public class TutorialManager : MonoBehaviour
 
                 OtherMission4Update();
             }
-
-            if (turrets_[0].GetComponent<TutorialTurret>().Get_State() == 2
-                && turrets_[1].GetComponent<TutorialTurret>().Get_State() == 2)
-            {
-                clear_pod_[2].SetActive(true);
-            }
-            else if (turrets_[0].GetComponent<TutorialTurret>().Get_State() == 1
-               || turrets_[1].GetComponent<TutorialTurret>().Get_State() == 1)
-            {
-                clear_pod_[2].SetActive(false);
-            }
         }
 
-        else if (clear_pod_[2].GetComponent<ClearPoint>().GetClear())
+        else if ((turrets_[0].GetComponent<TutorialTurret>().Get_State() == 3
+           && turrets_[1].GetComponent<TutorialTurret>().Get_State() == 3)
+           || (turrets_[0].GetComponent<TutorialTurret>().Get_State() == 4
+           && turrets_[1].GetComponent<TutorialTurret>().Get_State() == 4))
         {
             p_cntrlFlag = false;
             cntrlUI_ico_4.SetActive(false);
@@ -606,7 +602,6 @@ public class TutorialManager : MonoBehaviour
 
             if (door4_.GetComponent<DoorOpen>().GetClear())
             {
-                clear_pod_[2].SetActive(false);
                 missionC_ui_.enabled = false;
                 m_state = TutorialState.Mission5;
                 m_otherState = Tutorial_OtherState.None;

@@ -6,6 +6,7 @@ public class TutorialTurret : MonoBehaviour
 {
     private enum State
     {
+        None,
         Boot,
         On,
         Lost,
@@ -34,7 +35,7 @@ public class TutorialTurret : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        state_ = State.Off;
+        state_ = State.None;
         player_ = GameObject.FindGameObjectWithTag("Player");
         isLeft = false;
         t = 0f;
@@ -66,6 +67,7 @@ public class TutorialTurret : MonoBehaviour
                 Ray();
                 break;
             case State.Off:
+                muzzle_.GetComponent<LineRenderer>().enabled = false;
                 break;
         }
 
