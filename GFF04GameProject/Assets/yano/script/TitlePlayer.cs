@@ -43,7 +43,7 @@ public class TitlePlayer : MonoBehaviour
             //standFlag = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetButtonDown("Cancel"))
             smokeFlag = true;
 
         animator_.SetBool("Standflag", standFlag);
@@ -51,6 +51,9 @@ public class TitlePlayer : MonoBehaviour
         animator_.SetBool("Skip", titleMana_.GetComponent<TitleManager>().GetStandClear());
 
         smokeFlag = false;
+
+        if (titleMana_.GetComponent<TitleManager>().GetStandClear())
+            titleMana_.GetComponent<TitleManager>().SetStandClear(false);
     }
 
     public void Set_StandFlag(bool l_standFlag)

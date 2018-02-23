@@ -47,6 +47,9 @@ public class MapScan1 : MonoBehaviour
     {
         if (!isScan)
         {
+            if (!GetComponent<AudioSource>().isPlaying)
+                GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
+
             t += 2.0f * Time.deltaTime;
 
             if (t >= 1f)

@@ -39,12 +39,6 @@ public class TitleManager : MonoBehaviour
     private GameObject title_player_;
 
     [SerializeField]
-    private List<GameObject> quetion_y_n_back_;
-
-    [SerializeField]
-    private List<GameObject> quetion_y_n_text_;
-
-    [SerializeField]
     private GameObject question_text_;
 
     [SerializeField]
@@ -58,9 +52,15 @@ public class TitleManager : MonoBehaviour
     private bool isLScene;
 
     private bool isStandClear;
+    private bool isToIdel;
+
+    private bool isClear;
 
     [SerializeField]
     private GameObject vc_;
+
+    [SerializeField]
+    private GameObject se_;
 
     // Use this for initialization
     void Start()
@@ -70,6 +70,11 @@ public class TitleManager : MonoBehaviour
         m_feadSTimer = 0f;
         isLScene = false;
         isStandClear = false;
+        isToIdel = false;
+        isClear = false;
+
+        title_uis_.SetActive(false);
+        mode_uis_.SetActive(false);
     }
 
     // Update is called once per frame
@@ -97,28 +102,33 @@ public class TitleManager : MonoBehaviour
 
         else if (Input.anyKeyDown && titleState_ == TitleState.Ready)
         {
+            se_.GetComponents<AudioSource>()[0].PlayOneShot(se_.GetComponents<AudioSource>()[0].clip);
             titleState_ = TitleState.Start;
             sceneCnt_ = GameObject.FindGameObjectWithTag("SceneController");
         }
 
         else if (titleState_ == TitleState.Start)
         {
-            nextViewTimer += 1.0f * Time.deltaTime;
-
             if (nextViewTimer >= 2f)
             {
-                title_player_.GetComponent<TitlePlayer>().Set_StandFlag(true);
-                title_uis_.SetActive(false);
+                if (!isClear)
+                {
+                    title_player_.GetComponent<TitlePlayer>().Set_StandFlag(true);
+                    se_.GetComponents<AudioSource>()[1].PlayOneShot(se_.GetComponents<AudioSource>()[1].clip);
+                    title_uis_.SetActive(false);
+                    isClear = true;
+                }
+
                 titleCamera_.GetComponent<TitleCamera>().Set_Timer(1.0f * Time.deltaTime);
                 titleCamera_.GetComponent<TitleCamera>().titleReadyToStart();
 
-                if (Input.anyKeyDown)
+                if (Input.anyKeyDown && mode_uis_.activeSelf == false
+                    && nextViewTimer >= 2.2f)
                 {
                     titleCamera_.GetComponent<TitleCamera>().
                         Set_Timer(titleCamera_.GetComponent<TitleCamera>().Get_FeadTime());
                     isStandClear = true;
                 }
-
                 else if ((titleCamera_.GetComponent<TitleCamera>().Get_Timer()
                     >= titleCamera_.GetComponent<TitleCamera>().Get_FeadTime()) && mode_uis_.activeSelf == false)
                 {
@@ -126,39 +136,21 @@ public class TitleManager : MonoBehaviour
                     vc_.GetComponent<AudioSource>().PlayOneShot(vc_.GetComponent<AudioSource>().clip);
                 }
             }
+            nextViewTimer += 1.0f * Time.deltaTime;
 
             if (mode_uis_.activeSelf == true)
             {
-                if (modeState_ == ModeState.Yes)
-                {
-                    quetion_y_n_back_[0].SetActive(true);
-                    quetion_y_n_back_[1].SetActive(false);
+                mode_uis_.GetComponent<titleSelectUI>().SelectMode();
 
+                if (mode_uis_.GetComponent<titleSelectUI>().GetModeYN() == titleSelectUI.ModeYN.Tutorial)
                     sceneCnt_.GetComponent<SceneController>().SetNextScene(1);
 
-                    if (Input.GetAxis("Vertical_L") <= -1.0f)
-                        modeState_ = ModeState.No;
-
-
-                }
-                else if (modeState_ == ModeState.No)
-                {
-                    quetion_y_n_back_[0].SetActive(false);
-                    quetion_y_n_back_[1].SetActive(true);
-
+                else if (mode_uis_.GetComponent<titleSelectUI>().GetModeYN() == titleSelectUI.ModeYN.GamePlay)
                     sceneCnt_.GetComponent<SceneController>().SetNextScene(0);
-
-                    if (Input.GetAxis("Vertical_L") >= 1.0f)
-                        modeState_ = ModeState.Yes;
-                }
 
                 if (Input.GetButtonDown("Submit"))
                 {
-                    //mode_uis_.SetActive(false);
-                    quetion_y_n_back_[0].SetActive(false);
-                    quetion_y_n_back_[1].SetActive(false);
-                    quetion_y_n_text_[0].SetActive(false);
-                    quetion_y_n_text_[1].SetActive(false);
+                    se_.GetComponents<AudioSource>()[0].PlayOneShot(se_.GetComponents<AudioSource>()[0].clip);
                     question_text_.GetComponent<questionText>().SetState(1);
                     titleCamera_.GetComponent<TitleCamera>().Reset_Timer();
                     titleState_ = TitleState.Sally;
@@ -202,5 +194,15 @@ public class TitleManager : MonoBehaviour
     public bool GetStandClear()
     {
         return isStandClear;
+    }
+
+    public void SetStandClear(bool l_isStandClear)
+    {
+        isStandClear = l_isStandClear;
+    }
+
+    public bool GetToIdelFlag()
+    {
+        return isToIdel;
     }
 }

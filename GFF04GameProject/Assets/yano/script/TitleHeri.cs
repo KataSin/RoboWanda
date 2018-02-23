@@ -25,12 +25,15 @@ public class TitleHeri : MonoBehaviour
         m_speed = 0f;
 
         m_speed_dampinf = 8f;
+
+        GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (!GetComponent<AudioSource>().isPlaying)
+            GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
     }
 
     public void TitleHeriMove()
