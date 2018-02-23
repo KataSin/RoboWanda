@@ -42,7 +42,7 @@ public class StrategyTankLose : MonoBehaviour
     {
 
         m_Time += Time.deltaTime;
-        if (m_Time <= 120.0f) return;
+        if (m_Time <= 180.0f) return;
 
         var breakBill = GameObject.FindGameObjectsWithTag("BreakTower");
         foreach (var i in breakBill)
