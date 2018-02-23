@@ -115,7 +115,7 @@ public class RobotManager : MonoBehaviour
     void Update()
     {
         Debug.Log(m_RobotState);
-
+        Debug.Log(m_RobotHp);
 
         m_ColorTime += Time.deltaTime;
 
