@@ -18,7 +18,7 @@ public enum PlayerState
     Passing,    // 乗り越え
     Setting,    // 爆発物設置
     BlewUp,     // 飛ばされる
-    BlewUpDead,  // 飛ばされて死亡
+    BlewUpDead, // 飛ばされて死亡
     NoInput
 }
 
@@ -82,6 +82,7 @@ public class PlayerController : MonoBehaviour
     private float m_JumpPower_dash;                 // ダッシュ時のジャンプ力
     float m_CurrentJumpPower;                       // 現在のジャンプ力
     float m_SpeedBeforePass = 0.0f;                 // 乗り越える前の速度
+    Vector3 m_DirectionBeforePass = Vector3.zero;   // 乗り越える前の方向
     bool m_IsPassed = false;                        // 障害物を乗り越えたか
     [SerializeField]
     [Header("距離探知レイキャスト座標")]
@@ -273,7 +274,7 @@ public class PlayerController : MonoBehaviour
                 break;
             // 乗り越える
             case PlayerState.Passing:
-                Passing();
+                Passing_v2();
                 m_IsAiming = false;
                 m_IsCreeping = false;
                 m_IsDead = false;
@@ -347,8 +348,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("無敵状態：" + m_IsInvincible);
         }
 
-
-
+        Debug.Log(m_State);
 
         /*
         Debug.Log("前方に障害物があるか：" + IsObjectInDistance());
@@ -409,7 +409,7 @@ public class PlayerController : MonoBehaviour
 
     private void NoInput()
     {
-        if(m_CameraPosition.GetComponent<CameraPosition>().GetMode() != 5)
+        if (m_CameraPosition.GetComponent<CameraPosition>().GetMode() != 5)
         {
             m_State = PlayerState.Normal;
         }
@@ -585,7 +585,9 @@ public class PlayerController : MonoBehaviour
             if (CanPass())
             {
                 // 乗り越える前の速度を記憶
-                m_SpeedBeforePass = m_Controller.velocity.magnitude;
+                m_DirectionBeforePass = transform.forward;
+                m_SpeedBeforePass = m_CurrentSpeedLimit;
+                Physics.IgnoreLayerCollision(13, 16);
                 m_State = PlayerState.Passing;
             }
         }
@@ -822,18 +824,18 @@ public class PlayerController : MonoBehaviour
     {
         // グレネードランチャーの表示を消す
         m_Launcher.SetActive(false);
-        // 乗り越えモーションを再生
-        m_Animator.Play("Passing");
 
         // 1回ジャンプする
         if (!m_IsPassed)
         {
             m_VelocityY = m_CurrentJumpPower;
+            // 乗り越えモーションを再生
+            m_Animator.Play("Passing");
             m_IsPassed = true;
         }
 
         // 移動処理
-        Vector3 velocity = transform.forward * m_SpeedBeforePass;
+        Vector3 velocity = m_DirectionBeforePass * m_SpeedBeforePass;
         // 重力加速度を加算
         m_VelocityY -= m_Gravity * Time.deltaTime;
         // y軸方向の移動量を加味する
@@ -844,7 +846,7 @@ public class PlayerController : MonoBehaviour
         AnimatorStateInfo AniInfo;     // アニメーションの状態
         AniInfo = gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
 
-        if (m_Controller.isGrounded || AniInfo.normalizedTime <= 0.9f)
+        if (m_Controller.isGrounded && AniInfo.normalizedTime < 1.0f)
         {
             // グレネードランチャーを表示
             m_Launcher.SetActive(true);
@@ -929,7 +931,7 @@ public class PlayerController : MonoBehaviour
         // if (ObjectNormal().z != 0.0f) return false;
         if (ObjectAngle() != 0.0f && ObjectAngle() != 180.0f) return false;
         // プレイヤーは障害物の真正面にいるか
-        if (CollisionAngle().y > 200.0f || CollisionAngle().y < 160.0f) return false;
+        if (CollisionAngle().y > 185.0f || CollisionAngle().y < 175.0f) return false;
 
         return true;
     }
@@ -939,27 +941,36 @@ public class PlayerController : MonoBehaviour
     {
         // グレネードランチャーの表示を消す
         m_Launcher.SetActive(false);
-        // 乗り越えモーションを再生
-        m_Animator.Play("Passing");
+
+        // 一回ジャンプして、乗り越えモーションを再生
+        if (!m_IsPassed)
+        {
+            m_VelocityY = m_CurrentJumpPower;
+            m_Animator.Play("Passing");
+            m_IsPassed = true;
+        }
 
         // 移動処理
-        Vector3 velocity = transform.forward * m_SpeedBeforePass;
+        Vector3 velocity = m_DirectionBeforePass * m_SpeedBeforePass;
+        // 重力加速度を加算
+        m_VelocityY -= m_Gravity * Time.deltaTime;
+        // y軸方向の移動量を加味する
+        velocity.y = m_VelocityY;
         m_Controller.Move(velocity * Time.deltaTime);
 
-        // 乗り越えアニメーションが終了すると、通常状態に戻る
+        // アニメーションが終了すると、通常状態に戻る
         AnimatorStateInfo AniInfo;     // アニメーションの状態
         AniInfo = gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
 
-        if (m_passing_time <= 0 && AniInfo.normalizedTime <= 0.9f)
+        if (AniInfo.normalizedTime >= 0.9f)
         {
             // グレネードランチャーを表示
             m_Launcher.SetActive(true);
-            // 通常状態に戻る
-            m_State = PlayerState.Normal;
+            // ガードレールとの当たり判定を再設定
             Physics.IgnoreLayerCollision(13, 16, false);
+            m_State = PlayerState.Normal;
+            m_IsPassed = false;
         }
-
-        m_passing_time -= Time.deltaTime;
     }
 
     // 死亡時の処理
