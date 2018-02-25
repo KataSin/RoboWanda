@@ -348,7 +348,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("無敵状態：" + m_IsInvincible);
         }
 
-        Debug.Log(m_State);
+        // Debug.Log(m_State);
 
         /*
         Debug.Log("前方に障害物があるか：" + IsObjectInDistance());
@@ -399,11 +399,15 @@ public class PlayerController : MonoBehaviour
         // Debug.Log(other.gameObject.name);
         if (other.gameObject.tag == "Break_Tower_Can_Break" && m_State == PlayerState.Normal && Input.GetButtonDown("BombSet"))
         {
-            m_BuildingNear = other.gameObject;
-            // Debug.Log("爆発物を設置する");
+            // （爆破作戦後は設置できない）
+            if (timer_.GetComponent<Timer>().GetTimer() >= 180)
+            {
+                m_BuildingNear = other.gameObject;
+                // Debug.Log("爆発物を設置する");
 
-            m_setting_time = 1.0f;
-            m_State = PlayerState.Setting;
+                m_setting_time = 1.0f;
+                m_State = PlayerState.Setting;
+            }
         }
     }
 
