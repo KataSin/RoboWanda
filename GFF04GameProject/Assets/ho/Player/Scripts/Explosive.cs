@@ -16,6 +16,8 @@ public class Explosive : MonoBehaviour
     [SerializeField]
     private GameObject m_Explosion;         // 爆発判定
 
+    GameObject m_Buliding;                  // 設置されたビル
+
     // Use this for initialization
     void Start()
     {
@@ -50,5 +52,17 @@ public class Explosive : MonoBehaviour
     {
         Destroy(gameObject);    // 爆発物オブジェクトを消す
         Instantiate(m_Explosion, transform.position, Quaternion.identity);  // 爆発判定を発生
+    }
+
+    // 設置されたビルを登録
+    public void AddBuilding(GameObject buliding)
+    {
+        m_Buliding = buliding;
+    }
+
+    // 設置されたビルを返す
+    public GameObject GetBuliding()
+    {
+        return m_Buliding;
     }
 }
