@@ -19,7 +19,10 @@ public class titleSelectUI : MonoBehaviour
     [SerializeField]
     private GameObject noUI_;
 
+    [SerializeField]
     private Sprite originImage_Y_;
+
+    [SerializeField]
     private Sprite originImage_N_;
 
     [SerializeField]
@@ -28,12 +31,19 @@ public class titleSelectUI : MonoBehaviour
     [SerializeField]
     private Sprite otherModeImage_N_;
 
+    [SerializeField]
+    private GameObject wave_;
+
+    [SerializeField]
+    private GameObject wave_parent_;
+
+    private float m_intervalTime;
+
     // Use this for initialization
     void Start()
     {
         m_mode = ModeYN.Tutorial;
-        originImage_Y_ = yesUI_.GetComponent<Image>().sprite;
-        originImage_N_ = noUI_.GetComponent<Image>().sprite;
+        m_intervalTime = 1f;
     }
 
     // Update is called once per frame
@@ -47,26 +57,56 @@ public class titleSelectUI : MonoBehaviour
         switch (m_mode)
         {
             case ModeYN.Tutorial:
-                yesUI_.GetComponent<Image>().sprite = otherModeImage_Y_;
+                yesUI_.GetComponent<Image>().sprite = originImage_Y_;
                 noUI_.GetComponent<Image>().sprite = originImage_N_;
 
-                if (Input.GetAxis("Vertical_L") <= -0.9f)
+                if (m_intervalTime <= 0f)
+                {
+                    Instantiate(wave_, yesUI_.transform.position, Quaternion.identity, wave_parent_.transform);
+                    m_intervalTime = 1f;
+                }
+
+                //if (Input.GetAxis("Vertical_L") <= -0.9f)
+                //{
+                //    GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
+                //    m_mode = ModeYN.GamePlay;
+                //}
+
+                if (Input.GetAxis("Horizontal_L") >= 0.9f)
                 {
                     GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
                     m_mode = ModeYN.GamePlay;
+                    m_intervalTime = 1f;
                 }
+
+                m_intervalTime -= 2.0f * Time.deltaTime;
 
                 break;
 
             case ModeYN.GamePlay:
-                yesUI_.GetComponent<Image>().sprite = originImage_Y_;
+                yesUI_.GetComponent<Image>().sprite = otherModeImage_Y_;
                 noUI_.GetComponent<Image>().sprite = otherModeImage_N_;
 
-                if (Input.GetAxis("Vertical_L") >= 0.9f)
+                //if (Input.GetAxis("Vertical_L") >= 0.9f)
+                //{
+                //    GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
+                //    m_mode = ModeYN.Tutorial;
+                //}
+
+                if (m_intervalTime <= 0f)
+                {
+                    Instantiate(wave_, noUI_.transform.position, Quaternion.identity, wave_parent_.transform);
+                    m_intervalTime = 1f;
+                }
+
+                if (Input.GetAxis("Horizontal_L") <= -0.9f)
                 {
                     GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
                     m_mode = ModeYN.Tutorial;
+                    m_intervalTime = 1f;
                 }
+
+                m_intervalTime -= 2.0f * Time.deltaTime;
 
                 break;
         }

@@ -68,12 +68,6 @@ public class Break_Other : MonoBehaviour
 
         if (m_break_time >= 5f)
         {
-            if (GameObject.FindGameObjectWithTag("ScoreManager"))
-            {
-                scoreMana_ = GameObject.FindGameObjectWithTag("ScoreManager");
-                scoreMana_.GetComponent<ScoreManager>().SetBreakCount();
-            }
-
             if (!break_se_.isPlaying)
                 Destroy(this.gameObject);
         }
@@ -90,6 +84,12 @@ public class Break_Other : MonoBehaviour
             smoke.transform.Find("desert_Vertical").localScale = transform.localScale * m_sand_smoke_scalar;
 
             break_se_.Play();
+
+            if (GameObject.FindGameObjectWithTag("ScoreManager"))
+            {
+                scoreMana_ = GameObject.FindGameObjectWithTag("ScoreManager");
+                scoreMana_.GetComponent<ScoreManager>().SetBreakCount();
+            }
 
             gareki_obj_.SetActive(true);
 

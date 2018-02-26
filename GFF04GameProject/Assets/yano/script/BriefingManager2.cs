@@ -545,6 +545,7 @@ public class BriefingManager2 : MonoBehaviour
                 {
                     NextText();
                     t0 = 0f;
+                    scan_.SetActive(false);
                     state_ = State.Finish;
                 }
             }

@@ -40,10 +40,14 @@ public class Briefing_CBBase : MonoBehaviour
         if (m_flashingTime <= 0f)
         {
             m_alpha = (m_alpha == 0f) ? 0.6f : 0f;
+
             m_flashingCnt++;
             m_flashingTime = 1f;
             if (m_flashingCnt >= 5)
                 m_alpha = 1f;
+
+            if (m_alpha >= 0.6f)
+                GetComponents<AudioSource>()[0].PlayOneShot(GetComponents<AudioSource>()[0].clip);
         }
 
         if (m_flashingCnt <= 4)
@@ -66,6 +70,9 @@ public class Briefing_CBBase : MonoBehaviour
                     gameObject.SetActive(false);
 
                 t1 += 8.0f * Time.deltaTime;
+
+                if (!GetComponents<AudioSource>()[1].isPlaying)
+                    GetComponents<AudioSource>()[1].PlayOneShot(GetComponents<AudioSource>()[1].clip);
             }
             t0 += 4.0f * Time.deltaTime;
         }

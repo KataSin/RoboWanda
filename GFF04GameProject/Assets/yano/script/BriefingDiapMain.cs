@@ -44,6 +44,9 @@ public class BriefingDiapMain : MonoBehaviour
             }
 
             t1 += 10.0f * Time.deltaTime;
+
+            if (!GetComponent<AudioSource>().isPlaying)
+                GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
         }
 
         t0 += 8.0f * Time.deltaTime;

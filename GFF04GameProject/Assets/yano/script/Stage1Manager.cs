@@ -184,6 +184,15 @@ public class Stage1Manager : MonoBehaviour
     //ステージ上の全キャラクターのHPチェック
     private void Check_CharaHp()
     {
+        if (go_uis_.activeInHierarchy)
+        {
+            if (camera_pos_.GetComponent<CameraPosition>().GetDeadFinish())
+                go_uis_.GetComponent<MF_DeadorTup>().YouAreDead();
+
+            else if (timer_ui_.GetComponent<Timer>().GetTimer() <= 0f)
+                go_uis_.GetComponent<MF_DeadorTup>().TimeUp();
+        }
+
         //ボスのチェック
         if (robot_.GetComponent<RobotManager>().GetRobotHP() <= 0f)
         {

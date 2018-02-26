@@ -24,6 +24,9 @@ public class TitlePlayer : MonoBehaviour
     [SerializeField]
     private GameObject titleMana_;
 
+    [SerializeField]
+    private GameObject look_point_;
+
     // Use this for initialization
     void Start()
     {
@@ -54,6 +57,16 @@ public class TitlePlayer : MonoBehaviour
 
         if (titleMana_.GetComponent<TitleManager>().GetStandClear())
             titleMana_.GetComponent<TitleManager>().SetStandClear(false);
+    }
+
+
+    void OnAnimatorIK()
+    {
+        if (titleMana_.GetComponent<TitleManager>().GetState() == TitleManager.TitleState.Sally)
+        {
+            animator_.SetLookAtWeight(1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+            animator_.SetLookAtPosition(look_point_.transform.position);
+        }
     }
 
     public void Set_StandFlag(bool l_standFlag)

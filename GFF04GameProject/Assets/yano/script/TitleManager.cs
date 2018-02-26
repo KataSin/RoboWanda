@@ -13,15 +13,7 @@ public class TitleManager : MonoBehaviour
         Sally,
     }
 
-    private enum ModeState
-    {
-        Yes,
-        No,
-    }
-
     public TitleState titleState_ = TitleState.Opening;
-
-    private ModeState modeState_ = ModeState.Yes;
 
     [SerializeField]
     private float nextViewTimer;
@@ -62,6 +54,9 @@ public class TitleManager : MonoBehaviour
     [SerializeField]
     private GameObject se_;
 
+    [SerializeField]
+    private GameObject look_point_;
+
     // Use this for initialization
     void Start()
     {
@@ -82,6 +77,8 @@ public class TitleManager : MonoBehaviour
     {
         if (titleState_ == TitleState.Opening)
         {
+            GetComponent<BlackOut_UI>().FeadIn();
+
             titleCamera_.GetComponent<TitleCamera>().Set_Timer(1.0f * Time.deltaTime);
             titleCamera_.GetComponent<TitleCamera>().titleReadyCamera();
 
@@ -89,6 +86,7 @@ public class TitleManager : MonoBehaviour
             {
                 titleCamera_.GetComponent<TitleCamera>().
                     Set_Timer(titleCamera_.GetComponent<TitleCamera>().Get_ReadyTime());
+                GetComponent<BlackOut_UI>().SetT(GetComponent<BlackOut_UI>().GetBFeadTime());
             }
 
             else if (titleCamera_.GetComponent<TitleCamera>().Get_Timer()
@@ -105,6 +103,7 @@ public class TitleManager : MonoBehaviour
             se_.GetComponents<AudioSource>()[0].PlayOneShot(se_.GetComponents<AudioSource>()[0].clip);
             titleState_ = TitleState.Start;
             sceneCnt_ = GameObject.FindGameObjectWithTag("SceneController");
+            GetComponent<BlackOut_UI>().ResetT();
         }
 
         else if (titleState_ == TitleState.Start)
@@ -160,7 +159,13 @@ public class TitleManager : MonoBehaviour
 
         else if (titleState_ == TitleState.Sally)
         {
-            m_sallyTimer += 1.0f * Time.deltaTime;
+            if (mode_uis_.GetComponent<titleSelectUI>().GetModeYN() == titleSelectUI.ModeYN.Tutorial)
+                look_point_.GetComponent<TitleLookPoint>().YesMove();
+
+            else if (mode_uis_.GetComponent<titleSelectUI>().GetModeYN() == titleSelectUI.ModeYN.GamePlay)
+                look_point_.GetComponent<TitleLookPoint>().NoMove();
+
+
 
             if (Input.GetButtonDown("Submit"))
                 mode_uis_.SetActive(false);
@@ -171,8 +176,6 @@ public class TitleManager : MonoBehaviour
                 titleCamera_.GetComponent<TitleCamera>().Set_Timer(1.0f * Time.deltaTime);
                 Heri.GetComponent<TitleHeri>().TitleHeriMove();
                 titleCamera_.GetComponent<TitleCamera>().titleHeriSally();
-
-                m_feadSTimer += 1.0f * Time.deltaTime;
 
                 if (m_feadSTimer >= 4f)
                 {
@@ -185,9 +188,11 @@ public class TitleManager : MonoBehaviour
                         isLScene = true;
                     }
                 }
+
+                m_feadSTimer += 1.0f * Time.deltaTime;
             }
 
-
+            m_sallyTimer += 1.0f * Time.deltaTime;
         }
     }
 
@@ -201,8 +206,8 @@ public class TitleManager : MonoBehaviour
         isStandClear = l_isStandClear;
     }
 
-    public bool GetToIdelFlag()
+    public TitleState GetState()
     {
-        return isToIdel;
+        return titleState_;
     }
 }

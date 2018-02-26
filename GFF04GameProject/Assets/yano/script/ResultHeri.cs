@@ -12,16 +12,18 @@ public class ResultHeri : MonoBehaviour
     void Start()
     {
         m_speed = 0f;
+        GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (!GetComponent<AudioSource>().isPlaying)
+            GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
     }
 
     public void FinishHeriMove()
-    {        
+    {
         m_speed += 1.0f * Time.deltaTime;
         if (m_speed >= 5f)
             m_speed = 5f;

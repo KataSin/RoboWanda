@@ -28,6 +28,11 @@ public class ResultManager : MonoBehaviour
 
     private bool isLScene;
 
+    [SerializeField]
+    private GameObject se_;
+
+    private bool isClear;
+
     // Use this for initialization
     void Start()
     {
@@ -37,6 +42,7 @@ public class ResultManager : MonoBehaviour
 
         m_finishTimer = 0f;
         isLScene = false;
+        isClear = false;
 
         if (GameObject.FindGameObjectWithTag("SceneController"))
             scene_ = GameObject.FindGameObjectWithTag("SceneController");
@@ -66,8 +72,15 @@ public class ResultManager : MonoBehaviour
             result_uis_.SetActive(true);
             result_uis_.GetComponent<ResultScore>().ScoreUpdate();
 
+            if (!isClear)
+            {
+                se_.GetComponents<AudioSource>()[0].PlayOneShot(se_.GetComponents<AudioSource>()[0].clip);
+                isClear = true;
+            }
+
             if (Input.anyKeyDown)
             {
+                se_.GetComponents<AudioSource>()[1].PlayOneShot(se_.GetComponents<AudioSource>()[1].clip);
                 GetComponent<BlackOut_UI>().ResetT();
                 state_ = ResultState.Finish;
             }
