@@ -1032,7 +1032,8 @@ public class PlayerController : MonoBehaviour
         // 爆発物を生成
         if (m_setting_time <= 0.5f && m_explosive_set == false)
         {
-            Instantiate(m_Explosive, m_ExplosivePoint.transform.position, transform.rotation);
+            var explosive = Instantiate(m_Explosive, m_ExplosivePoint.transform.position, transform.rotation);
+            explosive.GetComponent<Explosive>().AddBuilding(m_BuildingNear);
             m_explosive_set = true;
         }
 
