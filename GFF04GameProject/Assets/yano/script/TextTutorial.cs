@@ -198,7 +198,7 @@ public class TextTutorial : MonoBehaviour
         m_text_char[1] = 'ず';
         m_text_char[2] = 'は';
         m_text_char[3] = '炸';
-        m_text_char[4] = '烈';
+        m_text_char[4] = '裂';
         m_text_char[5] = '弾';
         m_text_char[6] = 'の';
         m_text_char[7] = '訓';
