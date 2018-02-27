@@ -110,6 +110,7 @@ public class StrategyDrop : MonoBehaviour
                 HeliState state = new HeliState();
                 GameObject heli = Instantiate(m_HeliDropPrefab, m_SpawnPoint, Quaternion.identity);
                 heli.GetComponent<HelicopterDrop>().SetPoint(m_DropPoints[i].transform.position);
+
                 state.heli = heli;
                 state.spawnFlag = true;
                 m_Helis[i] = state;
@@ -123,7 +124,7 @@ public class StrategyDrop : MonoBehaviour
                 foreach (var i in m_Helis)
                 {
                     i.heli.GetComponent<HelicopterDrop>().SetDrop(true);
-                    i.heli.GetComponent<HelicopterDrop>().DropBox();
+                    i.heli.GetComponent<HelicopterDrop>().DropBox(m_Drop);
                 }
                 m_AudioSource.clip = m_WirelessClip;
                 if (m_WirelessClip != null)

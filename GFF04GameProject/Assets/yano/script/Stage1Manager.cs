@@ -84,11 +84,11 @@ public class Stage1Manager : MonoBehaviour
         //    bezeru_ui_.GetComponent<ui_Bezeru>().SetT(camera_pos_.GetComponent<CameraPosition>().GetT());
         //}
 
-        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 5)
-        {
-            bezeru_ui_.SetActive(false);
-        }
-        else if (camera_pos_.GetComponent<CameraPosition>().GetMode() != 5)
+        //if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 5)
+        //{
+        //    bezeru_ui_.SetActive(false);
+        //}
+        if (camera_pos_.GetComponent<CameraPosition>().GetMode() != 5)
             bezeru_ui_.SetActive(true);
 
         if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1)
@@ -96,7 +96,8 @@ public class Stage1Manager : MonoBehaviour
             timer_ui_.SetActive(true);
         }
 
-        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 2)
+        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 2
+            && !player_ui_.activeInHierarchy)
         {
             //if (camera_pos_.GetComponent<CameraPosition>().Get_EventEnd()
             //    && GetComponent<BlackOut_UI>().Get_Clear())

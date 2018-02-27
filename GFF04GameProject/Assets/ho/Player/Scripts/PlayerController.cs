@@ -411,6 +411,22 @@ public class PlayerController : MonoBehaviour
     {
         // 倒壊しているビルと隣接している間、Aボタンを押すと、爆発物を設置
         // Debug.Log(other.gameObject.name);
+
+
+        if (other.gameObject.tag == "Break_Tower_Can_Break" && timer_.GetComponent<Timer>().GetTimer() >= 120)
+        {
+            var ui = GameObject.FindGameObjectWithTag("BomAUi").GetComponent<BomAuI>();
+
+            if (!other.transform.parent.GetComponent<tower_Type>().GetIsBom())
+            {
+                ui.SetIsDraw(true);
+                ui.SetTarget(other.transform.parent.Find("Center").position);
+            }
+            else
+                ui.SetIsDraw(false);
+
+
+        }
         if (other.gameObject.tag == "Break_Tower_Can_Break" && m_State == PlayerState.Normal && Input.GetButtonDown("BombSet"))
         {
             // （爆破作戦後は設置できない）
@@ -424,6 +440,20 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Break_Tower_Can_Break")
+        {
+            var ui = GameObject.FindGameObjectWithTag("BomAUi").GetComponent<BomAuI>();
+
+            ui.SetIsDraw(false);
+
+        }
+
+    }
+
+
 
     private void NoInput()
     {
