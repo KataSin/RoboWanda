@@ -17,6 +17,7 @@ public class StrategyDrop : MonoBehaviour
 
     public enum DropItem
     {
+        NULL,
         SMOKE_BULLET,
         LIGHT_BULLET
     }
@@ -27,7 +28,6 @@ public class StrategyDrop : MonoBehaviour
         public float arrivalTime;//スポーンポイントからドロップポイントにかかる時間
         public bool spawnFlag;
     }
-
 
     public DropItem m_Drop;
     private List<GameObject> m_DropPoints;
