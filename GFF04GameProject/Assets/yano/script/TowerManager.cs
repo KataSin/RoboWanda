@@ -33,6 +33,9 @@ public class TowerManager : MonoBehaviour
     [SerializeField]
     private GameObject tower4_;
 
+    [SerializeField]
+    private GameObject special_bomb_;
+
     // Use this for initialization
     void Start()
     {
@@ -135,6 +138,9 @@ public class TowerManager : MonoBehaviour
                     bills_other_[i].GetComponent<Break_ST>().Set_BreakFlag(true);
                     bills_other_[i].GetComponent<Break_ST>().OutBreak_Smoke();
                 }
+
+                if (special_bomb_ != null)
+                    Destroy(special_bomb_);
             }
         }
     }
