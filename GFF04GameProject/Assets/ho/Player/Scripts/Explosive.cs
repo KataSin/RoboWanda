@@ -58,6 +58,7 @@ public class Explosive : MonoBehaviour
     public void AddBuilding(GameObject buliding)
     {
         m_Buliding = buliding;
+        m_Buliding.transform.parent.GetComponent<tower_Type>().IsBom();
     }
 
     // 設置されたビルを返す

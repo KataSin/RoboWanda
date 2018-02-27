@@ -17,6 +17,8 @@ public class tower_Type : MonoBehaviour
         No,
         H_Collapse,
     }
+    //爆弾を設置されたかどうか
+    private bool m_IsBom;
 
     [SerializeField]
     [Header("取得する場合 0:Low 1:High 2:Other")]
@@ -25,6 +27,11 @@ public class tower_Type : MonoBehaviour
     [SerializeField]
     [Header("取得する場合 0:健在 1:半壊")]
     private BreakType breakType;
+
+    void Start()
+    {
+        m_IsBom = false;
+    }
 
     //タワーのタイプ取得
     public int Get_TowerType()
@@ -46,10 +53,18 @@ public class tower_Type : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.tag=="RobotArmAttack")
+        if (other.tag == "RobotArmAttack")
         {
             Destroy(gameObject);
         }
+    }
+    public void IsBom()
+    {
+        m_IsBom = true;
+    }
+    public bool GetIsBom()
+    {
+        return m_IsBom;
     }
 
 
