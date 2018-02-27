@@ -31,7 +31,7 @@ public class HelicopterDrop : MonoBehaviour
     private Vector3 m_ResPos;
     private Vector3 m_Pos;
     private Vector3 m_SpringVelo;
-
+    public StrategyDrop.DropItem m_Item;
     // Use this for initialization
     void Start()
     {
@@ -129,7 +129,7 @@ public class HelicopterDrop : MonoBehaviour
     }
     public void DropBox()
     {
-        Instantiate(m_ItemBox, transform.position - new Vector3(0, 2, 0), Quaternion.identity);
+        Instantiate(m_ItemBox, transform.position - new Vector3(0, 2, 0), Quaternion.identity).GetComponent<ItemBox>().m_Item=(BomSpawn.Bom)m_Item;
     }
     /// <summary>
     /// 投下地点についているか
