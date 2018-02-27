@@ -185,6 +185,8 @@ public class CameraPosition : MonoBehaviour
     private float m_LerpTime;
 
     private bool m_BombingFlag;
+
+    public GameObject m_Bezel;
     // Use this for initialization
     void Start()
     {
@@ -305,6 +307,10 @@ public class CameraPosition : MonoBehaviour
             default:
                 NormalMode();
                 break;
+        }
+        if (m_Mode != PlayerCameraMode.Event&&m_Mode!= PlayerCameraMode.Landing)
+        {
+            m_Bezel.GetComponent<ui_Bezeru>().FeadOut();
         }
 
         // 照準状態を更新
@@ -606,6 +612,7 @@ public class CameraPosition : MonoBehaviour
     // イベントカメラの挙動
     void EventMode()
     {
+        m_Bezel.GetComponent<ui_Bezeru>().FeadIn();
         switch (m_EMode)
         {
             case EventCameraState.None:

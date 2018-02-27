@@ -32,6 +32,8 @@ public class ui_Bezeru : MonoBehaviour
     {
         top_rect_.localPosition = Vector3.Lerp(new Vector3(0f, 360f, 0f), new Vector3(0f, 440f, 0f), t / m_feadTime);
         bottom_rect_.localPosition = Vector3.Lerp(new Vector3(0f, -360f, 0f), new Vector3(0f, -440f, 0f), t / m_feadTime);
+
+        t = Mathf.Clamp(t, 0f, m_feadTime);
     }
 
     public void FeadOut()
