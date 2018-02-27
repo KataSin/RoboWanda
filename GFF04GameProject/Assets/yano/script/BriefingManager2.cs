@@ -599,11 +599,11 @@ public class BriefingManager2 : MonoBehaviour
             ui_.GetComponent<BlackOut_UI>().ResetT();
             skip_gauge.SetActive(false);
             skip_button_ui.SetActive(false);
+            scan_.SetActive(false);
             state_ = State.Finish;
         }
 
-        if (Input.GetKey(KeyCode.P)
-            || Input.GetButton("Submit"))
+        if (Input.GetButton("Submit"))
         {
             m_skip_timer += 1.0f * Time.deltaTime;
             return;

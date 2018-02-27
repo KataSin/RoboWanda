@@ -77,8 +77,6 @@ public class BomSpawn : MonoBehaviour
         isTrigger = false;
         m_UseBom = new List<Bom>();
         m_UseBom.Add(Bom.BOM);
-        m_UseBom.Add(Bom.LIGHT_BOM);
-        m_UseBom.Add(Bom.SMOKE_BOM);
         m_IndexBom = 0;
 
         m_Player = GameObject.FindGameObjectWithTag("Player");
