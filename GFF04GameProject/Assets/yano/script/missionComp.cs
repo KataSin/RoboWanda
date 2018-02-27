@@ -13,6 +13,8 @@ public class missionComp : MonoBehaviour
     [SerializeField]
     private Vector3 m_scale;
 
+    private bool isClear;
+
     // Use this for initialization
     void Start()
     {
@@ -22,6 +24,8 @@ public class missionComp : MonoBehaviour
         t2 = 0f;
 
         m_scale = Vector3.zero;
+
+        isClear = false;
     }
 
     // Update is called once per frame
@@ -35,11 +39,18 @@ public class missionComp : MonoBehaviour
             {
                 m_scale.y = Mathf.Lerp(0f, 4f, t2 / 0.2f);
                 t2 += 1.0f * Time.deltaTime;
+                if (!isClear)
+                {
+                    GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
+                    isClear = true;
+                }
             }
-            
+
             m_rect.localScale = m_scale;
 
             t += 1.0f * Time.deltaTime;
+
+            
         }
 
         else
@@ -48,6 +59,7 @@ public class missionComp : MonoBehaviour
             m_rect.localScale = Vector3.zero;
             t = 0f;
             t2 = 0f;
+            isClear = false;
         }
     }
 }
