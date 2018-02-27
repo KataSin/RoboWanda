@@ -58,7 +58,7 @@ public class RobotDamage : MonoBehaviour
             //戦車の砲弾のダメージ
             else if (explosionName == "Tank")
             {
-                m_Manager.Damage(10);
+                m_Manager.Damage(50);
             }
 
         }
