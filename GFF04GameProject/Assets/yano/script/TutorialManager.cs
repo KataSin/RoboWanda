@@ -423,7 +423,8 @@ public class TutorialManager : MonoBehaviour
                         {
                             if (!isText7)
                             {
-                                TextNext();
+                                mission_text_.GetComponent<TextTutorial>().TextReset();
+                                m_text_state += 2;
                                 isText7 = true;
                                 m_textInterval = 12f;
                             }
@@ -432,12 +433,17 @@ public class TutorialManager : MonoBehaviour
                             || m_textInterval >= 18f)
                             && isText7 && !isText8)
                         {
-                            if (!isText8)
-                            {
-                                TextNext();
-                                isText8 = true;
-                                m_textInterval = 18f;
-                            }
+                            //if (!isText8)
+                            //{
+                            //    TextNext();
+                            //    isText8 = true;
+                            //    m_textInterval = 18f;
+                            //}
+
+                            mission_text_.SetActive(false);
+                            m_state = TutorialState.Mission3;
+                            m_intervalTime = 0f;
+                            m_textInterval = 0f;
                         }
 
                         else if ((Input.GetButtonDown("Submit")
@@ -531,7 +537,7 @@ public class TutorialManager : MonoBehaviour
             }
         }
 
-        if((turrets_[0].GetComponent<TutorialTurret>().Get_State() != 3
+        if ((turrets_[0].GetComponent<TutorialTurret>().Get_State() != 3
            && turrets_[1].GetComponent<TutorialTurret>().Get_State() != 3)
            &&
            (turrets_[0].GetComponent<TutorialTurret>().Get_State() != 4
@@ -653,7 +659,7 @@ public class TutorialManager : MonoBehaviour
     {
         if (camera_pos_.GetComponent<CameraPosition_Tutorial>().GetMode() == 4
            && camera_pos_.GetComponent<CameraPosition_Tutorial>().Get_T() >= 2f)
-        {            
+        {
             if (!isTextOther2)
             {
                 mission_text_.SetActive(true);
