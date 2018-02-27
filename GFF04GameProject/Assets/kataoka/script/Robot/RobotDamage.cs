@@ -32,7 +32,7 @@ public class RobotDamage : MonoBehaviour
         if (other.tag == "bom")
         {
             if (GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotManager>() != null)
-                m_Manager.Damage(10);
+                m_Manager.Damage(5);
 
             if (scoreMana_ != null)
                 scoreMana_.GetComponent<ScoreManager>().SetAtackScore(10);
@@ -40,7 +40,27 @@ public class RobotDamage : MonoBehaviour
 
         if (other.tag == "ExplosionCollision")
         {
-            m_Manager.Damage(1);
+            string explosionName= other.name.Substring(9, 4);
+            if (explosionName == "Beam")
+            {
+                //m_Manager.Damage(5);
+            }
+            //爆撃機のダメージ
+            else if(explosionName == "Drop")
+            {
+                m_Manager.Damage(200);
+            }
+            //ヘリのミサイルのダメージ
+            else if (explosionName == "Heli")
+            {
+                m_Manager.Damage(1);
+            }
+            //戦車の砲弾のダメージ
+            else if (explosionName == "Tank")
+            {
+                m_Manager.Damage(2);
+            }
+
         }
         //if (other.tag == "TowerCollision")
         //{

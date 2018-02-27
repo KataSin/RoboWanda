@@ -279,6 +279,7 @@ public class RobotAI : MonoBehaviour
         var tanks = GameObject.FindGameObjectsWithTag("GameTank");
         foreach(var i in tanks)
         {
+            if (!i.GetComponent<Tank>().GetIsAttack()) continue;
             Vector3 vec = (i.transform.position - robotEye.transform.position).normalized * 2000.0f;
             Vector3 start = robotEye.transform.position;
             RaycastHit hit;
