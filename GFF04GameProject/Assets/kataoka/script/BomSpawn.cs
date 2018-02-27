@@ -340,7 +340,7 @@ public class BomSpawn : MonoBehaviour
     {
         return m_UseBom;
     }
-
+   
     // Ho追加（2017/12/27）
     // 今選択中の弾種を返す
     public int GetMode()

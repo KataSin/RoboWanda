@@ -145,6 +145,9 @@ public class TutorialManager : MonoBehaviour
     private bool isText18;
     private bool isTextOther2;
 
+    [SerializeField]
+    private GameObject bomb_spawn_;
+
     // Use this for initialization
     void Start()
     {
@@ -420,7 +423,8 @@ public class TutorialManager : MonoBehaviour
                         {
                             if (!isText7)
                             {
-                                TextNext();
+                                mission_text_.GetComponent<TextTutorial>().TextReset();
+                                m_text_state += 2;
                                 isText7 = true;
                                 m_textInterval = 12f;
                             }
@@ -429,12 +433,17 @@ public class TutorialManager : MonoBehaviour
                             || m_textInterval >= 18f)
                             && isText7 && !isText8)
                         {
-                            if (!isText8)
-                            {
-                                TextNext();
-                                isText8 = true;
-                                m_textInterval = 18f;
-                            }
+                            //if (!isText8)
+                            //{
+                            //    TextNext();
+                            //    isText8 = true;
+                            //    m_textInterval = 18f;
+                            //}
+
+                            mission_text_.SetActive(false);
+                            m_state = TutorialState.Mission3;
+                            m_intervalTime = 0f;
+                            m_textInterval = 0f;
                         }
 
                         else if ((Input.GetButtonDown("Submit")
@@ -528,7 +537,7 @@ public class TutorialManager : MonoBehaviour
             }
         }
 
-        if((turrets_[0].GetComponent<TutorialTurret>().Get_State() != 3
+        if ((turrets_[0].GetComponent<TutorialTurret>().Get_State() != 3
            && turrets_[1].GetComponent<TutorialTurret>().Get_State() != 3)
            &&
            (turrets_[0].GetComponent<TutorialTurret>().Get_State() != 4
@@ -566,6 +575,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     if (!isText13)
                     {
+                        bomb_spawn_.GetComponent<BomSpawn>().AddBom(BomSpawn.Bom.SMOKE_BOM);
                         TextNext();
                         isText13 = true;
                     }
@@ -683,6 +693,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     if (!isText16)
                     {
+                        bomb_spawn_.GetComponent<BomSpawn>().AddBom(BomSpawn.Bom.LIGHT_BOM);
                         TextNext();
                         isText16 = true;
                     }

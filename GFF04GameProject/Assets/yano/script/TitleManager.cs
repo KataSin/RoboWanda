@@ -95,12 +95,15 @@ public class TitleManager : MonoBehaviour
             }
         }
 
-        else if (Input.anyKeyDown && titleState_ == TitleState.Ready)
+        else if (titleState_ == TitleState.Ready)
         {
-            se_.GetComponents<AudioSource>()[0].PlayOneShot(se_.GetComponents<AudioSource>()[0].clip);
-            titleState_ = TitleState.Start;
-            sceneCnt_ = GameObject.FindGameObjectWithTag("SceneController");
-            GetComponent<BlackOut_UI>().ResetT();
+            if (Input.anyKeyDown)
+            {
+                se_.GetComponents<AudioSource>()[0].PlayOneShot(se_.GetComponents<AudioSource>()[0].clip);
+                titleState_ = TitleState.Start;
+                sceneCnt_ = GameObject.FindGameObjectWithTag("SceneController");
+                GetComponent<BlackOut_UI>().ResetT();
+            }
         }
 
         else if (titleState_ == TitleState.Start)

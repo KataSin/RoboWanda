@@ -24,6 +24,9 @@ public class TutorialTank : MonoBehaviour
 
     private float t0, t1;
 
+    private bool isPlay1;
+    private bool isPlay2;
+
     // Use this for initialization
     void Start()
     {
@@ -31,6 +34,8 @@ public class TutorialTank : MonoBehaviour
         t0 = 0f;
         t1 = 0f;
         m_interValTime = 2.5f;
+        isPlay1 = false;
+        isPlay2 = false;
     }
 
     // Update is called once per frame
@@ -54,9 +59,21 @@ public class TutorialTank : MonoBehaviour
                     Quaternion.Slerp(Quaternion.identity, Quaternion.Euler(-11f, 0f, 0f), t1 / 2f);
 
                 t1 += 1.0f * Time.deltaTime;
+
+                if (!isPlay2)
+                {
+                    GetComponents<AudioSource>()[1].PlayOneShot(GetComponents<AudioSource>()[1].clip);
+                    isPlay2 = true;
+                }
             }
 
             t0 += 1.0f * Time.deltaTime;
+
+            if (!isPlay1)
+            {
+                GetComponents<AudioSource>()[1].PlayOneShot(GetComponents<AudioSource>()[1].clip);
+                isPlay1 = true;
+            }
         }
 
         t0 = Mathf.Clamp(t0, 0f, 2f);
@@ -73,7 +90,7 @@ public class TutorialTank : MonoBehaviour
                 Instantiate(fire_effect_, gunX_.transform.position + gunX_.transform.forward * 9f, Quaternion.identity);
                 l_gun.transform.rotation = gunX_.transform.rotation;
 
-                GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
+                GetComponents<AudioSource>()[0].PlayOneShot(GetComponents<AudioSource>()[0].clip);
 
                 m_interValTime = 2.5f;
             }

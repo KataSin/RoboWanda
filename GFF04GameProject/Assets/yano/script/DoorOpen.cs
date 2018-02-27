@@ -9,6 +9,7 @@ public class DoorOpen : MonoBehaviour
     private float t;
 
     private bool isClear;
+    private bool isPlay;
 
     [SerializeField]
     private float m_afterLposY;
@@ -21,6 +22,7 @@ public class DoorOpen : MonoBehaviour
         t = 0f;
 
         isClear = false;
+        isPlay = false;
     }
 
     // Update is called once per frame
@@ -37,6 +39,12 @@ public class DoorOpen : MonoBehaviour
     public void Open()
     {
         t += 1.0f * Time.deltaTime;
+
+        if (!isPlay)
+        {
+            GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip);
+            isPlay = true;
+        }
     }
 
     public void Close()
