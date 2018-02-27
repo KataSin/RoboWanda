@@ -15,6 +15,7 @@ public class Tank : MonoBehaviour
 
     private GameObject m_Robot;
 
+    private bool m_IsAttack;
 
     private NavMeshAgent m_Agent;
     private float m_Time;
@@ -24,6 +25,8 @@ public class Tank : MonoBehaviour
         m_Robot = GameObject.FindGameObjectWithTag("Robot");
 
         m_Agent = GetComponent<NavMeshAgent>();
+
+        m_IsAttack = false;
         m_Time = 0.0f;
     }
 
@@ -41,19 +44,16 @@ public class Tank : MonoBehaviour
         m_GunRotateY.transform.rotation = Quaternion.Euler(0.0f, lookY.eulerAngles.y, 0.0f);
         m_GunRotateX.transform.rotation = lookY;
 
-        bool colFlag = false;
+        m_IsAttack = false;
         var lightCol = GameObject.FindGameObjectsWithTag("LightCollision");
         if (lightCol.Length > 0)
         {
             foreach (var i in lightCol)
             {
-                if (i.GetComponent<LightCollision>().GetCollisionFlag())
-                {
-                    colFlag = true;
-                }
+                m_IsAttack = i.GetComponent<LightCollision>().GetCollisionFlag();
             }
-            if (colFlag) m_Time += Time.deltaTime;
-            if (m_Time >= 1.0f)
+            if (m_IsAttack) m_Time += Time.deltaTime;
+            if (m_Time >= 3.0f)
             {
                 m_SpawnBullet.GetComponent<TankGunSpawn>().SpawnBullet();
                 m_Time = 0.0f;
@@ -66,7 +66,7 @@ public class Tank : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.tag== "ExplosionCollision")
+        if (other.tag == "ExplosionCollision")
         {
             m_IsBreak = true;
         }
@@ -84,5 +84,10 @@ public class Tank : MonoBehaviour
         if (GetComponent<Rigidbody>() != null)
             Destroy(GetComponent<Rigidbody>());
         m_Agent.enabled = true;
+    }
+
+    public bool GetIsAttack()
+    {
+        return m_IsAttack;
     }
 }

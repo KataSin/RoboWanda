@@ -34,7 +34,7 @@ public class BomSpawn : MonoBehaviour
     [SerializeField, Tooltip("PV用にラインを消すかどうか")]
     public bool m_PvLineRendererNoDraw;
 
-
+    private GameObject m_Player;
     [SerializeField]
     private GameObject player_;
 
@@ -80,12 +80,19 @@ public class BomSpawn : MonoBehaviour
         m_UseBom.Add(Bom.LIGHT_BOM);
         m_UseBom.Add(Bom.SMOKE_BOM);
         m_IndexBom = 0;
+
+        m_Player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
     void Update()
     {
         Debug.Log(m_Bom);
+
+        if (m_Player.GetComponent<PlayerController>().GetPlayerState() != (int)PlayerState.Aiming)
+        {
+            SetDrawLine(false);
+        }
 
         //切り替えボタン
 
@@ -158,7 +165,7 @@ public class BomSpawn : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Vector3.Distance(start, end), layer))
             {
                 //着地地点の座標と回転を設定
-                m_LandingPoint.transform.position = hit.point+(hit.normal.normalized*0.2f);
+                m_LandingPoint.transform.position = hit.point+(hit.normal.normalized*0.1f);
                 m_LandingPoint.transform.LookAt(m_LandingPoint.transform.position + hit.normal * 5.0f);
                 m_LandingPoint.transform.rotation =
                     Quaternion.Euler(m_LandingPoint.transform.eulerAngles.x+90,
@@ -168,7 +175,7 @@ public class BomSpawn : MonoBehaviour
                 m_LandingPoint.SetActive(true);
                 for (int j = i + 1; j <= points.Count - 1; j++)
                 {
-                    points[i].SetActive(false);
+                    points[j].SetActive(false);
                 }
                 break;
             }
@@ -248,7 +255,7 @@ public class BomSpawn : MonoBehaviour
         if (m_VertexPos.y <= transform.position.y) m_VertexPos = Vector3.zero;
         if (m_Bom == Bom.LIGHT_BOM) bom.GetComponent<LightBullet>().SetVertex(m_VertexPos);
         else if (m_Bom == Bom.BOM) bom.GetComponent<Bomb_v2>().m_Bullet = Bom.BOM;
-        //bom.transform.rotation = Quaternion.Euler(90f, 0f, -(player_.transform.rotation.y * 180f / Mathf.PI) * 2f);
+        bom.transform.rotation = Quaternion.LookRotation(m_Vec) * Quaternion.Euler(90, 0, 0);
 
         float power = m_Power;
         if (m_Bom == Bom.LIGHT_BOM)

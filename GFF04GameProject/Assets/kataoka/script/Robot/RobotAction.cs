@@ -956,6 +956,7 @@ public class RobotAction : MonoBehaviour
                 }
                 foreach (var i in tanks)
                 {
+                    if (!i.GetComponent<Tank>().GetIsAttack()) continue;
                     Vector3 vec = i.transform.position - m_RobotEye.transform.position;
                     Ray ray = new Ray(m_RobotEye.transform.position, vec);
                     RaycastHit tank;
