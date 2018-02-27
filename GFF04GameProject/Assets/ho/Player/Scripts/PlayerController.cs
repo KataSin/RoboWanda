@@ -98,6 +98,7 @@ public class PlayerController : MonoBehaviour
     // コンポーネントと他の変数
     CharacterController m_Controller;               // キャラクターコントローラー
     Animator m_Animator;                            // アニメーター
+
     [SerializeField]
     PlayerState m_State;                            // プレイヤーの状態
     bool m_IsDash;                                  // ダッシュしているか
@@ -131,6 +132,10 @@ public class PlayerController : MonoBehaviour
     private GameObject m_Explosive;                 // 爆発物のプレハブ
     bool m_explosive_set;                           // 爆発物を設置したか
 
+    [SerializeField]
+    private float m_BlowForce;                      // 飛ばす力
+    bool m_blew_up;                                 // 飛ばされたか
+
     //ボムスポーン(片岡実装)
     private GameObject m_BomSpawn;
 
@@ -156,7 +161,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         m_Controller = GetComponent<CharacterController>();
-
         m_Animator = GetComponent<Animator>();
 
         playerSe_ = GetComponents<AudioSource>();
@@ -185,6 +189,8 @@ public class PlayerController : MonoBehaviour
 
         m_BuildingNear = null;
         m_explosive_set = false;
+
+        m_blew_up = false;
 
         //片岡実装
         m_BomSpawn = GameObject.FindGameObjectWithTag("BomSpawn");
@@ -346,6 +352,11 @@ public class PlayerController : MonoBehaviour
             m_IsInvincible = !m_IsInvincible;
 
             Debug.Log("無敵状態：" + m_IsInvincible);
+        }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            m_State = PlayerState.BlewUp;
         }
 
         // Debug.Log(m_State);
@@ -1053,7 +1064,13 @@ public class PlayerController : MonoBehaviour
     // 飛ばされている間の処理
     void BlewUp()
     {
+        // プレイヤーに力を与える
+        if (!m_blew_up)
+        {
 
+
+            m_blew_up = true;
+        }
     }
 
     // 飛ばされて死亡の処理
