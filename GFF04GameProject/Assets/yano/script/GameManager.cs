@@ -33,5 +33,7 @@ public class GameManager : MonoBehaviour
         {
             Instantiate(scoreMana_, transform);
         }
+
+        Cursor.visible = false;
     }
 }
