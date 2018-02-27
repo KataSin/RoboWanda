@@ -38,12 +38,14 @@ public class TitleHeri : MonoBehaviour
 
     public void TitleHeriMove()
     {
+        transform.rotation =
+            Quaternion.Slerp(Quaternion.Euler(0f, 19.624f, 0f), Quaternion.Euler(-2f, 100f, 20f), t / m_rotationTime);
+
         t += 1.0f * Time.deltaTime;
-
-        transform.rotation = Quaternion.Slerp(Quaternion.Euler(0f, 19.624f, 0f), Quaternion.Euler(-2f, 100f, 20f), t / m_rotationTime);
-
         m_speed += 1f * Time.deltaTime;
 
         transform.position -= (transform.forward * m_speed) / m_speed_dampinf;
+
+        GetComponent<AudioSource>().volume = Mathf.Lerp(0.1f, 1f, t / 1f);
     }
 }

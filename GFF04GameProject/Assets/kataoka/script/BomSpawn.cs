@@ -89,9 +89,16 @@ public class BomSpawn : MonoBehaviour
     {
         Debug.Log(m_Bom);
 
-        if (m_Player.GetComponent<PlayerController>().GetPlayerState() != (int)PlayerState.Aiming)
+        if (GameObject.FindGameObjectWithTag("TutorialObj"))
         {
-            SetDrawLine(false);
+            if(m_Player.GetComponent<PlayerController_Tutorial>().GetPlayerState() != (int)T_PlayerState.Aiming)
+                SetDrawLine(false);
+        }
+
+        else if(!GameObject.FindGameObjectWithTag("TutorialObj"))
+        {
+            if (m_Player.GetComponent<PlayerController>().GetPlayerState() != (int)PlayerState.Aiming)
+                SetDrawLine(false);
         }
 
         //切り替えボタン
@@ -165,10 +172,10 @@ public class BomSpawn : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Vector3.Distance(start, end), layer))
             {
                 //着地地点の座標と回転を設定
-                m_LandingPoint.transform.position = hit.point+(hit.normal.normalized*0.1f);
+                m_LandingPoint.transform.position = hit.point + (hit.normal.normalized * 0.1f);
                 m_LandingPoint.transform.LookAt(m_LandingPoint.transform.position + hit.normal * 5.0f);
                 m_LandingPoint.transform.rotation =
-                    Quaternion.Euler(m_LandingPoint.transform.eulerAngles.x+90,
+                    Quaternion.Euler(m_LandingPoint.transform.eulerAngles.x + 90,
                     m_LandingPoint.transform.eulerAngles.y,
                     m_LandingPoint.transform.eulerAngles.z);
 

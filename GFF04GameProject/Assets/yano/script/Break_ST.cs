@@ -111,9 +111,13 @@ public class Break_ST : MonoBehaviour
 
             Vector3 ob_pos = transform.position;
             ob_pos.y = 0f;
-            GameObject smoke = Instantiate(sand_smoke_manager_, ob_pos, Quaternion.identity);
-            smoke.transform.Find("desert_Horizontal").localScale = transform.localScale * m_sand_smoke_scalar;
-            smoke.transform.Find("desert_Vertical").localScale = transform.localScale * m_sand_smoke_scalar;
+
+            if (!GameObject.FindGameObjectWithTag("BriefingManager"))
+            {
+                GameObject smoke = Instantiate(sand_smoke_manager_, ob_pos, Quaternion.identity);
+                smoke.transform.Find("desert_Horizontal").localScale = transform.localScale * m_sand_smoke_scalar;
+                smoke.transform.Find("desert_Vertical").localScale = transform.localScale * m_sand_smoke_scalar;
+            }
 
             Instantiate(after_bill_, transform);
             after_bill_.transform.localPosition = m_origin_Lpos;

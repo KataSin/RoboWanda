@@ -21,6 +21,7 @@ public class CollisionCheck : MonoBehaviour
     {
         if (other.tag == "TowerCollision" || other.tag == "Tower" || other.tag == "GroundCollisionRigid"
             || other.tag == "Ground"
+            || other.tag == "GameTank"
             || LayerMask.LayerToName(other.gameObject.layer) == "Robot")
         {
             m_Collision = true;

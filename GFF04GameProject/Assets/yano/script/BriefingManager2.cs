@@ -325,6 +325,12 @@ public class BriefingManager2 : MonoBehaviour
 
             else if (t0 >= 4f)
             {
+                if (!isText5)
+                {
+                    NextText();
+                    isText5 = true;
+                }
+
                 if (t0 < 10f)
                 {
                     if (!briefing_cam_.GetComponent<BriefingCamera>().Get_Top())
@@ -346,13 +352,7 @@ public class BriefingManager2 : MonoBehaviour
                 }
 
                 else if (t0 >= 10f)
-                {
-                    if (!isText5)
-                    {
-                        NextText();
-                        isText5 = true;
-                    }
-
+                {                   
                     if (!briefing_cam_.GetComponent<BriefingCamera>().Get_Bombing2())
                         briefing_cam_.GetComponent<BriefingCamera>().BombingViewCam2();
 

@@ -156,6 +156,9 @@ public class PlayerController : MonoBehaviour
 
     private GameObject timer_;
 
+    [SerializeField]
+    private GameObject player_ui_;
+
 
     // Use this for initialization
     void Start()
@@ -411,7 +414,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "Break_Tower_Can_Break" && m_State == PlayerState.Normal && Input.GetButtonDown("BombSet"))
         {
             // （爆破作戦後は設置できない）
-            if (timer_.GetComponent<Timer>().GetTimer() >= 180)
+            if (timer_.GetComponent<Timer>().GetTimer() >= 120)
             {
                 m_BuildingNear = other.gameObject;
                 // Debug.Log("爆発物を設置する");
@@ -505,18 +508,21 @@ public class PlayerController : MonoBehaviour
     // 通常時の処理
     void Normal()
     {
-        // 通常時の移動処理
-        NormalMove();
-
-        // RBボタンを押すとダッシュ
-        // m_IsDash = (Input.GetAxis("Dash") > 0.5f) ? true : false;
-        m_IsDash = (Input.GetButton("Dash")) ? true : false;
-
-        // LTボタンを押すとボム投げ状態に
-        // if (Input.GetButton("Aim"))
-        if (Input.GetAxis("Aim") > 0.5f)
+        if (player_ui_.activeInHierarchy)
         {
-            m_State = PlayerState.Aiming;
+            // 通常時の移動処理
+            NormalMove();
+
+            // RBボタンを押すとダッシュ
+            // m_IsDash = (Input.GetAxis("Dash") > 0.5f) ? true : false;
+            m_IsDash = (Input.GetButton("Dash")) ? true : false;
+
+            // LTボタンを押すとボム投げ状態に
+            // if (Input.GetButton("Aim"))
+            if (Input.GetAxis("Aim") > 0.5f)
+            {
+                m_State = PlayerState.Aiming;
+            }
         }
     }
 

@@ -49,9 +49,6 @@ public class TitleManager : MonoBehaviour
     private bool isClear;
 
     [SerializeField]
-    private GameObject vc_;
-
-    [SerializeField]
     private GameObject se_;
 
     [SerializeField]
@@ -132,7 +129,6 @@ public class TitleManager : MonoBehaviour
                     >= titleCamera_.GetComponent<TitleCamera>().Get_FeadTime()) && mode_uis_.activeSelf == false)
                 {
                     mode_uis_.SetActive(true);
-                    vc_.GetComponent<AudioSource>().PlayOneShot(vc_.GetComponent<AudioSource>().clip);
                 }
             }
             nextViewTimer += 1.0f * Time.deltaTime;

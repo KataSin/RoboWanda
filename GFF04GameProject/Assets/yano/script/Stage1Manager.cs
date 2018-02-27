@@ -45,6 +45,9 @@ public class Stage1Manager : MonoBehaviour
 
     private bool isStart;
 
+    [SerializeField]
+    private GameObject se_;
+
     // Use this for initialization
     void Start()
     {
@@ -85,7 +88,7 @@ public class Stage1Manager : MonoBehaviour
         {
             bezeru_ui_.SetActive(false);
         }
-        else if(camera_pos_.GetComponent<CameraPosition>().GetMode() != 5)
+        else if (camera_pos_.GetComponent<CameraPosition>().GetMode() != 5)
             bezeru_ui_.SetActive(true);
 
         if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1)
@@ -104,7 +107,7 @@ public class Stage1Manager : MonoBehaviour
             //        player_ui_.SetActive(true);
             //}
 
-            if(GetComponent<BlackOut_UI>().Get_Clear())
+            if (GetComponent<BlackOut_UI>().Get_Clear())
             {
                 bezeru_ui_.GetComponent<ui_Bezeru>().FeadOut();
                 if (bezeru_ui_.GetComponent<ui_Bezeru>().GetT() >=
@@ -119,7 +122,7 @@ public class Stage1Manager : MonoBehaviour
             //boss_ui_[1].GetComponent<Image>().enabled = true;            
         }
 
-        if (camera_pos_.GetComponent<CameraPosition>().GetMode()==1
+        if (camera_pos_.GetComponent<CameraPosition>().GetMode() == 1
             || camera_pos_.GetComponent<CameraPosition>().GetMode() == 2
             || camera_pos_.GetComponent<CameraPosition>().GetMode() == 3
             || camera_pos_.GetComponent<CameraPosition>().GetMode() == 5)
@@ -153,7 +156,10 @@ public class Stage1Manager : MonoBehaviour
                 }
 
                 if (Input.GetAxis("Vertical_L") <= -0.9f && !isLScene)
+                {
+                    se_.GetComponent<AudioSource>().PlayOneShot(se_.GetComponent<AudioSource>().clip);
                     state_ = OverState.TitleTo;
+                }
             }
             else if (state_ == OverState.TitleTo)
             {
@@ -168,7 +174,10 @@ public class Stage1Manager : MonoBehaviour
                 }
 
                 if (Input.GetAxis("Vertical_L") >= 0.9f && !isLScene)
+                {
+                    se_.GetComponent<AudioSource>().PlayOneShot(se_.GetComponent<AudioSource>().clip);
                     state_ = OverState.Retry;
+                }
             }
         }
 
@@ -202,8 +211,6 @@ public class Stage1Manager : MonoBehaviour
             {
                 timer_ui_.SetActive(false);
                 GetComponent<BlackOut_UI>().GameClearFead();
-                //boss_ui_[0].SetActive(false);
-                //boss_ui_[1].GetComponent<Image>().enabled = false;
             }
             test += 1.0f * Time.deltaTime;
         }
@@ -214,8 +221,6 @@ public class Stage1Manager : MonoBehaviour
         {
             timer_ui_.SetActive(false);
             player_ui_.SetActive(false);
-            //boss_ui_[0].SetActive(false);
-            //boss_ui_[1].GetComponent<Image>().enabled = false;
             GetComponent<BlackOut_UI>().GameOverFead();
             if (GetComponent<BlackOut_UI>().Get_ClearGO())
             {
