@@ -48,6 +48,17 @@ public class HelicopterSpotManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        var boms = GameObject.FindGameObjectsWithTag("BreakTower");
+
+
+        for(int i = 0; i <= m_Points.Count - 1; i++)
+        {
+            if (m_Points[i].m_Point == null)
+            {
+                m_Points.Remove(m_Points[i]);
+            }
+        }
         SpotState disObject = m_Points[0];
         foreach (var i in m_Points)
         {
@@ -64,7 +75,7 @@ public class HelicopterSpotManager : MonoBehaviour
         {
             if (i.gameObject == null) return;
             i.GetComponent<HelicopterBreakBillSpot>().m_ToPoint = disObject.m_GoPoints[count];
-            i.GetComponent<HelicopterBreakBillSpot>().m_Light.transform.LookAt(disObject.m_Point.transform);
+            i.GetComponent<HelicopterBreakBillSpot>().m_LightLookPoint=disObject.m_Point;
             count++;
         }
 

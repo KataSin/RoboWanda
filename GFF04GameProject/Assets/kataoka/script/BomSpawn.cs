@@ -77,8 +77,6 @@ public class BomSpawn : MonoBehaviour
         isTrigger = false;
         m_UseBom = new List<Bom>();
         m_UseBom.Add(Bom.BOM);
-        m_UseBom.Add(Bom.LIGHT_BOM);
-        m_UseBom.Add(Bom.SMOKE_BOM);
         m_IndexBom = 0;
 
         m_Player = GameObject.FindGameObjectWithTag("Player");
@@ -258,12 +256,16 @@ public class BomSpawn : MonoBehaviour
 
 
 
-        GameObject bom = Instantiate(prefab, transform.position, Quaternion.LookRotation(m_Vec));
+        GameObject bom = Instantiate(prefab, transform.position, Quaternion.identity);
         if (m_VertexPos.y <= transform.position.y) m_VertexPos = Vector3.zero;
         if (m_Bom == Bom.LIGHT_BOM) bom.GetComponent<LightBullet>().SetVertex(m_VertexPos);
         else if (m_Bom == Bom.BOM) bom.GetComponent<Bomb_v2>().m_Bullet = Bom.BOM;
+
+
         bom.transform.rotation = Quaternion.LookRotation(m_Vec) * Quaternion.Euler(90, 0, 0);
 
+        if (m_Bom == Bom.LIGHT_BOM)
+            bom.transform.rotation = Quaternion.LookRotation(m_Vec);
         float power = m_Power;
         if (m_Bom == Bom.LIGHT_BOM)
             power = m_HighPower;
