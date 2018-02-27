@@ -3365,6 +3365,48 @@ Prefab:
     - {fileID: 6420606, guid: 0f1c409fdd311ce4ca7bfe14949b4389, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 0f1c409fdd311ce4ca7bfe14949b4389, type: 2}
   m_IsPrefabParent: 0
+--- !u!1001 &343896313
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1081305158}
+    m_Modifications:
+    - target: {fileID: 4646189532114414, guid: 19314fdbe7ce4a34185f04605bfcacc0, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -15.079521
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646189532114414, guid: 19314fdbe7ce4a34185f04605bfcacc0, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 15.414248
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646189532114414, guid: 19314fdbe7ce4a34185f04605bfcacc0, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 133.62741
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646189532114414, guid: 19314fdbe7ce4a34185f04605bfcacc0, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0.000000035733777
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646189532114414, guid: 19314fdbe7ce4a34185f04605bfcacc0, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0.5759378
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646189532114414, guid: 19314fdbe7ce4a34185f04605bfcacc0, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0.8174935
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646189532114414, guid: 19314fdbe7ce4a34185f04605bfcacc0, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: -0.00000002517504
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646189532114414, guid: 19314fdbe7ce4a34185f04605bfcacc0, type: 2}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 19314fdbe7ce4a34185f04605bfcacc0, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &345248421
 GameObject:
   m_ObjectHideFlags: 0
@@ -5581,6 +5623,14 @@ Prefab:
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 199584, guid: 00379f7646f0ca84692c5130a26a1177, type: 2}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 182142, guid: 00379f7646f0ca84692c5130a26a1177, type: 2}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 163964, guid: 00379f7646f0ca84692c5130a26a1177, type: 2}
       propertyPath: m_TagString
       value: Ground
       objectReference: {fileID: 0}
@@ -8417,7 +8467,8 @@ Transform:
   m_LocalRotation: {x: -0.040680826, y: -0.020760993, z: 0.021893874, w: 0.99871653}
   m_LocalPosition: {x: 0.115, y: -0.033, z: 0.007}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1341738122}
   m_Father: {fileID: 104766259}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8526,8 +8577,7 @@ MonoBehaviour:
     type: 2}
   m_SmokeBomPrefab: {fileID: 1518464148432348, guid: 901cba20d18afbb458374860bb42f729,
     type: 2}
-  m_LandingPoint: {fileID: 1454165766310194, guid: 19314fdbe7ce4a34185f04605bfcacc0,
-    type: 2}
+  m_LandingPoint: {fileID: 1341738119}
   m_VertexPoint: {fileID: 0}
   m_Point: {fileID: 1203606589735834, guid: 29ad441811426d8408c910bf0b9773cf, type: 2}
   m_Power: 100
@@ -11050,6 +11100,16 @@ BoxCollider:
 Transform:
   m_PrefabParentObject: {fileID: 489598, guid: bdaa8963568d45f42a54a47e532cc40c, type: 2}
   m_PrefabInternal: {fileID: 1179717882}
+--- !u!1 &1341738119 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1454165766310194, guid: 19314fdbe7ce4a34185f04605bfcacc0,
+    type: 2}
+  m_PrefabInternal: {fileID: 343896313}
+--- !u!4 &1341738122 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4646189532114414, guid: 19314fdbe7ce4a34185f04605bfcacc0,
+    type: 2}
+  m_PrefabInternal: {fileID: 343896313}
 --- !u!1 &1344494005
 GameObject:
   m_ObjectHideFlags: 0
@@ -11306,7 +11366,7 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingPath: -1
+  m_RenderingPath: 3
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
@@ -11799,7 +11859,7 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingPath: -1
+  m_RenderingPath: 3
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
