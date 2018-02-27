@@ -74,7 +74,8 @@ public class Bomb_v2 : MonoBehaviour
             || other.tag == "LightCollision"
             || other.tag == "ExplosionCollision"
             || other.tag == "ClearPoint"
-            || other.tag == "DoorCheck") return;
+            || other.tag == "DoorCheck"
+            || other.tag == "AmmoBox") return;
 
 
         //矢野追加10270231
