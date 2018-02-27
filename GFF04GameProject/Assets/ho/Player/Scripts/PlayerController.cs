@@ -414,7 +414,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "Break_Tower_Can_Break" && m_State == PlayerState.Normal && Input.GetButtonDown("BombSet"))
         {
             // （爆破作戦後は設置できない）
-            if (timer_.GetComponent<Timer>().GetTimer() >= 240)
+            if (timer_.GetComponent<Timer>().GetTimer() >= 120)
             {
                 m_BuildingNear = other.gameObject;
                 // Debug.Log("爆発物を設置する");
