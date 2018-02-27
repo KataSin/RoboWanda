@@ -18,8 +18,8 @@ public class TitleLookPoint : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        m_origin_pos = transform.localPosition;
-
+        m_origin_pos = new Vector3(0.359f, 1.963f, -1.428f);
+        //m_ready_pos = new Vector3(0.415f, 1.4f, -1.428f);
         m_yes_pos = new Vector3(0.359f, 1.8f, -1.4f);
         m_no_pos1 = new Vector3(0.195f, transform.localPosition.y, -1.38f);
         m_no_pos2 = new Vector3(0.55f, transform.localPosition.y, -1.5f);

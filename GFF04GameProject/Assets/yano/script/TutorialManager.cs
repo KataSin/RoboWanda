@@ -145,6 +145,9 @@ public class TutorialManager : MonoBehaviour
     private bool isText18;
     private bool isTextOther2;
 
+    [SerializeField]
+    private GameObject bomb_spawn_;
+
     // Use this for initialization
     void Start()
     {
@@ -566,6 +569,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     if (!isText13)
                     {
+                        bomb_spawn_.GetComponent<BomSpawn>().AddBom(BomSpawn.Bom.SMOKE_BOM);
                         TextNext();
                         isText13 = true;
                     }
@@ -649,7 +653,7 @@ public class TutorialManager : MonoBehaviour
     {
         if (camera_pos_.GetComponent<CameraPosition_Tutorial>().GetMode() == 4
            && camera_pos_.GetComponent<CameraPosition_Tutorial>().Get_T() >= 2f)
-        {
+        {            
             if (!isTextOther2)
             {
                 mission_text_.SetActive(true);
@@ -683,6 +687,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     if (!isText16)
                     {
+                        bomb_spawn_.GetComponent<BomSpawn>().AddBom(BomSpawn.Bom.LIGHT_BOM);
                         TextNext();
                         isText16 = true;
                     }
