@@ -48,7 +48,7 @@ public class RobotDamage : MonoBehaviour
             //爆撃機のダメージ
             else if(explosionName == "Drop")
             {
-                m_Manager.Damage(100);
+                m_Manager.Damage(90);
             }
             //ヘリのミサイルのダメージ
             else if (explosionName == "Heli")
